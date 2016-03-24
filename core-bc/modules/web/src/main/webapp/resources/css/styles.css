@@ -561,6 +561,10 @@ button,.button,input[type="submit"] {
     border-radius: 5px;
 }
 
+button.back-button, .button.back-button, input[type="submit"].back-button {
+    background-image: -webkit-linear-gradient(top, #989898, #6B6B6B);
+}
+
 button:hover,.button:hover,input[type="submit"]:hover {
     text-decoration: none;
     background-color: #1d8692;
@@ -570,6 +574,11 @@ button:hover,.button:hover,input[type="submit"]:hover {
     background-image: -moz-linear-gradient(top, #1d8692, #0b6a7a);
     background-image: -ms-linear-gradient(top, #1d8692, #0b6a7a);
     background-image: -o-linear-gradient(top, #1d8692, #0b6a7a);
+}
+
+button.back-button:hover, .button.back-button:hover, input[type="submit"].back-button:hover {
+    background-color: #929292;
+    background-image: -webkit-linear-gradient(top, #939494, #797979);
 }
 
 button:active,.button:active,input[type="submit"]:active {
@@ -1397,6 +1406,11 @@ button.disabled:active,.button.disabled:active,input[type="submit"].disabled:act
     font-family: "Lucida Grande", Helvetica, Arial;
     margin: 0 auto;
 }
+
+#contentContainer.wide {
+    width: 90%;
+}
+
 #contentContainer h2 {
     margin: 0px;
 }

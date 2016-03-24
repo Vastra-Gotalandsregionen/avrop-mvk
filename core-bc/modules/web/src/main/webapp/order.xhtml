@@ -5,7 +5,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 
-<ui:composition template="WEB-INF/xhtml/template/baseTemplate.xhtml">
+<ui:composition template="WEB-INF/xhtml/template/wideContent.xhtml">
 
     <ui:define name="boxContent">
 
@@ -47,7 +47,7 @@
 
                 //&ndash;&gt;</script>-->
                 <div class="right-align">
-                    <h:commandButton styleClass="abort" value="Bakåt" action="start?faces-redirect=true&amp;includeViewParams=true" />
+                    <h:commandButton styleClass="back-button" value="Bakåt" action="start?faces-redirect=true&amp;includeViewParams=true" />
                     <h:commandButton value="Till leverans" action="delivery?faces-redirect=true&amp;includeViewParams=true" />
                 </div>
                 <!--</form>-->
