@@ -1,0 +1,417 @@
+/*********************************
+ * BoxShadowContainer
+ *********************************/
+
+.containerBoxShadow>.bottom,
+.containerBoxShadow>.top {
+    position: relative;
+    padding: 0 3px;
+}
+
+.containerBoxShadow>.top>.left,
+.containerBoxShadow>.top>.right,
+.containerBoxShadow>.top>.wrapper,
+.containerBoxShadow>.bottom>.left,
+.containerBoxShadow>.bottom>.right,
+.containerBoxShadow>.bottom>.wrapper {
+    background-image: url("/mvk/javax.faces.resource/containerBackgrounds/boxShadowTopAndBottom.png.xhtml?ln=images");
+    background-repeat: no-repeat;
+    height: 2px;
+    width: 3px;
+}
+
+.containerBoxShadow>.bottom>.left,
+.containerBoxShadow>.bottom>.right,
+.containerBoxShadow>.bottom>.wrapper {
+    height: 4px;
+}
+
+.containerBoxShadow>.top>.left,
+.containerBoxShadow>.bottom>.left {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.containerBoxShadow>.top>.right,
+.containerBoxShadow>.bottom>.right {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.containerBoxShadow>.top>.wrapper {
+    background-repeat: repeat-x;
+    background-position: 0 -2px;
+    width: 100%;
+}
+
+.containerBoxShadow>.top>.left {
+    background-position: 0 0;
+}
+
+.containerBoxShadow>.top>.right {
+    background-position: 0 -4px;
+}
+
+.containerBoxShadow>.bottom>.wrapper {
+    background-position: 0 -10px;
+    background-repeat: repeat-x;
+    width: 100%;
+}
+
+.containerBoxShadow>.bottom>.left {
+    background-position: 0 -6px;
+}
+
+.containerBoxShadow>.bottom>.right {
+    background-position: 0 -14px;
+}
+
+.containerBoxShadow>.wrapper {
+    padding-right: 3px;
+    background-image:
+            url("/mvk/javax.faces.resource/containerBackgrounds/boxShadowBodySec.png.xhtml?ln=images");
+    background-repeat: repeat-y;
+    background-position: right top;
+}
+
+.containerBoxShadow>.wrapper>.boxShadowBody {
+    background-image:
+            url("/mvk/javax.faces.resource/containerBackgrounds/boxShadowBodyMain.png.xhtml?ln=images");
+    background-position: left;
+    background-repeat: repeat-y;
+    padding: 0px 0px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Container: Grey */
+.containerBoxShadow.grey > .top > .left,
+.containerBoxShadow.grey > .top > .right,
+.containerBoxShadow.grey > .top > .wrapper,
+.containerBoxShadow.grey > .bottom > .left,
+.containerBoxShadow.grey > .bottom > .right,
+.containerBoxShadow.grey > .bottom > .wrapper {
+    background-image:url("/mvk/javax.faces.resource/containerBackgrounds/boxShadowTopAndBottom_grey.png.xhtml?ln=images");
+}
+
+.containerBoxShadow.grey > .wrapper {
+    background-image:url("/mvk/javax.faces.resource/containerBackgrounds/boxShadowBodySec_grey.png.xhtml?ln=images");
+}
+
+.containerBoxShadow.grey > .wrapper > .boxShadowBody {
+    background-image:url("/mvk/javax.faces.resource/containerBackgrounds/boxShadowBodyMain_grey.png.xhtml?ln=images");
+}
+
+/* Container: PaperSheet */
+.containerBoxShadow.paperSheet>.wrapper>.boxShadowBody {
+    padding: 0px 3.3%;
+}
+
+.containerBoxShadow.paperSheet>.bottom {
+    height: 17px;
+    padding: 0 220px;
+}
+
+.containerBoxShadow.paperSheet>.bottom>.left,
+.containerBoxShadow.paperSheet>.bottom>.right {
+    height: 17px;
+    width: 220px;
+    background-image:url("/mvk/javax.faces.resource/containerBackgrounds/paperSheetBottom.png.xhtml?ln=images");
+}
+
+.containerBoxShadow.paperSheet>.bottom>.left {
+    background-position: top left;
+}
+
+.containerBoxShadow.paperSheet>.bottom>.right {
+    background-position: top right;
+}
+
+/* Container: PaperSlip */
+.containerBoxShadow.paperSlip>.bottom {
+    padding-right: 158px;
+    height: 5px;
+}
+
+.containerBoxShadow.paperSlip>.bottom>.right {
+    background-image: url("/mvk/javax.faces.resource/containerBackgrounds/paperSlipBottomRight.png.xhtml?ln=images");
+    background-position: right top;
+    width: 158px;
+    height: 11px;
+}
+.containerBoxShadow.paperSlip.grey >.bottom > .right {
+    background-image: url("/mvk/javax.faces.resource/containerBackgrounds/paperSlipBottomRight_grey.png.xhtml?ln=images");
+}
+/******* Container: greyBluePaperSheet *******/
+.containerBoxShadow.greyBluePaperSheet>.top {
+    display: none;
+}
+
+.containerBoxShadow.greyBluePaperSheet>.wrapper {
+    background: none;
+}
+
+.containerBoxShadow.greyBluePaperSheet>.wrapper>.boxShadowBody {
+    padding: 0px 3.3%;
+    background: none;
+    background-color: #f2f2f2;
+    border: none;
+    -webkit-border-top-right-radius: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    -moz-border-radius-bottomright: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.containerBoxShadow.greyBluePaperSheet>.bottom {
+    height: 17px;
+    padding: 0;
+}
+
+.containerBoxShadow.greyBluePaperSheet>.bottom>.left,
+.containerBoxShadow.greyBluePaperSheet>.bottom>.right
+{
+    background-image: url("/mvk/javax.faces.resource/containerBackgrounds/paperSheetBottom.png.xhtml?ln=images");
+    height: 17px;
+    width: 220px;
+}
+
+.containerBoxShadow.greyBluePaperSheet>.bottom>.wrapper {
+    display: none;
+}
+
+.containerBoxShadow.greyBluePaperSheet>.bottom>.left {
+    display: none;
+}
+
+.containerBoxShadow.greyBluePaperSheet>.bottom>.right {
+    background-position: right -3px;
+    margin-right: 3%;
+}
+
+/*************** Container: Frame *******************/
+.containerBoxShadow.frame>.top>.left,
+.containerBoxShadow.frame>.top>.right,
+.containerBoxShadow.frame>.top>.wrapper,
+.containerBoxShadow.frame>.bottom>.left,
+.containerBoxShadow.frame>.bottom>.right,
+.containerBoxShadow.frame>.bottom>.wrapper {
+    background-image: url("/mvk/javax.faces.resource/containerBackgrounds/frameTopAndBottom.png.xhtml?ln=images");
+    background-repeat: no-repeat;
+    height: 16px;
+    width: 17px;
+}
+
+.containerBoxShadow.frame>.wrapper {
+    padding-right: 3px;
+    background-image: url("/mvk/javax.faces.resource/containerBackgrounds/frameBodySec.png.xhtml?ln=images");
+    background-repeat: repeat-y;
+    background-position: right top;
+}
+
+.containerBoxShadow.frame>.wrapper>.boxShadowBody {
+    background-image: url("/mvk/javax.faces.resource/containerBackgrounds/frameBodyMain.png.xhtml?ln=images");
+    background-position: left;
+    background-repeat: repeat-y;
+    padding: 0 14px 0px;
+    position: relative;
+    overflow: hidden;
+}
+
+.containerBoxShadow.frame>.bottom,
+.containerBoxShadow.frame>.top {
+    position: relative;
+    padding: 0 17px;
+}
+
+.containerBoxShadow.frame>.bottom>.left,
+.containerBoxShadow.frame>.bottom>.right,
+.containerBoxShadow.frame>.bottom>.wrapper {
+    height: 17px;
+}
+
+.containerBoxShadow.frame>.top>.left,
+.containerBoxShadow.frame>.bottom>.left {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.containerBoxShadow.frame>.top>.right,
+.containerBoxShadow.frame>.bottom>.right {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.containerBoxShadow.frame>.top>.wrapper {
+    background-repeat: repeat-x;
+    background-position: 0 -17px;
+    width: 100%;
+}
+
+.containerBoxShadow.frame>.top>.left {
+    background-position: 0 0;
+}
+
+.containerBoxShadow.frame>.top>.right {
+    background-position: 0 -35px;
+}
+
+.containerBoxShadow.frame>.bottom>.wrapper {
+    background-position: 0 -75px;
+    background-repeat: repeat-x;
+    width: 100%;
+}
+/*** start ***/
+.containerBoxShadow.frame>.bottom>.left {
+    background-position: 0 -55px;
+}
+
+.containerBoxShadow.frame>.bottom>.right {
+    background-position: 0 -96px;
+}
+.containerBoxShadow.frame.left{
+    width: 49%;
+    float: left;
+}
+
+.containerBoxShadow.frame.left.fullWidth{
+    width: 100%;
+    float: left;
+}
+
+.containerBoxShadow.frame.right{
+    width: 49%;
+    float: right;
+}
+
+/*******************************
+ * SearchField
+ *******************************/
+
+.searchField {
+    overflow:auto;
+}
+
+.searchField input[type="text"],
+.searchField a {
+    display:block;
+    float:left;
+    background:none;
+    font-size:0.7895em;
+    height:1.6em;
+    line-height:1.6em;
+    margin:0;
+    border:1px solid #000000;
+    background-color:#ededed;
+}
+
+.searchField input[type="text"] {
+    border-right:0;
+    padding:3px 5px;
+
+    -webkit-border-top-right-radius: 0px;
+    -webkit-border-bottom-right-radius: 0px;
+    -moz-border-radius-topright: 0px;
+    -moz-border-radius-bottomright: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.searchField a {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-left:0;
+    padding:3px 0;
+    text-decoration:none;
+
+    -webkit-border-top-left-radius: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+    -moz-border-radius-topleft: 0px;
+    -moz-border-radius-bottomleft: 0px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.searchField a span {
+    border-left:1px solid white;
+    padding-left:15px;
+    padding-right:15px;
+    border-left:1px solid #000000;
+    font-weight:bold;
+}
+
+/*******************************
+ * TermsAccept
+ *******************************/
+.termsAccept label {
+    font-weight:bold;
+}
+.termsAccept label a {
+    font-weight:normal;
+    text-decoration: underline;
+}
+/*********************************
+* toggleInfoBox
+*********************************/
+
+.toggleInfoBox .title {
+    cursor: pointer;
+}
+
+@media all and (max-width:800px) {
+
+    /*********************************
+     * BoxShadowContainer
+     *********************************/
+
+    .containerBoxShadow>.top>.left,
+    .containerBoxShadow>.top>.right,
+    .containerBoxShadow>.top>.wrapper {
+        height: 2px;
+    }
+    .containerBoxShadow.paperSheet>.bottom {
+        padding: 0 149px 0 149px;
+    }
+    .containerBoxShadow.paperSheet>.bottom>.left {
+        background-image:
+                url("/mvk/javax.faces.resource//images/containerBackgrounds/paperSheetBottomBgLeft.png.xhtml");
+        width: 149px;
+    }
+    .containerBoxShadow.paperSheet>.bottom>.right {
+        background-image:
+                url("/mvk/javax.faces.resource//images/containerBackgrounds/paperSheetBottomBgRight.png.xhtml");
+        width: 149px;
+    }
+
+}
+@media all and (max-width:480px) {
+    /****Start**********/
+    .containerBoxShadow.frame.left{
+        width: 100%;
+        float: none;
+    }
+    .containerBoxShadow.frame.right{
+        width: 100%;
+        float: none;
+    }
+    #contactCard .facilityServices {
+        float: none;
+        width: 100%;
+    }
+
+    #contactCard .mainInformation {
+        float: none;
+        width: 100%;
+    }
+}

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+<h:head/>
+
+<h:body>
+    <f:view>
+
+        <h:form>
+
+            <h:outputLabel value="#{firstController.getText('John')}"/>
+
+            <h:commandButton action="#{firstController.action}" value="Action"/>
+        </h:form>
+    </f:view>
+</h:body>
+</html>

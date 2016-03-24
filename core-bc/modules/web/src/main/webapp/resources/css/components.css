@@ -1,0 +1,558 @@
+/********************
+ * General
+ ********************/
+
+.mvkcomp.button {
+    display: block;
+    text-decoration:none;
+    background-color: #008391;
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#008391),
+    to(#00606a) );
+    background-image: -webkit-linear-gradient(top, #008391, #00606a);
+    background-image: -moz-linear-gradient(top, #008391, #00606a);
+    background-image: -ms-linear-gradient(top, #008391, #00606a);
+    background-image: -o-linear-gradient(top, #008391, #00606a);
+    cursor: pointer;
+    -webkit-box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.3);
+    border: 0;
+    color: white;
+    margin: 10px 5px;
+    padding: 5px 15px;
+    font-family: Lucida Grande,Helvetica,Arial,sans-serif;
+    font-size: 0.9375em;
+    font-weight: bold;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+/*********************
+ * BoxContainer
+ *********************/
+
+.mvkcomp.boxContainer > .bottom,
+.mvkcomp.boxContainer > .top {
+    position: relative;
+    padding: 0 3px;
+}
+
+.mvkcomp.boxContainer > .top > .left,
+.mvkcomp.boxContainer > .top > .right,
+.mvkcomp.boxContainer > .top > .wrapper,
+.mvkcomp.boxContainer > .bottom > .left,
+.mvkcomp.boxContainer > .bottom > .right,
+.mvkcomp.boxContainer > .bottom > .wrapper {
+    background-image: url("/mvk/javax.faces.resource/containerBackgrounds/boxShadowTopAndBottom.png.xhtml?ln=images");
+    background-repeat: no-repeat;
+    height: 2px;
+    width: 3px;
+}
+
+.mvkcomp.boxContainer > .bottom > .left,
+.mvkcomp.boxContainer > .bottom > .right,
+.mvkcomp.boxContainer > .bottom > .wrapper {
+    height: 4px;
+}
+
+.mvkcomp.boxContainer > .top > .left,
+.mvkcomp.boxContainer > .bottom > .left {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.mvkcomp.boxContainer > .top > .right,
+.mvkcomp.boxContainer > .bottom > .right {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.mvkcomp.boxContainer > .top > .wrapper {
+    background-repeat: repeat-x;
+    background-position: 0 -2px;
+    width: 100%;
+}
+
+.mvkcomp.boxContainer > .top > .left {
+    background-position: 0 0;
+}
+
+.mvkcomp.boxContainer > .top > .right {
+    background-position: 0 -4px;
+}
+
+.mvkcomp.boxContainer > .bottom > .wrapper {
+    background-position: 0 -10px;
+    background-repeat: repeat-x;
+    width: 100%;
+}
+
+.mvkcomp.boxContainer > .bottom > .left {
+    background-position: 0 -6px;
+}
+
+.mvkcomp.boxContainer > .bottom > .right {
+    background-position: 0 -14px;
+}
+
+.mvkcomp.boxContainer > .wrapper {
+    padding-right: 3px;
+    background-image:
+            url("/mvk/javax.faces.resource/containerBackgrounds/boxShadowBodySec.png.xhtml?ln=images");
+    background-repeat: repeat-y;
+    background-position: right top;
+}
+
+.mvkcomp.boxContainer > .wrapper > .boxContainerBody {
+    background-image:
+            url("/mvk/javax.faces.resource/containerBackgrounds/boxShadowBodyMain.png.xhtml?ln=images");
+    background-position: left;
+    background-repeat: repeat-y;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 2px 2px 2px rgba(136, 136, 136, 0.42);
+}
+
+
+
+/******************
+ * Item List
+ ******************/
+
+.mvkcomp.itemList {
+    list-style:none;
+    padding:0;
+    margin:0;
+    margin-bottom:25px;
+}
+
+
+.mvkcomp.listItem .listItemBase {
+    position:relative;
+    margin:0;
+}
+
+/* */
+
+.mvkcomp.listDetailNavigation {
+    cursor:pointer;
+}
+
+.mvkcomp.listDetailNavigation .boxContainerBody {
+    padding-right: 40px !important;
+}
+
+.mvkcomp.listDetailNavigation .itemNavigation {
+    position: absolute;
+    right: 0px;
+    top: 0;
+    display: block;
+    background-image: url("/mvk/javax.faces.resource/listNavigationBgBlue.png.xhtml?ln=images");
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 40px;
+    height: 100%;
+    font-size: 0.975em;
+
+    text-indent: -9999px;
+    overflow: hidden;
+
+    outline-offset: -5px;
+}
+
+.mvkcomp.listDetailNavigation .boxContainer >.bottom {
+    padding-right: 158px;
+    height: 5px;
+}
+
+.mvkcomp.listDetailNavigation .boxContainer > .bottom > .right {
+    background-image: url("/mvk/javax.faces.resource/containerBackgrounds/paperSlipBottomRight.png.xhtml?ln=images");
+    background-position: right top;
+    width: 158px;
+    height: 11px;
+}
+
+.mvkcomp.listDetailNavigation.hover .itemNavigation {
+    background-image: url("/mvk/javax.faces.resource/listNavigationBgDarkBlue.png.xhtml?ln=images");
+}
+
+.mvkcomp.listDetailNavigation.disabled h3,
+.mvkcomp.listDetailNavigation.disabled h4 {
+    color:grey;
+}
+
+.mvkcomp.listDetailNavigation.disabled .itemNavigation {
+    background-image:url("/mvk/javax.faces.resource/listNavigationBg.png.xhtml?ln=images");
+}
+
+.mvkcomp.listDetailNavigation .listItemBody {
+    background-image: url("/mvk/javax.faces.resource/listItemBodyBg.png.xhtml?ln=images");
+    background-position: right top;
+    background-repeat: repeat-y;
+}
+
+/* */
+
+.mvkcomp.listDetailToggle .header,
+.mvkcomp.listDetailToggle .footer,
+.mvkcomp.listDetailToggle .detail {
+    padding-left:40px;
+    overflow:auto;
+}
+
+.mvkcomp.listDetailToggle .header {
+    position:relative;
+    border-top:1px solid #ccc;
+    cursor:pointer;
+}
+
+.mvkcomp.listDetailToggle .header.open {
+    border-bottom:1px solid #ccc;
+}
+
+.mvkcomp.listDetailToggle .toggler{
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    display: block;
+    width: 25px;
+    height: 100%;
+    padding:0;
+    text-indent: -999999px;
+    overflow:hidden;
+    border:0;
+}
+
+.mvkcomp.listDetailToggle .header.open .toggler {
+    background-image: url("/mvk/javax.faces.resource/images/togglerOpen.png.xhtml?ln=mvkcomponents");
+}
+
+.mvkcomp.listDetailToggle .header.closed .toggler{
+    background-image: url("/mvk/javax.faces.resource/images/togglerClosed.png.xhtml?ln=mvkcomponents");
+}
+
+.mvkcomp.listDetailToggle .header.closed.hover .toggler {
+    background-image:url("/mvk/javax.faces.resource/images/togglerClosedBlue.png.xhtml?ln=mvkcomponents");
+}
+
+.mvkcomp.listDetailToggle .mvkcomp.listItemBase {
+    padding-left:0;
+}
+
+.mvkcomp.listDetailToggle > .boxContainer > .wrapper > .boxContainerBody > .listItemBody {
+    padding:10px;
+}
+
+.mvkcomp.listDetailToggle .boxContainerBody > .listItemBody > .header {
+    border-top:none;
+}
+
+/*******************
+ * List item base
+ *******************/
+
+.mvkcomp.listItemBase {
+    padding-left:10px;
+    padding-bottom: 5px;
+}
+
+.mvkcomp.listItemBase .mainBody {
+    position: relative;
+    overflow:auto;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.mvkcomp.listItemBase h3,
+.mvkcomp.listItemBase h4 {
+    margin: 5px 0;
+    color: #17646F;
+    font-size: 0.9375em;
+    font-weight: bold;
+}
+
+.mvkcomp.listItemBase .subRow {
+    font-size: 0.9375em;
+}
+
+.mvkcomp.withIcon.listItemBase {
+    padding-left: 55px;
+    overflow: hidden;
+}
+
+.mvkcomp.subRowOnTop.listItemBase h3,
+.mvkcomp.subRowOnTop.listItemBase h4 {
+    font-size: 1.125em;
+    font-weight: normal;
+}
+
+.mvkcomp.subRowOnTop.listItemBase .subRow {
+    position: absolute;
+    top: 1.3625em;
+    line-height: 1.3em;
+    font-size: 0.8125em;
+}
+
+.mvkcomp.subRowOnTop.listItemBase  .mainBody {
+    padding-top: 2em;
+    padding-bottom: 10px;
+}
+
+.mvkcomp.listDetailToggle .listItemBase.subRowOnTop .mainBody {
+    padding-top: 1.5em;
+    padding-bottom: 5px;
+}
+.mvkcomp.listDetailToggle .listItemBase.subRowOnTop .mainBody  .subRow {
+    top: 0.8em;
+}
+
+/**********************
+ * Custom select
+ **********************/
+
+.mvkcomp .custom-select-container {
+    position: relative;
+}
+
+.mvkcomp .wrapSelect {
+    overflow: auto;
+}
+
+.mvkcomp .wrapSelect .custom-select-container {
+    float: left;
+}
+
+.mvkcomp select.custom.replaced {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    height: 3em;
+    border: 0;
+    filter: alpha(opacity = 0);
+    opacity: 0;
+    line-height: 2;
+}
+
+.mvkcomp .custom-select {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.mvkcomp .custom-select>span {
+    font-size: 0.8125em;
+    display: block;
+    padding: 0 25px 0 6px;
+    border: solid 1px #000;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    color: black;
+    background: #ededed url("/mvk/javax.faces.resource/custom-select-bg.png.xhtml?ln=images")
+    no-repeat 100% 50%;
+    line-height: 2;
+}
+
+.mvkcomp .custom-select span span {
+    display: block;
+    height: 2em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.mvkcomp .custom-select.active>span {
+    border-color: #999;
+    -moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+/**************************
+ * Checkbox / Radio
+ **************************/
+
+.mvkcomp.selectOneRadio .radioButtonLabel,
+.mvkcomp.checkbox .checkboxLabel {
+    display: block;
+    padding-left: 30px;
+    height: 25px;
+    padding-top: 5px;
+    background-image: url("/mvk/javax.faces.resource/images/checkboxBoolean_unchecked.png.xhtml?ln=mvkcomponents");
+    background-repeat: no-repeat;
+    float: left;
+}
+
+.mvkcomp.checkbox .checkboxLabel.checked {
+    background-image: url("/mvk/javax.faces.resource/images/checkboxBoolean_checked.png.xhtml?ln=mvkcomponents");
+}
+
+.mvkcomp.checkbox .checkboxLabel.focus {
+    background-image:url("/mvk/javax.faces.resource/images/checkboxBoolean_unchecked_focus.png.xhtml?ln=mvkcomponents") !important;
+}
+
+.mvkcomp.checkbox .checkboxLabel.checked.focus {
+    background-image:url("/mvk/javax.faces.resource/images/checkboxBoolean_checked_focus.png.xhtml?ln=mvkcomponents") !important;
+}
+
+.mvkcomp.selectOneRadio label.disabled,
+.mvkcomp.checkbox label.disabled {
+    color: #545454;
+}
+
+.mvkcomp.selectOneRadio .radioButtonLabel {
+    background-image: url("/mvk/javax.faces.resource/images/radio.png.xhtml?ln=mvkcomponents");
+}
+
+.mvkcomp.selectOneRadio .radioButtonLabel.checked {
+    background-image: url("/mvk/javax.faces.resource/images/radio_active.png.xhtml?ln=mvkcomponents");
+}
+
+.mvkcomp.selectOneRadio .radioButtonLabel.focus {
+    background-image: url("/mvk/javax.faces.resource/images/radio_focus.png.xhtml?ln=mvkcomponents");
+}
+
+.mvkcomp.selectOneRadio .radioButtonLabel.checked.focus {
+    background-image: url("/mvk/javax.faces.resource/images/radio_active_focus.png.xhtml?ln=mvkcomponents");
+}
+
+/**********************
+ * Back button
+ **********************/
+
+a.mvkcomp.backButton {
+    float: left;
+    display: block;
+    text-decoration: none;
+    font-size: 1.3em;
+    margin-top: 10px;
+    padding-left: 48px;
+    background-image: url("/mvk/javax.faces.resource/navigateBack.png.xhtml?ln=images");
+    background-repeat: no-repeat;
+    background-position: left center;
+    color: #17646F;
+    outline-offset:-3px;
+}
+
+a.mvkcomp.backButton span {
+    display: block;
+    font-size: 0.625em;
+    color: black;
+}
+
+a.mvkcomp.backButton:hover span {
+    text-decoration: underline;
+}
+
+
+/**********************
+ * Continue abort button
+ **********************/
+
+
+.mvkcomp.continueAbort {
+    overflow:auto;
+    margin:25px 0 15px;
+}
+
+.mvkcomp.continueAbort .abort {
+    display:block;
+    padding: 5px 15px;
+    float : left;
+    font-size: 0.8125em;
+    line-height: 1.25em;
+    text-decoration:underline;
+}
+
+.mvkcomp.continueAbort .button {
+    float:left;
+    margin:0px;
+    margin-right:15px;
+    display:block;
+}
+
+@media all and (max-width:800px) {
+
+    /******************
+     * Item List
+     ******************/
+
+    .mvkcomp.listDetailNavigation .boxContainerBody {
+        padding-right: 25px !important;
+    }
+
+    .mvkcomp.listDetailNavigation .itemNavigation {
+        width: 25px;
+        background-image: url("/mvk/javax.faces.resource/listNavigationBgBlueSmall.png.xhtml?ln=images");
+        background-position: center center;
+    }
+
+
+
+    .mvkcomp.listDetailToggle .header,
+    .mvkcomp.listDetailToggle .footer,
+    .mvkcomp.listDetailToggle .detail {
+        padding-left:35px;
+    }
+
+    /*****************
+     * List Item Base
+     *****************/
+
+    .mvkcomp.listItemBase .mainBody {
+        padding-bottom: 10px;
+        padding-top: 0px;
+    }
+
+    .mvkcomp.subRowOnTop.listItemBase .listItemBody {
+        padding-bottom: 3px;
+    }
+    .mvkcomp.subRowOnTop.listItemBase h3,
+    .mvkcomp.subRowOnTop.listItemBase h4 {
+        font-size: 1.125em;
+        font-weight: normal;
+    }
+    .mvkcomp.subRowOnTop.listItemBase .mainBody {
+        padding-top: 1.4em;
+        padding-bottom: 2px;
+    }
+    .mvkcomp.subRowOnTop.listItemBase .subRow {
+        top: 0.8em;
+        line-height: 1.3em;
+        font-size: 0.8125em;
+    }
+
+    /****************
+     * Custom select
+     ****************/
+
+    .mvkcomp select.custom.replaced {
+        height:2em;
+        font-size:16px;
+    }
+}
+
+@media all and (max-width:480px) {
+    .mvkcomp.listItemBase h3,
+    .mvkcomp.listItemBase h4,
+    .mvkcomp.listItemBase .subRow,
+    .mvkcomp.subRowOnTop.listItemBase h3,
+    .mvkcomp.subRowOnTop.listItemBase h4 {
+        font-size: 0.8125em;
+    }
+
+    .mvkcomp.subRowOnTop.listItemBase .subRow {
+        font-size: 0.75em;
+    }
+}
