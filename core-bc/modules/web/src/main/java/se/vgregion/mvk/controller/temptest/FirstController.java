@@ -1,4 +1,4 @@
-package se.vgregion.mvk.controller;
+package se.vgregion.mvk.controller.temptest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

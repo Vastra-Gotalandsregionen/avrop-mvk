@@ -1,4 +1,4 @@
-package se.vgregion.mvk.controller;
+package se.vgregion.mvk.controller.temptest;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
