@@ -16,8 +16,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>composites/types</module>
+        <module>composites/schema</module>
         <module>composites/svc</module>
+        <module>composites/types</module>
         <!--<module>composites/webcomp</module>-->
         <module>modules/web</module>
     </modules>

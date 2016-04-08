@@ -3,39 +3,33 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/task"
        xmlns:jaxws="http://cxf.apache.org/jaxws"
-       xmlns:cxf="http://cxf.apache.org/core" xmlns:util="http://www.springframework.org/schema/util"
        xmlns:p="http://www.springframework.org/schema/p" xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:cxf="http://cxf.apache.org/core"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans.xsd
           http://www.springframework.org/schema/context
           http://www.springframework.org/schema/context/spring-context.xsd
-           http://www.springframework.org/schema/task
-            http://www.springframework.org/schema/task/spring-task.xsd
-             http://www.springframework.org/schema/cache
-              http://www.springframework.org/schema/cache/spring-cache.xsd
-       http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
-    http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
-        "
->
-    <context:component-scan base-package="se.vgregion.mvk.controller" />
+          http://www.springframework.org/schema/task
+          http://www.springframework.org/schema/task/spring-task.xsd
+          http://www.springframework.org/schema/cache
+          http://www.springframework.org/schema/cache/spring-cache.xsd
+          http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+          http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">
 
-    <bean class="se._1177.lmn.service.LmnServiceFacadeImpl" >
-        <constructor-arg index="0" ref="getMedicalSupplyDeliveryPoints"/>
-        <constructor-arg index="1" ref="getMedicalSupplyPrescriptions"/>
-        <constructor-arg index="2" ref="registerMedicalSupplyOrder"/>
-    </bean>
+    <context:component-scan base-package="se.vgregion.mvk.controller"/>
 
     <jaxws:client id="getMedicalSupplyDeliveryPoints"
                   serviceClass="riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._0.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface"
-                  address="http://localhost:18080/GetMedicalSupplyDeliveryPoints" />
+                  address="http://localhost:18080/GetMedicalSupplyDeliveryPoints/"/>
 
     <jaxws:client id="getMedicalSupplyPrescriptions"
                   serviceClass="riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._0.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface"
-                  address="http://localhost:18080/GetMedicalSupplyPrescriptions" />
+                  address="http://localhost:18080/GetMedicalSupplyPrescriptions/"/>
 
     <jaxws:client id="registerMedicalSupplyOrder"
                   serviceClass="riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._0.rivtabp21.RegisterMedicalSupplyOrderResponderInterface"
-                  address="http://localhost:18080/RegisterMedicalSupplyOrder" />
+                  address="http://localhost:18080/RegisterMedicalSupplyOrder/"/>
+
 
     <cxf:bus>
         <cxf:outInterceptors>

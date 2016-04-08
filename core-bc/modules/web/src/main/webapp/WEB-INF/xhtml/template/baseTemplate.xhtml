@@ -10,44 +10,92 @@
 
 <h:body>
     <h:outputStylesheet library="css" name="style.css"/>
-    <h:outputStylesheet library="css" name="components.css"/>
-    <h:outputStylesheet library="css" name="components2.css"/>
+    <h:outputStylesheet library="css" name="grabbedFromMvk/components.css"/>
+    <h:outputStylesheet library="css" name="grabbedFromMvk/components2.css"/>
     <h:outputStylesheet library="css" name="custom.css"/>
 
-    <div id="wrapper">
-        <div id="header">
-            <div class="wrapper">
-                <div class="header-left">
-                    <div class="icon-1177"></div>
-                    <h1>E-tjänster</h1>
-                </div>
-
-                <div class="header-right">
-                    <div class="user">
-                        <div class="user-top"><a href="/mvk/login/logout.xhtml" class="logoutButton">Logga ut</a>
-                            <span class="icon-logout"></span><a href="/mvk/settings.xhtml" class="settingsButton">Inställningar</a>
-
+    <div id="container">
+        <div id="wrapper" class="wrapper">
+            <header class="_1177-header-container" id="1177-topbar">
+                <div class="_1177-header">
+                    <div class="_1177-header-content">
+                        <div class="_1177-logo-block">
+                            <h1 class="_1177-sitetitle">
+                                <img class="_1177-logo-img" alt="1177 Vårdguiden" src="img/1177-logo.png"/>
+                                <span class="_1177-sitename">E-tjänster</span>
+                            </h1>
                         </div>
-                        <br />
-                        <div class="user-bottom">
-                            <p>Inloggad som Test Testsson</p>
+
+                        <div class="_1177-user">
+                            <div class="_1177-settings">
+                                <a class="link-userblock" href="#">Inställningar</a>
+                            </div>
+                            <div class="_1177-logout">
+                                <a class="link-userblock" href="#">Logga ut</a>
+                            </div>
+                            <div class="_1177-currentuser">Inloggad som&#160;Förnamn Efternamn</div>
+                        </div><!--_1177-user-->
+                    </div><!--_1177-header-content-->
+                </div><!--_1177-header-->
+
+            </header>
+
+
+            <div class="delegate-container">
+                <div class="delegate-block">
+                    <div class="delegate-header">
+                        <div class="_1177-delegate-title">
+                            <div class="_1177-header-info">
+                                Du utför nu ärenden åt <span class="delegate-name no-wrap">Delegatnamn&#160;Delegatefternamn<a href="#" data-content="Hjälpinformation.">
+                                <img class="moreinfo helptoggle" id="delegate-toggle" src="img/icon-info-1.png" alt="Mer information"/></a></span>
+                            </div>
+                        </div>
+                        <div class="_1177-delegate-settings"><a class="_1177-delegate-settings-link link" href="#">Inställningar</a>
+                        </div>
+                    </div>
+                    <div class="_1177-delegate-expand" id="delegate-expand" style="display: none;">Här utför du vårdärenden för&#160;Delegatnamn Delegatefternamn, 010203-0405. Det innebär att allt du gör här gäller Delegatnamn Delegatefternamn. Den vårdgivare du har kontakt med ser vem som utför ärendet.
+                    </div>
+                </div>
+            </div>
+
+            <div class="breadcrumbs-container">
+                <div class="breadcrumbs">
+                    <a class="link" href="#">Start</a> » <a class="link" href="#">Föregående sida</a>&#160;» Denna sida
+                </div><!--breadcrumbs-->
+            </div><!--breadcrumbs-container-->
+
+
+        </div>
+
+        <div class="row-main">
+            <ui:insert name="mainContent"/>
+            <div class="push" id="push" style="height: 112px;"></div>
+        </div>
+
+        <div class="footerblock1177" id="footerblock1177">
+            <div class="_1177-footer">
+
+                <div class="_1177-links">
+                    <div class="_1177-links-row">
+                        <div class="footer-link" id="link-phone">
+                            <img class="icon-footer" src="img/icon-phone.png" alt=""/><a class="footer-link-text" href="tel:+46812313500">Ring supporten 08-123 135 00</a>
+                        </div>
+                        <div class="footer-link" id="link-support">
+                            <img class="icon-footer" src="img/icon-mail.png" alt=""/><a class="footer-link-text link1177" href="http://1177.se/e-tjanster" target="_blank" title="Öppnas i nytt fönster">Mejla supporten</a><img src="img/icon-newwindow.png" class="extlink" alt="Länken öppnas i nytt fönster."/>
+                        </div>
+                        <div class="footer-link" id="link-1177more">
+                            <img class="icon-footer" src="img/icon-q.png" alt=""/><a class="footer-link-text link1177" href="http://1177.se/e-tjanster" target="_blank" title="Öppnas i nytt fönster">Läs mer om e-tjänster</a><img src="img/icon-newwindow.png" class="extlink" alt="Länken öppnas i nytt fönster."/>
+                        </div>
+                        <div class="footer-link" id="link-sitemap">
+                            <img class="icon-footer" src="img/icon-list.png" alt=""/><a class="footer-link-text" href="/webbkarta">Webbkarta</a>
                         </div>
                     </div>
                 </div>
 
-                <div class="header-bottom"></div>
+                <div class="_1177-tagline-block">
+                    <div class="_1177-tagline-text"><a class="link-negative link1177i" title="Öppnas i nytt fönster" href="http://1177.se" target="_blank">1177 Vårdguiden</a>&#160;<img src="img/icon-newwindow-inv.png" class="extlink" alt="Länken öppnas i nytt fönster."/> —&#160;En&#160;tjänst&#160;från&#160;Sveriges&#160;landsting&#160;och&#160;regioner</div>
+                </div>
             </div>
-            <div id="breadcrumbs">
-
-            </div>
-        </div>
-
-        <div id="mainContainer">
-            <ui:insert name="mainContent"/>
-        </div>
-
-        <div id="footer" style="position:static;">
-
         </div>
     </div>
 </h:body>

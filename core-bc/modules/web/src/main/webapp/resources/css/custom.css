@@ -1,3 +1,25 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+#container {
+    min-height: 100%;
+    position: relative;
+}
+
+.row-main {
+    padding-bottom: 112px; /* Height of footer */
+}
+
+#footerblock1177 {
+    bottom: 0;
+    height: 112px;
+    position: absolute;
+    width: 100%;
+}
+
 .right-align {
     text-align: right;
 }
@@ -6,16 +28,24 @@
     border-collapse: collapse;
 }
 
+.avrop-table thead {
+    background-color: #008391;
+    background-image: -webkit-linear-gradient(#128693, #006a7b);
+    background-image: linear-gradient(#128693, #006a7b);
+    color: #ffffff;
+    font-style: italic;
+}
+
 .avrop-table td {
     border: 1px solid #000000;
     padding: 8px;
 }
 
-input[type=checkbox] {
-    display:none;
+input[type="checkbox"] {
+    /*display:none;*/
 }
 
-input[type=checkbox] + label
+input[type="checkbox"] + label
 {
     background: #999;
     height: 16px;
@@ -23,7 +53,7 @@ input[type=checkbox] + label
     display:inline-block;
     padding: 0 0 0 0px;
 }
-input[type=checkbox]:checked + label
+input[type="checkbox"]:checked + label
 {
     background: #0080FF;
     height: 16px;
@@ -31,3 +61,22 @@ input[type=checkbox]:checked + label
     display:inline-block;
     padding: 0 0 0 0px;
 }
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+button.back-button, .button.back-button, input[type="submit"].back-button {
+    background-image: -webkit-linear-gradient(top, #989898, #6B6B6B);
+    border-color: #6B6B6B;
+
+}
+
+button.back-button:hover, .button.back-button:hover, input[type="submit"].back-button:hover {
+    background-color: #ffffff;
+    background-image: none;
+    /*background-color: #929292;*/
+    /*background-image: -webkit-linear-gradient(top, #939494, #797979);*/
+    color: #6B6B6B;
+}
+

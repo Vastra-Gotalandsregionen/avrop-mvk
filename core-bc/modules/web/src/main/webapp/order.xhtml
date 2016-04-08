@@ -42,6 +42,7 @@
             <h:form>
 
                 <h4>Mina produkter</h4>
+
                 <table class="avrop-table my-products-table contentFontSize">
                     <thead>
                     <tr>
@@ -52,15 +53,31 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                    <ui:repeat value="#{mvkController.medicalSupplyPrescriptions.subjectOfCareType.prescriptionItem}" var="item">
+                        <tr>
+                            <td>
+                                <h:selectBooleanCheckbox />
+                            </td>
+                            <td>
+                                #{item.article.articleName}<br/>#{item.article.articleNo}
+                            </td>
+                            <td>
+                                #{item.article.articleName}
+                            </td>
+                            <td>
+                                #{item.noOfRemainingOrders}/#{item.noOfOrders}
+                            </td>
+                        </tr>
+                    </ui:repeat>
+                    <!--<tr>
                         <td class="column-0">
-                            <input type="checkbox" id="myCheckBox" />
-                            <label for="myCheckBox"/>
+                            <input class="" type="checkbox" id="myCheckBox" />
+                            &lt;!&ndash;<label for="myCheckBox"/>&ndash;&gt;
                         </td>
                         <td class="column-1">Produktgrupp/Artikel-nr.</td>
                         <td class="column-2">Produktgrupp/Artikel-nr.</td>
                         <td class="column-3">Produktgrupp/Artikel-nr.</td>
-                    </tr>
+                    </tr>-->
                     </tbody>
                 </table>
                 <!--<script type="text/javascript"
@@ -69,8 +86,10 @@
 
                 //&ndash;&gt;</script>-->
                 <div class="right-align">
-                    <h:commandButton styleClass="back-button" value="Bakåt" action="start?faces-redirect=true&amp;includeViewParams=true" />
-                    <h:commandButton value="Till leverans" action="delivery?faces-redirect=true&amp;includeViewParams=true" />
+
+                    <h:commandButton styleClass="button back-button" value="Bakåt" action="start?faces-redirect=true&amp;includeViewParams=true" />
+                    <h:commandButton styleClass="button" value="Till leverans" action="delivery?faces-redirect=true&amp;includeViewParams=true" />
+                    <!--<h:commandLink styleClass="" value="Bakåt" action="start?faces-redirect=true&amp;includeViewParams=true" />-->
                 </div>
                 <!--</form>-->
             </h:form>
