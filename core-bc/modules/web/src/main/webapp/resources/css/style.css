@@ -89,9 +89,9 @@ a {
 ul { list-style: none;
     padding-left: 0;}
 
-ul li:before {
+/*ul li:before {
     content: "\00BB  ";
-}
+}*/
 
 .button {
     display: inline-block;

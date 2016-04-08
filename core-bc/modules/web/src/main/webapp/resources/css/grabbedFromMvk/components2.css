@@ -105,10 +105,6 @@
 }
 
 /* Container: PaperSheet */
-.containerBoxShadow.paperSheet>.wrapper>.boxShadowBody {
-    padding: 0px 3.3%;
-}
-
 .containerBoxShadow.paperSheet>.bottom {
     height: 17px;
     padding: 0 220px;
@@ -154,7 +150,7 @@
 }
 
 .containerBoxShadow.greyBluePaperSheet>.wrapper>.boxShadowBody {
-    padding: 0px 3.3%;
+    padding: 3.3% 6.6%;
     background: none;
     background-color: #f2f2f2;
     border: none;

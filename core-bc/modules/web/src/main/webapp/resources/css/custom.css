@@ -41,23 +41,28 @@ html, body {
     padding: 8px;
 }
 
-input[type="checkbox"] {
-    /*display:none;*/
+.checkbox {
 }
 
-input[type="checkbox"] + label
-{
-    background: #999;
-    height: 16px;
-    width: 16px;
-    display:inline-block;
-    padding: 0 0 0 0px;
+.checkbox input[type="checkbox"] {
+    display:none;
 }
-input[type="checkbox"]:checked + label
-{
-    background: #0080FF;
-    height: 16px;
-    width: 16px;
+
+.checkbox input[type="checkbox"] + label {
+    background-image: url("../img/unchecked.png");
+    height: 24px;
+    width: 24px;
+    display: inline-block;
+    padding: 0 0 0 0px;
+    background-size: 24px;
+    background-repeat: no-repeat;
+}
+
+.checkbox input[type="checkbox"]:checked + label {
+    display:none;
+    background-image: url("../img/checked.png");
+    height: 24px;
+    width: 24px;
     display:inline-block;
     padding: 0 0 0 0px;
 }
@@ -79,4 +84,65 @@ button.back-button:hover, .button.back-button:hover, input[type="submit"].back-b
     /*background-image: -webkit-linear-gradient(top, #939494, #797979);*/
     color: #6B6B6B;
 }
+
+/*** TOOLBAR ***/
+ul.caseDetailToolbar,ul.toolbar {
+    float: right;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+ul.caseDetailToolbar a,ul.toolbar a {
+    /* 	text-decoration: none; */
+    /* 	color: inherit; */
+}
+
+ul.caseDetailToolbar li,ul.toolbar li {
+    float: left;
+    margin-right: 10px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+ul.caseDetailToolbar .icon,ul.toolbar .icon {
+    margin: 1px auto;
+    padding-top: 38px;
+    width: 48px;
+    display: block;
+    text-align: center;
+    background-repeat: no-repeat;
+    background-position: 13px 13px;
+}
+
+@media all and (max-width: 767px) {
+    ul.caseDetailToolbar .icon,ul.toolbar .icon {
+        margin: 20px auto;
+    }
+}
+
+ul.caseDetailToolbar a:hover .icon,ul.toolbar a:hover .icon {
+    background-image: url("../img/skrivut-02.png");
+}
+
+ul.caseDetailToolbar .icon.toolbar_delete,ul.toolbar .icon.toolbar_delete
+{
+    background-position: -96px 0px;
+}
+
+ul.caseDetailToolbar .icon.toolbar_archive,ul.toolbar .icon.toolbar_archive
+{
+    background-position: -144px 0;
+}
+
+ul.caseDetailToolbar .icon.toolbar_print,ul.toolbar .icon.toolbar_print
+{
+    background-image: url("../img/skrivut-01.png");
+}
+
+ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
+}
+
+/**************************/
 

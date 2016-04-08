@@ -9,18 +9,15 @@
 
     <ui:define name="boxContent">
 
-        <!--<form method="post"
-              action="/mvk/caseForm/SSO_START.xhtml" enctype="application/x-www-form-urlencoded">-->
-            <ul id="toolbar" class="toolbar caseDetailToolbar ">
-                <li class="toolbarItem"><a href="#" onclick="window.print(); return false;">
-					<span class="icon toolbar_print">
-						<span>Skriv ut</span>
-					</span></a>
-                </li>
-            </ul>
+        <ui:include src="WEB-INF/xhtml/include/print.xhtml" />
 
-        <!--</form>-->
-
+        <div class="print-toolbar">
+            <a href="#" onclick="window.print(); return false;">
+                <span class="icon toolbar_print">
+                    <span>Skriv ut</span>
+                </span>
+            </a>
+        </div>
 
         <div class="centerareatext">
             <h3>Mina läkemedelsnära produkter</h3>
@@ -56,7 +53,10 @@
                     <ui:repeat value="#{mvkController.medicalSupplyPrescriptions.subjectOfCareType.prescriptionItem}" var="item">
                         <tr>
                             <td>
-                                <h:selectBooleanCheckbox />
+                                <span class="checkbox">
+                                    <h:selectBooleanCheckbox id="subscriptionCheckbox" />
+                                    <h:outputLabel for="subscriptionCheckbox" />
+                                </span>
                             </td>
                             <td>
                                 #{item.article.articleName}<br/>#{item.article.articleNo}
