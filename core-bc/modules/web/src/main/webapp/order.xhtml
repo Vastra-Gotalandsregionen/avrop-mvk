@@ -9,15 +9,11 @@
 
     <ui:define name="boxContent">
 
-        <ui:include src="WEB-INF/xhtml/include/print.xhtml" />
+        <div style="display: none">#{mvkController} This reference is needed in order to make possible message be added before the h:messages tag is rendered.</div>
 
-        <div class="print-toolbar">
-            <a href="#" onclick="window.print(); return false;">
-                <span class="icon toolbar_print">
-                    <span>Skriv ut</span>
-                </span>
-            </a>
-        </div>
+        <h:messages showSummary="true" styleClass="alert alert-danger"/>
+
+        <ui:include src="WEB-INF/xhtml/include/print.xhtml" />
 
         <div class="centerareatext">
             <h3>Mina läkemedelsnära produkter</h3>

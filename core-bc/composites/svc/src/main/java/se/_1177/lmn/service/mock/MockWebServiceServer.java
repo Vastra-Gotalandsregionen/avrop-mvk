@@ -12,11 +12,11 @@ public class MockWebServiceServer {
     private static Endpoint endpoint3;
 
     public static void main(String[] args) {
-        publishEndpoints();
+        publishEndpoints(18080);
     }
 
-    public static void publishEndpoints() {
-        String endpointBase = "http://localhost:18080";
+    public static void publishEndpoints(int port) {
+        String endpointBase = "http://localhost:" + port;
 
         endpoint1 = Endpoint.publish(
                 endpointBase + "/GetMedicalSupplyDeliveryPoints",

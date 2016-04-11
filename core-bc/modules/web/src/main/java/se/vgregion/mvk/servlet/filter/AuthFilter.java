@@ -1,0 +1,62 @@
+package se.vgregion.mvk.servlet.filter;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+/**
+ * @author Patrik Björk
+ */
+@WebFilter("*")
+public class AuthFilter implements Filter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthFilter.class);
+
+    private String userIdHeader = "AJP_sn_id";
+
+    public void init(FilterConfig filterConfig) throws ServletException {
+        LOGGER.info("Filter init...");
+    }
+
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+
+        LOGGER.info("RequestURI: " + request.getRequestURI());
+
+        String env = System.getProperty("env");
+
+        if (env != null && env.equalsIgnoreCase("dev")) {
+            filterChain.doFilter(servletRequest, servletResponse);
+        } else {
+
+            String ajpSnId = request.getHeader(this.userIdHeader);
+            if (ajpSnId != null && !"".equals(ajpSnId) && ajpSnId.length() > 0) {
+                filterChain.doFilter(servletRequest, servletResponse);
+            } else {
+                try (PrintWriter writer = response.getWriter()) {
+                    LOGGER.error("Request without " + userIdHeader + " set.");
+                    writer.append("Inloggning krävs.");
+                    response.setStatus(401);
+                }
+            }
+
+        }
+
+    }
+
+    public void destroy() {
+
+    }
+}

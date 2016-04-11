@@ -30,7 +30,7 @@ public class LmnServiceFacadeImplTest {
 
     @BeforeClass
     public static void setupMockServer() {
-        MockWebServiceServer.publishEndpoints();
+        MockWebServiceServer.publishEndpoints(18081);
     }
 
     @AfterClass
