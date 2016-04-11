@@ -7,6 +7,7 @@ import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
@@ -45,9 +46,21 @@ public class AuthFilter implements Filter {
             if (ajpSnId != null && !"".equals(ajpSnId) && ajpSnId.length() > 0) {
                 filterChain.doFilter(servletRequest, servletResponse);
             } else {
-                try (PrintWriter writer = response.getWriter()) {
+                response.setContentType("text/html");
+
+                try (ServletOutputStream outputStream = response.getOutputStream()) {
                     LOGGER.error("Request without " + userIdHeader + " set.");
-                    writer.append("Inloggning krävs.");
+
+                    StringBuilder sb = new StringBuilder();
+
+                    sb.append("<!DOCTYPE html>" + System.getProperty("line.separator"));
+                    sb.append("<html>" +
+                            "<head><meta charset=\"utf-8\"></meta></head>" +
+                            "<body>");
+                    sb.append("Inloggning krävs.");
+                    sb.append("</body></html>");
+
+                    outputStream.write(sb.toString().getBytes("UTF-8"));
                     response.setStatus(401);
                 }
             }

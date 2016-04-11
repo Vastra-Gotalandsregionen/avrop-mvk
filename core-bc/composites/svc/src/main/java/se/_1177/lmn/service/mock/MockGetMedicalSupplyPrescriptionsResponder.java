@@ -18,6 +18,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Random;
 
@@ -30,11 +31,11 @@ public class MockGetMedicalSupplyPrescriptionsResponder
 
     private final ObjectFactory objectFactory = new ObjectFactory();
 
-    private Random random = new Random();
-
     public GetMedicalSupplyPrescriptionsResponseType getMedicalSupplyPrescriptions(
             String logicalAddress,
             GetMedicalSupplyPrescriptionsType parameters) {
+
+        Random random = new Random(4);
 
         GetMedicalSupplyPrescriptionsResponseType response = objectFactory
                 .createGetMedicalSupplyPrescriptionsResponseType();
@@ -45,45 +46,10 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         subjectOfCare.setSubjectOfCareId(random.nextInt(1000) + "");
 
         for (int i = 0; i <= random.nextInt(5); i++) {
-            OrderItemType orderItem = new OrderItemType();
-
-            ArticleType article = new ArticleType();
-            article.setArticleName("Artikelnamn" + random.nextInt(100));
-            article.setArticleNo(random.nextInt(100000) + "");
-            article.setIsOrderable(random.nextBoolean());
-            article.setPackageSize(random.nextInt(100));
-            article.setPackageSizeUnit("Enhet" + random.nextInt(100));
-            article.setProductArea(ProductAreaEnum.values()[random.nextInt(ProductAreaEnum.values().length)]);
-
-            orderItem.setArticle(article);
-
-            orderItem.setDeliveredDate(getRandomCalendar());
-            DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
-            deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
-//            deliveryChoice.setDeliveryPoint(); kanske todo utveckla mer på deliveryChoice...
-            orderItem.setDeliveryChoice(deliveryChoice);
-//            orderItem.set
-
-            subjectOfCare.getOrderItem().add(orderItem);
-
-            PrescriptionItemType prescriptionItem = new PrescriptionItemType();
-
-            ArticleType article2 = new ArticleType();
-            article2.setArticleName("Artikelnamn" + random.nextInt(100));
-            article2.setArticleNo(random.nextInt(100000) + "");
-            article2.setIsOrderable(random.nextBoolean());
-            article2.setPackageSize(random.nextInt(100));
-            article2.setPackageSizeUnit("Enhet" + random.nextInt(100));
-            article2.setProductArea(ProductAreaEnum.values()[random.nextInt(ProductAreaEnum.values().length)]);
-
-            prescriptionItem.setArticle(article2);
-
-            prescriptionItem.setNoOfOrders(random.nextInt(10));
-            prescriptionItem.setNoOfRemainingOrders(random.nextInt(10));
-            prescriptionItem.setNextEarliestOrderDate(getRandomCalendar());
-
-            subjectOfCare.getPrescriptionItem().add(prescriptionItem);
+            addPrescriptionItem(random, subjectOfCare, false);
         }
+
+        addPrescriptionItem(random, subjectOfCare, true);
 
         response.setSubjectOfCareType(subjectOfCare);
 
@@ -92,7 +58,64 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         return response;
     }
 
-    private XMLGregorianCalendar getRandomCalendar() {
+    private void addPrescriptionItem(Random random, SubjectOfCareType subjectOfCare, boolean nextPossibleOrderDateInFuture) {
+        OrderItemType orderItem = new OrderItemType();
+
+        ArticleType article = new ArticleType();
+        article.setArticleName("Artikelnamn" + random.nextInt(100));
+        article.setArticleNo(random.nextInt(100000) + "");
+        article.setIsOrderable(random.nextBoolean());
+        article.setPackageSize(random.nextInt(100));
+        article.setPackageSizeUnit("Enhet" + random.nextInt(100));
+        article.setProductArea(ProductAreaEnum.values()[random.nextInt(ProductAreaEnum.values().length)]);
+
+        orderItem.setArticle(article);
+
+        orderItem.setDeliveredDate(getRandomCalendar(random));
+        DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
+        deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+//            deliveryChoice.setDeliveryPoint(); kanske todo utveckla mer på deliveryChoice...
+        orderItem.setDeliveryChoice(deliveryChoice);
+
+        subjectOfCare.getOrderItem().add(orderItem);
+
+        PrescriptionItemType prescriptionItem = new PrescriptionItemType();
+
+        ArticleType article2 = new ArticleType();
+        article2.setArticleName("Artikelnamn" + random.nextInt(100));
+        article2.setArticleNo(random.nextInt(100000) + "");
+        article2.setIsOrderable(random.nextBoolean());
+        article2.setPackageSize(random.nextInt(100));
+        article2.setPackageSizeUnit("Enhet" + random.nextInt(100));
+        article2.setProductArea(ProductAreaEnum.values()[random.nextInt(ProductAreaEnum.values().length)]);
+
+        prescriptionItem.setArticle(article2);
+
+        prescriptionItem.setNoOfOrders(random.nextInt(10));
+        prescriptionItem.setNoOfRemainingOrders(random.nextInt(10));
+
+        if (!nextPossibleOrderDateInFuture) {
+            prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random));
+        } else {
+            Calendar c = Calendar.getInstance();
+
+            c.add(Calendar.MONTH, 1);
+
+            XMLGregorianCalendar randomCalendar = getRandomCalendar(random);
+            randomCalendar.setYear(c.get(Calendar.YEAR) + 1);
+
+            prescriptionItem.setNextEarliestOrderDate(randomCalendar);
+        }
+        prescriptionItem.setPrescriptionId(random.nextInt(100000) + "");
+        prescriptionItem.setPrescriber("Kalle Karlsson");
+        prescriptionItem.setLastValidDate(getRandomCalendar(random));
+        prescriptionItem.setNoOfArticlesPerOrder(random.nextInt(5) * 1000 + 1000);
+        prescriptionItem.setNoOfPackagesPerOrder(random.nextInt(5) * 50 + 50);
+
+        subjectOfCare.getPrescriptionItem().add(prescriptionItem);
+    }
+
+    private XMLGregorianCalendar getRandomCalendar(Random random) {
         XMLGregorianCalendar xmlGregorianCalendar = null;
         DatatypeFactory datatypeFactory;
         try {

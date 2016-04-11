@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 /**
  * @author Patrik Björk
  */
-@Component
-@Scope("request")
+//@Component
+//@Scope("request")
 public class UtilController {
 
     public String getLinkSuffix() {

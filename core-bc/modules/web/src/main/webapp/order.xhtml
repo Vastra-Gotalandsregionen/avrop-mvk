@@ -36,29 +36,67 @@
 
                 <h4>Mina produkter</h4>
 
-                <table class="avrop-table my-products-table contentFontSize">
+                <table class="avrop-table my-products-table contentFontSize" style="table-layout: fixed">
                     <thead>
                     <tr>
                         <td class="column-0"></td>
                         <td class="column-1">Produktgrupp/Artikel-nr.</td>
                         <td class="column-2">Benämning</td>
-                        <td class="column-3">Uttag kvar/antal uttag</td>
+                        <td class="column-3">Uttag kvar / antal uttag</td>
                     </tr>
                     </thead>
                     <tbody>
                     <ui:repeat value="#{mvkController.medicalSupplyPrescriptions.subjectOfCareType.prescriptionItem}" var="item">
                         <tr>
                             <td>
-                                <span class="checkbox">
-                                    <h:selectBooleanCheckbox id="subscriptionCheckbox" />
+                                <h:panelGroup styleClass="checkbox" rendered="#{not utilController.isAfterToday(item.nextEarliestOrderDate)}">
+                                    <h:selectBooleanCheckbox id="subscriptionCheckbox" value="#{mvkController.chosenItemMap[item.prescriptionId]}" />
                                     <h:outputLabel for="subscriptionCheckbox" />
-                                </span>
+                                </h:panelGroup>
                             </td>
                             <td>
                                 #{item.article.articleName}<br/>#{item.article.articleNo}
                             </td>
-                            <td>
+                            <td class="#{not utilController.isAfterToday(item.nextEarliestOrderDate) ? 'bold' : ''}">
+                                <h:panelGroup layout="block" class="alert-text" rendered="#{utilController.isAfterToday(item.nextEarliestOrderDate)}">
+                                    Kan beställas
+                                    <h:outputText value="#{utilController.toDate(item.nextEarliestOrderDate)}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm"/>
+                                    </h:outputText>.
+                                </h:panelGroup>
                                 #{item.article.articleName}
+                                <div>
+                                    <a href="#" class="show-more-link">
+                                        Mer info
+                                    </a>
+                                    <a href="#" class="show-less-link" style="display: none;">
+                                        Mindre info
+                                    </a>
+                                    <div class="more-info" style="display: none;">
+                                        <table class="embedded-table">
+                                            <thead>
+                                            <tr>
+                                                <td>Förpackning/ut</td>
+                                                <td>Totalt antal/ut</td>
+                                                <td>Förskrivare</td>
+                                                <td>Giltigt t.o.m.</td>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>#{item.noOfPackagesPerOrder}</td>
+                                                <td>#{item.noOfArticlesPerOrder}</td>
+                                                <td>#{item.prescriber}</td>
+                                                <td>
+                                                    <h:outputText value="#{utilController.toDate(item.lastValidDate)}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm"/>
+                                                    </h:outputText>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </td>
                             <td>
                                 #{item.noOfRemainingOrders}/#{item.noOfOrders}
@@ -84,12 +122,21 @@
                 <div class="right-align">
 
                     <h:commandButton styleClass="button back-button" value="Bakåt" action="start?faces-redirect=true&amp;includeViewParams=true" />
-                    <h:commandButton styleClass="button" value="Till leverans" action="delivery?faces-redirect=true&amp;includeViewParams=true" />
+                    <h:commandButton styleClass="button" value="Till leverans" action="#{mvkController.toDelivery}" />
+                    <!--<h:commandButton styleClass="button" value="Till leverans" action="delivery?faces-redirect=true&amp;includeViewParams=true" />-->
                     <!--<h:commandLink styleClass="" value="Bakåt" action="start?faces-redirect=true&amp;includeViewParams=true" />-->
                 </div>
                 <!--</form>-->
+
             </h:form>
         </div>
+
+        <script type="text/javascript">
+            jq(document).ready(function () {
+                initOrderPage();
+            });
+        </script>
+
     </ui:define>
 </ui:composition>
 </html>

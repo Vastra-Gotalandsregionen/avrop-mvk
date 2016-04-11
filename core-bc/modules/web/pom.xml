@@ -16,6 +16,9 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
+    <build>
+        <finalName>avrop-mvk</finalName>
+    </build>
     <!--<build>
         <plugins>
             <plugin>

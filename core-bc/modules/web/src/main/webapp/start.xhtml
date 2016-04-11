@@ -9,55 +9,60 @@
 
     <ui:define name="boxContent">
 
-        <!-- todo skriv ut -->
-        <ui:include src="WEB-INF/xhtml/include/print.xhtml" />
+        <div id="startPageContainer">
+           <!-- todo skriv ut -->
+            <ui:include src="WEB-INF/xhtml/include/print.xhtml" />
 
-        <h2>Beställning av läkemedelsnära produkter</h2>
-        <p>
-        </p>
-        <p>
-            Plats för övrig information.
-        </p>
-        <p></p>
-        <div class="containerBoxShadow greyBluePaperSheet">
-            <div class="wrapper">
-                <div class="boxShadowBody">
-                    <div class="termConditionsWrapper">
-                        <h2>Viktigt</h2>
-                        <ul>
-                            <li>
-                                <strong>Frågor om dina produkter </strong>Om det i samband med att du läser din journal uppkommer medicinska frågor eller funderingar kan du få svar på olika sätt:
-                            </li>
-                            <li>
-                                På
-                                <a href="http://www.1177.se">www.1177.se</a> hittar du fakta och praktiska råd om sjukdomar och besvär, undersökningar, behandlingar och läkemedel. Välj<strong> "Fakta och råd"</strong>.<br/>Du kan även skicka en anonym skriftlig fråga via
-                                <a href="http://www.1177.se/">www.1177.se</a> och få svar på denna inom en vecka. Välj "<strong>Ställ en anonym fråga"</strong>.<br/>Vid behov av personlig kontakt går det bra att ringa telefonnummer 1177
-                                <strong>"Råd om vård dygnet runt"</strong>.<strong>
-                                <br/><br/></strong>Du kan också kontakta din vårdenhet genom att logga in på 1177.se och skicka meddelande till berörd mottagning eller via telefon, på vårdenhetens angivna telefontider.
-                            </li>
-                        </ul>
-                        <!--<ul id="termsCondition" style="display: none;"></ul>
-                        <hr/>-->
-                        <!--<div class="acceptCondition">
-                            <input type="checkbox" name="accept"
-                                   title="Jag har tagit del av den fullständiga informationen."
-                                   class="noborder" id="accept"/>
-                            <label for="accept"
-                                   class="noblock">Jag har tagit del av den fullständiga informationen.</label>
-                        </div>--><!-- acceptCondition -->
-                    </div><!-- end termConditionsWrapper -->
-                </div><!-- end boxShadowBody -->
-            </div><!-- end wrapper  -->
-            <div class="bottom">
-                <div class="right"></div>
+            <h2>Beställning av läkemedelsnära produkter</h2>
+
+            <div class="more-info-container">
+                <p>
+                    Plats för övrig information.
+                </p>
             </div>
-            <div class="clear"></div>
-        </div><!-- end containerBoxShadow greyBluePaperSheet -->
-        <h:form>
-            <div class="right-align">
-                <h:commandButton styleClass="button" value="Till beställning" action="order?faces-redirect=true&amp;includeViewParams=true"/>
-            </div>
-        </h:form>
+
+            <div class="containerBoxShadow greyBluePaperSheet">
+                <div class="wrapper">
+                    <div class="boxShadowBody">
+                        <div id="termConditionsWrapper">
+                            <h2>Viktigt</h2>
+                            <ul>
+                                <li>
+                                    <strong>Frågor om dina produkter </strong>Om det i samband med att du läser din journal uppkommer medicinska frågor eller funderingar kan du få svar på olika sätt:
+                                </li>
+
+                                <li>
+                                    På
+                                    <a href="http://www.1177.se">www.1177.se</a> hittar du fakta och praktiska råd om sjukdomar och besvär, undersökningar, behandlingar och läkemedel. Välj<strong> "Fakta och råd"</strong>.<br/>Du kan även skicka en anonym skriftlig fråga via
+                                    <a href="http://www.1177.se/">www.1177.se</a> och få svar på denna inom en vecka. Välj "<strong>Ställ en anonym fråga"</strong>.<br/>Vid behov av personlig kontakt går det bra att ringa telefonnummer 1177
+                                    <strong>"Råd om vård dygnet runt"</strong>.<strong>
+                                    <br/><br/></strong>Du kan också kontakta din vårdenhet genom att logga in på 1177.se och skicka meddelande till berörd mottagning eller via telefon, på vårdenhetens angivna telefontider.
+                                </li>
+                            </ul>
+                            <!--<ul id="termsCondition" style="display: none;"></ul>
+                            <hr/>-->
+                            <!--<div class="acceptCondition">
+                                <input type="checkbox" name="accept"
+                                       title="Jag har tagit del av den fullständiga informationen."
+                                       class="noborder" id="accept"/>
+                                <label for="accept"
+                                       class="noblock">Jag har tagit del av den fullständiga informationen.</label>
+                            </div>--><!-- acceptCondition -->
+                        </div><!-- end termConditionsWrapper -->
+                    </div><!-- end boxShadowBody -->
+                </div><!-- end wrapper  -->
+                <div class="bottom">
+                    <div class="right"></div>
+                </div>
+                <div class="clear"></div>
+            </div><!-- end containerBoxShadow greyBluePaperSheet -->
+            <h:form>
+                <div class="right-align">
+                    <h:commandButton styleClass="button" value="Till beställning" action="order?faces-redirect=true&amp;includeViewParams=true"/>
+                </div>
+            </h:form>
+
+        </div>
     </ui:define>
 </ui:composition>
 </html>

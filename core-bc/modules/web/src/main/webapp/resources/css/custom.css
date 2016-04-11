@@ -24,8 +24,19 @@ html, body {
     text-align: right;
 }
 
-.avrop-table {
+.alert-text {
+    color: #cd0a0a;
+    font-weight: bold;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.avrop-table, .embedded-table {
     border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
 }
 
 .avrop-table thead {
@@ -39,6 +50,22 @@ html, body {
 .avrop-table td {
     border: 1px solid #000000;
     padding: 8px;
+    box-sizing: border-box;
+}
+
+.my-products-table .column-0 {
+    width: 41px;
+}
+
+.my-products-table .column-1 {
+    width: 165px;
+}
+
+.my-products-table .column-2 {
+}
+
+.my-products-table .column-3 {
+    width: 100px;
 }
 
 .checkbox {
@@ -159,4 +186,14 @@ ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
     font-size: 1.2em;
     margin-bottom: 20px;
     padding: 15px;
+}
+
+/**************************/
+
+#startPageContainer .more-info-container {
+    min-height: 180px;
+}
+
+#termConditionsWrapper ul {
+    list-style: disc;
 }
