@@ -48,7 +48,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <ui:repeat value="#{mvkController.medicalSupplyPrescriptions}" var="item">
+                    <ui:repeat value="#{mvkController.medicalSupplyPrescriptions}" var="item" varStatus="status">
                         <tr class="#{utilController.isAfterToday(item.nextEarliestOrderDate) ? 'unavailable-row' : ''}">
                             <td>
                                 <h:panelGroup styleClass="checkbox" rendered="#{not utilController.isAfterToday(item.nextEarliestOrderDate)}">
@@ -65,6 +65,10 @@
                                     <h:outputText value="#{utilController.toDate(item.nextEarliestOrderDate)}">
                                         <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm"/>
                                     </h:outputText>.
+                                    <span class="toggle-trigger info-icon expand" data-toggle-for="orderTimingInfo#{status.index}"/>
+                                    <div id="orderTimingInfo#{status.index}" style="display: none;">
+                                        Infotext...
+                                    </div>
                                 </h:panelGroup>
                                 #{item.article.articleName}
                                 <mvk:moreInfo item="#{item}"/>
@@ -80,7 +84,13 @@
 
                 <hr/>
 
-                <h4 class="toggle-trigger expand" data-toggle-for="collected-products-wrapper">Uthämtade produkter, #{mvkController.noLongerOrderableMedicalSupplyPrescriptions.size()} st</h4>
+                <h4 class="toggle-trigger plus-icon expand" data-toggle-for="collected-products-wrapper">Uthämtade produkter, #{mvkController.noLongerOrderableMedicalSupplyPrescriptions.size()} st</h4>
+
+                <span class="toggle-trigger info-icon expand" data-toggle-for="collectedProductsInfo"/>
+
+                <div id="collectedProductsInfo" style="display: none;">
+                    Infotext...
+                </div>
 
                 <div id="collected-products-wrapper" style="display: none;">
                     <table class="avrop-table my-products-table contentFontSize collected-expired-products" style="table-layout: fixed">
