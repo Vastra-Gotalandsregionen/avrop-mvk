@@ -219,6 +219,9 @@ ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
     cursor: pointer;
     display: inline-block;
     line-height: 36px;
+}
+
+.toggle-trigger.with-text {
     padding-left: 40px;
 }
 
