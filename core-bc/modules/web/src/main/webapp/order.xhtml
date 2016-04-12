@@ -3,7 +3,9 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:mvk="http://java.sun.com/jsf/composite/component/mvk"
+>
 
 <ui:composition template="WEB-INF/xhtml/template/wideContent.xhtml">
 
@@ -65,53 +67,14 @@
                                     </h:outputText>.
                                 </h:panelGroup>
                                 #{item.article.articleName}
-                                <div>
-                                    <a href="#" class="show-more-link">
-                                        Mer info
-                                    </a>
-                                    <a href="#" class="show-less-link" style="display: none;">
-                                        Mindre info
-                                    </a>
-                                    <div class="more-info" style="display: none;">
-                                        <table class="embedded-table">
-                                            <thead>
-                                            <tr>
-                                                <td>Förpackning/ut</td>
-                                                <td>Totalt antal/ut</td>
-                                                <td>Förskrivare</td>
-                                                <td>Giltigt t.o.m.</td>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td>#{item.noOfPackagesPerOrder}</td>
-                                                <td>#{item.noOfArticlesPerOrder}</td>
-                                                <td>#{item.prescriber}</td>
-                                                <td>
-                                                    <h:outputText value="#{utilController.toDate(item.lastValidDate)}">
-                                                        <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm"/>
-                                                    </h:outputText>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                <mvk:moreInfo item="#{item}"/>
                             </td>
                             <td>
                                 #{item.noOfRemainingOrders}/#{item.noOfOrders}
                             </td>
                         </tr>
                     </ui:repeat>
-                    <!--<tr>
-                        <td class="column-0">
-                            <input class="" type="checkbox" id="myCheckBox" />
-                            &lt;!&ndash;<label for="myCheckBox"/>&ndash;&gt;
-                        </td>
-                        <td class="column-1">Produktgrupp/Artikel-nr.</td>
-                        <td class="column-2">Produktgrupp/Artikel-nr.</td>
-                        <td class="column-3">Produktgrupp/Artikel-nr.</td>
-                    </tr>-->
+
                     </tbody>
                 </table>
 
@@ -130,16 +93,18 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <ui:repeat value="#{mvkController.noLongerOrderableMedicalSupplyPrescriptions}" var="orderItem">
+                    <ui:repeat value="#{mvkController.noLongerOrderableMedicalSupplyPrescriptions}" var="expiredItem">
                         <tr class="unavailable-row">
                             <td>
-                                <h:panelGroup layout="block" styleClass="row" rendered="#{utilController.isOlderThanAYear(orderItem.lastValidDate)}">#{utilController.isOlderThanAYear(orderItem.lastValidDate) ? 'För gammal förskrivning' : ''}</h:panelGroup>
-                                <!--<h:panelGroup rendered="#{utilController.isOlderThanAYear(orderItem.lastValidDate) and orderItem.noOfRemainingOrders le 0}"><br/></h:panelGroup>-->
-                                <h:panelGroup layout="block" styleClass="row" rendered="#{orderItem.noOfRemainingOrders le 0}">#{orderItem.noOfRemainingOrders le 0 ? 'Max antal uttag uppnått' : ''}</h:panelGroup>
+                                <h:panelGroup layout="block" styleClass="row" rendered="#{utilController.isOlderThanAYear(expiredItem.lastValidDate)}">#{utilController.isOlderThanAYear(expiredItem.lastValidDate) ? 'För gammal förskrivning' : ''}</h:panelGroup>
+                                <h:panelGroup layout="block" styleClass="row" rendered="#{expiredItem.noOfRemainingOrders le 0}">#{expiredItem.noOfRemainingOrders le 0 ? 'Max antal uttag uppnått' : ''}</h:panelGroup>
                             </td>
-                            <td>#{orderItem.article.articleName}<br/>#{orderItem.article.articleNo}</td>
-                            <td>#{orderItem.article.articleName}</td>
-                            <td><span class="#{orderItem.noOfRemainingOrders le 0 ? 'alert-text' : ''}">#{orderItem.noOfRemainingOrders} / #{orderItem.noOfOrders}</span></td>
+                            <td>#{expiredItem.article.articleName}<br/>#{expiredItem.article.articleNo}</td>
+                            <td>
+                                #{expiredItem.article.articleName}
+                                <mvk:moreInfo item="#{expiredItem}"/>
+                            </td>
+                            <td><span class="#{expiredItem.noOfRemainingOrders le 0 ? 'alert-text' : ''}">#{expiredItem.noOfRemainingOrders} / #{expiredItem.noOfOrders}</span></td>
                         </tr>
                     </ui:repeat>
 
@@ -147,19 +112,12 @@
 
                     </table>
                 </div>
-                <!--<script type="text/javascript"
-                        src="/mvk/javax.faces.resource/oamSubmit.js.xhtml?ln=org.apache.myfaces">&lt;!&ndash;
 
-
-                //&ndash;&gt;</script>-->
                 <div class="right-align">
 
                     <h:commandButton styleClass="button back-button" value="Bakåt" action="start?faces-redirect=true&amp;includeViewParams=true" />
                     <h:commandButton styleClass="button" value="Till leverans" action="#{mvkController.toDelivery}" />
-                    <!--<h:commandButton styleClass="button" value="Till leverans" action="delivery?faces-redirect=true&amp;includeViewParams=true" />-->
-                    <!--<h:commandLink styleClass="" value="Bakåt" action="start?faces-redirect=true&amp;includeViewParams=true" />-->
                 </div>
-                <!--</form>-->
 
             </h:form>
         </div>

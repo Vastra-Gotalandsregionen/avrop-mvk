@@ -1,5 +1,7 @@
 package se.vgregion.mvk.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import se._1177.lmn.service.util.Util;
 
@@ -13,6 +15,8 @@ import java.util.GregorianCalendar;
  */
 @Component
 public class UtilController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UtilController.class);
 
     public Date toDate(XMLGregorianCalendar calendar) {
         if (calendar == null) {
@@ -41,6 +45,12 @@ public class UtilController {
     }
 
     public static boolean isOlderThanAYear(XMLGregorianCalendar date) {
+
+        if (date == null) {
+            LOGGER.error("Date should not be null.");
+            return false;
+        }
+
         return Util.isOlderThanAYear(date);
     }
 

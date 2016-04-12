@@ -1,0 +1,51 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:f="http://xmlns.jcp.org/jsf/core"
+              xmlns:h="http://xmlns.jcp.org/jsf/html"
+              xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+              xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+              xmlns:composite="http://java.sun.com/jsf/composite"
+              xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<composite:interface>
+    <composite:attribute name="item"/>
+</composite:interface>
+
+<composite:implementation>
+
+    <c:set var="item" value="#{cc.attrs.item}"/>
+
+    <div>
+        <a href="#" class="show-more-link">
+            Mer info
+        </a>
+        <a href="#" class="show-less-link" style="display: none;">
+            Mindre info
+        </a>
+        <div class="more-info" style="display: none;">
+            <table class="embedded-table">
+                <thead>
+                <tr>
+                    <td>Förpackning/ut</td>
+                    <td>Totalt antal/ut</td>
+                    <td>Förskrivare</td>
+                    <td>Giltigt t.o.m.</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>#{item.noOfPackagesPerOrder}</td>
+                    <td>#{item.noOfArticlesPerOrder}</td>
+                    <td>#{item.prescriber}</td>
+                    <td>
+                        <h:outputText value="#{utilController.toDate(item.lastValidDate)}">
+                            <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm"/>
+                        </h:outputText>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</composite:implementation>
+
+</ui:component>
