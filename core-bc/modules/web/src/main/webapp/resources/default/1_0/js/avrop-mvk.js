@@ -17,6 +17,18 @@ function findShowLessLink(e) {
     return td.find('.show-less-link');
 }
 
+function initCommon() {
+    jq('.toggle-trigger').click(function (e) {
+        var forId = e.target.getAttribute('data-toggle-for');
+        jq('#' + forId).toggle();
+
+        jq(e.target).toggleClass('expand');
+        jq(e.target).toggleClass('minimize');
+    });
+
+
+}
+
 function initOrderPage() {
 
     jq('.show-more-link').click(function (e) {
@@ -41,14 +53,6 @@ function initOrderPage() {
 
         findShowMoreLink(e).show();
         findShowLessLink(e).hide();
-    });
-
-    jq('.toggle-trigger').click(function (e) {
-        var forId = e.target.getAttribute('data-toggle-for');
-        jq('#' + forId).toggle();
-
-        jq(e.target).toggleClass('expand');
-        jq(e.target).toggleClass('minimize');
     });
 
 }

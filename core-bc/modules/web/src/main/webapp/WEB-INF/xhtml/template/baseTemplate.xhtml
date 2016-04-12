@@ -53,8 +53,14 @@
                     <div class="delegate-header">
                         <div class="_1177-delegate-title">
                             <div class="_1177-header-info">
-                                Du utför nu ärenden åt <span class="delegate-name no-wrap">Delegatnamn&#160;Delegatefternamn<a href="#" data-content="Hjälpinformation.">
-                                <h:graphicImage styleClass="moreinfo helptoggle" id="delegate-toggle" library="default" alt="Mer inforamation" name="img/icon-info-1.png" /></a></span>
+                                Du utför nu ärenden åt <span class="delegate-name no-wrap">Delegatnamn&#160;Delegatefternamn
+                                <!--<a href="#" data-content="Hjälpinformation.">
+                                <h:graphicImage styleClass="moreinfo helptoggle" id="delegate-toggle" library="default" alt="Mer inforamation" name="img/icon-info-1.png" /></a>--></span>
+                                <span class="toggle-trigger info-icon expand" data-toggle-for="delegateInfo"/>
+
+                                <div id="delegateInfo" style="display: none;">
+                                    Infotext...
+                                </div>
                                 <!--<img class="moreinfo helptoggle" id="delegate-toggle" src="img/icon-info-1.png" alt="Mer information"/></a></span>-->
                             </div>
                         </div>
@@ -109,6 +115,12 @@
     </div>
 
     <h:outputScript library="default" name="js/avrop-mvk.js"/>
+
+    <script type="text/javascript">
+        jq(document).ready(function () {
+            initCommon();
+        });
+    </script>
 
 </h:body>
 </html>
