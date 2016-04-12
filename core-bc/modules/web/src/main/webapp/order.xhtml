@@ -46,8 +46,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <ui:repeat value="#{mvkController.medicalSupplyPrescriptions.subjectOfCareType.prescriptionItem}" var="item">
-                        <tr>
+                    <ui:repeat value="#{mvkController.medicalSupplyPrescriptions}" var="item">
+                        <tr class="#{utilController.isAfterToday(item.nextEarliestOrderDate) ? 'unavailable-row' : ''}">
                             <td>
                                 <h:panelGroup styleClass="checkbox" rendered="#{not utilController.isAfterToday(item.nextEarliestOrderDate)}">
                                     <h:selectBooleanCheckbox id="subscriptionCheckbox" value="#{mvkController.chosenItemMap[item.prescriptionId]}" />
@@ -114,6 +114,39 @@
                     </tr>-->
                     </tbody>
                 </table>
+
+                <hr/>
+
+                <h4 class="toggle-trigger expand" data-toggle-for="collected-products-wrapper">Uthämtade produkter, #{mvkController.noLongerOrderableMedicalSupplyPrescriptions.size()} st</h4>
+
+                <div id="collected-products-wrapper" style="display: none;">
+                    <table class="avrop-table my-products-table contentFontSize collected-expired-products" style="table-layout: fixed">
+                    <thead>
+                    <tr>
+                        <td class="column-0"></td>
+                        <td class="column-1">Produktgrupp/Artikel-nr.</td>
+                        <td class="column-2">Benämning</td>
+                        <td class="column-3">Uttag kvar / antal uttag</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ui:repeat value="#{mvkController.noLongerOrderableMedicalSupplyPrescriptions}" var="orderItem">
+                        <tr class="unavailable-row">
+                            <td>
+                                <h:panelGroup layout="block" styleClass="row" rendered="#{utilController.isOlderThanAYear(orderItem.lastValidDate)}">#{utilController.isOlderThanAYear(orderItem.lastValidDate) ? 'För gammal förskrivning' : ''}</h:panelGroup>
+                                <!--<h:panelGroup rendered="#{utilController.isOlderThanAYear(orderItem.lastValidDate) and orderItem.noOfRemainingOrders le 0}"><br/></h:panelGroup>-->
+                                <h:panelGroup layout="block" styleClass="row" rendered="#{orderItem.noOfRemainingOrders le 0}">#{orderItem.noOfRemainingOrders le 0 ? 'Max antal uttag uppnått' : ''}</h:panelGroup>
+                            </td>
+                            <td>#{orderItem.article.articleName}<br/>#{orderItem.article.articleNo}</td>
+                            <td>#{orderItem.article.articleName}</td>
+                            <td><span class="#{orderItem.noOfRemainingOrders le 0 ? 'alert-text' : ''}">#{orderItem.noOfRemainingOrders} / #{orderItem.noOfOrders}</span></td>
+                        </tr>
+                    </ui:repeat>
+
+                    </tbody>
+
+                    </table>
+                </div>
                 <!--<script type="text/javascript"
                         src="/mvk/javax.faces.resource/oamSubmit.js.xhtml?ln=org.apache.myfaces">&lt;!&ndash;
 

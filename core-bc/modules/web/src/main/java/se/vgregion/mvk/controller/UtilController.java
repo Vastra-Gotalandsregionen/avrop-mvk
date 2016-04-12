@@ -1,6 +1,7 @@
 package se.vgregion.mvk.controller;
 
 import org.springframework.stereotype.Component;
+import se._1177.lmn.service.util.Util;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.Calendar;
@@ -38,4 +39,9 @@ public class UtilController {
 
         return toGregorian.after(lastMilliSecondToday.getTime());
     }
+
+    public static boolean isOlderThanAYear(XMLGregorianCalendar date) {
+        return Util.isOlderThanAYear(date);
+    }
+
 }

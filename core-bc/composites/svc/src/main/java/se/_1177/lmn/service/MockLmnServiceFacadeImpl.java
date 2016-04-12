@@ -4,6 +4,7 @@ import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._0.rivta
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsResponseType;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._0.GetMedicalSupplyPrescriptionsResponseType;
 import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.RegisterMedicalSupplyOrderResponseType;
+import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 
 /**
  * @author Patrik Björk
@@ -12,6 +13,11 @@ public class MockLmnServiceFacadeImpl implements LmnServiceFacade {
 
     private GetMedicalSupplyDeliveryPointsResponderInterface deliveryPointsService;
 
+
+    @Override
+    public MedicalSupplyPrescriptionsHolder getMedicalSupplyPrescriptionsHolder() {
+        return null;
+    }
 
     public GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints() {
         return null;

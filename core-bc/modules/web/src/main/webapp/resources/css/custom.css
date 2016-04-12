@@ -68,6 +68,22 @@ html, body {
     width: 100px;
 }
 
+.my-products-table.collected-expired-products .column-0 {
+    width: 128px;
+}
+
+.my-products-table tr.unavailable-row {
+    background-color: #dadada
+}
+
+.my-products-table .row:not(:first-child) {
+    margin-top: 8px;
+}
+
+hr {
+    margin: 32px 0 16px 0;
+}
+
 .checkbox {
 }
 
@@ -176,7 +192,7 @@ ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
 /******** Alerts **********/
 
 .alert-danger {
-    color: #a94442;
+    color: #FF0000;
     background-color: #f2dede;
     border-color: #ebccd1;
 }
@@ -196,4 +212,20 @@ ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
 
 #termConditionsWrapper ul {
     list-style: disc;
+}
+
+.toggle-trigger {
+    color: #007180;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 36px;
+    padding-left: 40px;
+}
+
+.toggle-trigger.expand {
+    background: url("../img/toggle-open.png") no-repeat;
+}
+
+.toggle-trigger.minimize {
+    background: url("../img/toggle-close.png") no-repeat;
 }

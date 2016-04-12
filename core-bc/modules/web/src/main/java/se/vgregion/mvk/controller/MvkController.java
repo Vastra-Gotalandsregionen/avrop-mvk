@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._0.GetMedicalSupplyPrescriptionsResponseType;
 import se._1177.lmn.service.LmnServiceFacade;
+import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 import se.vgregion.mvk.controller.model.Cart;
 
 import javax.annotation.PostConstruct;
@@ -34,16 +34,16 @@ public class MvkController {
     @Autowired
     private Cart cart;
 
-    private GetMedicalSupplyPrescriptionsResponseType medicalSupplyPrescriptions;
+    private MedicalSupplyPrescriptionsHolder medicalSupplyPrescriptions;
 
     private Map<String, Boolean> chosenItemMap = new HashMap<>();
 
     @PostConstruct
     public void  init() {
         try {
-            this.medicalSupplyPrescriptions = lmnServiceFacade.getMedicalSupplyPrescriptions();
+            this.medicalSupplyPrescriptions = lmnServiceFacade.getMedicalSupplyPrescriptionsHolder();
 
-            for (PrescriptionItemType prescriptionItem : medicalSupplyPrescriptions.getSubjectOfCareType().getPrescriptionItem()) {
+            for (PrescriptionItemType prescriptionItem : medicalSupplyPrescriptions.orderable) {
                 String prescriptionId = prescriptionItem.getPrescriptionId();
                 chosenItemMap.put(prescriptionId, cart.getItemsInCart().contains(prescriptionId));
             }
@@ -56,8 +56,12 @@ public class MvkController {
         }
     }
 
-    public GetMedicalSupplyPrescriptionsResponseType getMedicalSupplyPrescriptions() {
-        return medicalSupplyPrescriptions;
+    public List<PrescriptionItemType> getMedicalSupplyPrescriptions() {
+        return medicalSupplyPrescriptions.orderable;
+    }
+
+    public List<PrescriptionItemType> getNoLongerOrderableMedicalSupplyPrescriptions() {
+        return medicalSupplyPrescriptions.noLongerOrderable;
     }
 
     public Map<String, Boolean> getChosenItemMap() {

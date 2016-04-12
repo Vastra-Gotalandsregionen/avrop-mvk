@@ -18,6 +18,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.time.Period;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Random;
@@ -45,7 +46,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         SubjectOfCareType subjectOfCare = new SubjectOfCareType();
         subjectOfCare.setSubjectOfCareId(random.nextInt(1000) + "");
 
-        for (int i = 0; i <= random.nextInt(5); i++) {
+        for (int i = 0; i <= random.nextInt(150); i++) {
             addPrescriptionItem(random, subjectOfCare, false);
         }
 
@@ -92,7 +93,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.setArticle(article2);
 
         prescriptionItem.setNoOfOrders(random.nextInt(10));
-        prescriptionItem.setNoOfRemainingOrders(random.nextInt(10));
+        prescriptionItem.setNoOfRemainingOrders(random.nextInt(5));
 
         if (!nextPossibleOrderDateInFuture) {
             prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random));
@@ -125,9 +126,15 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         }
 
         xmlGregorianCalendar = datatypeFactory.newXMLGregorianCalendar(new GregorianCalendar());
-        Duration duration = datatypeFactory.newDuration(random.nextInt());
+
+        Period period = Period.ofDays(random.nextInt(730));
+
+        long timeToSubtract = -period.getDays() * 24L * 60L * 60L * 1000L;
+
+        Duration duration = datatypeFactory.newDuration(timeToSubtract);
 
         xmlGregorianCalendar.add(duration);
+
         return xmlGregorianCalendar;
     }
 
