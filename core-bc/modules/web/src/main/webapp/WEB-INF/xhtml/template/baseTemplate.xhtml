@@ -16,10 +16,10 @@
         var jq = $.noConflict();
     </script>
 
-    <h:outputStylesheet library="css" name="style.css"/>
+    <h:outputStylesheet library="default" name="css/style.css"/>
     <!--<h:outputStylesheet library="css" name="grabbedFromMvk/components.css"/>-->
-    <h:outputStylesheet library="css" name="grabbedFromMvk/components2.css"/>
-    <h:outputStylesheet library="css" name="custom.css"/>
+    <h:outputStylesheet library="default" name="css/grabbedFromMvk/components2.css"/>
+    <h:outputStylesheet library="default" name="css/custom.css"/>
 
     <div id="container">
         <div id="wrapper" class="wrapper">
@@ -28,7 +28,7 @@
                     <div class="_1177-header-content">
                         <div class="_1177-logo-block">
                             <h1 class="_1177-sitetitle">
-                                <img class="_1177-logo-img" alt="1177 Vårdguiden" src="img/1177-logo.png"/>
+                                <h:graphicImage library="default" name="img/1177-logo.png" alt="1177 Vårdguiden" styleClass="_1177-logo-img"/>
                                 <span class="_1177-sitename">E-tjänster</span>
                             </h1>
                         </div>
@@ -54,7 +54,8 @@
                         <div class="_1177-delegate-title">
                             <div class="_1177-header-info">
                                 Du utför nu ärenden åt <span class="delegate-name no-wrap">Delegatnamn&#160;Delegatefternamn<a href="#" data-content="Hjälpinformation.">
-                                <img class="moreinfo helptoggle" id="delegate-toggle" src="img/icon-info-1.png" alt="Mer information"/></a></span>
+                                <h:graphicImage styleClass="moreinfo helptoggle" id="delegate-toggle" library="default" alt="Mer inforamation" name="img/icon-info-1.png" /></a></span>
+                                <!--<img class="moreinfo helptoggle" id="delegate-toggle" src="img/icon-info-1.png" alt="Mer information"/></a></span>-->
                             </div>
                         </div>
                         <div class="_1177-delegate-settings"><a class="_1177-delegate-settings-link link" href="#">Inställningar</a>
@@ -85,28 +86,29 @@
                 <div class="_1177-links">
                     <div class="_1177-links-row">
                         <div class="footer-link" id="link-phone">
-                            <img class="icon-footer" src="img/icon-phone.png" alt=""/><a class="footer-link-text" href="tel:+46812313500">Ring supporten 08-123 135 00</a>
+                            <h:graphicImage styleClass="icon-footer" library="default" name="img/icon-phone.png" alt=""/><a class="footer-link-text" href="tel:+46812313500">Ring supporten 08-123 135 00</a>
+                            <!--<img class="icon-footer" src="img/icon-phone.png" alt=""/><a class="footer-link-text" href="tel:+46812313500">Ring supporten 08-123 135 00</a>-->
                         </div>
                         <div class="footer-link" id="link-support">
-                            <img class="icon-footer" src="img/icon-mail.png" alt=""/><a class="footer-link-text link1177" href="http://1177.se/e-tjanster" target="_blank" title="Öppnas i nytt fönster">Mejla supporten</a><img src="img/icon-newwindow.png" class="extlink" alt="Länken öppnas i nytt fönster."/>
+                            <h:graphicImage styleClass="icon-footer" library="default" name="img/icon-mail.png" alt=""/><a class="footer-link-text link1177" href="http://1177.se/e-tjanster" target="_blank" title="Öppnas i nytt fönster">Mejla supporten</a><h:graphicImage styleClass="extlink" library="default" name="img/icon-newwindow.png" alt="Länken öppnas i nytt fönster."/>
                         </div>
                         <div class="footer-link" id="link-1177more">
-                            <img class="icon-footer" src="img/icon-q.png" alt=""/><a class="footer-link-text link1177" href="http://1177.se/e-tjanster" target="_blank" title="Öppnas i nytt fönster">Läs mer om e-tjänster</a><img src="img/icon-newwindow.png" class="extlink" alt="Länken öppnas i nytt fönster."/>
+                            <h:graphicImage styleClass="icon-footer" library="default" name="img/icon-q.png" alt=""/><a class="footer-link-text link1177" href="http://1177.se/e-tjanster" target="_blank" title="Öppnas i nytt fönster">Läs mer om e-tjänster</a><h:graphicImage styleClass="extlink" library="default" name="img/icon-newwindow.png" alt="Länken öppnas i nytt fönster."/>
                         </div>
                         <div class="footer-link" id="link-sitemap">
-                            <img class="icon-footer" src="img/icon-list.png" alt=""/><a class="footer-link-text" href="/webbkarta">Webbkarta</a>
+                            <h:graphicImage styleClass="icon-footer" library="default" name="img/icon-list.png" alt=""/><a class="footer-link-text" href="/webbkarta">Webbkarta</a>
                         </div>
                     </div>
                 </div>
 
                 <div class="_1177-tagline-block">
-                    <div class="_1177-tagline-text"><a class="link-negative link1177i" title="Öppnas i nytt fönster" href="http://1177.se" target="_blank">1177 Vårdguiden</a>&#160;<img src="img/icon-newwindow-inv.png" class="extlink" alt="Länken öppnas i nytt fönster."/> —&#160;En&#160;tjänst&#160;från&#160;Sveriges&#160;landsting&#160;och&#160;regioner</div>
+                    <div class="_1177-tagline-text"><a class="link-negative link1177i" title="Öppnas i nytt fönster" href="http://1177.se" target="_blank">1177 Vårdguiden</a>&#160;<h:graphicImage styleClass="extlink" library="default" name="img/icon-newwindow-inv.png" alt="Länken öppnas i nytt fönster."/> —&#160;En&#160;tjänst&#160;från&#160;Sveriges&#160;landsting&#160;och&#160;regioner</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <h:outputScript name="js/avrop-mvk.js"/>
+    <h:outputScript library="default" name="js/avrop-mvk.js"/>
 
 </h:body>
 </html>

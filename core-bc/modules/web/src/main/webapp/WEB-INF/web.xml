@@ -33,6 +33,10 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+    <listener>
+        <listener-class>se._1177.lmn.service.spring.MvkContextListener</listener-class>
+    </listener>
+
     <servlet>
         <servlet-name>FacesServlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -81,5 +85,15 @@
         <param-name>facelets.SKIP_COMMENTS</param-name>
         <param-value>true</param-value>
     </context-param>
+
+    <!--<context-param>
+        <param-name>com.sun.faces.defaultResourceMaxAge</param-name>
+        <param-value>3628800000</param-value> &lt;!&ndash; 6 weeks. &ndash;&gt;
+    </context-param>-->
+
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/viewExpired.xhtml</location>
+    </error-page>
 
 </web-app>

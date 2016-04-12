@@ -92,7 +92,7 @@ hr {
 }
 
 .checkbox input[type="checkbox"] + label {
-    background-image: url("../img/unchecked.png");
+    background-image: url("../img/unchecked.png.xhtml?ln=default");
     height: 24px;
     width: 24px;
     display: inline-block;
@@ -103,7 +103,7 @@ hr {
 
 .checkbox input[type="checkbox"]:checked + label {
     display:none;
-    background-image: url("../img/checked.png");
+    background-image: url("../img/checked.png.xhtml?ln=default");
     height: 24px;
     width: 24px;
     display:inline-block;
@@ -166,7 +166,7 @@ ul.caseDetailToolbar .icon,ul.toolbar .icon {
 }
 
 ul.caseDetailToolbar a:hover .icon,ul.toolbar a:hover .icon {
-    background-image: url("../img/skrivut-02.png");
+    background-image: url("../img/skrivut-02.png.xhtml?ln=default");
 }
 
 ul.caseDetailToolbar .icon.toolbar_delete,ul.toolbar .icon.toolbar_delete
@@ -181,7 +181,7 @@ ul.caseDetailToolbar .icon.toolbar_archive,ul.toolbar .icon.toolbar_archive
 
 ul.caseDetailToolbar .icon.toolbar_print,ul.toolbar .icon.toolbar_print
 {
-    background-image: url("../img/skrivut-01.png");
+    background-image: url("../img/skrivut-01.png.xhtml?ln=default");
 }
 
 ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
@@ -223,9 +223,9 @@ ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
 }
 
 .toggle-trigger.expand {
-    background: url("../img/toggle-open.png") no-repeat;
+    background: url("../img/toggle-open.png.xhtml?ln=default") no-repeat;
 }
 
 .toggle-trigger.minimize {
-    background: url("../img/toggle-close.png") no-repeat;
+    background: url("../img/toggle-close.png.xhtml?ln=default") no-repeat;
 }
