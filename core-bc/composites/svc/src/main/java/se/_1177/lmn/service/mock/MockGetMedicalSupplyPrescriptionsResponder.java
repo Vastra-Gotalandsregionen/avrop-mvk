@@ -7,6 +7,7 @@ import riv.crm.selfservice.medicalsupply._0.OrderItemType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ProductAreaEnum;
 import riv.crm.selfservice.medicalsupply._0.ResultCodeEnum;
+import riv.crm.selfservice.medicalsupply._0.StatusEnum;
 import riv.crm.selfservice.medicalsupply._0.SubjectOfCareType;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._0.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._0.GetMedicalSupplyPrescriptionsResponseType;
@@ -112,6 +113,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.setLastValidDate(getRandomCalendar(random));
         prescriptionItem.setNoOfArticlesPerOrder(random.nextInt(5) * 1000 + 1000);
         prescriptionItem.setNoOfPackagesPerOrder(random.nextInt(5) * 50 + 50);
+        prescriptionItem.setStatus(StatusEnum.values()[random.nextInt(StatusEnum.values().length)]);
 
         subjectOfCare.getPrescriptionItem().add(prescriptionItem);
     }
