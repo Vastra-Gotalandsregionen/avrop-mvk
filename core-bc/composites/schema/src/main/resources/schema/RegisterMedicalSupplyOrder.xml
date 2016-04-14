@@ -1,0 +1,70 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrderResponder:0" xmlns:urn2="urn:riv:crm:selfservice:medicalsupply:0">
+   <soapenv:Header>
+      <urn:LogicalAddress>?</urn:LogicalAddress>
+   </soapenv:Header>
+   <soapenv:Body>
+      <urn1:RegisterMedicalSupplyOrder>
+         <!--1 or more repetitions:-->
+         <urn1:Order>
+            <urn2:SubjectOfCareId>?</urn2:SubjectOfCareId>
+            <urn2:Orderer>?</urn2:Orderer>
+            <urn2:OrderByDelegate>false</urn2:OrderByDelegate>
+            <!--1 or more repetitions:-->
+            <urn2:OrderRow>
+               <urn2:PrescriptionId>?</urn2:PrescriptionId>
+               <urn2:PrescriptionItemId>?</urn2:PrescriptionItemId>
+               <urn2:DeliveryChoice>
+                  <urn2:DeliveryMethodId>?</urn2:DeliveryMethodId>
+                  <urn2:DeliveryMethod>?</urn2:DeliveryMethod>
+                  <!--Optional:-->
+                  <urn2:HomeDeliveryAdress>
+                     <urn2:Reciever>?</urn2:Reciever>
+                     <!--Optional:-->
+                     <urn2:CareOfAddress>?</urn2:CareOfAddress>
+                     <urn2:Street>?</urn2:Street>
+                     <urn2:PostalCode>?</urn2:PostalCode>
+                     <urn2:City>?</urn2:City>
+                     <!--Optional:-->
+                     <urn2:DoorCode>?</urn2:DoorCode>
+                     <urn2:Phone>?</urn2:Phone>
+                     <!--You may enter ANY elements at this point-->
+                  </urn2:HomeDeliveryAdress>
+                  <!--Optional:-->
+                  <urn2:DeliveryPoint>
+                     <urn2:DeliveryPointId>?</urn2:DeliveryPointId>
+                     <urn2:DeliveryPointName>?</urn2:DeliveryPointName>
+                     <urn2:DeliveryPointAddress>?</urn2:DeliveryPointAddress>
+                     <urn2:DeliveryPointPostalCode>?</urn2:DeliveryPointPostalCode>
+                     <urn2:DeliveryPointCity>?</urn2:DeliveryPointCity>
+                     <urn2:CountryCode>?</urn2:CountryCode>
+                     <!--You may enter ANY elements at this point-->
+                     <!--Optional:-->
+                     <urn2:IsClosest>?</urn2:IsClosest>
+                  </urn2:DeliveryPoint>
+                  <!--Zero or more repetitions:-->
+                  <urn2:DeliveryNotificationMethod>?</urn2:DeliveryNotificationMethod>
+                  <!--Optional:-->
+                  <urn2:DeliveryNotificationReceiver>?</urn2:DeliveryNotificationReceiver>
+                  <!--You may enter ANY elements at this point-->
+               </urn2:DeliveryChoice>
+               <urn2:Article>
+                  <urn2:ArticleNo>?</urn2:ArticleNo>
+                  <urn2:ArticleName>?</urn2:ArticleName>
+                  <urn2:PackageSize>?</urn2:PackageSize>
+                  <!--Optional:-->
+                  <urn2:PackageSizeUnit>?</urn2:PackageSizeUnit>
+                  <urn2:ProductArea>?</urn2:ProductArea>
+                  <urn2:IsOrderable>?</urn2:IsOrderable>
+                  <!--You may enter ANY elements at this point-->
+               </urn2:Article>
+               <urn2:NoOfPackages>?</urn2:NoOfPackages>
+               <urn2:NoOfPcs>?</urn2:NoOfPcs>
+               <urn2:Source>?</urn2:Source>
+               <!--You may enter ANY elements at this point-->
+            </urn2:OrderRow>
+            <!--You may enter ANY elements at this point-->
+         </urn1:Order>
+         <!--You may enter ANY elements at this point-->
+      </urn1:RegisterMedicalSupplyOrder>
+   </soapenv:Body>
+</soapenv:Envelope>
