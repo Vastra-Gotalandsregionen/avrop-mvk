@@ -108,6 +108,7 @@
                             <td>
                                 <h:panelGroup layout="block" styleClass="row" rendered="#{utilController.isOlderThanAYear(expiredItem.lastValidDate)}">#{utilController.isOlderThanAYear(expiredItem.lastValidDate) ? 'För gammal förskrivning' : ''}</h:panelGroup>
                                 <h:panelGroup layout="block" styleClass="row" rendered="#{expiredItem.noOfRemainingOrders le 0}">#{expiredItem.noOfRemainingOrders le 0 ? 'Max antal uttag uppnått' : ''}</h:panelGroup>
+                                <h:panelGroup layout="block" styleClass="row" rendered="#{expiredItem.status ne 'AKTIV'}">#{expiredItem.status}</h:panelGroup>
                             </td>
                             <td>#{expiredItem.article.articleName}<br/>#{expiredItem.article.articleNo}</td>
                             <td>

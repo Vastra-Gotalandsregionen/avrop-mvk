@@ -1,6 +1,7 @@
 package se._1177.lmn.service;
 
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._0.StatusEnum;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._0.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsResponseType;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsType;
@@ -53,7 +54,7 @@ public class LmnServiceFacadeImpl implements LmnServiceFacade {
 
         for (PrescriptionItemType item : medicalSupplyPrescriptions.getSubjectOfCareType().getPrescriptionItem()) {
 
-            if (item.getNoOfRemainingOrders() <= 0) {
+            if (item.getNoOfRemainingOrders() <= 0 || !item.getStatus().equals(StatusEnum.AKTIV)) {
                 noLongerOrderable.add(item);
             } else {
                 // Check date
@@ -62,7 +63,7 @@ public class LmnServiceFacadeImpl implements LmnServiceFacade {
                 if (olderThanAYear) {
                     noLongerOrderable.add(item);
                 } else {
-                    // Neither old nor "out of stock".
+                    // Neither old nor "out of stock" or status other than AKTIV.
                     orderableItems.add(item);
                 }
             }
