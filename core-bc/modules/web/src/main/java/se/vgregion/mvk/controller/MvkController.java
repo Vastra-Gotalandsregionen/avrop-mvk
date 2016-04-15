@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
+
 /**
  * @author Patrik Björk
  */
@@ -80,6 +82,14 @@ public class MvkController {
 
         cart.setItemsInCart(toCart);
 
-        return "delivery?faces-redirect=true&amp;includeViewParams=true";
+        if (cart.getItemsInCart().size() == 0) {
+            String msg = "Du har inte valt någon produkt. Välj minst en för att fortsätta.";
+            FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_WARN, msg, msg));
+
+            return "order";
+        } else {
+            return "delivery" + ACTION_SUFFIX;
+        }
+
     }
 }
