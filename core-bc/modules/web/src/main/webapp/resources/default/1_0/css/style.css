@@ -180,7 +180,7 @@ ul { list-style: none;
     display: inline-block;
     margin-left: 10px;
     padding-left: 20px;
-    background-image: url(http://mvk.nu/img/icon-logout-inv.png);
+    background-image: url("../img/icon-logout-inv.png.xhtml?ln=default");
     background-position: 0px 50%;
     background-repeat: no-repeat;
 }

@@ -169,18 +169,15 @@ ul.caseDetailToolbar a:hover .icon,ul.toolbar a:hover .icon {
     background-image: url("../img/skrivut-02.png.xhtml?ln=default");
 }
 
-ul.caseDetailToolbar .icon.toolbar_delete,ul.toolbar .icon.toolbar_delete
-{
-    background-position: -96px 0px;
+ul.caseDetailToolbar .icon.toolbar_delete,ul.toolbar .icon.toolbar_delete {
+    background-position: -96px 0;
 }
 
-ul.caseDetailToolbar .icon.toolbar_archive,ul.toolbar .icon.toolbar_archive
-{
+ul.caseDetailToolbar .icon.toolbar_archive,ul.toolbar .icon.toolbar_archive {
     background-position: -144px 0;
 }
 
-ul.caseDetailToolbar .icon.toolbar_print,ul.toolbar .icon.toolbar_print
-{
+ul.caseDetailToolbar .icon.toolbar_print,ul.toolbar .icon.toolbar_print {
     background-image: url("../img/skrivut-01.png.xhtml?ln=default");
 }
 
@@ -242,4 +239,81 @@ ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
 
 .info-icon:hover {
     background: url("../img/icon-info-2.png.xhtml?ln=default") no-repeat;
+}
+
+.column-row {
+    margin: 30px 0;
+}
+
+.column-row .col50 {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    float: left;
+    padding: 20px;
+    width: 50%;
+}
+
+.row {
+    margin-bottom: 12px;
+    position: relative;
+}
+
+.clearfix {
+    overflow: auto;
+}
+
+ul.delivery-options {
+    height: 256px;
+}
+
+ul.delivery-options li {
+    box-sizing: border-box;
+    float: left;
+    height: 100%;
+    width: 50%;
+    padding: 24px;
+}
+
+input[type="radio"] {
+    cursor: pointer;
+    zoom: 2;
+}
+
+ul.delivery-options li label {
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1.3em;
+    line-height: 27px;
+    padding-left: 8px;
+    position: absolute;
+    top: 0;
+}
+
+ ul.delivery-options li:not(:first-child) {
+     border-left: 1px dashed #E3E3E3;
+}
+
+.input-group {
+    margin-bottom: 16px;
+}
+
+.input-group input[disabled="disabled"] {
+    background: #E3E3E3;
+}
+
+.input-group input[type="text"] {
+    border-radius: 5px;
+    border: 1px solid #888;
+    padding: 7px;
+    min-width: 256px;
+}
+
+.input-group label {
+    display: block;
+    padding-left: 8px;
+}
+
+.page-introduction {
+    margin-bottom: 24px;
 }

@@ -34,7 +34,7 @@ public class AuthFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        LOGGER.info("RequestURI: " + request.getRequestURI());
+        LOGGER.debug("RequestURI: " + request.getRequestURI());
 
         String env = System.getProperty("env");
 

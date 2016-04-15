@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -13,30 +14,51 @@
 
         <ui:include src="WEB-INF/xhtml/include/print.xhtml" />
 
-        <div class="centerareatext">
+        <div>
             <h3>Leveranssätt</h3>
             <div>
-                <div id="mvkIncludeContentConditions"> <!-- start mvkIncludeContentConditions -->
+                <div>
                     <p>
                         Du kan välja på två olika leveranssätt. Läs om varje leveranssätt under respektive rubrik. Du kan alltid gå tillbaka och ändra leveranssätt senare innan du bekräftar beställningen om du vill.
                     </p>
-
-                </div> <!-- end mvkIncludeContentConditions-->
+                </div>
 
             </div>
 
             <h:form>
 
-                <h4>Mina produkter</h4>
+                <div class="cosdflumn-row clearfix">
+                    <ul class="delivery-options clearfix">
+                        <li>
+                            <div class="row">
+                                <input type="radio" jsf:id="hemleveransOption" p:name="#{hiddenItem.clientId}"
+                                       value="#{deliveryController.hemleveransValue}" p:checked="#{deliveryController.deliveryMethod eq deliveryController.hemleveransValue ? 'checked' : null}" />
+                                <h:outputLabel for="hemleveransOption" value="Hemleverans"/>
+                            </div>
+                            <p>
+                                Hemleverans innebär att paketet levereras till din bostad och ställs utanför ytterdörren alt lägenhetsdörren om man bor i flerfamiljshus.
+                            </p>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <input type="radio" jsf:id="utlamningsstalleOption" p:name="#{hiddenItem.clientId}"
+                                       value="#{deliveryController.utlamningsstalleValue}" p:checked="#{deliveryController.deliveryMethod eq deliveryController.utlamningsstalleValue ? 'checked' : null}" />
+                                <h:outputLabel for="utlamningsstalleOption" value="Utlämningsställe"/>
+                            </div>
+                            <p>
+                                Detta val innebär att paketet kommer skickas till ditt närmsta postombud. Du har möjlighet att välja utlämningsställe.
+                            </p>
+                        </li>
+                    </ul>
 
-                <ui:repeat value="#{cart.itemsInCart}" var="item">
-                    <div>#{item}</div>
-                </ui:repeat>
+                    <h:inputHidden id="selectedItem" binding="#{hiddenItem}" value="#{deliveryController.deliveryMethod}"
+                                   rendered="#{facesContext.currentPhaseId.ordinal ne 6}" />
+
+                </div>
 
                 <div class="right-align">
-
                     <h:commandButton styleClass="button back-button" value="Bakåt" action="order?faces-redirect=true&amp;includeViewParams=true" />
-                    <h:commandButton styleClass="button" value="Till adressinformation" action="#{mvkController.toDelivery}" />
+                    <h:commandButton styleClass="button" value="Till adressinformation" action="#{deliveryController.toDeliveryMethod}" />
                 </div>
                 <!--</form>-->
             </h:form>

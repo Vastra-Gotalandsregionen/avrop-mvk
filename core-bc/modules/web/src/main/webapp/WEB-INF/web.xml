@@ -37,6 +37,11 @@
         <listener-class>se._1177.lmn.service.spring.MvkContextListener</listener-class>
     </listener>
 
+    <!--- The RequestContextListener gets rid of a WARN log message which occurs often otherwise. -->
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+
     <servlet>
         <servlet-name>FacesServlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
