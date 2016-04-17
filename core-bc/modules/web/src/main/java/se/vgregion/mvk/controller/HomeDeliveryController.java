@@ -5,21 +5,27 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
-
-import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 
 /**
  * @author Patrik Björk
  */
 @Component
-@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class HomeDeliveryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HomeDeliveryController.class);
+
+    private String doorCode;
 
     public String toVerifyDelivery() {
         return null;
     }
 
+    public void setDoorCode(String doorCode) {
+        this.doorCode = doorCode;
+    }
+
+    public String getDoorCode() {
+        return doorCode;
+    }
 }

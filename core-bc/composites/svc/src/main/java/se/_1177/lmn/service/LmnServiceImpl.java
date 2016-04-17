@@ -22,7 +22,7 @@ import static se._1177.lmn.service.util.Util.isOlderThanAYear;
 /**
  * @author Patrik Björk
  */
-public class LmnServiceFacadeImpl implements LmnServiceFacade {
+public class LmnServiceImpl implements LmnService {
 
     private GetMedicalSupplyDeliveryPointsResponderInterface medicalSupplyDeliveryPoint;
 
@@ -30,7 +30,7 @@ public class LmnServiceFacadeImpl implements LmnServiceFacade {
 
     private RegisterMedicalSupplyOrderResponderInterface registerMedicalSupplyOrder;
 
-    public LmnServiceFacadeImpl(
+    public LmnServiceImpl(
             GetMedicalSupplyDeliveryPointsResponderInterface medicalSupplyDeliveryPoint,
             GetMedicalSupplyPrescriptionsResponderInterface medicalSupplyPrescriptions,
             RegisterMedicalSupplyOrderResponderInterface registerMedicalSupplyOrder) {

@@ -4,7 +4,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <ui:composition template="WEB-INF/xhtml/template/wideContent.xhtml">
 
@@ -26,39 +27,47 @@
 
             <h:form>
 
+                <c:set var="user" value="#{userProfileController.userProfile.userProfile}"/>
+
                 <div class="input-group">
                     <h:outputLabel for="nameField" value="Namn"/>
-                    <h:inputText id="nameField" value="#{userController.fullName}" disabled="true"/>
+                    <h:inputText id="nameField" value="#{user.firstName} #{user.lastName}" disabled="true"/>
                 </div>
 
                 <div class="input-group">
                     <h:outputLabel for="coField" value="C/O adress"/>
-                    <h:inputText id="coField" value="#{userController.fullName}" disabled="true"/>
+                    <h:inputText id="coField" value="" disabled="true"/>
                 </div>
 
                 <div class="input-group">
                     <h:outputLabel for="addressField" value="Adress"/>
-                    <h:inputText id="addressField" value="#{userController.fullName}" disabled="true"/>
+                    <h:inputText id="addressField" value="#{user.streetAddress}" disabled="true"/>
                 </div>
 
                 <div class="input-group">
                     <h:outputLabel for="postalNumberField" value="Postnummer"/>
-                    <h:inputText styleClass="postal-number" id="postalNumberField" value="#{userController.fullName}" disabled="true"/>
+                    <h:inputText styleClass="postal-number" id="postalNumberField" value="#{user.zip}" disabled="true"/>
                 </div>
 
                 <div class="input-group">
                     <h:outputLabel for="cityField" value="Postort"/>
-                    <h:inputText id="cityField" value="#{userController.fullName}" disabled="true"/>
+                    <h:inputText id="cityField" value="#{user.city}" disabled="true"/>
                 </div>
 
-                <div class="input-group">
-                    <h:outputLabel for="doorCodeField" value="Portkod (om portkod inte finns, lämna fältet blankt)"/>
-                    <h:inputText id="doorCodeField" value="#{userController.fullName}"/>
+                <div class="input-group clearfix door-code-group">
+                    <div>
+                        <span>
+                            <h:outputLabel for="doorCodeField" value="Portkod (om portkod inte finns, lämna fältet blankt)"/>
+                            <h:inputText id="doorCodeField" value="#{homeDeliveryController.doorCode}"/>
+                        </span>
+                        <span id="doorCodeReminderText" class="arrow-box">Glöm inte att fylla i portkoden för att ditt paket ska kunna levereras.
+    Portkoden är för posten och delas inte med någon annan.</span>
+                    </div>
                 </div>
 
                 <div class="input-group">
                     <h:outputLabel for="mobilePhoneField" value="Namn"/>
-                    <h:inputText id="mobilePhoneField" value="#{userController.fullName}" disabled="true"/>
+                    <h:inputText id="mobilePhoneField" value="#{user.mobilePhoneNumber}" disabled="true"/>
                 </div>
 
                 <div class="right-align">

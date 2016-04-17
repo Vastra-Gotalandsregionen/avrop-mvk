@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
 /**
  * @author Patrik Björk
  */
-public class LmnServiceFacadeImplTest {
+public class LmnServiceImplTest {
 
     private GetMedicalSupplyDeliveryPointsResponderInterface medicalSupplyDeliveryPoints;
     private GetMedicalSupplyPrescriptionsResponderInterface medicalSupplyPrescriptions;

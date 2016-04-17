@@ -9,7 +9,7 @@ import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 /**
  * @author Patrik Björk
  */
-public class MockLmnServiceFacadeImpl implements LmnServiceFacade {
+public class MockLmnServiceImpl implements LmnService {
 
     private GetMedicalSupplyDeliveryPointsResponderInterface deliveryPointsService;
 

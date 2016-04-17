@@ -10,6 +10,7 @@ public class MockWebServiceServer {
     private static Endpoint endpoint1;
     private static Endpoint endpoint2;
     private static Endpoint endpoint3;
+    private static Endpoint endpoint4;
 
     public static void main(String[] args) {
         publishEndpoints(18080);
@@ -29,12 +30,17 @@ public class MockWebServiceServer {
         endpoint3 = Endpoint.publish(
                 endpointBase + "/RegisterMedicalSupplyOrder",
                 new MockRegisterMedicalSupplyOrderResponder());
+
+        endpoint4 = Endpoint.publish(
+                endpointBase + "/GetUserProfile",
+                new MockGetUserProfileResponder());
     }
 
     public static void shutdown() {
         endpoint1.stop();
         endpoint2.stop();
         endpoint3.stop();
+        endpoint4.stop();
     }
 
 }

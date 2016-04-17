@@ -28,14 +28,26 @@
                         <configuration>
                             <sourceRoot>${project.build.directory}/generated/cxf</sourceRoot>
                             <wsdlOptions>
+                                <!-- RTJP services -->
                                 <wsdlOption>
-                                    <wsdl>${basedir}/src/main/resources/schema/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyDeliveryPointsInteraction/GetMedicalSupplyDeliveryPointsInteraction_0.1_RIVTABP21.wsdl</wsdl>
+                                    <wsdl>${basedir}/src/main/resources/schema/RTJP/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyDeliveryPointsInteraction/GetMedicalSupplyDeliveryPointsInteraction_0.1_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
-                                    <wsdl>${basedir}/src/main/resources/schema/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyPrescriptionsInteraction/GetMedicalSupplyPrescriptionsInteraction_0.1_RIVTABP21.wsdl</wsdl>
+                                    <wsdl>${basedir}/src/main/resources/schema/RTJP/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyPrescriptionsInteraction/GetMedicalSupplyPrescriptionsInteraction_0.1_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
-                                    <wsdl>${basedir}/src/main/resources/schema/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/RegisterMedicalSupplyOrderInteraction/RegisterMedicalSupplyOrderInteraction_0.1_RIVTABP21.wsdl</wsdl>
+                                    <wsdl>${basedir}/src/main/resources/schema/RTJP/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/RegisterMedicalSupplyOrderInteraction/RegisterMedicalSupplyOrderInteraction_0.1_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
+
+                                <!-- User profile services -->
+                                <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/schema/TD_USERPROFILE_2_0/schemas/interactions/GetSubjectOfCare/GetSubjectOfCareInteraction_2.0_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/schema/TD_USERPROFILE_2_0/schemas/interactions/GetUserProfile/GetUserProfileInteraction_2.0_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
+                                <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/schema/TD_USERPROFILE_2_0/schemas/interactions/GetUserProfileByAgent/GetUserProfileByAgentInteraction_2.0_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
                             </wsdlOptions>
                         </configuration>

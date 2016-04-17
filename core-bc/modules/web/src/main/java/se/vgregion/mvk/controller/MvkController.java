@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
-import se._1177.lmn.service.LmnServiceFacade;
+import se._1177.lmn.service.LmnService;
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 import se.vgregion.mvk.controller.model.Cart;
 
@@ -31,7 +31,7 @@ public class MvkController {
     private static final Logger LOGGER = LoggerFactory.getLogger(MvkController.class);
 
     @Autowired
-    private LmnServiceFacade lmnServiceFacade;
+    private LmnService lmnService;
 
     @Autowired
     private Cart cart;
@@ -43,7 +43,7 @@ public class MvkController {
     @PostConstruct
     public void  init() {
         try {
-            this.medicalSupplyPrescriptions = lmnServiceFacade.getMedicalSupplyPrescriptionsHolder();
+            this.medicalSupplyPrescriptions = lmnService.getMedicalSupplyPrescriptionsHolder();
 
             for (PrescriptionItemType prescriptionItem : medicalSupplyPrescriptions.orderable) {
                 String prescriptionId = prescriptionItem.getPrescriptionId();

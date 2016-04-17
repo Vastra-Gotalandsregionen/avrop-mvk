@@ -8,7 +8,7 @@ import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 /**
  * @author Patrik Björk
  */
-public interface LmnServiceFacade {
+public interface LmnService {
     MedicalSupplyPrescriptionsHolder getMedicalSupplyPrescriptionsHolder();
 
     GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints();

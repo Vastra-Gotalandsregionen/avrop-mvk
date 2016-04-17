@@ -19,10 +19,14 @@
 >
     <context:component-scan base-package="se.vgregion.mvk.controller" />
 
-    <bean class="se._1177.lmn.service.LmnServiceFacadeImpl" >
+    <bean class="se._1177.lmn.service.LmnServiceImpl" >
         <constructor-arg index="0" ref="getMedicalSupplyDeliveryPoints"/>
         <constructor-arg index="1" ref="getMedicalSupplyPrescriptions"/>
         <constructor-arg index="2" ref="registerMedicalSupplyOrder"/>
+    </bean>
+
+    <bean class="se._1177.lmn.service.MvkUserProfileService">
+        <constructor-arg ref="getUserProfileResponderInterface"/>
     </bean>
 
     <jaxws:client id="getMedicalSupplyDeliveryPoints"
@@ -36,6 +40,10 @@
     <jaxws:client id="registerMedicalSupplyOrder"
                   serviceClass="riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._0.rivtabp21.RegisterMedicalSupplyOrderResponderInterface"
                   address="http://localhost:18080/RegisterMedicalSupplyOrder" />
+
+    <jaxws:client id="getUserProfileResponderInterface"
+                  serviceClass="mvk.itintegration.userprofile.getuserprofile._2.rivtabp21.GetUserProfileResponderInterface"
+                  address="http://localhost:18080/GetUserProfile" />
 
     <cxf:bus>
         <cxf:outInterceptors>
