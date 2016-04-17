@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="GetSubjectOfCareInteraction" targetNamespace="urn:mvk:itintegration:userprofile:GetSubjectOfCare:2:rivtabp21" xmlns:tjsr="urn:mvk:itintegration:userprofile:GetSubjectOfCareResponder:2" xmlns:tns="urn:mvk:itintegration:userprofile:GetSubjectOfCare:2:rivtabp21" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema targetNamespace="urn:mvk:itintegration:userprofile:GetSubjectOfCare:2:rivtabp21">
+    	<xs:import namespace="urn:mvk:itintegration:userprofile:GetSubjectOfCareResponder:2" schemaLocation="GetSubjectOfCareResponder_2.0.xsd" />
+    </xs:schema>
+  </wsdl:types>
+	<wsdl:message name="GetSubjectOfCareRequest">
+		<wsdl:part name="request" element="tjsr:GetSubjectOfCare"/>
+	</wsdl:message>
+	<wsdl:message name="GetSubjectOfCareResponse">
+		<wsdl:part name="response" element="tjsr:GetSubjectOfCareResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="GetSubjectOfCareResponderInterface">
+		<wsdl:operation name="GetSubjectOfCare">
+			<wsdl:input message="tns:GetSubjectOfCareRequest"/>
+			<wsdl:output message="tns:GetSubjectOfCareResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="GetSubjectOfCareResponderBinding" type="tns:GetSubjectOfCareResponderInterface">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="GetSubjectOfCare">
+			<soap:operation soapAction="urn:mvk:itintegration:userprofile:GetSubjectOfCareResponder:2:GetSubjectOfCare" style="document"/>
+			<wsdl:input>
+				<soap:body parts="request" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="GetSubjectOfCareResponderService">
+		<wsdl:port name="GetSubjectOfCareResponderPort" binding="tns:GetSubjectOfCareResponderBinding">
+			<soap:address location="http://tempuri.org" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

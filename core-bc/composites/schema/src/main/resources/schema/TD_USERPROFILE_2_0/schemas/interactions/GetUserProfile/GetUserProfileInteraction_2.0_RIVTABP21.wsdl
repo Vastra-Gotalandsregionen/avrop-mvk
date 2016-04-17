@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="GetUserProfileInteraction" targetNamespace="urn:mvk:itintegration:userprofile:GetUserProfile:2:rivtabp21" xmlns:tjsr="urn:mvk:itintegration:userprofile:GetUserProfileResponder:2" xmlns:tns="urn:mvk:itintegration:userprofile:GetUserProfile:2:rivtabp21" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xs:schema targetNamespace="urn:mvk:itintegration:userprofile:GetUserProfile:2:rivtabp21">
+    	<xs:import namespace="urn:mvk:itintegration:userprofile:GetUserProfileResponder:2" schemaLocation="GetUserProfileResponder_2.0.xsd" />
+    </xs:schema>
+  </wsdl:types>
+	<wsdl:message name="GetUserProfileRequest">
+		<wsdl:part name="request" element="tjsr:GetUserProfile"/>
+	</wsdl:message>
+	<wsdl:message name="GetUserProfileResponse">
+		<wsdl:part name="response" element="tjsr:GetUserProfileResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="GetUserProfileResponderInterface">
+		<wsdl:operation name="GetUserProfile">
+			<wsdl:input message="tns:GetUserProfileRequest"/>
+			<wsdl:output message="tns:GetUserProfileResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="GetUserProfileResponderBinding" type="tns:GetUserProfileResponderInterface">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="GetUserProfile">
+			<soap:operation soapAction="urn:mvk:itintegration:userprofile:GetUserProfileResponder:2:GetUserProfile" style="document"/>
+			<wsdl:input>
+				<soap:body parts="request" use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="GetUserProfileResponderService">
+		<wsdl:port name="GetUserProfileResponderPort" binding="tns:GetUserProfileResponderBinding">
+			<soap:address location="http://tempuri.org" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

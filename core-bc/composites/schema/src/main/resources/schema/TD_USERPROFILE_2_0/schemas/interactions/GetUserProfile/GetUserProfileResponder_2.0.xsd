@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" 
+           targetNamespace="urn:mvk:itintegration:userprofile:GetUserProfileResponder:2" version="2.0" 
+           xmlns:tns="urn:mvk:itintegration:userprofile:GetUserProfileResponder:2" 
+           xmlns:core="urn:mvk:itintegration:userprofile:2" 
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" >
+  	<xs:import namespace="urn:mvk:itintegration:userprofile:2" schemaLocation="../../core_components/mvk_itintegration_userprofile_2.0.xsd"/>
+  	<xs:element name="GetUserProfile" type="tns:GetUserProfileType"/>
+  	<xs:element name="GetUserProfileResponse" type="tns:GetUserProfileResponseType"/>
+  	<xs:complexType name="GetUserProfileType">
+    	<xs:sequence>
+      		<xs:element name="subjectOfCare" type="core:SubjectOfCareIdType"/>
+		</xs:sequence>
+  	</xs:complexType>
+  	<xs:complexType name="GetUserProfileResponseType">
+    	<xs:sequence>
+      		<xs:element name="userProfile" type="core:UserProfileType" minOccurs="0"/>
+			<xs:element name="isActive" type="xs:boolean" minOccurs="0" />
+    		<xs:element name="resultCode" type="core:ResultCodeEnum" minOccurs="1" />
+  			<xs:element name="resultText" type="xs:string" minOccurs="0" />
+  			<xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
+  		</xs:sequence>
+  	</xs:complexType>
+</xs:schema>

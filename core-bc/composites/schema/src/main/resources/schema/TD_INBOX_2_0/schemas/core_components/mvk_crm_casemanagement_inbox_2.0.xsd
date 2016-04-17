@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema attributeFormDefault="unqualified"
+	elementFormDefault="qualified"
+	targetNamespace="urn:mvk:crm:casemanagement:inbox:2" version="2.0"
+	xmlns:tns="urn:mvk:crm:casemanagement:inbox:2"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:simpleType name="SubjectOfCareIdType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="^[0-9]{8}[0-9pPtTfF][0-9]{3}$"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="UserSelectionStatusType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Active" />
+			<xs:enumeration value="Archived" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CaseReadStatusType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Read" />
+			<xs:enumeration value="Unread" />
+		</xs:restriction>		
+	</xs:simpleType>
+	<xs:simpleType name="ResultCodeEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="OK"/>
+			<xs:enumeration value="ERROR"/>
+			<xs:enumeration value="INFO"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ErrorCodeEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Unavailable"/>
+			<xs:enumeration value="Unauthorized"/>
+			<xs:enumeration value="IllegalArgument"/>
+			<xs:enumeration value="Unknown"/>
+		</xs:restriction>
+	</xs:simpleType>	
+	<xs:simpleType name="UrlLinkTypeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="CurrentWindow"></xs:enumeration>			
+			<xs:enumeration value="NewWindow"></xs:enumeration>	
+			<xs:enumeration value="Widget"></xs:enumeration>
+			<xs:enumeration value="Embedded"></xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>	
+	<xs:complexType name="UrlConfigurationType">
+		<xs:sequence>
+        	<xs:element name="systemId" type="xs:string" />
+			<xs:element name="urlText" type="xs:string"  />
+			<xs:element name="queryString" type="xs:string" minOccurs="0" />
+			<xs:element name="urlLinkType" type="tns:UrlLinkTypeType" />
+		</xs:sequence>
+	</xs:complexType>	
+	<xs:complexType name="CaseTypeType">
+		<xs:sequence>
+        	<xs:element name="id" type="xs:string" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="caseTypeDescription" type="xs:string" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="HealthCareFacilityType">
+		<xs:sequence>
+			<xs:element name="hsaId" type="xs:string" minOccurs="0" />
+			<xs:element name="healthCareFacilityName" type="xs:string" minOccurs="0" />
+			<xs:element name="healthCareFacilityAddress" type="xs:string" minOccurs="0" />
+			<xs:element name="healthCareFacilityPostalCode" type="xs:string" minOccurs="0" />
+			<xs:element name="healthCareFacilityPostalCity" type="xs:string" minOccurs="0" />
+			<xs:element name="healthCareFacilityTelephone" type="xs:string" minOccurs="0" />
+			<xs:element name="childHsaId" type="xs:string" minOccurs="0" />
+			<xs:element name="isServiceCategory" type="xs:boolean" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BookingType">
+		<xs:sequence>
+			<xs:element name="bookingId" type="xs:string" />
+			<xs:element name="isInvitation" type="xs:boolean" />
+			<xs:element name="isOpenInvitation" type="xs:boolean" minOccurs="0" />
+			<xs:element name="rebookingAllowed" type="xs:boolean" minOccurs="0" />
+			<xs:element name="cancelBookingAllowed" type="xs:boolean" minOccurs="0" />			
+			<xs:element name="dynamicId" type="xs:string" minOccurs="0" />
+			<xs:element name="cancelled" type="xs:boolean" minOccurs="0" />
+			<xs:element name="performerName" type="xs:string" minOccurs="0" />
+			<xs:element name="bookingDate" type="xs:dateTime" minOccurs="0" />
+			<xs:element name="timeTypeName" type="xs:string" minOccurs="0" />
+			<xs:element name="careTypeId" type="xs:string" minOccurs="0" />
+			<xs:element name="userContextStatus" type="xs:string" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CaseStatusType">
+		<xs:sequence>
+			<xs:element name="id" type="xs:integer" />
+			<xs:element name="statusDescription" type="xs:string" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+    <xs:complexType name="CaseType" abstract="true">
+        <xs:sequence>
+	        <xs:element name="id" type="xs:string" minOccurs="0" maxOccurs="1"/>
+	        <xs:element name="caseReadStatus" type="tns:CaseReadStatusType" minOccurs="0" maxOccurs="1" />
+	        <xs:element name="actionDate" type="xs:date" minOccurs="0" maxOccurs="1" />
+	        <xs:element name="actionTime" type="xs:time" minOccurs="0" maxOccurs="1" />
+			<xs:element name="caseType" type="tns:CaseTypeType" minOccurs="0" maxOccurs="1" />
+	        <xs:element name="userSelectionStatus" type="tns:UserSelectionStatusType" minOccurs="0" maxOccurs="1" />
+	        <xs:element name="healthCareFacility" type="tns:HealthCareFacilityType" minOccurs="0" maxOccurs="1"/>
+	    	<xs:element name="booking" type="tns:BookingType" minOccurs="0" maxOccurs="1" />
+			<xs:element name="businessObjectId" type="xs:string" minOccurs="0" maxOccurs="1" />
+			<xs:element name="headerText" type="xs:string" minOccurs="0" maxOccurs="1" />
+        	<xs:element name="bodyText" type="xs:string" minOccurs="0" maxOccurs="1" />
+	    	<xs:element name="details" type="tns:CaseListType" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="WorkflowCaseType">
+		<xs:complexContent>
+			<xs:extension base="tns:CaseType">
+				<xs:sequence>
+	        		<xs:element name="caseStatus" type="tns:CaseStatusType" minOccurs="0" />	
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+		<xs:complexType name="MessageCaseType">
+		<xs:complexContent>
+			<xs:extension base="tns:CaseType">
+				<xs:sequence>
+	        		<xs:element name="msg" type="xs:string" minOccurs="0" />	
+					<xs:element name="urlConfiguration" type="tns:UrlConfigurationType" minOccurs="0" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CaseListType">
+        <xs:sequence>
+            <xs:element name="Cases" type="tns:CaseType" maxOccurs="unbounded" minOccurs="0" />        
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

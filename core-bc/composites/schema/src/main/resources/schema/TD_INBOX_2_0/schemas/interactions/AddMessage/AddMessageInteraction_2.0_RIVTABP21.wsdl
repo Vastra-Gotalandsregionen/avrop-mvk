@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements. See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership. Sveriges Kommuner och Landsting licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License. You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied. See the License for the
+ specific language governing permissions and limitations
+ under the License.
+ -->		
+<wsdl:definitions name="AddMessageInteraction" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tjsr="urn:mvk:crm:casemanagement:inbox:AddMessageResponder:2" xmlns:tns="urn:mvk:crm:casemanagement:inbox:AddMessage:2:rivtabp21" targetNamespace="urn:mvk:crm:casemanagement:inbox:AddMessage:2:rivtabp21" >
+  <xs:annotation>
+    <xs:documentation>
+		Tjänsteinteraktionens namn: AddMessageInteraction
+		Beskrivning:
+		Interaction to add a case item in the users inbox
+		Revisioner:
+		Tjänstedomän: mvk:crm:casemanagement:inbox
+		Tjänsteinteraktionstyp: Fråga-Svar
+		Förvaltas av: Softronic
+	</xs:documentation>
+  </xs:annotation>
+  <wsdl:types>
+    <xs:schema targetNamespace="urn:mvk:crm:casemanagement:inbox:AddMessage:2:rivtabp21">
+    	<xs:import schemaLocation="AddMessageResponder_2.0.xsd" namespace="urn:mvk:crm:casemanagement:inbox:AddMessageResponder:2" />
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="AddMessageRequest">
+    <wsdl:part name="request" element="tjsr:AddMessage" />
+  </wsdl:message>
+  <wsdl:message name="AddMessageResponse">
+    <wsdl:part name="response" element="tjsr:AddMessageResponse" />
+  </wsdl:message>
+  <wsdl:portType name="AddMessageResponderInterface">
+    <wsdl:operation name="AddMessage">
+      <wsdl:input message="tns:AddMessageRequest" />
+      <wsdl:output message="tns:AddMessageResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AddMessageResponderBinding" type="tns:AddMessageResponderInterface">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="AddMessage">
+      <soap:operation soapAction="urn:mvk:crm:casemanagement:inbox:AddMessageResponder:2:AddMessage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" parts="request" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AddMessageResponderService">
+    <wsdl:port name="AddMessageResponderPort" binding="tns:AddMessageResponderBinding">
+      <soap:address location="http://tempuri.org" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

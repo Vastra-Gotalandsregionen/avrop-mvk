@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema attributeFormDefault="unqualified"
+	elementFormDefault="qualified"
+	targetNamespace="urn:mvk:itintegration:userprofile:2" version="2.0"
+	xmlns:tns="urn:mvk:itintegration:userprofile:2"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:simpleType name="SubjectOfCareIdType">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="^[0-9]{8}[0-9pPtTfF][0-9]{3}$"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="GenderType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Male" />
+			<xs:enumeration value="Female" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RelativeTypeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Parent" />
+			<xs:enumeration value="Child" />
+		</xs:restriction>
+	</xs:simpleType>	
+	<xs:simpleType name="ResultCodeEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="OK"/>
+			<xs:enumeration value="ERROR"/>
+			<xs:enumeration value="INFO"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="RelativeType">
+		<xs:sequence>
+			<xs:element name="subjectOfCareId" type="tns:SubjectOfCareIdType" />
+			<xs:element name="relativeType" type="tns:RelativeTypeType" />
+		</xs:sequence>
+	</xs:complexType> 
+	<xs:complexType name="SubjectOfCareType">
+		<xs:sequence>
+			<xs:element name="subjectOfCareId" type="tns:SubjectOfCareIdType" />
+			<xs:element name="firstName" type="xs:string" minOccurs="0" />
+			<xs:element name="lastName" type="xs:string" minOccurs="0" />
+			<xs:element name="gender" type="tns:GenderType" minOccurs="0" />			
+			<xs:element name="streetAddress" type="xs:string" minOccurs="0" />			
+			<xs:element name="countyCode" type="xs:string" minOccurs="0" />
+			<xs:element name="municipalityCode" type="xs:string" minOccurs="0" />
+			<xs:element name="parishCode" type="xs:string" minOccurs="0" />
+			<xs:element name="zip" type="xs:string" minOccurs="0" />
+			<xs:element name="city" type="xs:string" minOccurs="0" />		
+			<xs:element name="relatives" type="tns:RelativeListType" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType> 	
+	<xs:complexType name="UserProfileType">
+		<xs:complexContent>
+			<xs:extension base="tns:SubjectOfCareType">
+				<xs:sequence>
+					<xs:element name="phoneNumber" type="xs:string" minOccurs="0" />
+					<xs:element name="mobilePhoneNumber" type="xs:string" minOccurs="0" />
+					<xs:element name="email" type="xs:string" minOccurs="0" />
+					<xs:element name="hasMailNotification" type="xs:boolean" minOccurs="0" />
+					<xs:element name="hasSmsNotification" type="xs:boolean" minOccurs="0" />	
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RelativeListType">
+		<xs:sequence>
+			<xs:element name="items" type="tns:RelativeType" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
