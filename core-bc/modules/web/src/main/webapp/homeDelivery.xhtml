@@ -25,7 +25,7 @@
                 </div>
             </div>
 
-            <h:form>
+            <h:form id="homeDeliveryForm">
 
                 <c:set var="user" value="#{userProfileController.userProfile.userProfile}"/>
 
@@ -71,8 +71,30 @@
 
                 <div class="right-align">
                     <h:commandButton styleClass="button back-button" value="Bakåt" action="delivery?faces-redirect=true&amp;includeViewParams=true" />
-                    <h:commandButton styleClass="button" value="Till adressinformation" action="#{homeDeliveryController.toVerifyDelivery}" />
+                    <h:commandButton styleClass="button to-be-confirmed-submit-button" value="Till adressinformation" action="#{homeDeliveryController.toVerifyDelivery}" />
+                    <h:commandButton style="display: none" styleClass="button confirm-submit-button" value="Till adressinformation" action="#{homeDeliveryController.toVerifyDelivery}" />
                 </div>
+
+                <div id="dialog" title="Portkod saknas" style="display: none;">
+                    <div class="section">
+                        <p>Hej!</p>
+                        <p>Det ser ut som du kanske har glömt fylla i din portkod? Om du har portkod till ditt hus måste du fylla i det för att ditt paket ska
+                            kunna levereras.</p>
+                        <p>Om du inte har någon portkod så är det bara att trycka på fortsätt.</p>
+                    </div>
+
+                    <div class="right-align">
+                        <button class="button back-button cancel-button">Gå tillbaka och fyll i</button>
+                        <button class="button" onclick="jq('.confirm-submit-button').click();">Jag har ingen portkod och vill fortsätta</button>
+                    </div>
+                </div>
+
+                <script>
+                    jq(document).ready(function() {
+                        initHomeDeliveryPage();
+                    })
+                </script>
+
             </h:form>
         </div>
     </ui:define>

@@ -259,6 +259,11 @@ ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
     position: relative;
 }
 
+.section {
+    margin-bottom: 36px;
+    position: relative;
+}
+
 .clearfix {
     overflow: auto;
 }
@@ -290,7 +295,7 @@ ul.delivery-options li label {
     top: 0;
 }
 
- ul.delivery-options li:not(:first-child) {
+ul.delivery-options li:not(:first-child) {
      border-left: 1px dashed #E3E3E3;
 }
 
@@ -355,4 +360,39 @@ ul.delivery-options li label {
     border-right-color: #E3E3E3;
     border-width: 15px;
     margin-top: -15px;
+}
+
+.confirm-empty-door-code {
+    background: #ffffff;
+    border-radius: 4px;
+    float: left;
+    max-width: 600px;
+    z-index: 100;
+}
+
+.confirm-empty-door-code .ui-button {
+    display: none;
+}
+
+.confirm-empty-door-code .ui-dialog-titlebar {
+    background: #007180;
+    border-radius: 4px 4px 0 0;
+    color: #fff;
+    font-weight: bold;
+    padding: 8px 16px;
+}
+
+.confirm-empty-door-code .ui-dialog-content {
+    padding: 8px 16px;
+}
+
+.ui-widget-overlay.ui-front {
+    position: fixed;
+    height: 999999999px;
+    width: 999999999px;
+    top: 0;
+    left: 0;
+    background: #888;
+    z-index: 99;
+    opacity: .7;
 }

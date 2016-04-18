@@ -49,10 +49,31 @@ function initOrderPage() {
 
         moreInfo.hide();
 
-        var showMoreLink = findShowMoreLink(e);
-
         findShowMoreLink(e).show();
         findShowLessLink(e).hide();
     });
 
+}
+
+function initHomeDeliveryPage() {
+    var confirmDialog = jq("#dialog").dialog({
+        autoOpen: false,
+        dialogClass: 'confirm-empty-door-code',
+        modal: true,
+        width: '80%'
+    });
+
+    jq('.to-be-confirmed-submit-button').on('click', function (e) {
+        var doorCodeInput = jq('#homeDeliveryForm\\:doorCodeField');
+
+        if (doorCodeInput.val().length == 0) {
+            e.preventDefault();
+            confirmDialog.dialog('open');
+        }
+    });
+
+    jq('.cancel-button').on('click', function (e) {
+        e.preventDefault();
+        confirmDialog.dialog('close');
+    });
 }
