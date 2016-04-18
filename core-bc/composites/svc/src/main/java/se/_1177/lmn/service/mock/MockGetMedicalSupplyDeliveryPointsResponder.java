@@ -20,11 +20,13 @@ public class MockGetMedicalSupplyDeliveryPointsResponder
 
     private final ObjectFactory objectFactory = new ObjectFactory();
 
-    private Random random = new Random();
+    private Random random;
 
     public GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(
             String logicalAddress,
             GetMedicalSupplyDeliveryPointsType parameters) {
+
+        random = new Random(0);
 
         GetMedicalSupplyDeliveryPointsResponseType response = objectFactory
                 .createGetMedicalSupplyDeliveryPointsResponseType();
@@ -33,7 +35,7 @@ public class MockGetMedicalSupplyDeliveryPointsResponder
 
         response.setResultCode(ResultCodeEnum.OK);
 
-        for (int i = 0; i <= random.nextInt(5); i++) {
+        for (int i = 0; i <= random.nextInt(5) + 5; i++) {
             DeliveryPointType deliveryPoint = new DeliveryPointType();
 
             deliveryPoint.setCountryCode(CountryCodeEnum.SE);
@@ -43,6 +45,7 @@ public class MockGetMedicalSupplyDeliveryPointsResponder
             deliveryPoint.setDeliveryPointId("Leverans-id" + random.nextInt(100));
             deliveryPoint.setDeliveryPointName("Leverans-namn" + random.nextInt(100));
             deliveryPoint.setDeliveryPointPostalCode(random.nextInt(100000) + "");
+            deliveryPoint.setIsClosest(false);
 
             response.getDeliveryPoint().add(deliveryPoint);
 

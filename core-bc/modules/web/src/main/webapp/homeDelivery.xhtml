@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="input-group">
-                    <h:outputLabel for="coField" value="C/O adress"/>
+                    <h:outputLabel for="coField" value="C/O-adress"/>
                     <h:inputText id="coField" value="" disabled="true"/>
                 </div>
 
@@ -60,8 +60,7 @@
                             <h:outputLabel for="doorCodeField" value="Portkod (om portkod inte finns, lämna fältet blankt)"/>
                             <h:inputText id="doorCodeField" value="#{homeDeliveryController.doorCode}"/>
                         </span>
-                        <span id="doorCodeReminderText" class="arrow-box">Glöm inte att fylla i portkoden för att ditt paket ska kunna levereras.
-    Portkoden är för posten och delas inte med någon annan.</span>
+                        <span id="doorCodeReminderText" class="arrow-box">Glöm inte att fylla i portkoden för att ditt paket ska kunna levereras. Portkoden är för posten och delas inte med någon annan.</span>
                     </div>
                 </div>
 
@@ -71,7 +70,7 @@
                 </div>
 
                 <div class="right-align">
-                    <h:commandButton styleClass="button back-button" value="Bakåt" action="order?faces-redirect=true&amp;includeViewParams=true" />
+                    <h:commandButton styleClass="button back-button" value="Bakåt" action="delivery?faces-redirect=true&amp;includeViewParams=true" />
                     <h:commandButton styleClass="button" value="Till adressinformation" action="#{homeDeliveryController.toVerifyDelivery}" />
                 </div>
             </h:form>

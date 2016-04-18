@@ -19,7 +19,7 @@ public class MockLmnServiceImpl implements LmnService {
         return null;
     }
 
-    public GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints() {
+    public GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(String postalCode) {
         return null;
     }
 

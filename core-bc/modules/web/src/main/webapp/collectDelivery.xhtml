@@ -26,44 +26,14 @@
 
             <h:form>
 
-                <div class="input-group">
-                    <h:outputLabel for="nameField" value="Namn"/>
-                    <h:inputText id="nameField" value="#{userController.fullName}" disabled="true"/>
-                </div>
+                <h:selectOneMenu value="#{collectDeliveryController.chosenDeliveryPoint}">
+                    <f:selectItems value="#{collectDeliveryController.deliverySelectItems}"/>
+                </h:selectOneMenu>
 
-                <div class="input-group">
-                    <h:outputLabel for="coField" value="C/O adress"/>
-                    <h:inputText id="coField" value="#{userController.fullName}" disabled="true"/>
-                </div>
-
-                <div class="input-group">
-                    <h:outputLabel for="addressField" value="Adress"/>
-                    <h:inputText id="addressField" value="#{userController.fullName}" disabled="true"/>
-                </div>
-
-                <div class="input-group">
-                    <h:outputLabel for="postalNumberField" value="Postnummer"/>
-                    <h:inputText styleClass="postal-number" id="postalNumberField" value="#{userController.fullName}" disabled="true"/>
-                </div>
-
-                <div class="input-group">
-                    <h:outputLabel for="cityField" value="Postort"/>
-                    <h:inputText id="cityField" value="#{userController.fullName}" disabled="true"/>
-                </div>
-
-                <div class="input-group">
-                    <h:outputLabel for="doorCodeField" value="Portkod (om portkod inte finns, lämna fältet blankt)"/>
-                    <h:inputText id="doorCodeField" value="#{userController.fullName}"/>
-                </div>
-
-                <div class="input-group">
-                    <h:outputLabel for="mobilePhoneField" value="Namn"/>
-                    <h:inputText id="mobilePhoneField" value="#{userController.fullName}" disabled="true"/>
-                </div>
 
                 <div class="right-align">
-                    <h:commandButton styleClass="button back-button" value="Bakåt" action="order?faces-redirect=true&amp;includeViewParams=true" />
-                    <h:commandButton styleClass="button" value="Till adressinformation" action="#{homeDeliveryController.toVerifyDelivery}" />
+                    <h:commandButton styleClass="button back-button" value="Bakåt" action="delivery?faces-redirect=true&amp;includeViewParams=true" />
+                    <h:commandButton styleClass="button" value="Till adressinformation" action="#{collectDeliveryController.toVerifyDelivery}" />
                 </div>
             </h:form>
         </div>

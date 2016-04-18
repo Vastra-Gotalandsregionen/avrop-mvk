@@ -1,6 +1,9 @@
 package se._1177.lmn.service;
 
+import org.apache.commons.lang3.builder.CompareToBuilder;
+import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply._0.StatusEnum;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._0.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsResponseType;
@@ -15,6 +18,7 @@ import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static se._1177.lmn.service.util.Util.isOlderThanAYear;
@@ -75,8 +79,42 @@ public class LmnServiceImpl implements LmnService {
         return holder;
     }
 
-    public GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints() {
-        return medicalSupplyDeliveryPoint.getMedicalSupplyDeliveryPoints("", new GetMedicalSupplyDeliveryPointsType());
+    public GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(String postalCode) {
+        GetMedicalSupplyDeliveryPointsType parameters = new GetMedicalSupplyDeliveryPointsType();
+
+        parameters.setPostalCode(postalCode);
+        parameters.setServicePointProvider(ServicePointProviderEnum.POSTNORD); // TODO Hard-coded or choice?
+
+        GetMedicalSupplyDeliveryPointsResponseType medicalSupplyDeliveryPoints = medicalSupplyDeliveryPoint
+                .getMedicalSupplyDeliveryPoints("", parameters);
+
+        List<DeliveryPointType> deliveryPoints = medicalSupplyDeliveryPoints.getDeliveryPoint();
+        sort(deliveryPoints);
+
+        return medicalSupplyDeliveryPoints;
+    }
+
+    /**
+     * Sort by {@link DeliveryPointType#isIsClosest()} with highest priority - closer is less  and null translates to
+     * isClosest == false). Second priority is address - first in alphabetical order is less and null is less than
+     * non-null).
+     *
+     * @param deliveryPoints the list to be sorted
+     */
+    static void sort(List<DeliveryPointType> deliveryPoints) {
+        Collections.sort(deliveryPoints, (o1, o2) -> {
+            CompareToBuilder compareToBuilder = new CompareToBuilder();
+
+            boolean isClosest1 = o1.isIsClosest() == null ? false : o1.isIsClosest();
+            boolean isClosest2 = o2.isIsClosest() == null ? false : o2.isIsClosest();
+
+            return compareToBuilder
+                    .append(!isClosest1, !isClosest2) // Turn around to make closer "less".
+                    .append(o1.getDeliveryPointAddress(), o2.getDeliveryPointAddress())
+                    .append(o1.hashCode(), o2.hashCode())
+                    .toComparison();
+
+        });
     }
 
     public GetMedicalSupplyPrescriptionsResponseType getMedicalSupplyPrescriptions() {

@@ -11,7 +11,7 @@ import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 public interface LmnService {
     MedicalSupplyPrescriptionsHolder getMedicalSupplyPrescriptionsHolder();
 
-    GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints();
+    GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(String postalCode);
 
     GetMedicalSupplyPrescriptionsResponseType getMedicalSupplyPrescriptions();
 

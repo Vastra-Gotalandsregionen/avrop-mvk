@@ -15,18 +15,25 @@ import javax.servlet.http.HttpServletRequest;
  */
 // TODO Figure out whether it's better to have request scope here and cache result or have session scope without needing to cache.
 @Component
-@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserProfileController {
 
     @Autowired
     private MvkUserProfileService mvkUserProfileService;
+    private GetUserProfileResponseType subjectOfCare;
 
     public GetUserProfileResponseType getUserProfile() {
-        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-                .getRequest();
 
-        String ssn = request.getHeader("AJP_Subject_SerialNumber");
+        if (subjectOfCare == null) {
 
-        return mvkUserProfileService.getSubjectOfCare(ssn);
+            HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
+                    .getRequest();
+
+            String ssn = request.getHeader("AJP_Subject_SerialNumber");
+
+            subjectOfCare = mvkUserProfileService.getSubjectOfCare(ssn);
+        }
+
+        return subjectOfCare;
     }
 }
