@@ -37,10 +37,19 @@ public class MockWebServiceServer {
     }
 
     public static void shutdown() {
-        endpoint1.stop();
-        endpoint2.stop();
-        endpoint3.stop();
-        endpoint4.stop();
+        if (endpoint1 != null) {
+            endpoint1.stop();
+        }
+
+        if (endpoint1 != null) {
+            endpoint2.stop();
+        }
+        if (endpoint1 != null) {
+            endpoint3.stop();
+        }
+        if (endpoint1 != null) {
+            endpoint4.stop();
+        }
     }
 
 }

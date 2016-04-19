@@ -25,8 +25,6 @@ function initCommon() {
         jq(e.target).toggleClass('expand');
         jq(e.target).toggleClass('minimize');
     });
-
-
 }
 
 function initOrderPage() {

@@ -17,6 +17,11 @@
     http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
         "
 >
+
+    <context:property-placeholder properties-ref="lakemedelsnaraProprties" ignore-resource-not-found="false"/>
+
+    <bean id="lakemedelsnaraProprties" class="se._1177.lmn.service.util.LakemedelsnaraProperties" factory-method="getProperties"/>
+
     <context:component-scan base-package="se.vgregion.mvk.controller" />
 
     <bean class="se._1177.lmn.service.LmnServiceImpl" >
