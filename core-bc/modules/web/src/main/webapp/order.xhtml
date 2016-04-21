@@ -106,9 +106,7 @@
                     <ui:repeat value="#{mvkController.noLongerOrderableMedicalSupplyPrescriptions}" var="expiredItem">
                         <tr class="unavailable-row">
                             <td>
-                                <h:panelGroup layout="block" styleClass="row" rendered="#{utilController.isOlderThanAYear(expiredItem.lastValidDate)}">#{utilController.isOlderThanAYear(expiredItem.lastValidDate) ? 'För gammal förskrivning' : ''}</h:panelGroup>
-                                <h:panelGroup layout="block" styleClass="row" rendered="#{expiredItem.noOfRemainingOrders le 0}">#{expiredItem.noOfRemainingOrders le 0 ? 'Max antal uttag uppnått' : ''}</h:panelGroup>
-                                <h:panelGroup layout="block" styleClass="row" rendered="#{expiredItem.status ne 'AKTIV'}">#{expiredItem.status}</h:panelGroup>
+                                #{utilController.getStatusText(expiredItem)}
                             </td>
                             <td>#{expiredItem.article.articleName}<br/>#{expiredItem.article.articleNo}</td>
                             <td>

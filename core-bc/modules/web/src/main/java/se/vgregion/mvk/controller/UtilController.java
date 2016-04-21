@@ -1,8 +1,11 @@
 package se.vgregion.mvk.controller;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._0.StatusEnum;
 import se._1177.lmn.service.util.Util;
 
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -54,4 +57,28 @@ public class UtilController {
         return Util.isOlderThanAYear(date);
     }
 
+    public static String getStatusText(PrescriptionItemType expiredItem) {
+
+        if (expiredItem.getStatus().equals(StatusEnum.LEVERERAD)) {
+            return "Inga kvarvarande uttag";
+        }
+
+        if (expiredItem.getNoOfRemainingOrders() <= 0) {
+            return "Max antal uttag uppnått";
+        }
+
+        if (expiredItem.getStatus().equals(StatusEnum.MAKULERAD)) {
+            return "Makulerad förskrivning";
+        }
+
+        if (isOlderThanAYear(expiredItem.getLastValidDate())) {
+            return "För gammal förskrivning";
+        }
+
+        if (expiredItem.getStatus().equals(StatusEnum.UTGÅTT)) {
+            return "Artikel har utgått";
+        }
+
+        return WordUtils.capitalizeFully(expiredItem.getStatus().toString());
+    }
 }

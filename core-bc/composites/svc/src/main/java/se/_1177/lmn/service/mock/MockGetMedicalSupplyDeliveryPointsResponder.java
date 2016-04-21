@@ -35,7 +35,7 @@ public class MockGetMedicalSupplyDeliveryPointsResponder
 
         response.setResultCode(ResultCodeEnum.OK);
 
-        for (int i = 0; i <= random.nextInt(5) + 5; i++) {
+        for (int i = 0; i <= random.nextInt(5) + 10; i++) {
             DeliveryPointType deliveryPoint = new DeliveryPointType();
 
             deliveryPoint.setCountryCode(CountryCodeEnum.SE);

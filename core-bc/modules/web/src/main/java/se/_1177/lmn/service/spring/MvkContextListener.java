@@ -19,7 +19,8 @@ public class MvkContextListener extends ContextLoader implements ServletContextL
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
 
-        WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContextEvent.getServletContext());
+        WebApplicationContext webApplicationContext = WebApplicationContextUtils
+                .getWebApplicationContext(servletContextEvent.getServletContext());
 
         String shouldStartup = ((XmlWebApplicationContext) webApplicationContext).getBeanFactory()
                 .resolveEmbeddedValue("${local.mock.service.startup}");
