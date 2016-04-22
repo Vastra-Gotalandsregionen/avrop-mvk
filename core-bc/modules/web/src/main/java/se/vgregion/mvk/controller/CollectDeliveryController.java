@@ -10,6 +10,7 @@ import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
 import se._1177.lmn.service.LmnService;
 
 import javax.annotation.PostConstruct;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 import java.util.ArrayList;
@@ -24,8 +25,6 @@ public class CollectDeliveryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CollectDeliveryController.class);
 
-    private String zip;
-
     @Autowired
     private LmnService lmnService;
 
@@ -33,7 +32,13 @@ public class CollectDeliveryController {
     private UserProfileController userProfileController;
 
     private String chosenDeliveryPoint;
+    private String zip;
     private List<DeliveryPointType> deliveryPoints;
+
+    public void updateDeliverySelectItems(AjaxBehaviorEvent ajaxBehaviorEvent) {
+        // Just reset deliveryPoints, making them load again when they are requested.
+        deliveryPoints = null;
+    }
 
     @PostConstruct
     public void init() {
@@ -105,5 +110,13 @@ public class CollectDeliveryController {
 
     public String toVerifyDelivery() {
         return "collectDelivery";
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
     }
 }

@@ -319,6 +319,20 @@ ul.delivery-options li:not(:first-child) {
     padding-left: 8px;
 }
 
+.input-group input[type="text"].postal-number {
+    max-width: 80px;
+    min-width: 80px;
+}
+
+.input-group input[type="submit"] {
+    margin: 0 0 0 10px;
+}
+
+.input-group img {
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
 .page-introduction {
     margin-bottom: 24px;
 }

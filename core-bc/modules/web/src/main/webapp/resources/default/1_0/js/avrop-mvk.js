@@ -75,3 +75,30 @@ function initHomeDeliveryPage() {
         confirmDialog.dialog('close');
     });
 }
+
+function handleProgressWithSpinner(data) {
+    var ajaxStatus = data.status; // Can be "begin", "success" and "complete"
+
+    switch (ajaxStatus) {
+        case "begin": // This is called right before ajax request is been sent
+            //showLoadingMask();
+            jq('.spinner').show();
+            break;
+
+        case "complete": // This is called right after ajax response is received.
+            jq('.spinner').hide();
+            //hideLoadingMask();
+
+            //handleResponseAnomalies(data);
+
+            break;
+        case "success": // This is called when ajax response is successfully processed.
+            //if (completeCallback) {
+            //    completeCallback(data);
+            //}
+            break;
+        default:
+            alert(ajaxStatus);
+            break;
+    }
+}

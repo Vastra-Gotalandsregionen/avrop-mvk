@@ -26,7 +26,30 @@
 
             <h:form>
 
-                <h:selectOneMenu value="#{collectDeliveryController.chosenDeliveryPoint}">
+                <h4>
+                    Utlämningsställe
+                </h4>
+
+                <p>
+                    Ditt närmsta utlämningsställe baserat på ditt postnummer <span style="color:rebeccapurple">todo om postnummer inte kan hämtas</span> <a class="toggle-trigger" data-toggle-for="zipInputWrapper">Ändra postnummer</a>
+                </p>
+
+                <div id="zipInputWrapper" style="display: none;">
+                    <div class="input-group">
+                        <label for="zipInput">Postnummer</label>
+
+                        <h:inputText styleClass="postal-number" value="#{collectDeliveryController.zip}" id="zipInput"/>
+
+                        <h:commandButton styleClass="button" value="Sök">
+                            <f:ajax onevent="handleProgressWithSpinner" listener="#{collectDeliveryController.updateDeliverySelectItems}" execute="zipInput" render="deliveryPointMenu" />
+                        </h:commandButton>
+
+                        <h:graphicImage styleClass="spinner" library="default" name="img/preloader.gif" height="30px" style="display: none;"/>
+                    </div>
+
+                </div>
+
+                Valt utlämningsställe <h:selectOneMenu id="deliveryPointMenu" value="#{collectDeliveryController.chosenDeliveryPoint}">
                     <f:selectItems value="#{collectDeliveryController.deliverySelectItems}"/>
                 </h:selectOneMenu>
 

@@ -26,7 +26,13 @@ public class MockGetMedicalSupplyDeliveryPointsResponder
             String logicalAddress,
             GetMedicalSupplyDeliveryPointsType parameters) {
 
-        random = new Random(0);
+        String postalCode = parameters.getPostalCode();
+
+        if (postalCode == null) {
+            postalCode = "0";
+        }
+
+        random = new Random(postalCode.hashCode());
 
         GetMedicalSupplyDeliveryPointsResponseType response = objectFactory
                 .createGetMedicalSupplyDeliveryPointsResponseType();
