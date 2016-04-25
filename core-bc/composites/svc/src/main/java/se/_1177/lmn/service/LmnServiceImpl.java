@@ -1,5 +1,13 @@
 package se._1177.lmn.service;
 
+import riv.crm.selfservice.medicalsupply._0.AdressType;
+import riv.crm.selfservice.medicalsupply._0.ArticleType;
+import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
+import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
+import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._0.OrderRowType;
+import riv.crm.selfservice.medicalsupply._0.OrderType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply._0.StatusEnum;
@@ -92,8 +100,105 @@ public class LmnServiceImpl implements LmnService {
         return medicalSupplyPrescriptions.getMedicalSupplyPrescriptions("", new GetMedicalSupplyPrescriptionsType());
     }
 
-    public RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrder() {
-        return registerMedicalSupplyOrder.registerMedicalSupplyOrder("", new RegisterMedicalSupplyOrderType());
+    @Override
+    public RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrderCollectDelivery(
+            DeliveryPointType deliveryPoint,
+            DeliveryNotificationMethodEnum deliveryNotificationMethod,
+            String subjectOfCareId,
+            boolean orderByDelegate,
+            String orderer, // May be delegate
+            List<String> articleNumbers) {
+        RegisterMedicalSupplyOrderType parameters = new RegisterMedicalSupplyOrderType();
+
+        OrderType order = new OrderType();
+
+        order.setSubjectOfCareId(subjectOfCareId);
+        order.setOrderByDelegate(orderByDelegate);
+        order.setOrderer(orderer);
+
+        DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
+        deliveryChoice.getDeliveryNotificationMethod().add(deliveryNotificationMethod);
+        deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
+        deliveryChoice.setDeliveryPoint(deliveryPoint);
+
+        addOrderRows(articleNumbers, order, deliveryChoice);
+
+        parameters.getOrder().add(order);
+
+
+        return registerMedicalSupplyOrder.registerMedicalSupplyOrder("", parameters);
     }
 
+    void addOrderRows(List<String> articleNumbers, OrderType order, DeliveryChoiceType deliveryChoice) {
+        for (String articleNo : articleNumbers) {
+            OrderRowType orderRow = new OrderRowType();
+
+            orderRow.setDeliveryChoice(deliveryChoice);
+
+            ArticleType article = new ArticleType();
+
+            article.setArticleNo(articleNo);
+            orderRow.setArticle(article);
+
+            order.getOrderRow().add(orderRow);
+        }
+    }
+
+    /**
+     *
+     * @param deliveryNotificationReceiver Should match deliveryNotificationMethod. If email is chosen
+     *                                     deliveryNotificationReceiver should be an email value. If SMS is chosen
+     *                                     the deliveryNotificationReceiver should be a mobile phone number. If letter
+     *                                     is chosen no value is needed.
+     * @param articleNumbers
+     * @param deliveryNotificationMethod
+     * @return
+     */
+    @Override
+    public RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrderHomeDelivery(
+            String receiverFullName,
+            String phone,
+            String postalCode,
+            String street,
+            String doorCode,
+            String city,
+            String careOfAddress,
+            String subjectOfCareId,
+            boolean orderByDelegate,
+            String orderer, // May be delegate
+            String deliveryNotificationReceiver,
+            List<String> articleNumbers,
+            DeliveryNotificationMethodEnum deliveryNotificationMethod) {
+
+        RegisterMedicalSupplyOrderType parameters = new RegisterMedicalSupplyOrderType();
+
+        AdressType address = new AdressType();
+        address.setCareOfAddress(careOfAddress);
+        address.setCity(city);
+        address.setDoorCode(doorCode);
+        address.setPhone(phone);
+        address.setPostalCode(postalCode);
+        address.setReciever(receiverFullName); // todo Korrekt att detta är mottagarens namn?
+        address.setStreet(street);
+
+        DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
+        deliveryChoice.getDeliveryNotificationMethod().add(deliveryNotificationMethod);
+        deliveryChoice.setDeliveryPoint(null);
+        deliveryChoice.setDeliveryMethodId("behövs detta???"); // todo
+        deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        deliveryChoice.setDeliveryNotificationReceiver(deliveryNotificationReceiver);
+        deliveryChoice.setHomeDeliveryAdress(address);
+
+        OrderType order = new OrderType();
+
+        order.setSubjectOfCareId(subjectOfCareId);
+        order.setOrderByDelegate(orderByDelegate);
+        order.setOrderer(orderer);
+
+        addOrderRows(articleNumbers, order, deliveryChoice);
+
+        parameters.getOrder().add(order);
+
+        return registerMedicalSupplyOrder.registerMedicalSupplyOrder("", parameters);
+    }
 }

@@ -20,20 +20,20 @@ public class UserProfileController {
 
     @Autowired
     private MvkUserProfileService mvkUserProfileService;
-    private GetUserProfileResponseType subjectOfCare;
+    private GetUserProfileResponseType userProfile;
 
     public GetUserProfileResponseType getUserProfile() {
 
-        if (subjectOfCare == null) {
+        if (userProfile == null) {
 
             HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
                     .getRequest();
 
             String ssn = request.getHeader("AJP_Subject_SerialNumber");
 
-            subjectOfCare = mvkUserProfileService.getSubjectOfCare(ssn);
+            userProfile = mvkUserProfileService.getUserProfile(ssn);
         }
 
-        return subjectOfCare;
+        return userProfile;
     }
 }

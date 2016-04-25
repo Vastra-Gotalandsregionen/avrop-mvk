@@ -17,7 +17,7 @@ public class MvkUserProfileService {
         this.getUserProfileResponderInterface = getUserProfileResponderInterface;
     }
 
-    public GetUserProfileResponseType getSubjectOfCare(String pid) {
+    public GetUserProfileResponseType getUserProfile(String pid) {
         GetUserProfileType request = new GetUserProfileType();
 
         request.setSubjectOfCare(pid);

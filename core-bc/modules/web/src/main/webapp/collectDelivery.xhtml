@@ -26,9 +26,7 @@
 
             <h:form>
 
-                <h4>
-                    Utlämningsställe
-                </h4>
+                <h4>Utlämningsställe</h4>
 
                 <p>
                     Ditt närmsta utlämningsställe baserat på ditt postnummer <span style="color:rebeccapurple">todo om postnummer inte kan hämtas</span> <a class="toggle-trigger" data-toggle-for="zipInputWrapper">Ändra postnummer</a>
@@ -53,12 +51,80 @@
                     <f:selectItems value="#{collectDeliveryController.deliverySelectItems}"/>
                 </h:selectOneMenu>
 
+                <hr/>
+
+                <h3>Avisering</h3>
+
+                <div class="page-introduction">
+                    <div>
+                        <p>
+                            Avisering skickas per sms, e-post eller brev. Väljs sms måste mobilnummer anges, väljs epost måste e-postadress
+                            anges, väljs brev så skickas det till din folkbokföringsadress, detta går inte att ändra.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="input-group row clearfix">
+                    <div class="">
+                        <label for="deliveryNotificationMethod">&#160;</label>
+                        <span>Avi:n skickas som </span>
+                        <h:selectOneMenu id="deliveryNotificationMethod" value="#{collectDeliveryController.deliveryNotificationMethod}" onchange="updateDeliveryNotificationMethod(this.value)">
+                            <f:selectItem itemValue="#{collectDeliveryController.smsValue}" itemLabel="SMS"/>
+                            <f:selectItem itemValue="#{collectDeliveryController.epostValue}" itemLabel="Epost"/>
+                            <f:selectItem itemValue="#{collectDeliveryController.brevValue}" itemLabel="Brev" />
+                        </h:selectOneMenu>
+                    </div>
+
+                    <div id="smsInputWrapper" style="display: #{collectDeliveryController.deliveryNotificationMethod eq 'SMS' ? 'block' : 'none'};">
+                        <h:outputLabel for="smsInput" value="Mobiltelefon"/>
+                        <h:inputText id="smsInput" value="#{collectDeliveryController.smsNumber}"/>
+                    </div>
+
+                    <div id="emailInputWrapper" style="display: #{collectDeliveryController.deliveryNotificationMethod eq 'E_POST' ? 'block' : 'none'};">
+                        <h:outputLabel for="emailInput" value="Epost"/>
+                        <h:inputText id="emailInput" value="#{collectDeliveryController.email}"/>
+                    </div>
+
+                    <div id="letterWrapper" style="display: #{collectDeliveryController.deliveryNotificationMethod eq 'BREV' ? 'block' : 'none'};">
+                        <div>Folkbokföringsadress:</div>
+                        <div style="font-weight: bold;">
+                            <div>#{userProfileController.userProfile.userProfile.firstName} #{userProfileController.userProfile.userProfile.lastName}</div>
+                            <div>#{userProfileController.userProfile.userProfile.streetAddress}</div>
+                            <div>#{userProfileController.userProfile.userProfile.zip} #{userProfileController.userProfile.userProfile.city}</div>
+                        </div>
+                    </div>
+
+                </div>
 
                 <div class="right-align">
                     <h:commandButton styleClass="button back-button" value="Bakåt" action="delivery?faces-redirect=true&amp;includeViewParams=true" />
-                    <h:commandButton styleClass="button" value="Till adressinformation" action="#{collectDeliveryController.toVerifyDelivery}" />
+                    <h:commandButton styleClass="button" value="Bekräfta beställning / Till sammanfattning" action="#{collectDeliveryController.toVerifyDelivery}" />
                 </div>
             </h:form>
+
+            <h:outputScript>
+                function updateDeliveryNotificationMethod(value) {
+                    switch (value) {
+                        case 'E_POST':
+                            jq('#emailInputWrapper').show();
+                            jq('#smsInputWrapper').hide();
+                            jq('#letterWrapper').hide();
+                            break;
+                        case 'SMS':
+                            jq('#emailInputWrapper').hide();
+                            jq('#smsInputWrapper').show();
+                            jq('#letterWrapper').hide();
+                            break;
+                        case 'BREV':
+                            jq('#emailInputWrapper').hide();
+                            jq('#smsInputWrapper').hide();
+                            jq('#letterWrapper').show();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            </h:outputScript>
         </div>
     </ui:define>
 </ui:composition>

@@ -49,6 +49,11 @@
                                 <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/schema/TD_USERPROFILE_2_0/schemas/interactions/GetUserProfileByAgent/GetUserProfileByAgentInteraction_2.0_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
+
+                                <!-- Inbox services -->
+                                <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/schema/TD_INBOX_2_0/schemas/interactions/AddMessage/AddMessageInteraction_2.0_RIVTABP21.wsdl</wsdl>
+                                </wsdlOption>
                             </wsdlOptions>
                         </configuration>
                         <goals>

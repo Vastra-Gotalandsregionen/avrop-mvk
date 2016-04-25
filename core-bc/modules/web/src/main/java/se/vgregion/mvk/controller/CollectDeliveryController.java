@@ -1,11 +1,13 @@
 package se.vgregion.mvk.controller;
 
+import mvk.itintegration.userprofile._2.UserProfileType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
 import se._1177.lmn.service.LmnService;
 
@@ -15,6 +17,8 @@ import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 import java.util.ArrayList;
 import java.util.List;
+
+import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 
 /**
  * @author Patrik Björk
@@ -34,6 +38,9 @@ public class CollectDeliveryController {
     private String chosenDeliveryPoint;
     private String zip;
     private List<DeliveryPointType> deliveryPoints;
+    private DeliveryNotificationMethodEnum deliveryNotificationMethod;
+    private String email;
+    private String smsNumber;
 
     public void updateDeliverySelectItems(AjaxBehaviorEvent ajaxBehaviorEvent) {
         // Just reset deliveryPoints, making them load again when they are requested.
@@ -43,7 +50,17 @@ public class CollectDeliveryController {
     @PostConstruct
     public void init() {
         // Default zip is from user profile. It may be overridden if user chooses so.
-        zip = userProfileController.getUserProfile().getUserProfile().getZip();
+        UserProfileType userProfile = userProfileController.getUserProfile().getUserProfile();
+
+        zip = userProfile.getZip();
+
+        if (userProfile.isHasSmsNotification() != null && userProfile.isHasSmsNotification()) {
+            deliveryNotificationMethod = DeliveryNotificationMethodEnum.SMS;
+        } else if (userProfile.isHasMailNotification() != null && userProfile.isHasMailNotification()) {
+            deliveryNotificationMethod = DeliveryNotificationMethodEnum.E_POST;
+        } else {
+            deliveryNotificationMethod = DeliveryNotificationMethodEnum.BREV;
+        }
 
         List<SelectItemGroup> deliverySelectItems = getDeliverySelectItems();
 
@@ -109,7 +126,7 @@ public class CollectDeliveryController {
     }
 
     public String toVerifyDelivery() {
-        return "collectDelivery";
+        return "verifyDelivery" + ACTION_SUFFIX;
     }
 
     public String getZip() {
@@ -118,5 +135,41 @@ public class CollectDeliveryController {
 
     public void setZip(String zip) {
         this.zip = zip;
+    }
+
+    public DeliveryNotificationMethodEnum getDeliveryNotificationMethod() {
+        return deliveryNotificationMethod;
+    }
+
+    public void setDeliveryNotificationMethod(DeliveryNotificationMethodEnum deliveryNotificationMethod) {
+        this.deliveryNotificationMethod = deliveryNotificationMethod;
+    }
+
+    public DeliveryNotificationMethodEnum getBrevValue() {
+        return DeliveryNotificationMethodEnum.BREV;
+    }
+
+    public DeliveryNotificationMethodEnum getEpostValue() {
+        return DeliveryNotificationMethodEnum.E_POST;
+    }
+
+    public DeliveryNotificationMethodEnum getSmsValue() {
+        return DeliveryNotificationMethodEnum.SMS;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setSmsNumber(String smsNumber) {
+        this.smsNumber = smsNumber;
+    }
+
+    public String getSmsNumber() {
+        return smsNumber;
     }
 }

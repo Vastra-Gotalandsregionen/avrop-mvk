@@ -81,4 +81,8 @@ public class UtilController {
 
         return WordUtils.capitalizeFully(expiredItem.getStatus().toString());
     }
+
+    public static String capitalizeFulle(String string) {
+        return WordUtils.capitalizeFully(string);
+    }
 }

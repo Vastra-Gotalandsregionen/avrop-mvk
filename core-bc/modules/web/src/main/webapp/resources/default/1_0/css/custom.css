@@ -259,6 +259,13 @@ ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
     position: relative;
 }
 
+.row > select,
+.row > div,
+.row > span {
+    float: left;
+    margin-right: 24px;
+}
+
 .section {
     margin-bottom: 36px;
     position: relative;
@@ -409,4 +416,27 @@ ul.delivery-options li:not(:first-child) {
     background: #888;
     z-index: 99;
     opacity: .7;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {  /*safari and chrome*/
+    select {
+        height:30px;
+        line-height:30px;
+        background:#f4f4f4;
+    }
+}
+select::-moz-focus-inner { /*Remove button padding in FF*/
+    border: 0;
+    padding: 0;
+}
+@-moz-document url-prefix() { /* targets Firefox only */
+    select {
+        padding: 15px 0;
+    }
+}
+@media screen\0 { /* IE Hacks: targets IE 8, 9 and 10 */
+    select {
+        height:30px;
+        line-height:30px;
+    }
 }
