@@ -37,7 +37,7 @@ public class MockLmnServiceImpl implements LmnService {
     }
 
     @Override
-    public RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrderHomeDelivery(String receiverFullName, String phone, String postalCode, String street, String doorCode, String city, String careOfAddress, String subjectOfCareId, boolean orderByDelegate, String orderer, String deliveryNotificationReceiver, List<String> articleNumbers, DeliveryNotificationMethodEnum deliveryNotificationMethod) {
+    public RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrderHomeDelivery(String receiverFullName, String phone, String postalCode, String street, String doorCode, String city, String careOfAddress, String subjectOfCareId, boolean orderByDelegate, String orderer, List<String> articleNumbers) {
         return null;
     }
 

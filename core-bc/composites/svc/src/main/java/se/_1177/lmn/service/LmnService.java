@@ -38,7 +38,6 @@ public interface LmnService {
             String subjectOfCareId,
             boolean orderByDelegate,
             String orderer, // May be delegate
-            String deliveryNotificationReceiver,
-            List<String> articleNumbers,
-            DeliveryNotificationMethodEnum deliveryNotificationMethod);
+            List<String> articleNumbers//,
+    );
 }

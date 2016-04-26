@@ -47,7 +47,7 @@ public class MockGetMedicalSupplyDeliveryPointsResponder
             deliveryPoint.setCountryCode(CountryCodeEnum.SE);
 
             deliveryPoint.setDeliveryPointAddress("Gatan " + random.nextInt(100));
-            deliveryPoint.setDeliveryPointCity("Staden " + random.nextInt(100));
+            deliveryPoint.setDeliveryPointCity("Staden" + random.nextInt(100));
             deliveryPoint.setDeliveryPointId("Leverans-id" + random.nextInt(100));
             deliveryPoint.setDeliveryPointName("Leverans-namn" + random.nextInt(100));
             deliveryPoint.setDeliveryPointPostalCode(random.nextInt(100000) + "");

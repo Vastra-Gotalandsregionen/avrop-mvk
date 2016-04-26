@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
+import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
+
 /**
  * @author Patrik Björk
  */
@@ -18,7 +20,7 @@ public class HomeDeliveryController {
     private String doorCode;
 
     public String toVerifyDelivery() {
-        return null;
+        return "verifyDelivery" + ACTION_SUFFIX;
     }
 
     public void setDoorCode(String doorCode) {

@@ -1,12 +1,14 @@
 package se._1177.lmn.service.mock;
 
 import riv.crm.selfservice.medicalsupply._0.ArticleType;
+import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.OrderItemType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ProductAreaEnum;
 import riv.crm.selfservice.medicalsupply._0.ResultCodeEnum;
+import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply._0.StatusEnum;
 import riv.crm.selfservice.medicalsupply._0.SubjectOfCareType;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._0.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface;
@@ -93,6 +95,16 @@ public class MockGetMedicalSupplyPrescriptionsResponder
 
         prescriptionItem.setNoOfOrders(random.nextInt(10));
         prescriptionItem.setNoOfRemainingOrders(random.nextInt(5));
+        DeliveryAlternativeType deliveryAlternative = new DeliveryAlternativeType();
+        deliveryAlternative.setDeliveryMethodId(random.nextInt(10000) + "");
+        deliveryAlternative.setDeliveryMethod(
+                DeliveryMethodEnum.values()[random.nextInt(DeliveryMethodEnum.values().length)]);
+        deliveryAlternative.setServicePointProvider(
+                ServicePointProviderEnum.values()[random.nextInt(ServicePointProviderEnum.values().length)]);
+        deliveryAlternative.setAllowChioceOfDeliveryPoints(random.nextBoolean());
+        deliveryAlternative.setDeliveryMethodName(Character.getName(random.nextInt(1000)));
+
+        prescriptionItem.getDeliveryAlternative().add(deliveryAlternative);
 
         if (!nextPossibleOrderDateInFuture) {
             prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random));

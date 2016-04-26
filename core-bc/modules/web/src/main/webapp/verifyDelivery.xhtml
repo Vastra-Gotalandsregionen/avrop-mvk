@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+
+<ui:composition template="WEB-INF/xhtml/template/wideContent.xhtml">
+
+    <ui:define name="boxContent">
+
+        <h:messages showSummary="true" styleClass="alert alert-danger"/>
+
+        <ui:include src="WEB-INF/xhtml/include/print.xhtml"/>
+
+        <div>
+            <h3>Kontrollera din beställning</h3>
+
+            <h:form>
+                <div class="gray-box">
+                    <h4>Patientinformation</h4>
+                    <div class="row clearfix">
+                        <span class="input-group">
+                            <h:outputLabel for="patientName" value="Namn:"/>
+                            <h:outputText styleClass="bold" id="patientName"
+                                          value="#{userProfileController.userProfile.userProfile.firstName} #{userProfileController.userProfile.userProfile.lastName}"/>
+                        </span>
+
+                        <span class="input-group">
+                            <h:outputLabel for="patientPid" value="Personnummer:"/>
+                            <h:outputText styleClass="bold" id="patientPid"
+                                          value="#{userProfileController.userProfile.userProfile.subjectOfCareId}"/>
+                        </span>
+                    </div>
+                </div>
+
+                <h4>Produkter</h4>
+
+                <table class="avrop-table my-products-table contentFontSize verify-delivery" style="table-layout: fixed">
+                    <thead>
+                    <tr>
+                        <td class="column-1">Produktgrupp/Artikel-nr.</td>
+                        <td class="column-2">Benämning</td>
+                        <td class="column-3">Uttag kvar / antal uttag</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ui:repeat value="#{cart.itemsInCart}" var="itemId" varStatus="status">
+                        <tr>
+                            <td>
+                                #{utilController.capitalizeFully(cart.prescriptionItemInfo[itemId].article.productArea)}<br/>
+                                #{cart.prescriptionItemInfo[itemId].article.articleNo}
+                            </td>
+                            <td>
+                                #{cart.prescriptionItemInfo[itemId].article.articleName}
+                            </td>
+                            <td>
+                                #{cart.prescriptionItemInfo[itemId].noOfRemainingOrders}/#{cart.prescriptionItemInfo[itemId].noOfOrders}
+                            </td>
+                        </tr>
+                    </ui:repeat>
+                    </tbody>
+                </table>
+
+                <div class="gray-box clearfix">
+                    <h4>Leveransinformation</h4>
+
+                    <div class="row clearfix">
+                        <h:panelGroup id="collectDeliveryAddressWrapper" rendered="#{deliveryController.deliveryMethod eq deliveryController.utlamningsstalleValue}">
+                            <label for="collectDeliveryAddress">Utlämningsställe:</label>
+                            <div id="collectDeliveryAddress" class="bold">
+                                <div>#{collectDeliveryController.deliveryPointsMap[collectDeliveryController.chosenDeliveryPoint].deliveryPointName}</div>
+                                <div>#{collectDeliveryController.deliveryPointsMap[collectDeliveryController.chosenDeliveryPoint].deliveryPointAddress}</div>
+                                <div>
+                                    #{collectDeliveryController.deliveryPointsMap[collectDeliveryController.chosenDeliveryPoint].deliveryPointPostalCode}
+                                    #{collectDeliveryController.deliveryPointsMap[collectDeliveryController.chosenDeliveryPoint].deliveryPointCity}
+                                </div>
+                            </div>
+                        </h:panelGroup>
+
+                        <h:panelGroup id="homeDeliveryAddressWrapper" rendered="#{deliveryController.deliveryMethod eq deliveryController.hemleveransValue}">
+                            <label for="homeDeliveryAddress">Hemleverans:</label>
+                            <div id="homeDeliveryAddress" class="bold">
+                                <div>#{userProfileController.userProfile.userProfile.firstName} #{userProfileController.userProfile.userProfile.lastName}</div>
+                                <div>#{userProfileController.userProfile.userProfile.streetAddress}</div>
+                                <div>#{userProfileController.userProfile.userProfile.zip} #{userProfileController.userProfile.userProfile.city}</div>
+                            </div>
+                        </h:panelGroup>
+
+                        <h:panelGroup id="smsNotificationMethodWrapper" rendered="#{deliveryController.deliveryMethod eq deliveryController.utlamningsstalleValue}">
+                            <h:panelGroup rendered="#{collectDeliveryController.deliveryNotificationMethod eq collectDeliveryController.smsValue}">
+                                <div>SMS-avisering:</div>
+                                <div class="bold">#{collectDeliveryController.smsNumber}</div>
+                            </h:panelGroup>
+
+                            <h:panelGroup rendered="#{collectDeliveryController.deliveryNotificationMethod eq collectDeliveryController.epostValue}">
+                                <div>Epost-avisering:</div>
+                                <div class="bold">#{collectDeliveryController.email}</div>
+                            </h:panelGroup>
+
+                            <h:panelGroup rendered="#{collectDeliveryController.deliveryNotificationMethod eq collectDeliveryController.brevValue}">
+                                <div>Brev-avisering:</div>
+                                <div class="bold">
+                                    <div>#{userProfileController.userProfile.userProfile.firstName} #{userProfileController.userProfile.userProfile.lastName}</div>
+                                    <div>#{userProfileController.userProfile.userProfile.streetAddress}</div>
+                                    <div>#{userProfileController.userProfile.userProfile.zip} #{userProfileController.userProfile.userProfile.city}</div>
+                                </div>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </div>
+                </div>
+
+                <div class="right-align">
+                    <h:commandButton styleClass="button back-button" value="Bakåt" action="homeDelivery?faces-redirect=true&amp;includeViewParams=true" rendered="#{deliveryController.deliveryMethod eq deliveryController.hemleveransValue}" />
+                    <h:commandButton styleClass="button back-button" value="Bakåt" action="collectDelivery?faces-redirect=true&amp;includeViewParams=true" rendered="#{deliveryController.deliveryMethod eq deliveryController.utlamningsstalleValue}"/>
+                    <h:commandButton styleClass="button" value="Beställ / Bekräfta beställning" action="#{verifyDeliveryController.confirmOrder}" />
+                </div>
+
+            </h:form>
+        </div>
+
+    </ui:define>
+</ui:composition>
+</html>

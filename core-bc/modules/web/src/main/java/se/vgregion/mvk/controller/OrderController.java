@@ -26,9 +26,9 @@ import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
  */
 @Component
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class MvkController {
+public class OrderController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MvkController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
     private LmnService lmnService;
@@ -48,6 +48,7 @@ public class MvkController {
             for (PrescriptionItemType prescriptionItem : medicalSupplyPrescriptions.orderable) {
                 String prescriptionId = prescriptionItem.getPrescriptionId();
                 chosenItemMap.put(prescriptionId, cart.getItemsInCart().contains(prescriptionId));
+                cart.addPrescriptionItemForInfo(prescriptionId, prescriptionItem);
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);

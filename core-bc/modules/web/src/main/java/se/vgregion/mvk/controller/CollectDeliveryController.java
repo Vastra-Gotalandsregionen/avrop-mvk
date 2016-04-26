@@ -16,7 +16,9 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 
@@ -38,7 +40,8 @@ public class CollectDeliveryController {
     private String chosenDeliveryPoint;
     private String zip;
     private List<DeliveryPointType> deliveryPoints;
-    private DeliveryNotificationMethodEnum deliveryNotificationMethod;
+    private Map<String, DeliveryPointType> deliveryPointsMap = new HashMap<>();
+    private DeliveryNotificationMethodEnum deliveryNotificationMethod; // These gets stored in session memory
     private String email;
     private String smsNumber;
 
@@ -78,6 +81,10 @@ public class CollectDeliveryController {
         // Loads these once per session. Be careful about memory consumption under load.
         if (deliveryPoints == null) {
             deliveryPoints = lmnService.getMedicalSupplyDeliveryPoints(zip).getDeliveryPoint();
+            for (DeliveryPointType deliveryPoint : deliveryPoints) {
+                deliveryPointsMap.put(deliveryPoint.getDeliveryPointId(), deliveryPoint);
+            }
+
         }
 
         return deliveryPoints;
@@ -115,6 +122,10 @@ public class CollectDeliveryController {
         toReturn.add(group2);
 
         return toReturn;
+    }
+
+    public Map<String, DeliveryPointType> getDeliveryPointsMap() {
+        return deliveryPointsMap;
     }
 
     public String getChosenDeliveryPoint() {

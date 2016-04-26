@@ -323,7 +323,6 @@ ul.delivery-options li:not(:first-child) {
 
 .input-group label {
     display: block;
-    padding-left: 8px;
 }
 
 .input-group input[type="text"].postal-number {
@@ -362,6 +361,14 @@ ul.delivery-options li:not(:first-child) {
     padding: 12px;
     position: absolute;
     width: 420px;
+}
+
+.gray-box {
+    background: #E3E3E3;
+    border-radius: 4px;
+    box-shadow: 2px 2px 2px #949494;
+    margin: 20px 0;
+    padding: 1px 16px;
 }
 
 .arrow-box {

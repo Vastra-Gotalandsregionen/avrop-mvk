@@ -87,7 +87,7 @@
 
                     <div id="letterWrapper" style="display: #{collectDeliveryController.deliveryNotificationMethod eq 'BREV' ? 'block' : 'none'};">
                         <div>Folkbokföringsadress:</div>
-                        <div style="font-weight: bold;">
+                        <div class="bold">
                             <div>#{userProfileController.userProfile.userProfile.firstName} #{userProfileController.userProfile.userProfile.lastName}</div>
                             <div>#{userProfileController.userProfile.userProfile.streetAddress}</div>
                             <div>#{userProfileController.userProfile.userProfile.zip} #{userProfileController.userProfile.userProfile.city}</div>
@@ -98,7 +98,7 @@
 
                 <div class="right-align">
                     <h:commandButton styleClass="button back-button" value="Bakåt" action="delivery?faces-redirect=true&amp;includeViewParams=true" />
-                    <h:commandButton styleClass="button" value="Bekräfta beställning / Till sammanfattning" action="#{collectDeliveryController.toVerifyDelivery}" />
+                    <h:commandButton styleClass="button" value="Kontrollera beställning" action="#{collectDeliveryController.toVerifyDelivery}" />
                 </div>
             </h:form>
 

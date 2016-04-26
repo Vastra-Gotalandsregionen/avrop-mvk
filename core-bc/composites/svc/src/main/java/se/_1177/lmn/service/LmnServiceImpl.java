@@ -151,7 +151,7 @@ public class LmnServiceImpl implements LmnService {
      *                                     the deliveryNotificationReceiver should be a mobile phone number. If letter
      *                                     is chosen no value is needed.
      * @param articleNumbers
-     * @param deliveryNotificationMethod
+     * @param
      * @return
      */
     @Override
@@ -166,9 +166,7 @@ public class LmnServiceImpl implements LmnService {
             String subjectOfCareId,
             boolean orderByDelegate,
             String orderer, // May be delegate
-            String deliveryNotificationReceiver,
-            List<String> articleNumbers,
-            DeliveryNotificationMethodEnum deliveryNotificationMethod) {
+            List<String> articleNumbers) {
 
         RegisterMedicalSupplyOrderType parameters = new RegisterMedicalSupplyOrderType();
 
@@ -182,11 +180,7 @@ public class LmnServiceImpl implements LmnService {
         address.setStreet(street);
 
         DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
-        deliveryChoice.getDeliveryNotificationMethod().add(deliveryNotificationMethod);
-        deliveryChoice.setDeliveryPoint(null);
-        deliveryChoice.setDeliveryMethodId("behövs detta???"); // todo
         deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
-        deliveryChoice.setDeliveryNotificationReceiver(deliveryNotificationReceiver);
         deliveryChoice.setHomeDeliveryAdress(address);
 
         OrderType order = new OrderType();

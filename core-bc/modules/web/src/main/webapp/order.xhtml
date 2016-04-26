@@ -11,7 +11,7 @@
 
     <ui:define name="boxContent">
 
-        <div style="display: none">#{mvkController} This reference is needed in order to make possible message be added before the h:messages tag is rendered.</div>
+        <div style="display: none">#{orderController} This reference is needed in order to make possible message be added before the h:messages tag is rendered.</div>
 
         <h:messages showSummary="true" styleClass="alert alert-danger"/>
 
@@ -48,16 +48,16 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <ui:repeat value="#{mvkController.medicalSupplyPrescriptions}" var="item" varStatus="status">
+                    <ui:repeat value="#{orderController.medicalSupplyPrescriptions}" var="item" varStatus="status">
                         <tr class="#{utilController.isAfterToday(item.nextEarliestOrderDate) ? 'unavailable-row' : ''}">
                             <td>
                                 <h:panelGroup styleClass="checkbox" rendered="#{not utilController.isAfterToday(item.nextEarliestOrderDate)}">
-                                    <h:selectBooleanCheckbox id="subscriptionCheckbox" value="#{mvkController.chosenItemMap[item.prescriptionId]}" />
+                                    <h:selectBooleanCheckbox id="subscriptionCheckbox" value="#{orderController.chosenItemMap[item.prescriptionId]}" />
                                     <h:outputLabel for="subscriptionCheckbox" />
                                 </h:panelGroup>
                             </td>
                             <td>
-                                #{item.article.articleName}<br/>#{item.article.articleNo}
+                                #{utilController.capitalizeFully(item.article.productArea)}<br/>#{item.article.articleNo}
                             </td>
                             <td class="#{not utilController.isAfterToday(item.nextEarliestOrderDate) ? 'bold' : ''}">
                                 <h:panelGroup layout="block" class="alert-text" rendered="#{utilController.isAfterToday(item.nextEarliestOrderDate)}">
@@ -84,7 +84,7 @@
 
                 <hr/>
 
-                <h4 class="toggle-trigger with-text plus-icon expand" data-toggle-for="collected-products-wrapper">Tidigare produkter, #{mvkController.noLongerOrderableMedicalSupplyPrescriptions.size()} st</h4>
+                <h4 class="toggle-trigger with-text plus-icon expand" data-toggle-for="collected-products-wrapper">Tidigare produkter, #{orderController.noLongerOrderableMedicalSupplyPrescriptions.size()} st</h4>
 
                 <span class="toggle-trigger info-icon expand" data-toggle-for="collectedProductsInfo"/>
 
@@ -103,7 +103,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <ui:repeat value="#{mvkController.noLongerOrderableMedicalSupplyPrescriptions}" var="expiredItem">
+                    <ui:repeat value="#{orderController.noLongerOrderableMedicalSupplyPrescriptions}" var="expiredItem">
                         <tr class="unavailable-row">
                             <td>
                                 #{utilController.getStatusText(expiredItem)}
@@ -125,7 +125,7 @@
                 <div class="right-align">
 
                     <h:commandButton styleClass="button back-button" value="Bakåt" action="start?faces-redirect=true&amp;includeViewParams=true" />
-                    <h:commandButton styleClass="button" value="Till leverans" action="#{mvkController.toDelivery}" />
+                    <h:commandButton styleClass="button" value="Till leverans" action="#{orderController.toDelivery}" />
                 </div>
 
             </h:form>
