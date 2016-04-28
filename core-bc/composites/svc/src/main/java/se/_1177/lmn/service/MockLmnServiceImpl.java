@@ -19,7 +19,7 @@ public class MockLmnServiceImpl implements LmnService {
 
 
     @Override
-    public MedicalSupplyPrescriptionsHolder getMedicalSupplyPrescriptionsHolder() {
+    public MedicalSupplyPrescriptionsHolder getMedicalSupplyPrescriptionsHolder(String subjectOfCareId) {
         return null;
     }
 
@@ -27,7 +27,7 @@ public class MockLmnServiceImpl implements LmnService {
         return null;
     }
 
-    public GetMedicalSupplyPrescriptionsResponseType getMedicalSupplyPrescriptions() {
+    public GetMedicalSupplyPrescriptionsResponseType getMedicalSupplyPrescriptions(String subjectOfCareId) {
         return null;
     }
 

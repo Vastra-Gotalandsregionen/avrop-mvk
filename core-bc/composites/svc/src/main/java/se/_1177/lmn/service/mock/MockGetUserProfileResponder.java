@@ -31,7 +31,7 @@ public class MockGetUserProfileResponder implements GetUserProfileResponderInter
         userProfile.setLastName("Testare");
         userProfile.setPhoneNumber("031 123456");
         userProfile.setStreetAddress("Gatan 47");
-        userProfile.setZip("12345");
+        userProfile.setZip("42137");
         userProfile.setSubjectOfCareId(ssn);
 
         response.setUserProfile(userProfile);

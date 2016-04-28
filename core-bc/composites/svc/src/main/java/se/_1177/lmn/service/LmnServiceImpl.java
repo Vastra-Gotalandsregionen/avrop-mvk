@@ -49,8 +49,8 @@ public class LmnServiceImpl implements LmnService {
     }
 
     @Override
-    public MedicalSupplyPrescriptionsHolder getMedicalSupplyPrescriptionsHolder() {
-        GetMedicalSupplyPrescriptionsResponseType medicalSupplyPrescriptions = getMedicalSupplyPrescriptions();
+    public MedicalSupplyPrescriptionsHolder getMedicalSupplyPrescriptionsHolder(String subjectOfCareId) {
+        GetMedicalSupplyPrescriptionsResponseType medicalSupplyPrescriptions = getMedicalSupplyPrescriptions(subjectOfCareId);
 
         MedicalSupplyPrescriptionsHolder holder = new MedicalSupplyPrescriptionsHolder();
 
@@ -96,8 +96,12 @@ public class LmnServiceImpl implements LmnService {
         return medicalSupplyDeliveryPoints;
     }
 
-    public GetMedicalSupplyPrescriptionsResponseType getMedicalSupplyPrescriptions() {
-        return medicalSupplyPrescriptions.getMedicalSupplyPrescriptions("", new GetMedicalSupplyPrescriptionsType());
+    public GetMedicalSupplyPrescriptionsResponseType getMedicalSupplyPrescriptions(String subjectOfCareId) {
+        GetMedicalSupplyPrescriptionsType parameters = new GetMedicalSupplyPrescriptionsType();
+
+        parameters.setSubjectOfCareId(subjectOfCareId);
+
+        return medicalSupplyPrescriptions.getMedicalSupplyPrescriptions("", parameters);
     }
 
     @Override

@@ -13,11 +13,11 @@ import java.util.List;
  * @author Patrik Björk
  */
 public interface LmnService {
-    MedicalSupplyPrescriptionsHolder getMedicalSupplyPrescriptionsHolder();
+    MedicalSupplyPrescriptionsHolder getMedicalSupplyPrescriptionsHolder(String subjectOfCareId);
 
     GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(String postalCode);
 
-    GetMedicalSupplyPrescriptionsResponseType getMedicalSupplyPrescriptions();
+    GetMedicalSupplyPrescriptionsResponseType getMedicalSupplyPrescriptions(String subjectOfCareId);
 
     RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrderCollectDelivery(
             DeliveryPointType deliveryPoint,

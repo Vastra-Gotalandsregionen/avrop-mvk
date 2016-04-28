@@ -5,7 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.stereotype.Component;
+import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import se._1177.lmn.service.LmnService;
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
@@ -18,6 +20,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 
@@ -31,6 +35,12 @@ public class OrderController {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
+    private UserProfileController userProfileController;
+
+    @Autowired
+    private CollectDeliveryController collectDeliveryController;
+
+    @Autowired
     private LmnService lmnService;
 
     @Autowired
@@ -40,16 +50,39 @@ public class OrderController {
 
     private Map<String, Boolean> chosenItemMap = new HashMap<>();
 
+    private ExecutorService executorService;
+
+    public ExecutorService getExecutor() {
+        if (executorService != null) {
+            return executorService;
+        }
+        CustomizableThreadFactory threadFactory = new CustomizableThreadFactory();
+
+        threadFactory.setDaemon(true);
+        threadFactory.setThreadGroupName("backgroundTasksGroup");
+        threadFactory.setThreadNamePrefix("backgroundTask");
+
+        executorService = Executors.newCachedThreadPool(threadFactory);
+
+        return executorService;
+    }
+
     @PostConstruct
     public void  init() {
         try {
-            this.medicalSupplyPrescriptions = lmnService.getMedicalSupplyPrescriptionsHolder();
+            this.medicalSupplyPrescriptions = lmnService.getMedicalSupplyPrescriptionsHolder(
+                    userProfileController.getUserProfile().getUserProfile().getSubjectOfCareId());
 
             for (PrescriptionItemType prescriptionItem : medicalSupplyPrescriptions.orderable) {
                 String prescriptionId = prescriptionItem.getPrescriptionId();
                 chosenItemMap.put(prescriptionId, cart.getItemsInCart().contains(prescriptionId));
                 cart.addPrescriptionItemForInfo(prescriptionId, prescriptionItem);
             }
+
+            getExecutor().submit(() -> {
+                // Just calling any method will init the bean. We do this to load the delivery points.
+                collectDeliveryController.dummyMethod();
+            });
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
 

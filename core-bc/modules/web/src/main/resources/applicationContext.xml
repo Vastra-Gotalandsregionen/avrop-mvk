@@ -36,19 +36,19 @@
 
     <jaxws:client id="getMedicalSupplyDeliveryPoints"
                   serviceClass="riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._0.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface"
-                  address="http://localhost:18080/GetMedicalSupplyDeliveryPoints" />
+                  address="${GetMedicalSupplyDeliveryPointsResponderInterface.address}" />
 
     <jaxws:client id="getMedicalSupplyPrescriptions"
                   serviceClass="riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._0.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface"
-                  address="http://localhost:18080/GetMedicalSupplyPrescriptions" />
+                  address="${GetMedicalSupplyPrescriptionsResponderInterface.address}" />
 
     <jaxws:client id="registerMedicalSupplyOrder"
                   serviceClass="riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._0.rivtabp21.RegisterMedicalSupplyOrderResponderInterface"
-                  address="http://localhost:18080/RegisterMedicalSupplyOrder" />
+                  address="${RegisterMedicalSupplyOrderResponderInterface.address}" />
 
     <jaxws:client id="getUserProfileResponderInterface"
                   serviceClass="mvk.itintegration.userprofile.getuserprofile._2.rivtabp21.GetUserProfileResponderInterface"
-                  address="http://localhost:18080/GetUserProfile" />
+                  address="${GetUserProfileResponderInterface.address}" />
 
     <cxf:bus>
         <cxf:outInterceptors>

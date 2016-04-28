@@ -98,6 +98,7 @@ public class CollectDeliveryController {
         List<SelectItem> toGroup1 = new ArrayList<>();
         List<SelectItem> toGroup2 = new ArrayList<>();
 
+        int count = 0;
         for (DeliveryPointType deliveryPoint : getAllDeliveryPoints()) {
 
             String label = deliveryPoint.getDeliveryPointAddress()
@@ -106,7 +107,8 @@ public class CollectDeliveryController {
 
             SelectItem selectItem = new SelectItem(deliveryPoint.getDeliveryPointId(), label);
 
-            if (deliveryPoint.isIsClosest()) {
+            // First one is closest.
+            if (count++ == 0) {
                 toGroup1.add(selectItem);
             } else {
                 toGroup2.add(selectItem);
@@ -182,5 +184,14 @@ public class CollectDeliveryController {
 
     public String getSmsNumber() {
         return smsNumber;
+    }
+
+    public void dummyMethod() {
+        try {
+            Thread.sleep(15000);
+            System.out.println("Finished sleeping...");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
