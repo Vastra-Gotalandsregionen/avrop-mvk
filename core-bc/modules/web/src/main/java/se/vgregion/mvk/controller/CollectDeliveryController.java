@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsResponseType;
 import se._1177.lmn.service.LmnService;
 
 import javax.annotation.PostConstruct;
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 
@@ -44,6 +48,8 @@ public class CollectDeliveryController {
     private DeliveryNotificationMethodEnum deliveryNotificationMethod; // These gets stored in session memory
     private String email;
     private String smsNumber;
+    private Map<ServicePointProviderEnum, List<DeliveryPointType>> deliveryPointsPerProvider = new HashMap();
+    private Set<DeliveryMethodEnum> possibleDeliveryMethods;
 
     public void updateDeliverySelectItems(AjaxBehaviorEvent ajaxBehaviorEvent) {
         // Just reset deliveryPoints, making them load again when they are requested.
@@ -80,7 +86,7 @@ public class CollectDeliveryController {
 
         // Loads these once per session. Be careful about memory consumption under load.
         if (deliveryPoints == null) {
-            deliveryPoints = lmnService.getMedicalSupplyDeliveryPoints(zip).getDeliveryPoint();
+            deliveryPoints = deliveryPointsPerProvider.get()//lmnService.getMedicalSupplyDeliveryPoints(provider, zip).getDeliveryPoint();
             for (DeliveryPointType deliveryPoint : deliveryPoints) {
                 deliveryPointsMap.put(deliveryPoint.getDeliveryPointId(), deliveryPoint);
             }
@@ -186,12 +192,42 @@ public class CollectDeliveryController {
         return smsNumber;
     }
 
-    public void dummyMethod() {
+    public void triggerInit() {
         try {
             Thread.sleep(15000);
             System.out.println("Finished sleeping...");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setPossibleCollectCombinations(Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> possibleDeliveryNotificationMethods) {
+//        this.possibleDeliveryNotificationMethods = possibleDeliveryNotificationMethods;
+        throw new UnsupportedOperationException("kolla detta...");
+    }
+
+    // TODO: 2016-04-28 This is just under development. This should never be run more than once per session. That'd be unnecessary.
+    private int noRunLoadDeliveryPointsForAllSuppliers = 0;
+    public void loadDeliveryPointsForAllSuppliers() {
+        noRunLoadDeliveryPointsForAllSuppliers++;
+        if (noRunLoadDeliveryPointsForAllSuppliers > 1) {
+            throw new RuntimeException("");
+        }
+
+        String zip = userProfileController.getUserProfile().getUserProfile().getZip();
+
+        ServicePointProviderEnum[] allProviders = ServicePointProviderEnum.values();
+
+        for (ServicePointProviderEnum provider : allProviders) {
+
+            GetMedicalSupplyDeliveryPointsResponseType medicalSupplyDeliveryPoints =
+                    lmnService.getMedicalSupplyDeliveryPoints(provider, zip);
+
+            deliveryPointsPerProvider.put(provider, medicalSupplyDeliveryPoints.getDeliveryPoint());
+        }
+    }
+
+    public void setPossibleDeliveryMethods(Set<DeliveryMethodEnum> possibleDeliveryMethods) {
+        this.possibleDeliveryMethods = possibleDeliveryMethods;
     }
 }

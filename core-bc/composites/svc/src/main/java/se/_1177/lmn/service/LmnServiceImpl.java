@@ -84,11 +84,11 @@ public class LmnServiceImpl implements LmnService {
         return holder;
     }
 
-    public GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(String postalCode) {
+    public GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(ServicePointProviderEnum provider, String postalCode) {
         GetMedicalSupplyDeliveryPointsType parameters = new GetMedicalSupplyDeliveryPointsType();
 
         parameters.setPostalCode(postalCode);
-        parameters.setServicePointProvider(ServicePointProviderEnum.POSTNORD); // TODO Hard-coded or choice?
+        parameters.setServicePointProvider(provider);
 
         GetMedicalSupplyDeliveryPointsResponseType medicalSupplyDeliveryPoints = medicalSupplyDeliveryPoint
                 .getMedicalSupplyDeliveryPoints("", parameters);
