@@ -1,7 +1,6 @@
 package se._1177.lmn.service;
 
 import riv.crm.selfservice.medicalsupply._0.AdressType;
-import riv.crm.selfservice.medicalsupply._0.ArticleType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
@@ -111,7 +110,7 @@ public class LmnServiceImpl implements LmnService {
             String subjectOfCareId,
             boolean orderByDelegate,
             String orderer, // May be delegate
-            List<String> articleNumbers) {
+            List<PrescriptionItemType> prescriptionItems) {
         RegisterMedicalSupplyOrderType parameters = new RegisterMedicalSupplyOrderType();
 
         OrderType order = new OrderType();
@@ -125,7 +124,7 @@ public class LmnServiceImpl implements LmnService {
         deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
         deliveryChoice.setDeliveryPoint(deliveryPoint);
 
-        addOrderRows(articleNumbers, order, deliveryChoice);
+        addOrderRows(prescriptionItems, order, deliveryChoice);
 
         parameters.getOrder().add(order);
 
@@ -133,16 +132,13 @@ public class LmnServiceImpl implements LmnService {
         return registerMedicalSupplyOrder.registerMedicalSupplyOrder("", parameters);
     }
 
-    void addOrderRows(List<String> articleNumbers, OrderType order, DeliveryChoiceType deliveryChoice) {
-        for (String articleNo : articleNumbers) {
+    void addOrderRows(List<PrescriptionItemType> articleNumbers, OrderType order, DeliveryChoiceType deliveryChoice) {
+        for (PrescriptionItemType item : articleNumbers) {
             OrderRowType orderRow = new OrderRowType();
 
             orderRow.setDeliveryChoice(deliveryChoice);
 
-            ArticleType article = new ArticleType();
-
-            article.setArticleNo(articleNo);
-            orderRow.setArticle(article);
+            orderRow.setArticle(item.getArticle());
 
             order.getOrderRow().add(orderRow);
         }
@@ -154,7 +150,7 @@ public class LmnServiceImpl implements LmnService {
      *                                     deliveryNotificationReceiver should be an email value. If SMS is chosen
      *                                     the deliveryNotificationReceiver should be a mobile phone number. If letter
      *                                     is chosen no value is needed.
-     * @param articleNumbers
+     * @param prescriptionItems
      * @param
      * @return
      */
@@ -170,7 +166,7 @@ public class LmnServiceImpl implements LmnService {
             String subjectOfCareId,
             boolean orderByDelegate,
             String orderer, // May be delegate
-            List<String> articleNumbers) {
+            List<PrescriptionItemType> prescriptionItems) {
 
         RegisterMedicalSupplyOrderType parameters = new RegisterMedicalSupplyOrderType();
 
@@ -193,7 +189,7 @@ public class LmnServiceImpl implements LmnService {
         order.setOrderByDelegate(orderByDelegate);
         order.setOrderer(orderer);
 
-        addOrderRows(articleNumbers, order, deliveryChoice);
+        addOrderRows(prescriptionItems, order, deliveryChoice);
 
         parameters.getOrder().add(order);
 

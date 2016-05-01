@@ -4,6 +4,7 @@ import riv.crm.selfservice.medicalsupply._0.ArticleType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.OrderItemType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ProductAreaEnum;
@@ -99,10 +100,27 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         deliveryAlternative.setDeliveryMethodId(random.nextInt(10000) + "");
         deliveryAlternative.setDeliveryMethod(
                 DeliveryMethodEnum.values()[random.nextInt(DeliveryMethodEnum.values().length)]);
-        deliveryAlternative.setServicePointProvider(
-                ServicePointProviderEnum.values()[random.nextInt(ServicePointProviderEnum.values().length)]);
+
+        if (deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS)) {
+            deliveryAlternative.setServicePointProvider(ServicePointProviderEnum.INGEN);
+        } else {
+            deliveryAlternative.setServicePointProvider(
+                    ServicePointProviderEnum.values()[random.nextInt(ServicePointProviderEnum.values().length)]);
+
+            // Inefficient but this is a mock...
+            while (deliveryAlternative.getServicePointProvider().equals(ServicePointProviderEnum.INGEN)) {
+                // Continue until something other than ServicePointProviderEnum.INGEN gets set.
+                deliveryAlternative.setServicePointProvider(
+                        ServicePointProviderEnum.values()[random.nextInt(ServicePointProviderEnum.values().length)]);
+
+            }
+        }
+
         deliveryAlternative.setAllowChioceOfDeliveryPoints(random.nextBoolean());
         deliveryAlternative.setDeliveryMethodName(Character.getName(random.nextInt(1000)));
+
+        deliveryAlternative.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.values()
+                [random.nextInt(DeliveryNotificationMethodEnum.values().length)]);
 
         prescriptionItem.getDeliveryAlternative().add(deliveryAlternative);
 

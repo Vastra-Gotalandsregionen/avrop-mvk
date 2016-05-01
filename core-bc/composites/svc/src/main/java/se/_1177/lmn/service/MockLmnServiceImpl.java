@@ -2,6 +2,7 @@ package se._1177.lmn.service;
 
 import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._0.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsResponseType;
@@ -33,12 +34,12 @@ public class MockLmnServiceImpl implements LmnService {
     }
 
     @Override
-    public RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrderCollectDelivery(DeliveryPointType deliveryPoint, DeliveryNotificationMethodEnum deliveryNotificationMethod, String subjectOfCareId, boolean orderByDelegate, String orderer, List<String> articleNumbers) {
+    public RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrderCollectDelivery(DeliveryPointType deliveryPoint, DeliveryNotificationMethodEnum deliveryNotificationMethod, String subjectOfCareId, boolean orderByDelegate, String orderer, List<PrescriptionItemType> articleNumbers) {
         return null;
     }
 
     @Override
-    public RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrderHomeDelivery(String receiverFullName, String phone, String postalCode, String street, String doorCode, String city, String careOfAddress, String subjectOfCareId, boolean orderByDelegate, String orderer, List<String> articleNumbers) {
+    public RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrderHomeDelivery(String receiverFullName, String phone, String postalCode, String street, String doorCode, String city, String careOfAddress, String subjectOfCareId, boolean orderByDelegate, String orderer, List<PrescriptionItemType> articleNumbers) {
         return null;
     }
 

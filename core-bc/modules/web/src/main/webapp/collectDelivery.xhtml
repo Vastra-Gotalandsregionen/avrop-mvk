@@ -24,7 +24,7 @@
                 </div>
             </div>
 
-            <h:form>
+            <h:form id="collectDeliveryForm">
 
                 <h4>Utlämningsställe</h4>
 
@@ -39,7 +39,7 @@
                         <h:inputText styleClass="postal-number" value="#{collectDeliveryController.zip}" id="zipInput"/>
 
                         <h:commandButton styleClass="button" value="Sök">
-                            <f:ajax onevent="handleProgressWithSpinner" listener="#{collectDeliveryController.updateDeliverySelectItems}" execute="zipInput" render="deliveryPointMenu" />
+                            <f:ajax onevent="handleProgressWithSpinner" listener="#{collectDeliveryController.updateDeliverySelectItems}" execute="zipInput" render="deliveryPointMenuWrapper" />
                         </h:commandButton>
 
                         <h:graphicImage styleClass="spinner" library="default" name="img/preloader.gif" height="30px" style="display: none;"/>
@@ -47,9 +47,23 @@
 
                 </div>
 
-                Valt utlämningsställe <h:selectOneMenu id="deliveryPointMenu" value="#{collectDeliveryController.chosenDeliveryPoint}">
-                    <f:selectItems value="#{collectDeliveryController.deliverySelectItems}"/>
-                </h:selectOneMenu>
+                <h:panelGroup id="deliveryPointMenuWrapper">
+                    <h:panelGroup layout="block" rendered="#{collectDeliveryController.deliverySelectItems.size() gt 0}">
+                        <p>
+                            <b>Obs.</b> Valda artiklar kan inte levereras av en enskild transportör. Du behöver därför välja flera utlämningsställen.
+                        </p>
+                    </h:panelGroup>
+                    <ui:repeat value="#{utilController.toList(collectDeliveryController.deliverySelectItems.keySet())}" var="selectOneMenuItemsKey">
+                        <div class="service-point-row row clearfix">
+                            <span>
+                                Valt utlämningsställe (#{utilController.toProviderName(selectOneMenuItemsKey)})
+                            </span>
+                            <h:selectOneMenu id="deliveryPointMenu" >
+                                <f:selectItems value="#{collectDeliveryController.deliverySelectItems[selectOneMenuItemsKey]}"/>
+                            </h:selectOneMenu>
+                        </div>
+                    </ui:repeat>
+                </h:panelGroup>
 
                 <hr/>
 

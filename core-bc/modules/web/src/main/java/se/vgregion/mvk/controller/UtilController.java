@@ -5,13 +5,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply._0.StatusEnum;
 import se._1177.lmn.service.util.Util;
 
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * @author Patrik Björk
@@ -84,5 +88,17 @@ public class UtilController {
 
     public static String capitalizeFully(String string) {
         return WordUtils.capitalizeFully(string);
+    }
+
+    public static <T> List<T> toList(Collection<T> collection) {
+        return new ArrayList<>(collection);
+    }
+
+    public String toProviderName(ServicePointProviderEnum provider) {
+        if (provider.equals(ServicePointProviderEnum.DHL)) {
+            return ServicePointProviderEnum.DHL.value();
+        } else {
+            return capitalizeFully(provider.value());
+        }
     }
 }

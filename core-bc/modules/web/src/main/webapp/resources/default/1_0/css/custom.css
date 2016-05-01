@@ -80,6 +80,14 @@ html, body {
     margin-top: 8px;
 }
 
+table.single-item-delivery-choice td {
+    border: none;
+    padding-right: 12px;
+}
+
+table.single-item-delivery-choice td label {
+    word-break: break-word;
+}
 hr {
     margin: 32px 0 16px 0;
 }
@@ -252,6 +260,11 @@ ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
     float: left;
     padding: 20px;
     width: 50%;
+}
+
+.row.service-point-row > span {
+    min-width: 200px;
+    line-height: 30px;
 }
 
 .row {

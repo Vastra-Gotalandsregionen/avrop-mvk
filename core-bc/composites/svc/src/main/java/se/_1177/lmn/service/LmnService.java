@@ -2,6 +2,7 @@ package se._1177.lmn.service;
 
 import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsResponseType;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._0.GetMedicalSupplyPrescriptionsResponseType;
@@ -26,7 +27,7 @@ public interface LmnService {
             String subjectOfCareId,
             boolean orderByDelegate,
             String orderer, // May be delegate
-            List<String> articleNumbers);
+            List<PrescriptionItemType> prescriptionItems);
 
     RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrderHomeDelivery(
             String receiverFullName,
@@ -39,6 +40,6 @@ public interface LmnService {
             String subjectOfCareId,
             boolean orderByDelegate,
             String orderer, // May be delegate
-            List<String> articleNumbers//,
+            List<PrescriptionItemType> prescriptionItems
     );
 }

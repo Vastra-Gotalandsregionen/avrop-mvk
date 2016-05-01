@@ -27,33 +27,94 @@
 
             <h:form>
 
-                <div class="cosdflumn-row clearfix">
-                    <ul class="delivery-options clearfix">
-                        <li>
-                            <div class="row">
-                                <input type="radio" jsf:id="hemleveransOption" p:name="#{hiddenItem.clientId}"
-                                       value="#{deliveryController.hemleveransValue}" p:checked="#{deliveryController.deliveryMethod eq deliveryController.hemleveransValue ? 'checked' : null}" />
-                                <h:outputLabel for="hemleveransOption" value="Hemleverans"/>
-                            </div>
-                            <p>
-                                Hemleverans innebär att paketet levereras till din bostad och ställs utanför ytterdörren alt lägenhetsdörren om man bor i flerfamiljshus.
-                            </p>
-                        </li>
-                        <li>
-                            <div class="row">
-                                <input type="radio" jsf:id="utlamningsstalleOption" p:name="#{hiddenItem.clientId}"
-                                       value="#{deliveryController.utlamningsstalleValue}" p:checked="#{deliveryController.deliveryMethod eq deliveryController.utlamningsstalleValue ? 'checked' : null}" />
-                                <h:outputLabel for="utlamningsstalleOption" value="Utlämningsställe"/>
-                            </div>
-                            <p>
-                                Detta val innebär att paketet kommer skickas till ditt närmsta postombud. Du har möjlighet att välja utlämningsställe.
-                            </p>
-                        </li>
-                    </ul>
+                <div class="clearfix">
+                    <!-- If at least one method fits all. -->
+                    <h:panelGroup rendered="#{deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.hemleveransEnum) or deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.utlamningsstalleEnum)}">
+                        <ul class="delivery-options clearfix">
+                            <li>
+                                <div class="row">
 
-                    <h:inputHidden id="selectedItem" binding="#{hiddenItem}" value="#{deliveryController.deliveryMethod}"
-                                   rendered="#{facesContext.currentPhaseId.ordinal ne 6}" />
+                                    <h:panelGroup rendered="#{deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.hemleveransEnum)}">
+                                        <input type="radio" jsf:id="hemleveransOption" p:name="#{hiddenItem.clientId}"
+                                               value="#{deliveryController.hemleveransValue}" p:checked="#{deliveryController.deliveryMethod eq deliveryController.hemleveransEnum ? 'checked' : null}" />
+                                        <h:outputLabel for="hemleveransOption" value="Hemleverans"/>
+                                    </h:panelGroup>
 
+                                    <h:panelGroup rendered="#{not deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.hemleveransEnum)}">
+                                        <input type="radio" jsf:id="hemleveransOptionDisabled" p:name="#{hiddenItem.clientId}" disabled="disabled"
+                                               value="#{deliveryController.hemleveransValue}" p:checked="#{deliveryController.deliveryMethod eq deliveryController.hemleveransEnum ? 'checked' : null}" />
+                                        <h:outputLabel for="hemleveransOptionDisabled" value="Hemleverans"/>
+                                    </h:panelGroup>
+                                </div>
+                                <p>
+                                    Hemleverans innebär att paketet levereras till din bostad och ställs utanför ytterdörren alt lägenhetsdörren om man bor i flerfamiljshus.
+                                </p>
+                            </li>
+                            <li>
+                                <div class="row">
+
+                                    <h:panelGroup rendered="#{deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.utlamningsstalleEnum)}">
+                                        <input type="radio" jsf:id="utlamningsstalleOption" p:name="#{hiddenItem.clientId}"
+                                               value="#{deliveryController.utlamningsstalleValue}" p:checked="#{deliveryController.deliveryMethod eq deliveryController.utlamningsstalleEnum ? 'checked' : null}" />
+                                        <h:outputLabel for="utlamningsstalleOption" value="Utlämningsställe"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup rendered="#{not deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.utlamningsstalleEnum)}">
+                                        <input type="radio" jsf:id="utlamningsstalleOptionDisabled" p:name="#{hiddenItem.clientId}" disabled="disabled"
+                                               value="#{deliveryController.utlamningsstalleValue}" p:checked="#{deliveryController.deliveryMethod eq deliveryController.utlamningsstalleEnum ? 'checked' : null}" />
+                                        <h:outputLabel for="utlamningsstalleOptionDisabled" value="Utlämningsställe"/>
+                                    </h:panelGroup>
+                                </div>
+                                <p>
+                                    Detta val innebär att paketet kommer skickas till ditt närmsta postombud. Du har möjlighet att välja utlämningsställe.
+                                </p>
+                            </li>
+                        </ul>
+
+                        <h:inputHidden id="selectedItem" binding="#{hiddenItem}" value="#{deliveryController.deliveryMethod}"
+                                       rendered="#{facesContext.currentPhaseId.ordinal ne 6}" />
+                    </h:panelGroup>
+
+                    <!-- No single delivery method fits all. -->
+                    <h:panelGroup rendered="#{not (deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.hemleveransEnum) or deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.utlamningsstalleEnum))}">
+                        <p>
+                            Inget enskilt leveranssätt är tillgängligt för samtliga valda  produkter. Du behöver därför ange leveranssätt för de enskilda produkterna. Endast valbara alternativ är klickbara.
+                        </p>
+
+                        <table class="avrop-table my-products-table">
+                            <thead>
+                            <tr>
+                                <td class="column-1">Produktgrupp/Artikel-nr.</td>
+                                <td class="column-2">Benämning</td>
+                                <td>Valt leveranssätt</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <ui:repeat value="#{cart.itemsInCart}" var="item" varStatus="varStatus">
+                                <tr>
+                                    <td>
+                                        #{utilController.capitalizeFully(item.article.productArea.value())}<br/>#{item.article.articleNo}
+                                    </td>
+                                    <td>
+                                        #{item.article.articleName}
+                                    </td>
+                                    <td>
+
+                                        <h:selectOneRadio value="#{deliveryController.deliveryMethodForEachItem[item]}" styleClass="single-item-delivery-choice">
+
+                                            <f:selectItem itemValue="#{deliveryController.hemleveransEnum}" itemLabel="#{utilController.capitalizeFully(deliveryController.hemleveransValue)}"
+                                                          itemDisabled="#{not deliveryController.anyDeliveryAlternativeHasDeliveryMethod(item.deliveryAlternative, deliveryController.hemleveransEnum)}"/>
+
+                                            <f:selectItem itemValue="#{deliveryController.utlamningsstalleEnum}" itemLabel="#{utilController.capitalizeFully(deliveryController.utlamningsstalleValue)}"
+                                                          itemDisabled="#{not deliveryController.anyDeliveryAlternativeHasDeliveryMethod(item.deliveryAlternative, deliveryController.utlamningsstalleEnum)}"/>
+
+                                        </h:selectOneRadio>
+                                    </td>
+                                </tr>
+                            </ui:repeat>
+                            </tbody>
+                        </table>
+                    </h:panelGroup>
                 </div>
 
                 <div class="right-align">
