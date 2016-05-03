@@ -250,7 +250,7 @@ ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
 }
 
 .column-row {
-    margin: 30px 0;
+    /*margin: 30px 0;*/
 }
 
 .column-row .col50 {
@@ -258,7 +258,7 @@ ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     float: left;
-    padding: 20px;
+    padding: 0 20px 20px 0;
     width: 50%;
 }
 
@@ -274,9 +274,17 @@ ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
 
 .row > select,
 .row > div,
-.row > span {
+.row span.before-select {
     float: left;
     margin-right: 24px;
+}
+
+.row .notification-method-input-wrapper .before-select {
+    min-width: 200px;
+}
+
+.notification-method-select {
+    width: 82px;
 }
 
 .section {

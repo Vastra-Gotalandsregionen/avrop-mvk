@@ -1,6 +1,7 @@
 package se._1177.lmn.service;
 
 import riv.crm.selfservice.medicalsupply._0.AdressType;
+import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
@@ -23,7 +24,9 @@ import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static se._1177.lmn.service.util.Util.isOlderThanAYear;
 
@@ -37,6 +40,9 @@ public class LmnServiceImpl implements LmnService {
     private GetMedicalSupplyPrescriptionsResponderInterface medicalSupplyPrescriptions;
 
     private RegisterMedicalSupplyOrderResponderInterface registerMedicalSupplyOrder;
+
+    private Map<DeliveryMethodEnum, String> deliveryMethodToDeliveryMethodId = new HashMap<>();
+    private Map<String, DeliveryPointType> deliveryPointIdToDeliveryPoint = new HashMap<>();
 
     public LmnServiceImpl(
             GetMedicalSupplyDeliveryPointsResponderInterface medicalSupplyDeliveryPoint,
@@ -83,7 +89,8 @@ public class LmnServiceImpl implements LmnService {
         return holder;
     }
 
-    public GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(ServicePointProviderEnum provider, String postalCode) {
+    public GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(ServicePointProviderEnum provider,
+                                                                                     String postalCode) {
         GetMedicalSupplyDeliveryPointsType parameters = new GetMedicalSupplyDeliveryPointsType();
 
         parameters.setPostalCode(postalCode);
@@ -91,6 +98,11 @@ public class LmnServiceImpl implements LmnService {
 
         GetMedicalSupplyDeliveryPointsResponseType medicalSupplyDeliveryPoints = medicalSupplyDeliveryPoint
                 .getMedicalSupplyDeliveryPoints("", parameters);
+
+
+        for (DeliveryPointType deliveryPoint : medicalSupplyDeliveryPoints.getDeliveryPoint()) {
+            deliveryPointIdToDeliveryPoint.put(deliveryPoint.getDeliveryPointId(), deliveryPoint);
+        }
 
         return medicalSupplyDeliveryPoints;
     }
@@ -100,17 +112,36 @@ public class LmnServiceImpl implements LmnService {
 
         parameters.setSubjectOfCareId(subjectOfCareId);
 
-        return medicalSupplyPrescriptions.getMedicalSupplyPrescriptions("", parameters);
+        GetMedicalSupplyPrescriptionsResponseType medicalSupplyPrescriptions = this.medicalSupplyPrescriptions
+                .getMedicalSupplyPrescriptions("", parameters);
+
+        for (PrescriptionItemType item : medicalSupplyPrescriptions.getSubjectOfCareType().getPrescriptionItem()) {
+            for (DeliveryAlternativeType deliveryAlternative : item.getDeliveryAlternative()) {
+
+                // Assert they never change id.
+                DeliveryMethodEnum deliveryMethod = deliveryAlternative.getDeliveryMethod();
+                if (deliveryMethodToDeliveryMethodId.containsKey(deliveryMethod) &&
+                        deliveryMethodToDeliveryMethodId.get(deliveryMethod)
+                                .equals(deliveryAlternative.getDeliveryMethodId())) {
+                    throw new RuntimeException("Thd delivery method id of a delivery method is not expected to change.");
+                }
+
+                // Save these for later
+                deliveryMethodToDeliveryMethodId.put(deliveryMethod,
+                                                        deliveryAlternative.getDeliveryMethodId());
+            }
+        }
+
+        return medicalSupplyPrescriptions;
     }
 
     @Override
-    public RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrderCollectDelivery(
-            DeliveryPointType deliveryPoint,
-            DeliveryNotificationMethodEnum deliveryNotificationMethod,
+    public RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrder(
             String subjectOfCareId,
             boolean orderByDelegate,
             String orderer, // May be delegate
-            List<PrescriptionItemType> prescriptionItems) {
+            List<PrescriptionItemType> prescriptionItems,
+            Map<PrescriptionItemType, DeliveryChoiceType> deliveryChoicePerItem) {
         RegisterMedicalSupplyOrderType parameters = new RegisterMedicalSupplyOrderType();
 
         OrderType order = new OrderType();
@@ -119,12 +150,7 @@ public class LmnServiceImpl implements LmnService {
         order.setOrderByDelegate(orderByDelegate);
         order.setOrderer(orderer);
 
-        DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
-        deliveryChoice.getDeliveryNotificationMethod().add(deliveryNotificationMethod);
-        deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
-        deliveryChoice.setDeliveryPoint(deliveryPoint);
-
-        addOrderRows(prescriptionItems, order, deliveryChoice);
+        addOrderRows(prescriptionItems, order, deliveryChoicePerItem);
 
         parameters.getOrder().add(order);
 
@@ -132,9 +158,21 @@ public class LmnServiceImpl implements LmnService {
         return registerMedicalSupplyOrder.registerMedicalSupplyOrder("", parameters);
     }
 
-    void addOrderRows(List<PrescriptionItemType> articleNumbers, OrderType order, DeliveryChoiceType deliveryChoice) {
+    @Override
+    public String getDeliveryMethodId(DeliveryMethodEnum deliveryMethod) {
+        return deliveryMethodToDeliveryMethodId.get(deliveryMethod);
+    }
+
+    @Override
+    public DeliveryPointType getDeliveryPointById(String deliveryPointId) {
+        return deliveryPointIdToDeliveryPoint.get(deliveryPointId);
+    }
+
+    void addOrderRows(List<PrescriptionItemType> articleNumbers, OrderType order, Map<PrescriptionItemType, DeliveryChoiceType> deliveryChoicePerItem) {
         for (PrescriptionItemType item : articleNumbers) {
             OrderRowType orderRow = new OrderRowType();
+
+            DeliveryChoiceType deliveryChoice = deliveryChoicePerItem.get(item);
 
             orderRow.setDeliveryChoice(deliveryChoice);
 
@@ -142,57 +180,5 @@ public class LmnServiceImpl implements LmnService {
 
             order.getOrderRow().add(orderRow);
         }
-    }
-
-    /**
-     *
-     * @param deliveryNotificationReceiver Should match deliveryNotificationMethod. If email is chosen
-     *                                     deliveryNotificationReceiver should be an email value. If SMS is chosen
-     *                                     the deliveryNotificationReceiver should be a mobile phone number. If letter
-     *                                     is chosen no value is needed.
-     * @param prescriptionItems
-     * @param
-     * @return
-     */
-    @Override
-    public RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrderHomeDelivery(
-            String receiverFullName,
-            String phone,
-            String postalCode,
-            String street,
-            String doorCode,
-            String city,
-            String careOfAddress,
-            String subjectOfCareId,
-            boolean orderByDelegate,
-            String orderer, // May be delegate
-            List<PrescriptionItemType> prescriptionItems) {
-
-        RegisterMedicalSupplyOrderType parameters = new RegisterMedicalSupplyOrderType();
-
-        AdressType address = new AdressType();
-        address.setCareOfAddress(careOfAddress);
-        address.setCity(city);
-        address.setDoorCode(doorCode);
-        address.setPhone(phone);
-        address.setPostalCode(postalCode);
-        address.setReciever(receiverFullName); // todo Korrekt att detta är mottagarens namn?
-        address.setStreet(street);
-
-        DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
-        deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
-        deliveryChoice.setHomeDeliveryAdress(address);
-
-        OrderType order = new OrderType();
-
-        order.setSubjectOfCareId(subjectOfCareId);
-        order.setOrderByDelegate(orderByDelegate);
-        order.setOrderer(orderer);
-
-        addOrderRows(prescriptionItems, order, deliveryChoice);
-
-        parameters.getOrder().add(order);
-
-        return registerMedicalSupplyOrder.registerMedicalSupplyOrder("", parameters);
     }
 }

@@ -1,6 +1,8 @@
 package se.vgregion.mvk.controller;
 
 import mvk.itintegration.userprofile._2.UserProfileType;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 
@@ -50,15 +53,15 @@ public class CollectDeliveryController {
     @Autowired
     private Cart cart;
 
-    private String chosenDeliveryPoint;
     private String zip;
-    private Map<String, DeliveryPointType> deliveryPointsMap = new HashMap<>();
-    private DeliveryNotificationMethodEnum deliveryNotificationMethod; // These gets stored in session memory
+    private Map<ServicePointProviderEnum, String> deliveryPointIdsMap = new HashMap<>();
+    private DeliveryNotificationMethodEnum preferredDeliveryNotificationMethod; // These gets stored in session memory
     private String email;
     private String smsNumber;
     private Map<ServicePointProviderEnum, List<DeliveryPointType>> deliveryPointsPerProvider = new HashMap();
     private Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>>
             possibleCollectCombinationsFittingAllWithNotificationMethods = new HashMap<>();
+    private Map<ServicePointProviderEnum, String> chosenDeliveryNotificationMethod;
 
     public void updateDeliverySelectItems(AjaxBehaviorEvent ajaxBehaviorEvent) {
         // Just reset deliveryPoints, making them load again when they are requested.
@@ -73,12 +76,54 @@ public class CollectDeliveryController {
         zip = userProfile.getZip();
 
         if (userProfile.isHasSmsNotification() != null && userProfile.isHasSmsNotification()) {
-            deliveryNotificationMethod = DeliveryNotificationMethodEnum.SMS;
+            preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.SMS;
         } else if (userProfile.isHasMailNotification() != null && userProfile.isHasMailNotification()) {
-            deliveryNotificationMethod = DeliveryNotificationMethodEnum.E_POST;
+            preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.E_POST;
         } else {
-            deliveryNotificationMethod = DeliveryNotificationMethodEnum.BREV;
+            preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.BREV;
         }
+    }
+
+    public Map<ServicePointProviderEnum, List<String>> getDeliveryNotificationMethodsPerProvider() {
+
+        Map<ServicePointProviderEnum, List<String>> result = new HashMap<>();
+
+        for (PrescriptionItemType item : cart.getItemsInCart()) {
+            for (DeliveryAlternativeType deliveryAlternative : item.getDeliveryAlternative()) {
+
+                if (deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS)) {
+                    continue; // We're only interested in collect items.
+                }
+
+                if (!getRelevantServicePointProviders().contains(deliveryAlternative.getServicePointProvider())) {
+                   // Neither are we interested in any provider which isn't available for any item or which isn't available to all items when there is any that is.
+                   continue;
+                }
+
+                ServicePointProviderEnum provider = deliveryAlternative.getServicePointProvider();
+
+                List<DeliveryNotificationMethodEnum> deliveryNotificationMethods = deliveryAlternative
+                        .getDeliveryNotificationMethod();
+
+                List<String> deliveryNotificationMethodStrings = deliveryNotificationMethods
+                        .stream()
+                        .map(e -> e.name())
+                        .collect(Collectors.toCollection(ArrayList<String>::new));
+
+                if (!result.containsKey(provider)) {
+                    result.put(provider, new ArrayList<>());
+
+                    result.get(provider).addAll(deliveryNotificationMethodStrings);
+                } else {
+                    result.get(provider).retainAll(deliveryNotificationMethodStrings);
+                }
+            }
+
+        }
+
+        // Now we have all available notification methods for each provider
+
+        return result;
     }
 
     public Map<ServicePointProviderEnum, List<SelectItemGroup>> getDeliverySelectItems() {
@@ -89,6 +134,19 @@ public class CollectDeliveryController {
             loadDeliveryPointsForAllSuppliers(zip);
         }
 
+        List<ServicePointProviderEnum> servicePointProvidersForItems = getRelevantServicePointProviders();
+
+        for (ServicePointProviderEnum servicePointProviderForItem : servicePointProvidersForItems) {
+            List<SelectItemGroup> singleSelectMenuItems = getSingleSelectMenuItems(servicePointProviderForItem);
+
+            selectOneMenuLists.put(servicePointProviderForItem, singleSelectMenuItems);
+        }
+
+        return selectOneMenuLists;
+    }
+
+    List<ServicePointProviderEnum> getRelevantServicePointProviders() {
+        List<ServicePointProviderEnum> servicePointProvidersForItems = new ArrayList<>();
         if (possibleCollectCombinationsFittingAllWithNotificationMethods.size() > 0) {
             // We have at least one which may satisfy all prescription items. Take the first (probably there will never
             // be more than one in the collection)...
@@ -96,34 +154,35 @@ public class CollectDeliveryController {
             ServicePointProviderEnum provider = possibleCollectCombinationsFittingAllWithNotificationMethods.keySet()
                     .iterator().next();
 
-            List<SelectItemGroup> singleSelectMenuItems = getSingleSelectMenuItems(provider);
-
-            selectOneMenuLists.put(provider, singleSelectMenuItems);
+            servicePointProvidersForItems.clear();
+            servicePointProvidersForItems.add(provider);
         } else {
             // We don't have any single provider satisfying all items. The user needs to chosse service point for the
             // provider of each item.
             for (PrescriptionItemType item : cart.getItemsInCart()) {
-                ServicePointProviderEnum servicePointProviderForItem = null;
-                for (DeliveryAlternativeType deliveryAlternative : item.getDeliveryAlternative()) {
-                    if (deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)) {
-                        servicePointProviderForItem = deliveryAlternative.getServicePointProvider();
-                        break;
-                    }
-                }
+                ServicePointProviderEnum servicePointProviderForItem = getServicePointProviderForItem(item);
 
                 if (servicePointProviderForItem == null) {
                     // If this happens the item cannot be collected so we skip this.
                     continue;
                 }
 
-                List<SelectItemGroup> singleSelectMenuItems = getSingleSelectMenuItems(servicePointProviderForItem);
+                servicePointProvidersForItems.add(servicePointProviderForItem);
 
-                selectOneMenuLists.put(servicePointProviderForItem, singleSelectMenuItems);
             }
-
         }
+        return servicePointProvidersForItems;
+    }
 
-        return selectOneMenuLists;
+    public ServicePointProviderEnum getServicePointProviderForItem(PrescriptionItemType item) {
+        ServicePointProviderEnum servicePointProviderForItem = null;
+        for (DeliveryAlternativeType deliveryAlternative : item.getDeliveryAlternative()) {
+            if (deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)) {
+                servicePointProviderForItem = deliveryAlternative.getServicePointProvider();
+                break;
+            }
+        }
+        return servicePointProviderForItem;
     }
 
     List<SelectItemGroup> getSingleSelectMenuItems(ServicePointProviderEnum provider) {
@@ -161,16 +220,37 @@ public class CollectDeliveryController {
         return toReturn;
     }
 
-    public Map<String, DeliveryPointType> getDeliveryPointsMap() {
-        return deliveryPointsMap;
+    public Map<ServicePointProviderEnum, String> getChosenDeliveryNotificationMethod() {
+
+        if (chosenDeliveryNotificationMethod == null) {
+            chosenDeliveryNotificationMethod = new HashMap<>();
+
+            Map<ServicePointProviderEnum, List<String>> deliveryNotificationMethodsPerProvider =
+                    getDeliveryNotificationMethodsPerProvider();
+
+            for (Map.Entry<ServicePointProviderEnum, List<String>> entry :
+                    deliveryNotificationMethodsPerProvider.entrySet()) {
+
+                if (entry.getValue().contains(preferredDeliveryNotificationMethod.name())) {
+                    chosenDeliveryNotificationMethod.put(entry.getKey(), preferredDeliveryNotificationMethod.name());
+                } else {
+                    // In case the preferred one isn't available.
+                    String defaultNotificationMethod = entry.getValue().size() > 0 ? entry.getValue().get(0) : null;
+                    chosenDeliveryNotificationMethod.put(entry.getKey(), defaultNotificationMethod);
+                }
+            }
+        }
+
+        // If there are remaining entries from when the user had chosen more items to order.
+        chosenDeliveryNotificationMethod.keySet().retainAll(getRelevantServicePointProviders());
+
+        return chosenDeliveryNotificationMethod;
     }
 
-    public String getChosenDeliveryPoint() {
-        return chosenDeliveryPoint;
-    }
+    public Map<ServicePointProviderEnum, String> getDeliveryPointIdsMap() {
+        deliveryPointIdsMap.keySet().retainAll(getRelevantServicePointProviders());
 
-    public void setChosenDeliveryPoint(String chosenDeliveryPoint) {
-        this.chosenDeliveryPoint = chosenDeliveryPoint;
+        return deliveryPointIdsMap;
     }
 
     public String toVerifyDelivery() {
@@ -185,12 +265,12 @@ public class CollectDeliveryController {
         this.zip = zip;
     }
 
-    public DeliveryNotificationMethodEnum getDeliveryNotificationMethod() {
-        return deliveryNotificationMethod;
+    public DeliveryNotificationMethodEnum getPreferredDeliveryNotificationMethod() {
+        return preferredDeliveryNotificationMethod;
     }
 
-    public void setDeliveryNotificationMethod(DeliveryNotificationMethodEnum deliveryNotificationMethod) {
-        this.deliveryNotificationMethod = deliveryNotificationMethod;
+    public void setPreferredDeliveryNotificationMethod(DeliveryNotificationMethodEnum preferredDeliveryNotificationMethod) {
+        this.preferredDeliveryNotificationMethod = preferredDeliveryNotificationMethod;
     }
 
     public DeliveryNotificationMethodEnum getBrevValue() {
@@ -230,6 +310,10 @@ public class CollectDeliveryController {
         }
     }
 
+    public Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> getPossibleCollectCombinationsFittingAllWithNotificationMethods() {
+        return possibleCollectCombinationsFittingAllWithNotificationMethods;
+    }
+
     public void setPossibleCollectCombinationsFittingAllCollectItems(Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> possibleDeliveryNotificationMethods) {
         this.possibleCollectCombinationsFittingAllWithNotificationMethods = possibleDeliveryNotificationMethods;
     }
@@ -259,6 +343,31 @@ public class CollectDeliveryController {
 
             deliveryPointsPerProvider.put(provider, medicalSupplyDeliveryPoints.getDeliveryPoint());
         }
+    }
+
+    public DeliveryPointType getDeliveryPointById(String deliveryPointId) {
+        return lmnService.getDeliveryPointById(deliveryPointId);
+    }
+
+    public boolean notificationMethodUsedForAnyItem(DeliveryNotificationMethodEnum notificationMethod) {
+        return getChosenDeliveryNotificationMethod().values().contains(notificationMethod.name());
+    }
+
+    public String providersWithNotificationMethod(String notificationMethod) {
+        Map<ServicePointProviderEnum, String> chosenDeliveryNotificationMethod =
+                getChosenDeliveryNotificationMethod();
+
+        List<String> providers = new ArrayList<>();
+
+        for (Map.Entry<ServicePointProviderEnum, String> entry :
+                chosenDeliveryNotificationMethod.entrySet()) {
+
+            if (entry.getValue().equals(notificationMethod)) {
+                providers.add(UtilController.toProviderName(entry.getKey()));
+            }
+        }
+
+        return StringUtils.join(providers, ", ");
     }
 
     private ExecutorService executorService; // // TODO: 2016-05-01 Make a global executorService?

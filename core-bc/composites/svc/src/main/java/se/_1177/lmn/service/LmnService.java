@@ -1,5 +1,7 @@
 package se._1177.lmn.service;
 
+import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
+import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
@@ -10,6 +12,7 @@ import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Patrik Björk
@@ -21,25 +24,15 @@ public interface LmnService {
 
     GetMedicalSupplyPrescriptionsResponseType getMedicalSupplyPrescriptions(String subjectOfCareId);
 
-    RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrderCollectDelivery(
-            DeliveryPointType deliveryPoint,
-            DeliveryNotificationMethodEnum deliveryNotificationMethod,
+    RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrder(
             String subjectOfCareId,
             boolean orderByDelegate,
             String orderer, // May be delegate
-            List<PrescriptionItemType> prescriptionItems);
+            List<PrescriptionItemType> prescriptionItems,
+            Map<PrescriptionItemType, DeliveryChoiceType> deliveryChoicePerItem);
 
-    RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrderHomeDelivery(
-            String receiverFullName,
-            String phone,
-            String postalCode,
-            String street,
-            String doorCode,
-            String city,
-            String careOfAddress,
-            String subjectOfCareId,
-            boolean orderByDelegate,
-            String orderer, // May be delegate
-            List<PrescriptionItemType> prescriptionItems
-    );
+    String getDeliveryMethodId(DeliveryMethodEnum deliveryMethod);
+
+    DeliveryPointType getDeliveryPointById(String deliveryPointId);
+
 }

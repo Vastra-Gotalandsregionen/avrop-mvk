@@ -50,7 +50,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         SubjectOfCareType subjectOfCare = new SubjectOfCareType();
         subjectOfCare.setSubjectOfCareId(random.nextInt(1000) + "");
 
-        for (int i = 0; i <= 50; i++) {
+        for (int i = 0; i <= 100; i++) {
             addPrescriptionItem(random, subjectOfCare, random.nextBoolean());
         }
 
@@ -96,6 +96,36 @@ public class MockGetMedicalSupplyPrescriptionsResponder
 
         prescriptionItem.setNoOfOrders(random.nextInt(10));
         prescriptionItem.setNoOfRemainingOrders(random.nextInt(5));
+
+        DeliveryAlternativeType deliveryAlternative = getRandomDeliveryAlternativeType(random);
+        prescriptionItem.getDeliveryAlternative().add(deliveryAlternative);
+
+        DeliveryAlternativeType deliveryAlternative2 = getRandomDeliveryAlternativeType(random);
+        prescriptionItem.getDeliveryAlternative().add(deliveryAlternative2);
+
+        if (!nextPossibleOrderDateInFuture) {
+            prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random));
+        } else {
+            Calendar c = Calendar.getInstance();
+
+            c.add(Calendar.MONTH, 1);
+
+            XMLGregorianCalendar randomCalendar = getRandomCalendar(random);
+            randomCalendar.setYear(c.get(Calendar.YEAR) + 1);
+
+            prescriptionItem.setNextEarliestOrderDate(randomCalendar);
+        }
+        prescriptionItem.setPrescriptionId(random.nextInt(100000) + "");
+        prescriptionItem.setPrescriber("Kalle Karlsson");
+        prescriptionItem.setLastValidDate(getRandomCalendar(random));
+        prescriptionItem.setNoOfArticlesPerOrder(random.nextInt(5) * 1000 + 1000);
+        prescriptionItem.setNoOfPackagesPerOrder(random.nextInt(5) * 50 + 50);
+        prescriptionItem.setStatus(StatusEnum.values()[random.nextInt(StatusEnum.values().length)]);
+
+        subjectOfCare.getPrescriptionItem().add(prescriptionItem);
+    }
+
+    private DeliveryAlternativeType getRandomDeliveryAlternativeType(Random random) {
         DeliveryAlternativeType deliveryAlternative = new DeliveryAlternativeType();
         deliveryAlternative.setDeliveryMethodId(random.nextInt(10000) + "");
         deliveryAlternative.setDeliveryMethod(
@@ -119,31 +149,20 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         deliveryAlternative.setAllowChioceOfDeliveryPoints(random.nextBoolean());
         deliveryAlternative.setDeliveryMethodName(Character.getName(random.nextInt(1000)));
 
-        deliveryAlternative.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.values()
-                [random.nextInt(DeliveryNotificationMethodEnum.values().length)]);
+        DeliveryNotificationMethodEnum first = DeliveryNotificationMethodEnum.values()
+                [random.nextInt(DeliveryNotificationMethodEnum.values().length)];
+        deliveryAlternative.getDeliveryNotificationMethod().add(first);
 
-        prescriptionItem.getDeliveryAlternative().add(deliveryAlternative);
+        DeliveryNotificationMethodEnum second = DeliveryNotificationMethodEnum.values()
+                [random.nextInt(DeliveryNotificationMethodEnum.values().length)];
 
-        if (!nextPossibleOrderDateInFuture) {
-            prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random));
-        } else {
-            Calendar c = Calendar.getInstance();
-
-            c.add(Calendar.MONTH, 1);
-
-            XMLGregorianCalendar randomCalendar = getRandomCalendar(random);
-            randomCalendar.setYear(c.get(Calendar.YEAR) + 1);
-
-            prescriptionItem.setNextEarliestOrderDate(randomCalendar);
+        while (second == first) {
+            second = DeliveryNotificationMethodEnum.values()
+                    [random.nextInt(DeliveryNotificationMethodEnum.values().length)];
         }
-        prescriptionItem.setPrescriptionId(random.nextInt(100000) + "");
-        prescriptionItem.setPrescriber("Kalle Karlsson");
-        prescriptionItem.setLastValidDate(getRandomCalendar(random));
-        prescriptionItem.setNoOfArticlesPerOrder(random.nextInt(5) * 1000 + 1000);
-        prescriptionItem.setNoOfPackagesPerOrder(random.nextInt(5) * 50 + 50);
-        prescriptionItem.setStatus(StatusEnum.values()[random.nextInt(StatusEnum.values().length)]);
 
-        subjectOfCare.getPrescriptionItem().add(prescriptionItem);
+        deliveryAlternative.getDeliveryNotificationMethod().add(second);
+        return deliveryAlternative;
     }
 
     private XMLGregorianCalendar getRandomCalendar(Random random) {

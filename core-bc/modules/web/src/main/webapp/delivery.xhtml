@@ -42,7 +42,7 @@
 
                                     <h:panelGroup rendered="#{not deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.hemleveransEnum)}">
                                         <input type="radio" jsf:id="hemleveransOptionDisabled" p:name="#{hiddenItem.clientId}" disabled="disabled"
-                                               value="#{deliveryController.hemleveransValue}" p:checked="#{deliveryController.deliveryMethod eq deliveryController.hemleveransEnum ? 'checked' : null}" />
+                                               value="#{deliveryController.hemleveransValue}" />
                                         <h:outputLabel for="hemleveransOptionDisabled" value="Hemleverans"/>
                                     </h:panelGroup>
                                 </div>
@@ -61,7 +61,7 @@
 
                                     <h:panelGroup rendered="#{not deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.utlamningsstalleEnum)}">
                                         <input type="radio" jsf:id="utlamningsstalleOptionDisabled" p:name="#{hiddenItem.clientId}" disabled="disabled"
-                                               value="#{deliveryController.utlamningsstalleValue}" p:checked="#{deliveryController.deliveryMethod eq deliveryController.utlamningsstalleEnum ? 'checked' : null}" />
+                                               value="#{deliveryController.utlamningsstalleValue}" />
                                         <h:outputLabel for="utlamningsstalleOptionDisabled" value="Utlämningsställe"/>
                                     </h:panelGroup>
                                 </div>
@@ -93,7 +93,7 @@
                             <ui:repeat value="#{cart.itemsInCart}" var="item" varStatus="varStatus">
                                 <tr>
                                     <td>
-                                        #{utilController.capitalizeFully(item.article.productArea.value())}<br/>#{item.article.articleNo}
+                                        #{utilController.capitalizeFully(item.article.productArea.name())}<br/>#{item.article.articleNo}
                                     </td>
                                     <td>
                                         #{item.article.articleName}
