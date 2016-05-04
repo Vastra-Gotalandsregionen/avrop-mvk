@@ -53,13 +53,10 @@ public class MockGetMedicalSupplyDeliveryPointsResponder
             deliveryPoint.setDeliveryPointId("Leverans-id" + random.nextInt(100));
             deliveryPoint.setDeliveryPointName("Leverans-namn" + random.nextInt(100));
             deliveryPoint.setDeliveryPointPostalCode(random.nextInt(100000) + "");
-            deliveryPoint.setIsClosest(false);
 
             response.getDeliveryPoint().add(deliveryPoint);
 
         }
-
-        response.getDeliveryPoint().get(0).setIsClosest(true);
 
         return response;
     }

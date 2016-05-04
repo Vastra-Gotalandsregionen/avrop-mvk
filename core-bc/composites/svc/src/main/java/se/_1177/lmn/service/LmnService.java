@@ -1,8 +1,6 @@
 package se._1177.lmn.service;
 
 import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
-import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
@@ -30,8 +28,6 @@ public interface LmnService {
             String orderer, // May be delegate
             List<PrescriptionItemType> prescriptionItems,
             Map<PrescriptionItemType, DeliveryChoiceType> deliveryChoicePerItem);
-
-    String getDeliveryMethodId(DeliveryMethodEnum deliveryMethod);
 
     DeliveryPointType getDeliveryPointById(String deliveryPointId);
 

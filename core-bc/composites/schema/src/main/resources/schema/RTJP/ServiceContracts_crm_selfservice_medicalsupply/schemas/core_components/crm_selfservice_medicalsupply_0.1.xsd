@@ -76,7 +76,6 @@
 	  <xs:element name="DeliveryPointCity" type="xs:string" minOccurs='1' maxOccurs='1'/>
 	  <xs:element name="CountryCode" type="tns:CountryCodeEnum" minOccurs='1' maxOccurs='1'/>
       <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
-	  <xs:element name="IsClosest" type="xs:boolean" minOccurs='0' maxOccurs='1'/>
     </xs:sequence>
   </xs:complexType>
 
@@ -116,6 +115,24 @@
       <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>
   </xs:complexType>
+
+  <xs:complexType name="PrescriberType">
+    <xs:sequence>
+      <xs:element name="PrescriberId" type="xs:string" minOccurs='1' maxOccurs='1'/>
+	  <xs:element name="PrescriberName" type="xs:string" minOccurs='1' maxOccurs='1'/>
+	  <xs:element name="PrescriberTitle" type="xs:string" minOccurs='0' maxOccurs='1'/>
+	  <xs:element name="PrescriberCode" type="xs:string" minOccurs='0' maxOccurs='1'/>
+      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="PrescribingOrganizationType">
+    <xs:sequence>
+      <xs:element name="PrescribingOrganizationId" type="xs:string" minOccurs='1' maxOccurs='1'/>
+	  <xs:element name="PrescribingOrganizationName" type="xs:string" minOccurs='1' maxOccurs='1'/>
+      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
+    </xs:sequence>
+  </xs:complexType>
   
   <xs:complexType name="PrescriptionItemType">
     <xs:sequence>
@@ -130,8 +147,8 @@
       <xs:element name="NextEarliestOrderDate" type="xs:date" minOccurs='0' maxOccurs='1'/>
       <xs:element name="PrescriptionId" type="xs:string" minOccurs='1' maxOccurs='1'/>
       <xs:element name="Source" type="xs:string" minOccurs='1' maxOccurs='1'/>
-      <xs:element name="Prescriber" type="xs:string" minOccurs='1' maxOccurs='1'/>
-      <xs:element name="PrescribingOrganization" type="xs:string" minOccurs='1' maxOccurs='1'/>
+      <xs:element name="Prescriber" type="tns:PrescriberType" minOccurs='1' maxOccurs='1'/>
+      <xs:element name="PrescribingOrganization" type="tns:PrescribingOrganizationType" minOccurs='1' maxOccurs='1'/>
       <xs:element name="LastValidDate" type="xs:date" minOccurs='1' maxOccurs='1'/>
       <xs:element name="Status" type="tns:StatusEnum" minOccurs='1' maxOccurs='1'/>
       <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />

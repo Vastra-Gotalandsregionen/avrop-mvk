@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._0.AdressType;
+import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
@@ -78,7 +79,25 @@ public class VerifyDeliveryController {
 
             if (deliveryMethod.equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)) {
 
-                deliveryChoice.setDeliveryMethodId(lmnService.getDeliveryMethodId(deliveryMethod));
+                String deliveryMethodId = null;
+
+                // Take the first deliveryAlternative with matching deliveryMethod. This assumes no two
+                // deliveryAlternatives share the same deliveryMethod. That would lead to arbitrary result.
+                for (DeliveryAlternativeType deliveryAlternative : prescriptionItem.getDeliveryAlternative()) {
+                    if (deliveryAlternative.getDeliveryMethod().equals(deliveryMethod)) {
+                        deliveryMethodId = deliveryAlternative.getDeliveryMethodId();
+                        break;
+                    }
+                }
+
+                if (deliveryMethodId == null) {
+                    FacesContext.getCurrentInstance().addMessage("", new FacesMessage("Kunde inte genomföra " +
+                            "beställning. Försök senare."));
+
+                    return "verifyDelivery";
+                }
+
+                deliveryChoice.setDeliveryMethodId(deliveryMethodId);
 
                 ServicePointProviderEnum provider = collectDeliveryController
                         .getServicePointProviderForItem(prescriptionItem);
@@ -91,6 +110,20 @@ public class VerifyDeliveryController {
 
                 DeliveryNotificationMethodEnum notificationMethod = DeliveryNotificationMethodEnum
                         .valueOf(notificationMethodString);
+
+                // Assert the notification method is available for the prescription item.
+                boolean found = false;
+                for (DeliveryAlternativeType deliveryAlternative : prescriptionItem.getDeliveryAlternative()) {
+                    if (deliveryAlternative.getDeliveryNotificationMethod().contains(notificationMethod)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    throw new IllegalStateException("A notification method not available for the given prescription " +
+                            "item has been chosen. That shouldn't be possible so it's a bug.");
+                }
 
                 deliveryChoice.getDeliveryNotificationMethod().add(notificationMethod);
 

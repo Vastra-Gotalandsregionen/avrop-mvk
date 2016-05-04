@@ -1,10 +1,6 @@
 package se._1177.lmn.service;
 
-import riv.crm.selfservice.medicalsupply._0.AdressType;
-import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
-import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
 import riv.crm.selfservice.medicalsupply._0.OrderRowType;
 import riv.crm.selfservice.medicalsupply._0.OrderType;
@@ -41,7 +37,6 @@ public class LmnServiceImpl implements LmnService {
 
     private RegisterMedicalSupplyOrderResponderInterface registerMedicalSupplyOrder;
 
-    private Map<DeliveryMethodEnum, String> deliveryMethodToDeliveryMethodId = new HashMap<>();
     private Map<String, DeliveryPointType> deliveryPointIdToDeliveryPoint = new HashMap<>();
 
     public LmnServiceImpl(
@@ -115,23 +110,6 @@ public class LmnServiceImpl implements LmnService {
         GetMedicalSupplyPrescriptionsResponseType medicalSupplyPrescriptions = this.medicalSupplyPrescriptions
                 .getMedicalSupplyPrescriptions("", parameters);
 
-        for (PrescriptionItemType item : medicalSupplyPrescriptions.getSubjectOfCareType().getPrescriptionItem()) {
-            for (DeliveryAlternativeType deliveryAlternative : item.getDeliveryAlternative()) {
-
-                // Assert they never change id.
-                DeliveryMethodEnum deliveryMethod = deliveryAlternative.getDeliveryMethod();
-                if (deliveryMethodToDeliveryMethodId.containsKey(deliveryMethod) &&
-                        deliveryMethodToDeliveryMethodId.get(deliveryMethod)
-                                .equals(deliveryAlternative.getDeliveryMethodId())) {
-                    throw new RuntimeException("Thd delivery method id of a delivery method is not expected to change.");
-                }
-
-                // Save these for later
-                deliveryMethodToDeliveryMethodId.put(deliveryMethod,
-                                                        deliveryAlternative.getDeliveryMethodId());
-            }
-        }
-
         return medicalSupplyPrescriptions;
     }
 
@@ -159,11 +137,6 @@ public class LmnServiceImpl implements LmnService {
     }
 
     @Override
-    public String getDeliveryMethodId(DeliveryMethodEnum deliveryMethod) {
-        return deliveryMethodToDeliveryMethodId.get(deliveryMethod);
-    }
-
-    @Override
     public DeliveryPointType getDeliveryPointById(String deliveryPointId) {
         return deliveryPointIdToDeliveryPoint.get(deliveryPointId);
     }
@@ -177,6 +150,14 @@ public class LmnServiceImpl implements LmnService {
             orderRow.setDeliveryChoice(deliveryChoice);
 
             orderRow.setArticle(item.getArticle());
+
+            orderRow.setNoOfPackages(item.getNoOfPackagesPerOrder());
+
+            orderRow.setNoOfPcs(item.getNoOfArticlesPerOrder());
+
+            orderRow.setPrescriptionId(item.getPrescriptionId());
+
+            orderRow.setPrescriptionItemId(item.getPrescriptionItemId());
 
             order.getOrderRow().add(orderRow);
         }

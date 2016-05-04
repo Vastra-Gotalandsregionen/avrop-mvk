@@ -41,11 +41,6 @@ public class MockLmnServiceImpl implements LmnService {
     }
 
     @Override
-    public String getDeliveryMethodId(DeliveryMethodEnum deliveryMethod) {
-        return null;
-    }
-
-    @Override
     public DeliveryPointType getDeliveryPointById(String deliveryPointId) {
         return null;
     }
