@@ -72,6 +72,22 @@
                                 </h:panelGroup>
                                 #{item.article.articleName}
                                 <mvk:moreInfo item="#{item}"/>
+                                <div class="dev-temp" style="font-size: .7em;">
+                                    <ul>
+                                        <ui:repeat value="#{item.deliveryAlternative}" var="alternative">
+                                            <li>
+                                                #{alternative.deliveryMethod} - #{alternative.servicePointProvider}
+                                                <ol>
+                                                    <ui:repeat value="#{alternative.deliveryNotificationMethod}" var="method">
+                                                        <li>
+                                                            #{method}
+                                                        </li>
+                                                    </ui:repeat>
+                                                </ol>
+                                            </li>
+                                        </ui:repeat>
+                                    </ul>
+                                </div>
                             </td>
                             <td>
                                 #{item.noOfRemainingOrders}/#{item.noOfOrders}

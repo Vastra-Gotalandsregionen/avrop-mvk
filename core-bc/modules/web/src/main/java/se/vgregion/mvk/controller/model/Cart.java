@@ -17,14 +17,14 @@ import java.util.Map;
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Cart {
 
-    private List<String> itemsInCart = new ArrayList<>();
+    private List<PrescriptionItemType> itemsInCart = new ArrayList<>();
     private Map<String, PrescriptionItemType> prescriptionItemInfo = new HashMap<>();
 
-    public List<String> getItemsInCart() {
+    public List<PrescriptionItemType> getItemsInCart() {
         return itemsInCart;
     }
 
-    public void setItemsInCart(List<String> itemsInCart) {
+    public void setItemsInCart(List<PrescriptionItemType> itemsInCart) {
         this.itemsInCart = itemsInCart;
     }
 

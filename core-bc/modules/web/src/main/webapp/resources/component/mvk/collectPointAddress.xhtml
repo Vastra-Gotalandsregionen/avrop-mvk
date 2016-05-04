@@ -1,0 +1,33 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:f="http://xmlns.jcp.org/jsf/core"
+              xmlns:h="http://xmlns.jcp.org/jsf/html"
+              xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+              xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+              xmlns:composite="http://java.sun.com/jsf/composite"
+              xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<composite:interface>
+    <composite:attribute name="providerName"/>
+    <composite:attribute name="deliveryPoint"/>
+</composite:interface>
+
+<composite:implementation>
+
+    <c:set var="providerName" value="#{cc.attrs.providerName}"/>
+    <c:set var="deliveryPoint" value="#{cc.attrs.deliveryPoint}"/>
+
+    <div class="input-group">
+        <label for="collectDeliveryAddress">Utlämningsställe (#{utilController.toProviderName(providerName)}):</label>
+        <div id="collectDeliveryAddress" class="bold">
+
+            <div>#{deliveryPoint.deliveryPointName}</div>
+            <div>#{deliveryPoint.deliveryPointAddress}</div>
+            <div>
+                #{deliveryPoint.deliveryPointPostalCode}
+                #{deliveryPoint.deliveryPointCity}
+            </div>
+        </div>
+    </div>
+</composite:implementation>
+
+</ui:component>

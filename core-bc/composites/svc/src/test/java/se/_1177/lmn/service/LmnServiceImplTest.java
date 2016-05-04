@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._0.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsResponseType;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsType;
@@ -58,8 +59,13 @@ public class LmnServiceImplTest {
 
     @Test
     public void smokeTest() throws Exception {
+        GetMedicalSupplyDeliveryPointsType parameters = new GetMedicalSupplyDeliveryPointsType();
+
+        parameters.setPostalCode("12345");
+        parameters.setServicePointProvider(ServicePointProviderEnum.POSTNORD);
+
         GetMedicalSupplyDeliveryPointsResponseType response = medicalSupplyDeliveryPoints
-                .getMedicalSupplyDeliveryPoints("?", new GetMedicalSupplyDeliveryPointsType());
+                .getMedicalSupplyDeliveryPoints("?", parameters);
 
         GetMedicalSupplyPrescriptionsResponseType prescriptions =
                 medicalSupplyPrescriptions.getMedicalSupplyPrescriptions("", new GetMedicalSupplyPrescriptionsType());

@@ -4,7 +4,9 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:mvk="http://java.sun.com/jsf/composite/component/mvk"
+>
 
 <ui:composition template="WEB-INF/xhtml/template/wideContent.xhtml">
 
@@ -37,77 +39,115 @@
 
                 <h4>Produkter</h4>
 
-                <table class="avrop-table my-products-table contentFontSize verify-delivery" style="table-layout: fixed">
-                    <thead>
-                    <tr>
-                        <td class="column-1">Produktgrupp/Artikel-nr.</td>
-                        <td class="column-2">Benämning</td>
-                        <td class="column-3">Uttag kvar / antal uttag</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <ui:repeat value="#{cart.itemsInCart}" var="itemId" varStatus="status">
+                <h:panelGroup rendered="#{deliveryController.anyDeliveryMethodFitsAll() and collectDeliveryController.possibleCollectCombinationsFittingAllWithNotificationMethods.size() gt 0}">
+                    <table class="avrop-table my-products-table contentFontSize verify-delivery" style="table-layout: fixed">
+                        <thead>
                         <tr>
-                            <td>
-                                #{utilController.capitalizeFully(cart.prescriptionItemInfo[itemId].article.productArea)}<br/>
-                                #{cart.prescriptionItemInfo[itemId].article.articleNo}
-                            </td>
-                            <td>
-                                #{cart.prescriptionItemInfo[itemId].article.articleName}
-                            </td>
-                            <td>
-                                #{cart.prescriptionItemInfo[itemId].noOfRemainingOrders}/#{cart.prescriptionItemInfo[itemId].noOfOrders}
-                            </td>
+                            <td class="column-1">Produktgrupp/Artikel-nr.</td>
+                            <td class="column-2">Benämning</td>
+                            <td class="column-3">Uttag kvar / antal uttag</td>
                         </tr>
-                    </ui:repeat>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        <ui:repeat value="#{cart.itemsInCart}" var="item" varStatus="status">
+                            <tr>
+                                <td>
+                                    #{utilController.capitalizeFully(item.article.productArea)}<br/>
+                                    #{item.article.articleNo}
+                                </td>
+                                <td>
+                                    #{item.article.articleName}
+                                </td>
+                                <td>
+                                    #{item.noOfRemainingOrders}/#{item.noOfOrders}
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                        </tbody>
+                    </table>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{not (deliveryController.anyDeliveryMethodFitsAll() and collectDeliveryController.possibleCollectCombinationsFittingAllWithNotificationMethods.size() gt 0)}">
+                    <table class="avrop-table my-products-table contentFontSize verify-delivery" style="table-layout: fixed">
+                        <thead>
+                        <tr>
+                            <td class="column-1">Produktgrupp/Artikel-nr.</td>
+                            <td class="column-2">Benämning</td>
+                            <td class="column-3">Uttag kvar / antal uttag</td>
+                            <td class="column-4">Leveransinfo</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <ui:repeat value="#{cart.itemsInCart}" var="item" varStatus="status">
+                            <tr>
+                                <td>
+                                    #{utilController.capitalizeFully(item.article.productArea)}<br/>
+                                    #{item.article.articleNo}
+                                </td>
+                                <td>
+                                    #{item.article.articleName}
+                                </td>
+                                <td>
+                                    #{item.noOfRemainingOrders}/#{item.noOfOrders}
+                                </td>
+                                <td>
+                                    #{utilController.capitalizeFully(deliveryController.deliveryMethodForEachItem[item])}
+                                    <h:panelGroup rendered="#{deliveryController.deliveryMethodForEachItem[item] eq 'UTLÄMNINGSSTÄLLE'}"> /
+                                        #{utilController.toProviderName(collectDeliveryController.getServicePointProviderForItem(item))}
+                                    </h:panelGroup>
+                                </td>
+                            </tr>
+                        </ui:repeat>
+                        </tbody>
+                    </table>
+                </h:panelGroup>
 
                 <div class="gray-box clearfix">
                     <h4>Leveransinformation</h4>
 
-                    <div class="row clearfix">
-                        <h:panelGroup id="collectDeliveryAddressWrapper" rendered="#{deliveryController.deliveryMethod eq deliveryController.utlamningsstalleValue}">
-                            <label for="collectDeliveryAddress">Utlämningsställe:</label>
-                            <div id="collectDeliveryAddress" class="bold">
-                                <div>#{collectDeliveryController.deliveryPointsMap[collectDeliveryController.chosenDeliveryPoint].deliveryPointName}</div>
-                                <div>#{collectDeliveryController.deliveryPointsMap[collectDeliveryController.chosenDeliveryPoint].deliveryPointAddress}</div>
-                                <div>
-                                    #{collectDeliveryController.deliveryPointsMap[collectDeliveryController.chosenDeliveryPoint].deliveryPointPostalCode}
-                                    #{collectDeliveryController.deliveryPointsMap[collectDeliveryController.chosenDeliveryPoint].deliveryPointCity}
-                                </div>
-                            </div>
-                        </h:panelGroup>
+                    <div class="column-row clearfix">
+                        <div class="col50">
+                            <h:panelGroup id="collectDeliveryAddressWrapper" rendered="#{deliveryController.deliveryMethodUsedForAnyItem(deliveryController.utlamningsstalleEnum)}">
+                                <ui:repeat value="#{utilController.toList(collectDeliveryController.deliveryPointIdsMap.keySet())}" var="providerPointKey">
 
-                        <h:panelGroup id="homeDeliveryAddressWrapper" rendered="#{deliveryController.deliveryMethod eq deliveryController.hemleveransValue}">
-                            <label for="homeDeliveryAddress">Hemleverans:</label>
-                            <div id="homeDeliveryAddress" class="bold">
-                                <div>#{userProfileController.userProfile.userProfile.firstName} #{userProfileController.userProfile.userProfile.lastName}</div>
-                                <div>#{userProfileController.userProfile.userProfile.streetAddress}</div>
-                                <div>#{userProfileController.userProfile.userProfile.zip} #{userProfileController.userProfile.userProfile.city}</div>
-                            </div>
-                        </h:panelGroup>
+                                    <mvk:collectPointAddress providerName="#{providerPointKey}"
+                                                             deliveryPoint="#{collectDeliveryController.getDeliveryPointById(collectDeliveryController.deliveryPointIdsMap[providerPointKey])}" />
 
-                        <h:panelGroup id="smsNotificationMethodWrapper" rendered="#{deliveryController.deliveryMethod eq deliveryController.utlamningsstalleValue}">
-                            <h:panelGroup rendered="#{collectDeliveryController.deliveryNotificationMethod eq collectDeliveryController.smsValue}">
-                                <div>SMS-avisering:</div>
-                                <div class="bold">#{collectDeliveryController.smsNumber}</div>
+                                </ui:repeat>
                             </h:panelGroup>
 
-                            <h:panelGroup rendered="#{collectDeliveryController.deliveryNotificationMethod eq collectDeliveryController.epostValue}">
-                                <div>Epost-avisering:</div>
-                                <div class="bold">#{collectDeliveryController.email}</div>
-                            </h:panelGroup>
-
-                            <h:panelGroup rendered="#{collectDeliveryController.deliveryNotificationMethod eq collectDeliveryController.brevValue}">
-                                <div>Brev-avisering:</div>
-                                <div class="bold">
+                            <h:panelGroup id="homeDeliveryAddressWrapper" rendered="#{deliveryController.deliveryMethodUsedForAnyItem(deliveryController.hemleveransEnum)}">
+                                <label for="homeDeliveryAddress">Hemleverans:</label>
+                                <div id="homeDeliveryAddress" class="bold">
                                     <div>#{userProfileController.userProfile.userProfile.firstName} #{userProfileController.userProfile.userProfile.lastName}</div>
                                     <div>#{userProfileController.userProfile.userProfile.streetAddress}</div>
                                     <div>#{userProfileController.userProfile.userProfile.zip} #{userProfileController.userProfile.userProfile.city}</div>
                                 </div>
                             </h:panelGroup>
-                        </h:panelGroup>
+                        </div>
+
+                        <div class="col50">
+                            <h:panelGroup id="smsNotificationMethodWrapperdddddddd" rendered="#{deliveryController.deliveryMethodUsedForAnyItem(deliveryController.utlamningsstalleEnum)}">
+                                <h:panelGroup layout="block" styleClass="input-group" rendered="#{collectDeliveryController.notificationMethodUsedForAnyItem(collectDeliveryController.smsValue)}">
+                                    <div>SMS-avisering (#{collectDeliveryController.providersWithNotificationMethod(collectDeliveryController.smsValue)}):</div>
+                                    <div class="bold">#{collectDeliveryController.smsNumber}</div>
+                                </h:panelGroup>
+
+                                <h:panelGroup layout="block" styleClass="input-group" rendered="#{collectDeliveryController.notificationMethodUsedForAnyItem(collectDeliveryController.epostValue)}">
+                                    <div>Epost-avisering (#{collectDeliveryController.providersWithNotificationMethod(collectDeliveryController.epostValue)}):</div>
+                                    <div class="bold">#{collectDeliveryController.email}</div>
+                                </h:panelGroup>
+
+                                <h:panelGroup layout="block" styleClass="input-group" rendered="#{collectDeliveryController.notificationMethodUsedForAnyItem(collectDeliveryController.brevValue)}">
+                                    <div>Brev-avisering (#{collectDeliveryController.providersWithNotificationMethod(collectDeliveryController.brevValue)}):</div>
+                                    <div class="bold">
+                                        <div>#{userProfileController.userProfile.userProfile.firstName} #{userProfileController.userProfile.userProfile.lastName}</div>
+                                        <div>#{userProfileController.userProfile.userProfile.streetAddress}</div>
+                                        <div>#{userProfileController.userProfile.userProfile.zip} #{userProfileController.userProfile.userProfile.city}</div>
+                                    </div>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </div>
                     </div>
                 </div>
 

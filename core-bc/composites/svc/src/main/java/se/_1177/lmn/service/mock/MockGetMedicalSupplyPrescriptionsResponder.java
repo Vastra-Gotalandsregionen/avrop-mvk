@@ -4,7 +4,9 @@ import riv.crm.selfservice.medicalsupply._0.ArticleType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.OrderItemType;
+import riv.crm.selfservice.medicalsupply._0.PrescriberType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ProductAreaEnum;
 import riv.crm.selfservice.medicalsupply._0.ResultCodeEnum;
@@ -49,7 +51,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         SubjectOfCareType subjectOfCare = new SubjectOfCareType();
         subjectOfCare.setSubjectOfCareId(random.nextInt(1000) + "");
 
-        for (int i = 0; i <= 50; i++) {
+        for (int i = 0; i <= 100; i++) {
             addPrescriptionItem(random, subjectOfCare, random.nextBoolean());
         }
 
@@ -95,16 +97,12 @@ public class MockGetMedicalSupplyPrescriptionsResponder
 
         prescriptionItem.setNoOfOrders(random.nextInt(10));
         prescriptionItem.setNoOfRemainingOrders(random.nextInt(5));
-        DeliveryAlternativeType deliveryAlternative = new DeliveryAlternativeType();
-        deliveryAlternative.setDeliveryMethodId(random.nextInt(10000) + "");
-        deliveryAlternative.setDeliveryMethod(
-                DeliveryMethodEnum.values()[random.nextInt(DeliveryMethodEnum.values().length)]);
-        deliveryAlternative.setServicePointProvider(
-                ServicePointProviderEnum.values()[random.nextInt(ServicePointProviderEnum.values().length)]);
-        deliveryAlternative.setAllowChioceOfDeliveryPoints(random.nextBoolean());
-        deliveryAlternative.setDeliveryMethodName(Character.getName(random.nextInt(1000)));
 
+        DeliveryAlternativeType deliveryAlternative = getRandomDeliveryAlternativeType(random);
         prescriptionItem.getDeliveryAlternative().add(deliveryAlternative);
+
+        DeliveryAlternativeType deliveryAlternative2 = getRandomDeliveryAlternativeType(random);
+        prescriptionItem.getDeliveryAlternative().add(deliveryAlternative2);
 
         if (!nextPossibleOrderDateInFuture) {
             prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random));
@@ -119,13 +117,58 @@ public class MockGetMedicalSupplyPrescriptionsResponder
             prescriptionItem.setNextEarliestOrderDate(randomCalendar);
         }
         prescriptionItem.setPrescriptionId(random.nextInt(100000) + "");
-        prescriptionItem.setPrescriber("Kalle Karlsson");
+        PrescriberType prescriber = new PrescriberType();
+        prescriber.setPrescriberName("Kalle Karlsson");
+        prescriber.setPrescriberCode(random.nextInt(1000) + "");
+        prescriber.setPrescriberId(random.nextInt(1000) + "");
+        prescriber.setPrescriberTitle("Läkare");
+        prescriptionItem.setPrescriber(prescriber);
         prescriptionItem.setLastValidDate(getRandomCalendar(random));
         prescriptionItem.setNoOfArticlesPerOrder(random.nextInt(5) * 1000 + 1000);
         prescriptionItem.setNoOfPackagesPerOrder(random.nextInt(5) * 50 + 50);
         prescriptionItem.setStatus(StatusEnum.values()[random.nextInt(StatusEnum.values().length)]);
 
         subjectOfCare.getPrescriptionItem().add(prescriptionItem);
+    }
+
+    private DeliveryAlternativeType getRandomDeliveryAlternativeType(Random random) {
+        DeliveryAlternativeType deliveryAlternative = new DeliveryAlternativeType();
+        deliveryAlternative.setDeliveryMethodId(random.nextInt(10000) + "");
+        deliveryAlternative.setDeliveryMethod(
+                DeliveryMethodEnum.values()[random.nextInt(DeliveryMethodEnum.values().length)]);
+
+        if (deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS)) {
+            deliveryAlternative.setServicePointProvider(ServicePointProviderEnum.INGEN);
+        } else {
+            deliveryAlternative.setServicePointProvider(
+                    ServicePointProviderEnum.values()[random.nextInt(ServicePointProviderEnum.values().length)]);
+
+            // Inefficient but this is a mock...
+            while (deliveryAlternative.getServicePointProvider().equals(ServicePointProviderEnum.INGEN)) {
+                // Continue until something other than ServicePointProviderEnum.INGEN gets set.
+                deliveryAlternative.setServicePointProvider(
+                        ServicePointProviderEnum.values()[random.nextInt(ServicePointProviderEnum.values().length)]);
+
+            }
+        }
+
+        deliveryAlternative.setAllowChioceOfDeliveryPoints(random.nextBoolean());
+        deliveryAlternative.setDeliveryMethodName(Character.getName(random.nextInt(1000)));
+
+        DeliveryNotificationMethodEnum first = DeliveryNotificationMethodEnum.values()
+                [random.nextInt(DeliveryNotificationMethodEnum.values().length)];
+        deliveryAlternative.getDeliveryNotificationMethod().add(first);
+
+        DeliveryNotificationMethodEnum second = DeliveryNotificationMethodEnum.values()
+                [random.nextInt(DeliveryNotificationMethodEnum.values().length)];
+
+        while (second == first) {
+            second = DeliveryNotificationMethodEnum.values()
+                    [random.nextInt(DeliveryNotificationMethodEnum.values().length)];
+        }
+
+        deliveryAlternative.getDeliveryNotificationMethod().add(second);
+        return deliveryAlternative;
     }
 
     private XMLGregorianCalendar getRandomCalendar(Random random) {

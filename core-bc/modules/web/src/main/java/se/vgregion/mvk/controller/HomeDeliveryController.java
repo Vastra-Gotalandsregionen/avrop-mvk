@@ -18,9 +18,14 @@ public class HomeDeliveryController {
     private static final Logger LOGGER = LoggerFactory.getLogger(HomeDeliveryController.class);
 
     private String doorCode;
+    private boolean nextViewIsCollectDelivery;
 
     public String toVerifyDelivery() {
-        return "verifyDelivery" + ACTION_SUFFIX;
+        if (nextViewIsCollectDelivery) {
+            return "collectDelivery" + ACTION_SUFFIX;
+        } else {
+            return "verifyDelivery" + ACTION_SUFFIX;
+        }
     }
 
     public void setDoorCode(String doorCode) {
@@ -29,5 +34,9 @@ public class HomeDeliveryController {
 
     public String getDoorCode() {
         return doorCode;
+    }
+
+    public void setNextViewIsCollectDelivery(boolean nextViewIsCollectDelivery) {
+        this.nextViewIsCollectDelivery = nextViewIsCollectDelivery;
     }
 }

@@ -1,13 +1,16 @@
 package se._1177.lmn.service;
 
-import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
+import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsResponseType;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._0.GetMedicalSupplyPrescriptionsResponseType;
 import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.RegisterMedicalSupplyOrderResponseType;
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Patrik Björk
@@ -15,29 +18,17 @@ import java.util.List;
 public interface LmnService {
     MedicalSupplyPrescriptionsHolder getMedicalSupplyPrescriptionsHolder(String subjectOfCareId);
 
-    GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(String postalCode);
+    GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(ServicePointProviderEnum provider, String postalCode);
 
     GetMedicalSupplyPrescriptionsResponseType getMedicalSupplyPrescriptions(String subjectOfCareId);
 
-    RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrderCollectDelivery(
-            DeliveryPointType deliveryPoint,
-            DeliveryNotificationMethodEnum deliveryNotificationMethod,
+    RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrder(
             String subjectOfCareId,
             boolean orderByDelegate,
             String orderer, // May be delegate
-            List<String> articleNumbers);
+            List<PrescriptionItemType> prescriptionItems,
+            Map<PrescriptionItemType, DeliveryChoiceType> deliveryChoicePerItem);
 
-    RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrderHomeDelivery(
-            String receiverFullName,
-            String phone,
-            String postalCode,
-            String street,
-            String doorCode,
-            String city,
-            String careOfAddress,
-            String subjectOfCareId,
-            boolean orderByDelegate,
-            String orderer, // May be delegate
-            List<String> articleNumbers//,
-    );
+    DeliveryPointType getDeliveryPointById(String deliveryPointId);
+
 }
