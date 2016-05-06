@@ -84,6 +84,16 @@ public class CollectDeliveryController {
         }
     }
 
+    /**
+     * By iterating through all {@link PrescriptionItemType}s in the {@link Cart}, collecting all
+     * {@link ServicePointProviderEnum}s and the {@link DeliveryNotificationMethodEnum}s which are present in the
+     * respective {@link ServicePointProviderEnum} for all {@link PrescriptionItemType}s. If a
+     * {@link DeliveryNotificationMethodEnum} isn't available for a {@link ServicePointProviderEnum} for all
+     * {@link PrescriptionItemType}s it is not included in the result.
+     *
+     * @return the collected map with {@link ServicePointProviderEnum}s mapped to a list of strings of the names of the
+     * {@link DeliveryNotificationMethodEnum}s
+     */
     public Map<ServicePointProviderEnum, List<String>> getDeliveryNotificationMethodsPerProvider() {
 
         Map<ServicePointProviderEnum, List<String>> result = new HashMap<>();
@@ -96,8 +106,8 @@ public class CollectDeliveryController {
                 }
 
                 if (!getRelevantServicePointProviders().contains(deliveryAlternative.getServicePointProvider())) {
-                   // Neither are we interested in any provider which isn't available for any item or which isn't available to all items when there is any that is.
-                   continue;
+                    // Neither are we interested in any provider which isn't available for any item or which isn't available to all items when there is any that is.
+                    continue;
                 }
 
                 ServicePointProviderEnum provider = deliveryAlternative.getServicePointProvider();
@@ -193,19 +203,22 @@ public class CollectDeliveryController {
         List<SelectItem> toGroup2 = new ArrayList<>();
 
         int count = 0;
-        for (DeliveryPointType deliveryPoint : deliveryPointsPerProvider.get(provider)) {
+        if (deliveryPointsPerProvider.get(provider) != null) {
 
-            String label = deliveryPoint.getDeliveryPointAddress()
-                    + ", " + deliveryPoint.getDeliveryPointName()
-                    + ", " + deliveryPoint.getDeliveryPointCity();
+            for (DeliveryPointType deliveryPoint : deliveryPointsPerProvider.get(provider)) {
 
-            SelectItem selectItem = new SelectItem(deliveryPoint.getDeliveryPointId(), label);
+                String label = deliveryPoint.getDeliveryPointAddress()
+                        + ", " + deliveryPoint.getDeliveryPointName()
+                        + ", " + deliveryPoint.getDeliveryPointCity();
 
-            // First one is closest.
-            if (count++ == 0) {
-                toGroup1.add(selectItem);
-            } else {
-                toGroup2.add(selectItem);
+                SelectItem selectItem = new SelectItem(deliveryPoint.getDeliveryPointId(), label);
+
+                // First one is closest.
+                if (count++ == 0) {
+                    toGroup1.add(selectItem);
+                } else {
+                    toGroup2.add(selectItem);
+                }
             }
         }
 
@@ -223,28 +236,32 @@ public class CollectDeliveryController {
     public Map<ServicePointProviderEnum, String> getChosenDeliveryNotificationMethod() {
 
         if (chosenDeliveryNotificationMethod == null) {
-            chosenDeliveryNotificationMethod = new HashMap<>();
-
-            Map<ServicePointProviderEnum, List<String>> deliveryNotificationMethodsPerProvider =
-                    getDeliveryNotificationMethodsPerProvider();
-
-            for (Map.Entry<ServicePointProviderEnum, List<String>> entry :
-                    deliveryNotificationMethodsPerProvider.entrySet()) {
-
-                if (entry.getValue().contains(preferredDeliveryNotificationMethod.name())) {
-                    chosenDeliveryNotificationMethod.put(entry.getKey(), preferredDeliveryNotificationMethod.name());
-                } else {
-                    // In case the preferred one isn't available.
-                    String defaultNotificationMethod = entry.getValue().size() > 0 ? entry.getValue().get(0) : null;
-                    chosenDeliveryNotificationMethod.put(entry.getKey(), defaultNotificationMethod);
-                }
-            }
+            initChosenDeliveryNotificationMethod();
         }
 
         // If there are remaining entries from when the user had chosen more items to order.
         chosenDeliveryNotificationMethod.keySet().retainAll(getRelevantServicePointProviders());
 
         return chosenDeliveryNotificationMethod;
+    }
+
+    void initChosenDeliveryNotificationMethod() {
+        chosenDeliveryNotificationMethod = new HashMap<>();
+
+        Map<ServicePointProviderEnum, List<String>> deliveryNotificationMethodsPerProvider =
+                getDeliveryNotificationMethodsPerProvider();
+
+        for (Map.Entry<ServicePointProviderEnum, List<String>> entry :
+                deliveryNotificationMethodsPerProvider.entrySet()) {
+
+            if (entry.getValue().contains(preferredDeliveryNotificationMethod.name())) {
+                chosenDeliveryNotificationMethod.put(entry.getKey(), preferredDeliveryNotificationMethod.name());
+            } else {
+                // In case the preferred one isn't available.
+                String defaultNotificationMethod = entry.getValue().size() > 0 ? entry.getValue().get(0) : null;
+                chosenDeliveryNotificationMethod.put(entry.getKey(), defaultNotificationMethod);
+            }
+        }
     }
 
     public Map<ServicePointProviderEnum, String> getDeliveryPointIdsMap() {
@@ -338,10 +355,13 @@ public class CollectDeliveryController {
                 continue;
             }
 
-            GetMedicalSupplyDeliveryPointsResponseType medicalSupplyDeliveryPoints =
-                    lmnService.getMedicalSupplyDeliveryPoints(provider, zip);
-
-            deliveryPointsPerProvider.put(provider, medicalSupplyDeliveryPoints.getDeliveryPoint());
+            GetMedicalSupplyDeliveryPointsResponseType medicalSupplyDeliveryPoints;
+            try {
+                medicalSupplyDeliveryPoints = lmnService.getMedicalSupplyDeliveryPoints(provider, zip);
+                deliveryPointsPerProvider.put(provider, medicalSupplyDeliveryPoints.getDeliveryPoint());
+            } catch (Exception e) {
+                LOGGER.error(e.getMessage(), e);
+            }
         }
     }
 

@@ -1,5 +1,7 @@
 package se._1177.lmn.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
 import riv.crm.selfservice.medicalsupply._0.OrderRowType;
@@ -30,6 +32,8 @@ import static se._1177.lmn.service.util.Util.isOlderThanAYear;
  * @author Patrik Björk
  */
 public class LmnServiceImpl implements LmnService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LmnServiceImpl.class);
 
     private GetMedicalSupplyDeliveryPointsResponderInterface medicalSupplyDeliveryPoint;
 
@@ -94,7 +98,6 @@ public class LmnServiceImpl implements LmnService {
         GetMedicalSupplyDeliveryPointsResponseType medicalSupplyDeliveryPoints = medicalSupplyDeliveryPoint
                 .getMedicalSupplyDeliveryPoints("", parameters);
 
-
         for (DeliveryPointType deliveryPoint : medicalSupplyDeliveryPoints.getDeliveryPoint()) {
             deliveryPointIdToDeliveryPoint.put(deliveryPoint.getDeliveryPointId(), deliveryPoint);
         }
@@ -131,7 +134,6 @@ public class LmnServiceImpl implements LmnService {
         addOrderRows(prescriptionItems, order, deliveryChoicePerItem);
 
         parameters.getOrder().add(order);
-
 
         return registerMedicalSupplyOrder.registerMedicalSupplyOrder("", parameters);
     }
