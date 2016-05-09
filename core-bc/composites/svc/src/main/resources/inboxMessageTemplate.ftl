@@ -47,7 +47,7 @@
                     <listitem></listitem>
                 </varlistentry>
                 <varlistentry>
-                    <term>${choice.homeDeliveryAddress.streetAddress}</term>
+                    <term>${choice.homeDeliveryAddress.street}</term>
                     <listitem></listitem>
                 </varlistentry>
                 <varlistentry>

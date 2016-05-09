@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import riv.crm.selfservice.medicalsupply._0.AdressType;
+import riv.crm.selfservice.medicalsupply._0.AddressType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
@@ -150,16 +150,16 @@ public class VerifyDeliveryController {
 
                 deliveryChoice.setDeliveryNotificationReceiver(notificationReceiver);
             } else {
-                AdressType address = new AdressType();
+                AddressType address = new AddressType();
                 address.setCareOfAddress(""); // // TODO: 2016-05-02
                 address.setCity(userProfile.getCity());
                 address.setDoorCode(homeDeliveryController.getDoorCode());
                 address.setPhone(userProfile.getPhoneNumber());
                 address.setPostalCode(userProfile.getZip());
-                address.setReciever(userProfile.getFirstName() + " " + userProfile.getLastName()); // todo Korrekt att detta är mottagarens namn?
+                address.setReceiver(userProfile.getFirstName() + " " + userProfile.getLastName()); // todo Korrekt att detta är mottagarens namn?
                 address.setStreet(userProfile.getStreetAddress());
 
-                deliveryChoice.setHomeDeliveryAdress(address);
+                deliveryChoice.setHomeDeliveryAddress(address);
             }
         }
 

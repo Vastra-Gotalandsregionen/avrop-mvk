@@ -4,7 +4,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import riv.crm.selfservice.medicalsupply._0.AdressType;
+import riv.crm.selfservice.medicalsupply._0.AddressType;
 import riv.crm.selfservice.medicalsupply._0.ArticleType;
 import riv.crm.selfservice.medicalsupply._0.CountryCodeEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
@@ -17,7 +17,7 @@ import riv.crm.selfservice.medicalsupply._0.ProductAreaEnum;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Patrik Björk
@@ -26,7 +26,7 @@ public class MvkInboxServiceTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MvkInboxServiceTest.class);
 
-    @Test @Ignore // TODO: 2016-05-09 Run this when schema is updated when spelling corrections.
+    @Test
     public void composeMsg() throws Exception {
         MvkInboxService mvkInboxService = new MvkInboxService(null);
 
@@ -72,22 +72,98 @@ public class MvkInboxServiceTest {
         choice1.setDeliveryNotificationReceiver("070-2345678");
         choice1.setDeliveryNotificationMethod(DeliveryNotificationMethodEnum.SMS);
 
-        AdressType homeAddress = new AdressType();
+        AddressType homeAddress = new AddressType();
         homeAddress.setStreet("Gatan 37");
         homeAddress.setPostalCode("43213");
-        homeAddress.setReciever("Kalle Karlsson");
+        homeAddress.setReceiver("Kalle Karlsson");
         homeAddress.setDoorCode("4321");
         homeAddress.setCity("Bullerbyn");
         homeAddress.setPhone("031-123456");
 
-        choice2.setHomeDeliveryAdress(homeAddress);
+        choice2.setHomeDeliveryAddress(homeAddress);
 
         deliveryChoices.add(choice1);
         deliveryChoices.add(choice2);
 
         String result = mvkInboxService.composeMsg(prescriptionItems, deliveryChoices);
 
-        LOGGER.info(result);
+        assertEquals(expectedMessage, result);
     }
 
+    private String expectedMessage = "<?xml version=\"1.0\"?>\n" +
+            "<article>\n" +
+            "    <info>\n" +
+            "        <title>Beställda produkter</title>\n" +
+            "    </info>\n" +
+            "\n" +
+            "    <section>\n" +
+            "            <variablelist>\n" +
+            "            <varlistentry>\n" +
+            "                <term>Produktgrupp:</term>\n" +
+            "                <listitem>DIABETES</listitem>\n" +
+            "            </varlistentry>\n" +
+            "            <varlistentry>\n" +
+            "                <term></term>\n" +
+            "                <listitem>Artikalnamn1</listitem>\n" +
+            "            </varlistentry>\n" +
+            "            <varlistentry>\n" +
+            "                <term>Artikelnr.:</term>\n" +
+            "                <listitem>1234</listitem>\n" +
+            "            </varlistentry>\n" +
+            "        </variablelist>\n" +
+            "        <variablelist>\n" +
+            "            <varlistentry>\n" +
+            "                <term>Produktgrupp:</term>\n" +
+            "                <listitem>INKONTINENS</listitem>\n" +
+            "            </varlistentry>\n" +
+            "            <varlistentry>\n" +
+            "                <term></term>\n" +
+            "                <listitem>Artikelnamn2</listitem>\n" +
+            "            </varlistentry>\n" +
+            "            <varlistentry>\n" +
+            "                <term>Artikelnr.:</term>\n" +
+            "                <listitem>4321</listitem>\n" +
+            "            </varlistentry>\n" +
+            "        </variablelist>\n" +
+            "    </section>\n" +
+            "\n" +
+            "    <section>\n" +
+            "        <title>Leveransinformation</title>\n" +
+            "        <para>UTLÄMNINGSSTÄLLE:</para>\n" +
+            "        <variablelist>\n" +
+            "                <varlistentry>\n" +
+            "                    <term>Matnära</term>\n" +
+            "                    <listitem></listitem>\n" +
+            "                </varlistentry>\n" +
+            "                <varlistentry>\n" +
+            "                    <term>Gatan 1</term>\n" +
+            "                    <listitem></listitem>\n" +
+            "                </varlistentry>\n" +
+            "                <varlistentry>\n" +
+            "                    <term>12345 Ankeborg</term>\n" +
+            "                    <listitem></listitem>\n" +
+            "                </varlistentry>\n" +
+            "\n" +
+            "        </variablelist>\n" +
+            "        <para>HEMLEVERANS:</para>\n" +
+            "        <variablelist>\n" +
+            "                <varlistentry>\n" +
+            "                    <term>Kalle Karlsson</term>\n" +
+            "                    <listitem></listitem>\n" +
+            "                </varlistentry>\n" +
+            "                <varlistentry>\n" +
+            "                    <term>Gatan 37</term>\n" +
+            "                    <listitem></listitem>\n" +
+            "                </varlistentry>\n" +
+            "                <varlistentry>\n" +
+            "                    <term>43213Bullerbyn</term>\n" +
+            "                    <listitem></listitem>\n" +
+            "                </varlistentry>\n" +
+            "\n" +
+            "        </variablelist>\n" +
+            "\n" +
+            "    </section>\n" +
+            "\n" +
+            "    </variablelist>\n" +
+            "</article>";
 }
