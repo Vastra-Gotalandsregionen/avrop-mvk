@@ -11,10 +11,8 @@ import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder.
 import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._0.GetMedicalSupplyPrescriptionsType;
 import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._0.rivtabp21.RegisterMedicalSupplyOrderResponderInterface;
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
+import se._1177.lmn.service.util.Util;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -47,28 +45,28 @@ public class LmnServiceImplTest {
         item1.setNextEarliestOrderDate(null);
         item1.setStatus(StatusEnum.AKTIV);
         item1.setNoOfRemainingOrders(1);
-        item1.setLastValidDate(getCalendar(new GregorianCalendar()));
+        item1.setLastValidDate(Util.toXmlGregorianCalendar(new GregorianCalendar()));
 
         // Not orderable, MAKULERAD
         PrescriptionItemType item2 = new PrescriptionItemType();
         item2.setNextEarliestOrderDate(null);
         item2.setStatus(StatusEnum.MAKULERAD);
         item2.setNoOfRemainingOrders(1);
-        item2.setLastValidDate(getCalendar(new GregorianCalendar()));
+        item2.setLastValidDate(Util.toXmlGregorianCalendar(new GregorianCalendar()));
 
         // Not orderable, UTGÅTT
         PrescriptionItemType item3 = new PrescriptionItemType();
         item3.setNextEarliestOrderDate(null);
         item3.setStatus(StatusEnum.UTGÅTT);
         item3.setNoOfRemainingOrders(1);
-        item3.setLastValidDate(getCalendar(new GregorianCalendar()));
+        item3.setLastValidDate(Util.toXmlGregorianCalendar(new GregorianCalendar()));
 
         // Not orderable, LEVERERAD
         PrescriptionItemType item4 = new PrescriptionItemType();
         item4.setNextEarliestOrderDate(null);
         item4.setStatus(StatusEnum.LEVERERAD);
         item4.setNoOfRemainingOrders(1);
-        item4.setLastValidDate(getCalendar(new GregorianCalendar()));
+        item4.setLastValidDate(Util.toXmlGregorianCalendar(new GregorianCalendar()));
 
         // Orderable (even though it's not really orderable (not yet) but still it's shown in the same table) - next
         // earliest order date in future
@@ -77,30 +75,30 @@ public class LmnServiceImplTest {
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.add(Calendar.DATE, 1);
 
-        item5.setNextEarliestOrderDate(getCalendar(calendar));
+        item5.setNextEarliestOrderDate(Util.toXmlGregorianCalendar(calendar));
         item5.setStatus(StatusEnum.AKTIV);
         item5.setNoOfRemainingOrders(1);
-        item5.setLastValidDate(getCalendar(new GregorianCalendar()));
+        item5.setLastValidDate(Util.toXmlGregorianCalendar(new GregorianCalendar()));
 
         // Not orderable - no remaining orders
         PrescriptionItemType item6 = new PrescriptionItemType();
         item6.setNextEarliestOrderDate(null);
         item6.setStatus(StatusEnum.AKTIV);
         item6.setNoOfRemainingOrders(0);
-        item6.setLastValidDate(getCalendar(new GregorianCalendar()));
+        item6.setLastValidDate(Util.toXmlGregorianCalendar(new GregorianCalendar()));
 
         // Not orderable - last valid date older than a year
         PrescriptionItemType item7 = new PrescriptionItemType();
         item7.setNextEarliestOrderDate(null);
         item7.setStatus(StatusEnum.AKTIV);
         item7.setNoOfRemainingOrders(1);
-        item7.setLastValidDate(getCalendar(new GregorianCalendar()));
+        item7.setLastValidDate(Util.toXmlGregorianCalendar(new GregorianCalendar()));
 
         calendar = new GregorianCalendar();
         calendar.add(Calendar.YEAR, -1);
         calendar.add(Calendar.DATE, -1);
 
-        item7.setLastValidDate(getCalendar(calendar));
+        item7.setLastValidDate(Util.toXmlGregorianCalendar(calendar));
 
 
         subjectOfCare.getPrescriptionItem().add(item1);
@@ -134,17 +132,4 @@ public class LmnServiceImplTest {
         assertEquals(5, holder.getNoLongerOrderable().size());
     }
 
-    private XMLGregorianCalendar getCalendar(GregorianCalendar calendar) {
-        XMLGregorianCalendar xmlGregorianCalendar = null;
-        DatatypeFactory datatypeFactory;
-        try {
-            datatypeFactory = DatatypeFactory.newInstance();
-        } catch (DatatypeConfigurationException e) {
-            throw new RuntimeException(e);
-        }
-
-        xmlGregorianCalendar = datatypeFactory.newXMLGregorianCalendar(calendar);
-
-        return xmlGregorianCalendar;
-    }
 }

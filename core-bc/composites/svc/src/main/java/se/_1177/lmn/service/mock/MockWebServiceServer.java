@@ -11,6 +11,7 @@ public class MockWebServiceServer {
     private static Endpoint endpoint2;
     private static Endpoint endpoint3;
     private static Endpoint endpoint4;
+    private static Endpoint endpoint5;
 
     public static void main(String[] args) {
         publishEndpoints(18080);
@@ -34,6 +35,10 @@ public class MockWebServiceServer {
         endpoint4 = Endpoint.publish(
                 endpointBase + "/GetUserProfile",
                 new MockGetUserProfileResponder());
+
+        endpoint5 = Endpoint.publish(
+                endpointBase + "/AddMessage",
+                new MockAddMessageResponder());
     }
 
     public static void shutdown() {

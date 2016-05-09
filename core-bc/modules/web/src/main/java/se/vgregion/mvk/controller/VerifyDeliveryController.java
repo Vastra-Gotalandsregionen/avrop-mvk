@@ -17,6 +17,7 @@ import riv.crm.selfservice.medicalsupply._0.ResultCodeEnum;
 import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.RegisterMedicalSupplyOrderResponseType;
 import se._1177.lmn.service.LmnService;
+import se._1177.lmn.service.MvkInboxService;
 import se.vgregion.mvk.controller.model.Cart;
 
 import javax.faces.application.FacesMessage;
@@ -53,6 +54,9 @@ public class VerifyDeliveryController {
     private UserProfileController userProfileController;
 
     @Autowired
+    private MvkInboxService mvkInboxService;
+
+    @Autowired
     private Cart cart;
 
     private Boolean orderSuccess;
@@ -66,9 +70,10 @@ public class VerifyDeliveryController {
 
         HashMap<PrescriptionItemType, DeliveryChoiceType> deliveryChoicePerItem = new HashMap<>();
 
+        Map<PrescriptionItemType, String> deliveryMethodForEachItem =
+                deliveryController.getDeliveryMethodForEachItem();
+
         for (PrescriptionItemType prescriptionItem : cart.getItemsInCart()) {
-            Map<PrescriptionItemType, String> deliveryMethodForEachItem =
-                    deliveryController.getDeliveryMethodForEachItem();
 
             DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
 
@@ -125,7 +130,7 @@ public class VerifyDeliveryController {
                             "item has been chosen. That shouldn't be possible so it's a bug.");
                 }
 
-                deliveryChoice.getDeliveryNotificationMethod().add(notificationMethod);
+                deliveryChoice.setDeliveryNotificationMethod(notificationMethod);
 
                 String notificationReceiver;
 

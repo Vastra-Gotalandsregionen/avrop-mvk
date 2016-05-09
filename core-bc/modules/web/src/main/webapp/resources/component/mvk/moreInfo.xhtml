@@ -35,7 +35,7 @@
                 <tr>
                     <td>#{item.noOfPackagesPerOrder}</td>
                     <td>#{item.noOfArticlesPerOrder}</td>
-                    <td>#{item.prescriber}</td>
+                    <td>#{item.prescriber.prescriberName}</td>
                     <td>
                         <h:outputText value="#{utilController.toDate(item.lastValidDate)}">
                             <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm"/>

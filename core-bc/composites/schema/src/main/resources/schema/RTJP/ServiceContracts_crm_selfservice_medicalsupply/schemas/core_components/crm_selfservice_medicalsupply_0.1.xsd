@@ -61,7 +61,7 @@
 	  <xs:element name="DeliveryMethod" type="tns:DeliveryMethodEnum" minOccurs='1' maxOccurs='1'/>
 	  <xs:element name="HomeDeliveryAdress" type="tns:AdressType" minOccurs='0' maxOccurs='1'/>
 	  <xs:element name="DeliveryPoint" type="tns:DeliveryPointType" minOccurs='0' maxOccurs='1'/>
-	  <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodEnum" minOccurs='0' maxOccurs='unbounded'/>
+	  <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodEnum" minOccurs='0' maxOccurs='1'/>
 	  <xs:element name="DeliveryNotificationReceiver" type="xs:string" minOccurs='0' maxOccurs='1'/>
       <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>

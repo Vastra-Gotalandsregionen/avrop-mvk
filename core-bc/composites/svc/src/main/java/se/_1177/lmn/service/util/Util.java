@@ -1,5 +1,7 @@
 package se._1177.lmn.service.util;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -20,6 +22,20 @@ public class Util {
         LocalDate aYearAgo = LocalDate.now().minusYears(1);
 
         return lastValidDate.isBefore(aYearAgo);
+    }
+
+    public static XMLGregorianCalendar toXmlGregorianCalendar(GregorianCalendar calendar) {
+        XMLGregorianCalendar xmlGregorianCalendar;
+        DatatypeFactory datatypeFactory;
+        try {
+            datatypeFactory = DatatypeFactory.newInstance();
+        } catch (DatatypeConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+
+        xmlGregorianCalendar = datatypeFactory.newXMLGregorianCalendar(calendar);
+
+        return xmlGregorianCalendar;
     }
 
 }

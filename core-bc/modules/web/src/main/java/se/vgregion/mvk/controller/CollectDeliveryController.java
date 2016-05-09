@@ -167,7 +167,7 @@ public class CollectDeliveryController {
             servicePointProvidersForItems.clear();
             servicePointProvidersForItems.add(provider);
         } else {
-            // We don't have any single provider satisfying all items. The user needs to chosse service point for the
+            // We don't have any single provider satisfying all items. The user needs to choose service point for the
             // provider of each item.
             for (PrescriptionItemType item : cart.getItemsInCart()) {
                 ServicePointProviderEnum servicePointProviderForItem = getServicePointProviderForItem(item);
@@ -186,12 +186,25 @@ public class CollectDeliveryController {
 
     public ServicePointProviderEnum getServicePointProviderForItem(PrescriptionItemType item) {
         ServicePointProviderEnum servicePointProviderForItem = null;
-        for (DeliveryAlternativeType deliveryAlternative : item.getDeliveryAlternative()) {
-            if (deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)) {
-                servicePointProviderForItem = deliveryAlternative.getServicePointProvider();
-                break;
+        Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> commonDenominator =
+                getPossibleCollectCombinationsFittingAllWithNotificationMethods();
+
+        if (commonDenominator.size() > 0) {
+            // We take a service provider which is available for all items.
+            servicePointProviderForItem = commonDenominator.keySet().iterator().next();
+        } else {
+
+            for (DeliveryAlternativeType deliveryAlternative : item.getDeliveryAlternative()) {
+                if (deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)) {
+
+                    // If no have no common denominator we just take one.
+                    servicePointProviderForItem = deliveryAlternative.getServicePointProvider();
+
+                    break;
+                }
             }
         }
+
         return servicePointProviderForItem;
     }
 
@@ -286,7 +299,8 @@ public class CollectDeliveryController {
         return preferredDeliveryNotificationMethod;
     }
 
-    public void setPreferredDeliveryNotificationMethod(DeliveryNotificationMethodEnum preferredDeliveryNotificationMethod) {
+    public void setPreferredDeliveryNotificationMethod(
+            DeliveryNotificationMethodEnum preferredDeliveryNotificationMethod) {
         this.preferredDeliveryNotificationMethod = preferredDeliveryNotificationMethod;
     }
 
@@ -318,20 +332,15 @@ public class CollectDeliveryController {
         return smsNumber;
     }
 
-    public void triggerInit() {
-        try {
-            Thread.sleep(15000);
-            System.out.println("Finished sleeping...");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+    public Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>>
+    getPossibleCollectCombinationsFittingAllWithNotificationMethods() {
 
-    public Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> getPossibleCollectCombinationsFittingAllWithNotificationMethods() {
         return possibleCollectCombinationsFittingAllWithNotificationMethods;
     }
 
-    public void setPossibleCollectCombinationsFittingAllCollectItems(Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> possibleDeliveryNotificationMethods) {
+    public void setPossibleCollectCombinationsFittingAllCollectItems(
+            Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> possibleDeliveryNotificationMethods) {
+
         this.possibleCollectCombinationsFittingAllWithNotificationMethods = possibleDeliveryNotificationMethods;
     }
 

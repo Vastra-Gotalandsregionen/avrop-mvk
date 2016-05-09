@@ -34,6 +34,10 @@
         <constructor-arg ref="getUserProfileResponderInterface"/>
     </bean>
 
+    <bean class="se._1177.lmn.service.MvkInboxService">
+        <constructor-arg ref="addMessageResponderInterface"/>
+    </bean>
+
     <jaxws:client id="getMedicalSupplyDeliveryPoints"
                   serviceClass="riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._0.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface"
                   address="${GetMedicalSupplyDeliveryPointsResponderInterface.address}" />
@@ -49,6 +53,10 @@
     <jaxws:client id="getUserProfileResponderInterface"
                   serviceClass="mvk.itintegration.userprofile.getuserprofile._2.rivtabp21.GetUserProfileResponderInterface"
                   address="${GetUserProfileResponderInterface.address}" />
+
+    <jaxws:client id="addMessageResponderInterface"
+                  serviceClass="mvk.crm.casemanagement.inbox.addmessage._2.rivtabp21.AddMessageResponderInterface"
+                  address="${AddMessageResponderInterface.address}" />
 
     <cxf:bus>
         <cxf:outInterceptors>

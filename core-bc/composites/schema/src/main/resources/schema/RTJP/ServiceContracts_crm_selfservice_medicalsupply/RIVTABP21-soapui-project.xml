@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project id="6f91c674-4d38-45fc-b5a5-daeab7e3f025" activeEnvironment="Default" name="crm_selfservice_medicalsupply" resourceRoot="" soapui-version="5.2.1" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="f3645a22-c2ba-40a0-a02b-8f2a15872355" wsaVersion="NONE" name="GetMedicalSupplyDeliveryPointsResponderBinding" type="wsdl" bindingName="{urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyDeliveryPoints:0:rivtabp21}GetMedicalSupplyDeliveryPointsResponderBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/TOOLS/vt-gen/MVK/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyDeliveryPointsInteraction/GetMedicalSupplyDeliveryPointsInteraction_0.1_RIVTABP21.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/C:/TOOLS/vt-gen/MVK/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyDeliveryPointsInteraction/GetMedicalSupplyDeliveryPointsInteraction_0.1_RIVTABP21.wsdl"><con:part><con:url>file:/C:/TOOLS/vt-gen/MVK/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyDeliveryPointsInteraction/GetMedicalSupplyDeliveryPointsInteraction_0.1_RIVTABP21.wsdl</con:url><con:content><![CDATA[<!--Licensed to the Apache Software Foundation (ASF) under one
+<con:soapui-project id="6f91c674-4d38-45fc-b5a5-daeab7e3f025" activeEnvironment="Default" name="crm_selfservice_medicalsupply" resourceRoot="" soapui-version="5.2.1" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="f3645a22-c2ba-40a0-a02b-8f2a15872355" wsaVersion="NONE" name="GetMedicalSupplyDeliveryPointsResponderBinding" type="wsdl" bindingName="{urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyDeliveryPoints:0:rivtabp21}GetMedicalSupplyDeliveryPointsResponderBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/TOOLS/vt-gen/MVK/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyDeliveryPointsInteraction/GetMedicalSupplyDeliveryPointsInteraction_0.1_RIVTABP21.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/C:/TOOLS/vt-gen/MVK/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyDeliveryPointsInteraction/GetMedicalSupplyDeliveryPointsInteraction_0.1_RIVTABP21.wsdl"><con:part><con:url>file:/C:/TOOLS/vt-gen/MVK/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyDeliveryPointsInteraction/GetMedicalSupplyDeliveryPointsInteraction_0.1_RIVTABP21.wsdl</con:url><con:content><![CDATA[<!--Licensed to the Apache Software Foundation (ASF) under one
  or more contributor license agreements. See the NOTICE file
  distributed with this work for additional information
  regarding copyright ownership. VGR licenses this file
@@ -94,7 +94,7 @@
   </xs:complexType>
   <xs:complexType name="GetMedicalSupplyDeliveryPointsResponseType">
     <xs:sequence>
-      <xs:element name="DeliveryPointList" type="core:DeliveryPointListTyp" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="DeliveryPoint" type="core:DeliveryPointType" minOccurs="0" maxOccurs="10"/>
       <xs:element name="ResultCode" type="core:ResultCodeEnum"/>
       <xs:element name="comment" type="xs:string" minOccurs="0"/>
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
@@ -117,126 +117,7 @@
  specific language governing permissions and limitations
  under the License.-->
 <xs:schema targetNamespace="urn:riv:crm:selfservice:medicalsupply:0" elementFormDefault="qualified" attributeFormDefault="unqualified" version="0.1" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:riv:crm:selfservice:medicalsupply:0">
-  <xs:complexType name="SubjectOfCareTyp">
-    <xs:sequence>
-      <xs:element name="SubjectOfCareId" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="PrescriptionItemList" type="tns:PrescriptionItemListTyp" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="OrderList" type="tns:OrderListTyp" minOccurs="0" maxOccurs="1"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="PrescriptionItemListTyp">
-    <xs:sequence>
-      <xs:element name="PrescriptionItem" type="tns:PrescriptionItemTyp" minOccurs="1" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="OrderListTyp">
-    <xs:sequence>
-      <xs:element name="Order" type="tns:OrderTyp" minOccurs="1" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="PrescriptionItemTyp">
-    <xs:sequence>
-      <xs:element name="PrescriptionItemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="Article" type="tns:ArticleTyp" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="NoOfOrders" type="xs:int" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="NoOfRemainingOrders" type="xs:int" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="NoOfArticlesPerOrder" type="xs:int" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="NoOfPackagesPerOrder" type="xs:int" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="SubArticleList" type="tns:SubArticleListTyp" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="DeliveryAlternativeList" type="tns:DeliveryAlternativeListTyp" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="NextEarliestOrderDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="PrescriptionId" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="Source" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="Prescriber" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="PrescribingOrganization" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="LastValidDate" type="xs:date" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="Status" type="tns:StatusEnum" minOccurs="1" maxOccurs="1"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="OrderTyp">
-    <xs:sequence>
-      <xs:element name="OrderItemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="PrescriptionItemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveryAlternative" type="tns:DeliveryChoiceTyp" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="Article" type="tns:ArticleTyp" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="NoOfArticles" type="xs:int" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="NoOfPcs" type="xs:int" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="OrderDate" type="xs:date" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveredDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ArticleTyp">
-    <xs:sequence>
-      <xs:element name="ArticleNo" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="ArticleName" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="PackageSize" type="xs:int" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="PackageSizeUnit" type="xs:string" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="ProductArea" type="tns:ProductAreaEnum" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="IsOrderable" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="SubArticleListTyp">
-    <xs:sequence>
-      <xs:element name="SubArticle" type="tns:ArticleTyp" minOccurs="1" maxOccurs="unbounded"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="DeliveryPointListTyp">
-    <xs:sequence>
-      <xs:element name="DeliveryPoint" type="tns:DeliveryPointTyp" minOccurs="1" maxOccurs="10"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="DeliveryPointTyp">
-    <xs:sequence>
-      <xs:element name="DeliveryPointId" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveryPointName" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveryPointAddress" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveryPointPostalCode" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveryPointCity" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="CountryCode" type="tns:CountryCodeEnum" minOccurs="1" maxOccurs="1"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="IsClosest" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="DeliveryAlternativeListTyp">
-    <xs:sequence>
-      <xs:element name="SubArticle" type="tns:ArticleTyp" minOccurs="1" maxOccurs="unbounded"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="DeliveryAlternativeTyp">
-    <xs:sequence>
-      <xs:element name="DeliveryMethodId" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveryMethodName" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveryMethod" type="tns:DeliveryMethodEnum" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="ServicePointProvider" type="tns:ServicePointProviderEnum" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="AllowChioceOfDeliveryPoints" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodListTyp" minOccurs="0" maxOccurs="1"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="DeliveryNotificationMethodListTyp">
-    <xs:sequence>
-      <xs:element name="DeliveryMethod" type="tns:DeliveryMethodEnum" minOccurs="1" maxOccurs="unbounded"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="DeliveryChoiceTyp">
-    <xs:sequence>
-      <xs:element name="DeliveryMethodId" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveryMethod" type="tns:DeliveryMethodEnum" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="HomeDeliveryAdress" type="tns:AdressTyp" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="DeliveryPoint" type="tns:DeliveryPointTyp" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodEnum" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="DeliveryNotificationReceiver" type="xs:string" minOccurs="0" maxOccurs="1"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="AdressTyp">
+  <xs:complexType name="AdressType">
     <xs:sequence>
       <xs:element name="Reciever" type="xs:string" minOccurs="1" maxOccurs="1"/>
       <xs:element name="CareOfAddress" type="xs:string" minOccurs="0" maxOccurs="1"/>
@@ -248,7 +129,40 @@
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="DeliveryPointTyp">
+  <xs:complexType name="ArticleType">
+    <xs:sequence>
+      <xs:element name="ArticleNo" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="ArticleName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PackageSize" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PackageSizeUnit" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="ProductArea" type="tns:ProductAreaEnum" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="IsOrderable" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DeliveryAlternativeType">
+    <xs:sequence>
+      <xs:element name="DeliveryMethodId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryMethodName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryMethod" type="tns:DeliveryMethodEnum" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="ServicePointProvider" type="tns:ServicePointProviderEnum" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="AllowChioceOfDeliveryPoints" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodEnum" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DeliveryChoiceType">
+    <xs:sequence>
+      <xs:element name="DeliveryMethodId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryMethod" type="tns:DeliveryMethodEnum" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="HomeDeliveryAdress" type="tns:AdressType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="DeliveryPoint" type="tns:DeliveryPointType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodEnum" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="DeliveryNotificationReceiver" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DeliveryPointType">
     <xs:sequence>
       <xs:element name="DeliveryPointId" type="xs:string" minOccurs="1" maxOccurs="1"/>
       <xs:element name="DeliveryPointName" type="xs:string" minOccurs="1" maxOccurs="1"/>
@@ -257,14 +171,87 @@
       <xs:element name="DeliveryPointCity" type="xs:string" minOccurs="1" maxOccurs="1"/>
       <xs:element name="CountryCode" type="tns:CountryCodeEnum" minOccurs="1" maxOccurs="1"/>
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="IsClosest" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:simpleType name="StatusEnum">
+  <xs:complexType name="OrderItemType">
+    <xs:sequence>
+      <xs:element name="OrderItemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PrescriptionItemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryChoice" type="tns:DeliveryChoiceType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Article" type="tns:ArticleType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfArticles" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfPcs" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="OrderDate" type="xs:date" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveredDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OrderRowType">
+    <xs:sequence>
+      <xs:element name="PrescriptionId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PrescriptionItemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryChoice" type="tns:DeliveryChoiceType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Article" type="tns:ArticleType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfPackages" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfPcs" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Source" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OrderType">
+    <xs:sequence>
+      <xs:element name="SubjectOfCareId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Orderer" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="OrderByDelegate" default="false" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="OrderRow" type="tns:OrderRowType" minOccurs="1" maxOccurs="unbounded"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PrescriptionItemType">
+    <xs:sequence>
+      <xs:element name="PrescriptionItemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Article" type="tns:ArticleType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfOrders" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfRemainingOrders" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfArticlesPerOrder" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfPackagesPerOrder" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="SubArticle" type="tns:ArticleType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="DeliveryAlternative" type="tns:DeliveryAlternativeType" minOccurs="1" maxOccurs="unbounded"/>
+      <xs:element name="NextEarliestOrderDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="PrescriptionId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Source" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Prescriber" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PrescribingOrganization" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="LastValidDate" type="xs:date" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Status" type="tns:StatusEnum" minOccurs="1" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SubjectOfCareType">
+    <xs:sequence>
+      <xs:element name="SubjectOfCareId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PrescriptionItem" type="tns:PrescriptionItemType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="OrderItem" type="tns:OrderItemType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="CountryCodeEnum">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="AKTIV"/>
-      <xs:enumeration value="MAKULERAD"/>
-      <xs:enumeration value="LEVERERAD"/>
-      <xs:enumeration value="UTGÅTT"/>
+      <xs:enumeration value="SE"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DeliveryMethodEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="UTLÄMNINGSSTÄLLE"/>
+      <xs:enumeration value="HEMLEVERANS"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DeliveryNotificationMethodEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="E-POST"/>
+      <xs:enumeration value="BREV"/>
+      <xs:enumeration value="SMS"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="ProductAreaEnum">
@@ -275,10 +262,11 @@
       <xs:enumeration value="SÄRNÄR"/>
     </xs:restriction>
   </xs:simpleType>
-  <xs:simpleType name="DeliveryMethodEnum">
+  <xs:simpleType name="ResultCodeEnum">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="UTLÄMNINGSSTÄLLE"/>
-      <xs:enumeration value="HEMLEVERANS"/>
+      <xs:enumeration value="OK"/>
+      <xs:enumeration value="ERROR"/>
+      <xs:enumeration value="INFO"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="ServicePointProviderEnum">
@@ -289,23 +277,12 @@
       <xs:enumeration value="SCHENKER"/>
     </xs:restriction>
   </xs:simpleType>
-  <xs:simpleType name="DeliveryNotificationMethodEnum">
+  <xs:simpleType name="StatusEnum">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="E-POST"/>
-      <xs:enumeration value="BREV"/>
-      <xs:enumeration value="SMS"/>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:simpleType name="CountryCodeEnum">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="SE"/>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:simpleType name="ResultCodeEnum">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="OK"/>
-      <xs:enumeration value="ERROR"/>
-      <xs:enumeration value="INFO"/>
+      <xs:enumeration value="AKTIV"/>
+      <xs:enumeration value="MAKULERAD"/>
+      <xs:enumeration value="LEVERERAD"/>
+      <xs:enumeration value="UTGÅTT"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\C:\TOOLS\vt-gen\MVK\ServiceContracts_crm_selfservice_medicalsupply\schemas\core_components\itintegration_registry_1.0.xsd</con:url><con:content><![CDATA[<xs:schema targetNamespace="urn:riv:itintegration:registry:1" elementFormDefault="qualified" version="1.0" xmlns="urn:riv:itintegration:registry:1" xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -337,9 +314,9 @@
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
-</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://tempuri.org</con:endpoint></con:endpoints><con:operation id="96e53bf4-9832-41d7-a7a8-801f69f2d2f2" isOneWay="false" action="urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyDeliveryPointsResponder:0:GetMedicalSupplyDeliveryPoints" name="GetMedicalSupplyDeliveryPoints" bindingOperationName="GetMedicalSupplyDeliveryPoints" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="a7ee8c6d-60ac-4f8d-8c23-ee2c76148365" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://tempuri.org</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyDeliveryPointsResponder:0">\r
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://tempuri.org</con:endpoint><con:endpoint>https://rtjptest.vgregion.se/vp/crm/selfservice/medicalsupply/GetMedicalSupplyDeliveryPoints/0/rivtabp21</con:endpoint></con:endpoints><con:operation id="96e53bf4-9832-41d7-a7a8-801f69f2d2f2" isOneWay="false" action="urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyDeliveryPointsResponder:0:GetMedicalSupplyDeliveryPoints" name="GetMedicalSupplyDeliveryPoints" bindingOperationName="GetMedicalSupplyDeliveryPoints" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="a7ee8c6d-60ac-4f8d-8c23-ee2c76148365" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://rtjptest.vgregion.se/vp/crm/selfservice/medicalsupply/GetMedicalSupplyDeliveryPoints/0/rivtabp21</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyDeliveryPointsResponder:0">\r
    <soapenv:Header>\r
-      <urn:LogicalAddress>?</urn:LogicalAddress>\r
+      <urn:LogicalAddress>SE2321000131-E000000000001</urn:LogicalAddress>\r
    </soapenv:Header>\r
    <soapenv:Body>\r
       <urn1:GetMedicalSupplyDeliveryPoints>\r
@@ -442,7 +419,7 @@
   </xs:complexType>
   <xs:complexType name="GetMedicalSupplyPrescriptionsResponseType">
     <xs:sequence>
-      <xs:element name="SubjectOfCareTyp" type="core:SubjectOfCareTyp" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="SubjectOfCareType" type="core:SubjectOfCareType" minOccurs="0" maxOccurs="1"/>
       <xs:element name="ResultCode" type="core:ResultCodeEnum"/>
       <xs:element name="comment" type="xs:string" minOccurs="0"/>
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
@@ -465,126 +442,7 @@
  specific language governing permissions and limitations
  under the License.-->
 <xs:schema targetNamespace="urn:riv:crm:selfservice:medicalsupply:0" elementFormDefault="qualified" attributeFormDefault="unqualified" version="0.1" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:riv:crm:selfservice:medicalsupply:0">
-  <xs:complexType name="SubjectOfCareTyp">
-    <xs:sequence>
-      <xs:element name="SubjectOfCareId" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="PrescriptionItemList" type="tns:PrescriptionItemListTyp" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="OrderList" type="tns:OrderListTyp" minOccurs="0" maxOccurs="1"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="PrescriptionItemListTyp">
-    <xs:sequence>
-      <xs:element name="PrescriptionItem" type="tns:PrescriptionItemTyp" minOccurs="1" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="OrderListTyp">
-    <xs:sequence>
-      <xs:element name="Order" type="tns:OrderTyp" minOccurs="1" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="PrescriptionItemTyp">
-    <xs:sequence>
-      <xs:element name="PrescriptionItemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="Article" type="tns:ArticleTyp" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="NoOfOrders" type="xs:int" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="NoOfRemainingOrders" type="xs:int" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="NoOfArticlesPerOrder" type="xs:int" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="NoOfPackagesPerOrder" type="xs:int" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="SubArticleList" type="tns:SubArticleListTyp" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="DeliveryAlternativeList" type="tns:DeliveryAlternativeListTyp" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="NextEarliestOrderDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="PrescriptionId" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="Source" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="Prescriber" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="PrescribingOrganization" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="LastValidDate" type="xs:date" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="Status" type="tns:StatusEnum" minOccurs="1" maxOccurs="1"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="OrderTyp">
-    <xs:sequence>
-      <xs:element name="OrderItemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="PrescriptionItemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveryAlternative" type="tns:DeliveryChoiceTyp" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="Article" type="tns:ArticleTyp" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="NoOfArticles" type="xs:int" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="NoOfPcs" type="xs:int" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="OrderDate" type="xs:date" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveredDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="ArticleTyp">
-    <xs:sequence>
-      <xs:element name="ArticleNo" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="ArticleName" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="PackageSize" type="xs:int" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="PackageSizeUnit" type="xs:string" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="ProductArea" type="tns:ProductAreaEnum" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="IsOrderable" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="SubArticleListTyp">
-    <xs:sequence>
-      <xs:element name="SubArticle" type="tns:ArticleTyp" minOccurs="1" maxOccurs="unbounded"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="DeliveryPointListTyp">
-    <xs:sequence>
-      <xs:element name="DeliveryPoint" type="tns:DeliveryPointTyp" minOccurs="1" maxOccurs="10"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="DeliveryPointTyp">
-    <xs:sequence>
-      <xs:element name="DeliveryPointId" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveryPointName" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveryPointAddress" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveryPointPostalCode" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveryPointCity" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="CountryCode" type="tns:CountryCodeEnum" minOccurs="1" maxOccurs="1"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="IsClosest" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="DeliveryAlternativeListTyp">
-    <xs:sequence>
-      <xs:element name="SubArticle" type="tns:ArticleTyp" minOccurs="1" maxOccurs="unbounded"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="DeliveryAlternativeTyp">
-    <xs:sequence>
-      <xs:element name="DeliveryMethodId" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveryMethodName" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveryMethod" type="tns:DeliveryMethodEnum" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="ServicePointProvider" type="tns:ServicePointProviderEnum" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="AllowChioceOfDeliveryPoints" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodListTyp" minOccurs="0" maxOccurs="1"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="DeliveryNotificationMethodListTyp">
-    <xs:sequence>
-      <xs:element name="DeliveryMethod" type="tns:DeliveryMethodEnum" minOccurs="1" maxOccurs="unbounded"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="DeliveryChoiceTyp">
-    <xs:sequence>
-      <xs:element name="DeliveryMethodId" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="DeliveryMethod" type="tns:DeliveryMethodEnum" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="HomeDeliveryAdress" type="tns:AdressTyp" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="DeliveryPoint" type="tns:DeliveryPointTyp" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodEnum" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="DeliveryNotificationReceiver" type="xs:string" minOccurs="0" maxOccurs="1"/>
-      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="AdressTyp">
+  <xs:complexType name="AdressType">
     <xs:sequence>
       <xs:element name="Reciever" type="xs:string" minOccurs="1" maxOccurs="1"/>
       <xs:element name="CareOfAddress" type="xs:string" minOccurs="0" maxOccurs="1"/>
@@ -596,7 +454,40 @@
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="DeliveryPointTyp">
+  <xs:complexType name="ArticleType">
+    <xs:sequence>
+      <xs:element name="ArticleNo" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="ArticleName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PackageSize" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PackageSizeUnit" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="ProductArea" type="tns:ProductAreaEnum" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="IsOrderable" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DeliveryAlternativeType">
+    <xs:sequence>
+      <xs:element name="DeliveryMethodId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryMethodName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryMethod" type="tns:DeliveryMethodEnum" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="ServicePointProvider" type="tns:ServicePointProviderEnum" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="AllowChioceOfDeliveryPoints" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodEnum" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DeliveryChoiceType">
+    <xs:sequence>
+      <xs:element name="DeliveryMethodId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryMethod" type="tns:DeliveryMethodEnum" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="HomeDeliveryAdress" type="tns:AdressType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="DeliveryPoint" type="tns:DeliveryPointType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodEnum" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="DeliveryNotificationReceiver" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DeliveryPointType">
     <xs:sequence>
       <xs:element name="DeliveryPointId" type="xs:string" minOccurs="1" maxOccurs="1"/>
       <xs:element name="DeliveryPointName" type="xs:string" minOccurs="1" maxOccurs="1"/>
@@ -607,12 +498,100 @@
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:simpleType name="StatusEnum">
+  <xs:complexType name="OrderItemType">
+    <xs:sequence>
+      <xs:element name="OrderItemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PrescriptionItemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryChoice" type="tns:DeliveryChoiceType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Article" type="tns:ArticleType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfArticles" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfPcs" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="OrderDate" type="xs:date" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveredDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OrderRowType">
+    <xs:sequence>
+      <xs:element name="PrescriptionId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PrescriptionItemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryChoice" type="tns:DeliveryChoiceType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Article" type="tns:ArticleType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfPackages" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfPcs" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Source" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OrderType">
+    <xs:sequence>
+      <xs:element name="SubjectOfCareId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Orderer" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="OrderByDelegate" default="false" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="OrderRow" type="tns:OrderRowType" minOccurs="1" maxOccurs="unbounded"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PrescriberType">
+    <xs:sequence>
+      <xs:element name="PrescriberId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PrescriberName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PrescriberTitle" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="PrescriberCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PrescribingOrganizationType">
+    <xs:sequence>
+      <xs:element name="PrescribingOrganizationId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PrescribingOrganizationName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PrescriptionItemType">
+    <xs:sequence>
+      <xs:element name="PrescriptionItemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Article" type="tns:ArticleType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfOrders" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfRemainingOrders" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfArticlesPerOrder" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfPackagesPerOrder" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="SubArticle" type="tns:ArticleType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="DeliveryAlternative" type="tns:DeliveryAlternativeType" minOccurs="1" maxOccurs="unbounded"/>
+      <xs:element name="NextEarliestOrderDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="PrescriptionId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Source" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Prescriber" type="tns:PrescriberType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PrescribingOrganization" type="tns:PrescribingOrganizationType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="LastValidDate" type="xs:date" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Status" type="tns:StatusEnum" minOccurs="1" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SubjectOfCareType">
+    <xs:sequence>
+      <xs:element name="SubjectOfCareId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PrescriptionItem" type="tns:PrescriptionItemType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="OrderItem" type="tns:OrderItemType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="CountryCodeEnum">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="AKTIV"/>
-      <xs:enumeration value="MAKULERAD"/>
-      <xs:enumeration value="LEVERERAD"/>
-      <xs:enumeration value="UTGÅTT"/>
+      <xs:enumeration value="SE"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DeliveryMethodEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="UTLÄMNINGSSTÄLLE"/>
+      <xs:enumeration value="HEMLEVERANS"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DeliveryNotificationMethodEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="E-POST"/>
+      <xs:enumeration value="BREV"/>
+      <xs:enumeration value="SMS"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="ProductAreaEnum">
@@ -623,10 +602,11 @@
       <xs:enumeration value="SÄRNÄR"/>
     </xs:restriction>
   </xs:simpleType>
-  <xs:simpleType name="DeliveryMethodEnum">
+  <xs:simpleType name="ResultCodeEnum">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="UTLÄMNINGSSTÄLLE"/>
-      <xs:enumeration value="HEMLEVERANS"/>
+      <xs:enumeration value="OK"/>
+      <xs:enumeration value="ERROR"/>
+      <xs:enumeration value="INFO"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="ServicePointProviderEnum">
@@ -637,23 +617,12 @@
       <xs:enumeration value="SCHENKER"/>
     </xs:restriction>
   </xs:simpleType>
-  <xs:simpleType name="DeliveryNotificationMethodEnum">
+  <xs:simpleType name="StatusEnum">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="E-POST"/>
-      <xs:enumeration value="BREV"/>
-      <xs:enumeration value="SMS"/>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:simpleType name="CountryCodeEnum">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="SE"/>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:simpleType name="ResultCodeEnum">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="OK"/>
-      <xs:enumeration value="ERROR"/>
-      <xs:enumeration value="INFO"/>
+      <xs:enumeration value="AKTIV"/>
+      <xs:enumeration value="MAKULERAD"/>
+      <xs:enumeration value="LEVERERAD"/>
+      <xs:enumeration value="UTGÅTT"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\C:\TOOLS\vt-gen\MVK\ServiceContracts_crm_selfservice_medicalsupply\schemas\core_components\itintegration_registry_1.0.xsd</con:url><con:content><![CDATA[<xs:schema targetNamespace="urn:riv:itintegration:registry:1" elementFormDefault="qualified" version="1.0" xmlns="urn:riv:itintegration:registry:1" xmlns:xs="http://www.w3.org/2001/XMLSchema">
@@ -685,9 +654,9 @@
       <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
-</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://tempuri.org</con:endpoint></con:endpoints><con:operation id="614866d0-442b-444e-8eed-01194d51249a" isOneWay="false" action="urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyPrescriptionsResponder:0:GetMedicalSupplyPrescriptions" name="GetMedicalSupplyPrescriptions" bindingOperationName="GetMedicalSupplyPrescriptions" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="658b3421-b24f-4356-8dd7-70d46d6fd12f" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://tempuri.org</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyPrescriptionsResponder:0">\r
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://tempuri.org</con:endpoint></con:endpoints><con:operation id="614866d0-442b-444e-8eed-01194d51249a" isOneWay="false" action="urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyPrescriptionsResponder:0:GetMedicalSupplyPrescriptions" name="GetMedicalSupplyPrescriptions" bindingOperationName="GetMedicalSupplyPrescriptions" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="658b3421-b24f-4356-8dd7-70d46d6fd12f" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://rtjptest.vgregion.se/vp/crm/selfservice/medicalsupply/GetMedicalSupplyPrescriptions/0/rivtabp21</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyPrescriptionsResponder:0">\r
    <soapenv:Header>\r
-      <urn:LogicalAddress>?</urn:LogicalAddress>\r
+      <urn:LogicalAddress>SE2321000131-E000000000001</urn:LogicalAddress>\r
    </soapenv:Header>\r
    <soapenv:Body>\r
       <urn1:GetMedicalSupplyPrescriptions>\r
@@ -695,25 +664,405 @@
          <!--You may enter ANY elements at this point-->\r
       </urn1:GetMedicalSupplyPrescriptions>\r
    </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyPrescriptionsResponder:0:GetMedicalSupplyPrescriptions"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:mockService id="9d94f5c4-cc46-40a4-ad65-0875249430c2" port="8080" path="/" host="W254129" name="MockService 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties/><con:mockOperation name="GetMedicalSupplyDeliveryPoints" id="93984964-0dd0-40fe-993a-bea595f17719" interface="GetMedicalSupplyDeliveryPointsResponderBinding" operation="GetMedicalSupplyDeliveryPoints"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:response name="Response 1" id="6e2b551a-efca-48a2-91dc-84aa3bfd433e" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyDeliveryPointsResponder:0" xmlns:urn1="urn:riv:crm:selfservice:medicalsupply:0">
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyPrescriptionsResponder:0:GetMedicalSupplyPrescriptions"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="6d4040e6-5214-497a-bc1b-739596891925" wsaVersion="NONE" name="RegisterMedicalSupplyOrderResponderBinding" type="wsdl" bindingName="{urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrder:0:rivtabp21}RegisterMedicalSupplyOrderResponderBinding" soapVersion="1_1" anonymous="optional" definition="file:/C:/TOOLS/vt-gen/MVK/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/RegisterMedicalSupplyOrderInteraction/RegisterMedicalSupplyOrderInteraction_0.1_RIVTABP21.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/C:/TOOLS/vt-gen/MVK/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/RegisterMedicalSupplyOrderInteraction/RegisterMedicalSupplyOrderInteraction_0.1_RIVTABP21.wsdl"><con:part><con:url>file:/C:/TOOLS/vt-gen/MVK/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/RegisterMedicalSupplyOrderInteraction/RegisterMedicalSupplyOrderInteraction_0.1_RIVTABP21.wsdl</con:url><con:content><![CDATA[<!--Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements. See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership. VGR licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License. You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied. See the License for the
+ specific language governing permissions and limitations
+ under the License.-->
+<wsdl:definitions name="RegisterMedicalSupplyOrderInteraction" targetNamespace="urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrder:0:rivtabp21" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tjsr="urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrderResponder:0" xmlns:tjsi="urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrderInitiator:0" xmlns:tns="urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrder:0:rivtabp21" xmlns:itr="urn:riv:itintegration:registry:1">
+  <xs:annotation>
+    <xs:documentation>Tjänsteinteraktionens namn: RegisterMedicalSupplyOrderInteraction
+			 Beskrivning: 
+			   Tjänsten används för att genomföra beställningen av läkemedelsnära produkter mot underliggande källsystem. Svaret är en lista på skapade uttagsrader eller ett fel om en eller flera uttagsrader inte kunde skapas
+			 Revisioner: 
+			 Tjänstedomän: crm:selfservice:medicalsupply
+			 Tjänsteinteraktionstyp: Fråga-Svar
+			 WS-profil: RIVTABP21
+			 Förvaltas av: VGR</xs:documentation>
+  </xs:annotation>
+  <wsdl:types>
+    <xs:schema targetNamespace="urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrder:0:rivtabp21">
+      <xs:import schemaLocation="RegisterMedicalSupplyOrderResponder_0.1.xsd" namespace="urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrderResponder:0"/>
+      <xs:import schemaLocation="../../core_components/itintegration_registry_1.0.xsd" namespace="urn:riv:itintegration:registry:1"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="RegisterMedicalSupplyOrderRequest">
+    <wsdl:part name="LogicalAddress" element="itr:LogicalAddress">
+      <wsdl:documentation>The organisation number of the receiving insurance institution</wsdl:documentation>
+    </wsdl:part>
+    <wsdl:part name="parameters" element="tjsr:RegisterMedicalSupplyOrder"/>
+  </wsdl:message>
+  <wsdl:message name="RegisterMedicalSupplyOrderResponse">
+    <wsdl:part name="parameters" element="tjsr:RegisterMedicalSupplyOrderResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="RegisterMedicalSupplyOrderResponderInterface">
+    <wsdl:operation name="RegisterMedicalSupplyOrder">
+      <wsdl:input message="tns:RegisterMedicalSupplyOrderRequest"/>
+      <wsdl:output message="tns:RegisterMedicalSupplyOrderResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="RegisterMedicalSupplyOrderResponderBinding" type="tns:RegisterMedicalSupplyOrderResponderInterface">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="RegisterMedicalSupplyOrder">
+      <soap:operation soapAction="urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrderResponder:0:RegisterMedicalSupplyOrder" style="document"/>
+      <wsdl:input>
+        <soap:header use="literal" message="tns:RegisterMedicalSupplyOrderRequest" part="LogicalAddress"/>
+        <soap:body use="literal" parts="parameters"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RegisterMedicalSupplyOrderResponderService">
+    <wsdl:port name="RegisterMedicalSupplyOrderResponderPort" binding="tns:RegisterMedicalSupplyOrderResponderBinding">
+      <soap:address location="http://tempuri.org"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part><con:part><con:url>file:\C:\TOOLS\vt-gen\MVK\ServiceContracts_crm_selfservice_medicalsupply\schemas\interactions\RegisterMedicalSupplyOrderInteraction\RegisterMedicalSupplyOrderResponder_0.1.xsd</con:url><con:content><![CDATA[<!--Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements. See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership. VGR licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License. You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied. See the License for the
+ specific language governing permissions and limitations
+ under the License.-->
+<xs:schema targetNamespace="urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrderResponder:0" elementFormDefault="qualified" attributeFormDefault="unqualified" version="0.1" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrderResponder:0" xmlns:core="urn:riv:crm:selfservice:medicalsupply:0">
+  <xs:import schemaLocation="../../core_components/crm_selfservice_medicalsupply_0.1.xsd" namespace="urn:riv:crm:selfservice:medicalsupply:0"/>
+  <xs:element name="RegisterMedicalSupplyOrder" type="tns:RegisterMedicalSupplyOrderType"/>
+  <xs:element name="RegisterMedicalSupplyOrderResponse" type="tns:RegisterMedicalSupplyOrderResponseType"/>
+  <xs:complexType name="RegisterMedicalSupplyOrderType">
+    <xs:sequence>
+      <xs:element name="Order" type="core:OrderType" minOccurs="1" maxOccurs="unbounded"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RegisterMedicalSupplyOrderResponseType">
+    <xs:sequence>
+      <xs:element name="Order" type="core:OrderItemType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="ResultCode" type="core:ResultCodeEnum"/>
+      <xs:element name="comment" type="xs:string" minOccurs="0"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\C:\TOOLS\vt-gen\MVK\ServiceContracts_crm_selfservice_medicalsupply\schemas\core_components\crm_selfservice_medicalsupply_0.1.xsd</con:url><con:content><![CDATA[<!--Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements. See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership. VGR licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License. You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied. See the License for the
+ specific language governing permissions and limitations
+ under the License.-->
+<xs:schema targetNamespace="urn:riv:crm:selfservice:medicalsupply:0" elementFormDefault="qualified" attributeFormDefault="unqualified" version="0.1" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="urn:riv:crm:selfservice:medicalsupply:0">
+  <xs:complexType name="AdressType">
+    <xs:sequence>
+      <xs:element name="Reciever" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="CareOfAddress" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Street" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PostalCode" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="City" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DoorCode" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="Phone" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArticleType">
+    <xs:sequence>
+      <xs:element name="ArticleNo" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="ArticleName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PackageSize" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PackageSizeUnit" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="ProductArea" type="tns:ProductAreaEnum" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="IsOrderable" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DeliveryAlternativeType">
+    <xs:sequence>
+      <xs:element name="DeliveryMethodId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryMethodName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryMethod" type="tns:DeliveryMethodEnum" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="ServicePointProvider" type="tns:ServicePointProviderEnum" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="AllowChioceOfDeliveryPoints" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodEnum" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DeliveryChoiceType">
+    <xs:sequence>
+      <xs:element name="DeliveryMethodId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryMethod" type="tns:DeliveryMethodEnum" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="HomeDeliveryAdress" type="tns:AdressType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="DeliveryPoint" type="tns:DeliveryPointType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodEnum" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="DeliveryNotificationReceiver" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DeliveryPointType">
+    <xs:sequence>
+      <xs:element name="DeliveryPointId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryPointName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryPointAddress" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryPointPostalCode" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryPointCity" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="CountryCode" type="tns:CountryCodeEnum" minOccurs="1" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="IsClosest" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OrderItemType">
+    <xs:sequence>
+      <xs:element name="OrderItemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PrescriptionItemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryChoice" type="tns:DeliveryChoiceType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Article" type="tns:ArticleType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfArticles" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfPcs" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="OrderDate" type="xs:date" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveredDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OrderRowType">
+    <xs:sequence>
+      <xs:element name="PrescriptionId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PrescriptionItemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="DeliveryChoice" type="tns:DeliveryChoiceType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Article" type="tns:ArticleType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfPackages" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfPcs" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Source" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OrderType">
+    <xs:sequence>
+      <xs:element name="SubjectOfCareId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Orderer" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="OrderByDelegate" default="false" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="OrderRow" type="tns:OrderRowType" minOccurs="1" maxOccurs="unbounded"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="PrescriptionItemType">
+    <xs:sequence>
+      <xs:element name="PrescriptionItemId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Article" type="tns:ArticleType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfOrders" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfRemainingOrders" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfArticlesPerOrder" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="NoOfPackagesPerOrder" type="xs:int" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="SubArticle" type="tns:ArticleType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="DeliveryAlternative" type="tns:DeliveryAlternativeType" minOccurs="1" maxOccurs="unbounded"/>
+      <xs:element name="NextEarliestOrderDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="PrescriptionId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Source" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Prescriber" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PrescribingOrganization" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="LastValidDate" type="xs:date" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="Status" type="tns:StatusEnum" minOccurs="1" maxOccurs="1"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SubjectOfCareType">
+    <xs:sequence>
+      <xs:element name="SubjectOfCareId" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="PrescriptionItem" type="tns:PrescriptionItemType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="OrderItem" type="tns:OrderItemType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="CountryCodeEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SE"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DeliveryMethodEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="UTLÄMNINGSSTÄLLE"/>
+      <xs:enumeration value="HEMLEVERANS"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="DeliveryNotificationMethodEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="E-POST"/>
+      <xs:enumeration value="BREV"/>
+      <xs:enumeration value="SMS"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ProductAreaEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="STOMI"/>
+      <xs:enumeration value="DIABETES"/>
+      <xs:enumeration value="INKONTINENS"/>
+      <xs:enumeration value="SÄRNÄR"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ResultCodeEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="OK"/>
+      <xs:enumeration value="ERROR"/>
+      <xs:enumeration value="INFO"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="ServicePointProviderEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="INGEN"/>
+      <xs:enumeration value="DHL"/>
+      <xs:enumeration value="POSTNORD"/>
+      <xs:enumeration value="SCHENKER"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="StatusEnum">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AKTIV"/>
+      <xs:enumeration value="MAKULERAD"/>
+      <xs:enumeration value="LEVERERAD"/>
+      <xs:enumeration value="UTGÅTT"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part><con:part><con:url>file:\C:\TOOLS\vt-gen\MVK\ServiceContracts_crm_selfservice_medicalsupply\schemas\core_components\itintegration_registry_1.0.xsd</con:url><con:content><![CDATA[<xs:schema targetNamespace="urn:riv:itintegration:registry:1" elementFormDefault="qualified" version="1.0" xmlns="urn:riv:itintegration:registry:1" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:annotation>
+    <xs:documentation>Beskrivning: 	Grundl��ggande informationsobjekt f��r dom��nen itintegration:registry (adressering av tj��nster)
+			
+			Revisionshistorik: 2011-06-27 Mats Ekhammar, Callista Enterprise AB
+				Added ServiceContractType
+			
+			Datum:			2011-05-04
+			Beskrivning:	Initial version
+			F��rfattare:		marcus.krantz@callistaenterprise.se</xs:documentation>
+  </xs:annotation>
+  <xs:element name="LogicalAddress" type="LogicalAddressType"/>
+  <xs:element name="ServiceContract" type="ServiceContractType"/>
+  <xs:simpleType name="LogicalAddressType">
+    <xs:annotation>
+      <xs:documentation>Defines the type for logical address according to national reference architecture.
+				Superseeds wsa:To as type for logical address header in RIVTA 2.1.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+  <xs:complexType name="ServiceContractType">
+    <xs:annotation>
+      <xs:documentation>Type which describes a service contract. Used in interaction GetSupportedServiceContracts.</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="ServiceContractNamespace" type="xs:anyURI"/>
+      <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>]]></con:content><con:type>http://www.w3.org/2001/XMLSchema</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://tempuri.org</con:endpoint><con:endpoint>https://rtjptest.vgregion.se/vp/crm/selfservice/medicalsupply/RegisterMedicalSupplyOrder/0/rivtabp21</con:endpoint></con:endpoints><con:operation id="22171109-2ed0-4e35-adfb-87a3a5011f4b" isOneWay="false" action="urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrderResponder:0:RegisterMedicalSupplyOrder" name="RegisterMedicalSupplyOrder" bindingOperationName="RegisterMedicalSupplyOrder" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="0ffb938d-0cab-413f-a198-7e1eba882e2a" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://rtjptest.vgregion.se/vp/crm/selfservice/medicalsupply/RegisterMedicalSupplyOrder/0/rivtabp21</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:itintegration:registry:1" xmlns:urn1="urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrderResponder:0" xmlns:urn2="urn:riv:crm:selfservice:medicalsupply:0">\r
+   <soapenv:Header>\r
+      <urn:LogicalAddress>SE2321000131-E000000000001</urn:LogicalAddress>\r
+   </soapenv:Header>\r
+   <soapenv:Body>\r
+      <urn1:RegisterMedicalSupplyOrder>\r
+         <!--1 or more repetitions:-->\r
+         <urn1:Order>\r
+            <urn2:SubjectOfCareId>?</urn2:SubjectOfCareId>\r
+            <urn2:Orderer>?</urn2:Orderer>\r
+            <urn2:OrderByDelegate>false</urn2:OrderByDelegate>\r
+            <!--1 or more repetitions:-->\r
+            <urn2:OrderRow>\r
+               <urn2:PrescriptionId>?</urn2:PrescriptionId>\r
+               <urn2:PrescriptionItemId>?</urn2:PrescriptionItemId>\r
+               <urn2:DeliveryChoice>\r
+                  <urn2:DeliveryMethodId>?</urn2:DeliveryMethodId>\r
+                  <urn2:DeliveryMethod>?</urn2:DeliveryMethod>\r
+                  <!--Optional:-->\r
+                  <urn2:HomeDeliveryAdress>\r
+                     <urn2:Reciever>?</urn2:Reciever>\r
+                     <!--Optional:-->\r
+                     <urn2:CareOfAddress>?</urn2:CareOfAddress>\r
+                     <urn2:Street>?</urn2:Street>\r
+                     <urn2:PostalCode>?</urn2:PostalCode>\r
+                     <urn2:City>?</urn2:City>\r
+                     <!--Optional:-->\r
+                     <urn2:DoorCode>?</urn2:DoorCode>\r
+                     <urn2:Phone>?</urn2:Phone>\r
+                     <!--You may enter ANY elements at this point-->\r
+                  </urn2:HomeDeliveryAdress>\r
+                  <!--Optional:-->\r
+                  <urn2:DeliveryPoint>\r
+                     <urn2:DeliveryPointId>?</urn2:DeliveryPointId>\r
+                     <urn2:DeliveryPointName>?</urn2:DeliveryPointName>\r
+                     <urn2:DeliveryPointAddress>?</urn2:DeliveryPointAddress>\r
+                     <urn2:DeliveryPointPostalCode>?</urn2:DeliveryPointPostalCode>\r
+                     <urn2:DeliveryPointCity>?</urn2:DeliveryPointCity>\r
+                     <urn2:CountryCode>?</urn2:CountryCode>\r
+                     <!--You may enter ANY elements at this point-->\r
+                     <!--Optional:-->\r
+                     <urn2:IsClosest>?</urn2:IsClosest>\r
+                  </urn2:DeliveryPoint>\r
+                  <!--Zero or more repetitions:-->\r
+                  <urn2:DeliveryNotificationMethod>?</urn2:DeliveryNotificationMethod>\r
+                  <!--Optional:-->\r
+                  <urn2:DeliveryNotificationReceiver>?</urn2:DeliveryNotificationReceiver>\r
+                  <!--You may enter ANY elements at this point-->\r
+               </urn2:DeliveryChoice>\r
+               <urn2:Article>\r
+                  <urn2:ArticleNo>?</urn2:ArticleNo>\r
+                  <urn2:ArticleName>?</urn2:ArticleName>\r
+                  <urn2:PackageSize>?</urn2:PackageSize>\r
+                  <!--Optional:-->\r
+                  <urn2:PackageSizeUnit>?</urn2:PackageSizeUnit>\r
+                  <urn2:ProductArea>?</urn2:ProductArea>\r
+                  <urn2:IsOrderable>?</urn2:IsOrderable>\r
+                  <!--You may enter ANY elements at this point-->\r
+               </urn2:Article>\r
+               <urn2:NoOfPackages>?</urn2:NoOfPackages>\r
+               <urn2:NoOfPcs>?</urn2:NoOfPcs>\r
+               <urn2:Source>?</urn2:Source>\r
+               <!--You may enter ANY elements at this point-->\r
+            </urn2:OrderRow>\r
+            <!--You may enter ANY elements at this point-->\r
+         </urn1:Order>\r
+         <!--You may enter ANY elements at this point-->\r
+      </urn1:RegisterMedicalSupplyOrder>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrderResponder:0:RegisterMedicalSupplyOrder"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:mockService id="9d94f5c4-cc46-40a4-ad65-0875249430c2" port="8080" path="/" host="W254129" name="MockService 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties/><con:mockOperation name="GetMedicalSupplyDeliveryPoints" id="93984964-0dd0-40fe-993a-bea595f17719" interface="GetMedicalSupplyDeliveryPointsResponderBinding" operation="GetMedicalSupplyDeliveryPoints"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:response name="Response 1" id="6e2b551a-efca-48a2-91dc-84aa3bfd433e" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyDeliveryPointsResponder:0" xmlns:urn1="urn:riv:crm:selfservice:medicalsupply:0">
    <soapenv:Header/>
    <soapenv:Body>
       <urn:GetMedicalSupplyDeliveryPointsResponse>
-         <!--Optional:-->
-         <urn:DeliveryPointList>
-            <!--1 to 10 repetitions:-->
-            <urn1:DeliveryPoint>
-               <urn1:DeliveryPointId>?</urn1:DeliveryPointId>
-               <urn1:DeliveryPointName>?</urn1:DeliveryPointName>
-               <urn1:DeliveryPointAddress>?</urn1:DeliveryPointAddress>
-               <urn1:DeliveryPointPostalCode>?</urn1:DeliveryPointPostalCode>
-               <urn1:DeliveryPointCity>?</urn1:DeliveryPointCity>
-               <urn1:CountryCode>?</urn1:CountryCode>
-               <!--You may enter ANY elements at this point-->
-               <!--Optional:-->
-               <urn1:IsClosest>?</urn1:IsClosest>
-            </urn1:DeliveryPoint>
-         </urn:DeliveryPointList>
+         <!--0 to 10 repetitions:-->
+         <urn:DeliveryPoint>
+            <urn1:DeliveryPointId>?</urn1:DeliveryPointId>
+            <urn1:DeliveryPointName>?</urn1:DeliveryPointName>
+            <urn1:DeliveryPointAddress>?</urn1:DeliveryPointAddress>
+            <urn1:DeliveryPointPostalCode>?</urn1:DeliveryPointPostalCode>
+            <urn1:DeliveryPointCity>?</urn1:DeliveryPointCity>
+            <urn1:CountryCode>?</urn1:CountryCode>
+            <!--You may enter ANY elements at this point-->
+            <!--Optional:-->
+            <urn1:IsClosest>?</urn1:IsClosest>
+         </urn:DeliveryPoint>
          <urn:ResultCode>?</urn:ResultCode>
          <!--Optional:-->
          <urn:comment>?</urn:comment>
@@ -725,131 +1074,193 @@
    <soapenv:Body>
       <urn:GetMedicalSupplyPrescriptionsResponse>
          <!--Optional:-->
-         <urn:SubjectOfCareTyp>
+         <urn:SubjectOfCareType>
             <urn1:SubjectOfCareId>?</urn1:SubjectOfCareId>
-            <!--Optional:-->
-            <urn1:PrescriptionItemList>
-               <!--1 or more repetitions:-->
-               <urn1:PrescriptionItem>
-                  <urn1:PrescriptionItemId>?</urn1:PrescriptionItemId>
-                  <urn1:Article>
-                     <urn1:ArticleNo>?</urn1:ArticleNo>
-                     <urn1:ArticleName>?</urn1:ArticleName>
-                     <urn1:PackageSize>?</urn1:PackageSize>
-                     <!--Optional:-->
-                     <urn1:PackageSizeUnit>?</urn1:PackageSizeUnit>
-                     <urn1:ProductArea>?</urn1:ProductArea>
-                     <urn1:IsOrderable>?</urn1:IsOrderable>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:Article>
-                  <urn1:NoOfOrders>?</urn1:NoOfOrders>
-                  <urn1:NoOfRemainingOrders>?</urn1:NoOfRemainingOrders>
-                  <urn1:NoOfArticlesPerOrder>?</urn1:NoOfArticlesPerOrder>
-                  <urn1:NoOfPackagesPerOrder>?</urn1:NoOfPackagesPerOrder>
+            <!--Zero or more repetitions:-->
+            <urn1:PrescriptionItem>
+               <urn1:PrescriptionItemId>?</urn1:PrescriptionItemId>
+               <urn1:Article>
+                  <urn1:ArticleNo>?</urn1:ArticleNo>
+                  <urn1:ArticleName>?</urn1:ArticleName>
+                  <urn1:PackageSize>?</urn1:PackageSize>
                   <!--Optional:-->
-                  <urn1:SubArticleList>
-                     <!--1 or more repetitions:-->
-                     <urn1:SubArticle>
-                        <urn1:ArticleNo>?</urn1:ArticleNo>
-                        <urn1:ArticleName>?</urn1:ArticleName>
-                        <urn1:PackageSize>?</urn1:PackageSize>
-                        <!--Optional:-->
-                        <urn1:PackageSizeUnit>?</urn1:PackageSizeUnit>
-                        <urn1:ProductArea>?</urn1:ProductArea>
-                        <urn1:IsOrderable>?</urn1:IsOrderable>
-                        <!--You may enter ANY elements at this point-->
-                     </urn1:SubArticle>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:SubArticleList>
-                  <urn1:DeliveryAlternativeList>
-                     <!--1 or more repetitions:-->
-                     <urn1:SubArticle>
-                        <urn1:ArticleNo>?</urn1:ArticleNo>
-                        <urn1:ArticleName>?</urn1:ArticleName>
-                        <urn1:PackageSize>?</urn1:PackageSize>
-                        <!--Optional:-->
-                        <urn1:PackageSizeUnit>?</urn1:PackageSizeUnit>
-                        <urn1:ProductArea>?</urn1:ProductArea>
-                        <urn1:IsOrderable>?</urn1:IsOrderable>
-                        <!--You may enter ANY elements at this point-->
-                     </urn1:SubArticle>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:DeliveryAlternativeList>
-                  <!--Optional:-->
-                  <urn1:NextEarliestOrderDate>?</urn1:NextEarliestOrderDate>
-                  <urn1:PrescriptionId>?</urn1:PrescriptionId>
-                  <urn1:Source>?</urn1:Source>
-                  <urn1:Prescriber>?</urn1:Prescriber>
-                  <urn1:PrescribingOrganization>?</urn1:PrescribingOrganization>
-                  <urn1:LastValidDate>?</urn1:LastValidDate>
-                  <urn1:Status>?</urn1:Status>
+                  <urn1:PackageSizeUnit>?</urn1:PackageSizeUnit>
+                  <urn1:ProductArea>?</urn1:ProductArea>
+                  <urn1:IsOrderable>?</urn1:IsOrderable>
                   <!--You may enter ANY elements at this point-->
-               </urn1:PrescriptionItem>
-            </urn1:PrescriptionItemList>
-            <!--Optional:-->
-            <urn1:OrderList>
-               <!--1 or more repetitions:-->
-               <urn1:Order>
-                  <urn1:OrderItemId>?</urn1:OrderItemId>
-                  <urn1:PrescriptionItemId>?</urn1:PrescriptionItemId>
-                  <urn1:DeliveryAlternative>
-                     <urn1:DeliveryMethodId>?</urn1:DeliveryMethodId>
-                     <urn1:DeliveryMethod>?</urn1:DeliveryMethod>
-                     <!--Optional:-->
-                     <urn1:HomeDeliveryAdress>
-                        <urn1:Reciever>?</urn1:Reciever>
-                        <!--Optional:-->
-                        <urn1:CareOfAddress>?</urn1:CareOfAddress>
-                        <urn1:Street>?</urn1:Street>
-                        <urn1:PostalCode>?</urn1:PostalCode>
-                        <urn1:City>?</urn1:City>
-                        <!--Optional:-->
-                        <urn1:DoorCode>?</urn1:DoorCode>
-                        <urn1:Phone>?</urn1:Phone>
-                        <!--You may enter ANY elements at this point-->
-                     </urn1:HomeDeliveryAdress>
-                     <!--Optional:-->
-                     <urn1:DeliveryPoint>
-                        <urn1:DeliveryPointId>?</urn1:DeliveryPointId>
-                        <urn1:DeliveryPointName>?</urn1:DeliveryPointName>
-                        <urn1:DeliveryPointAddress>?</urn1:DeliveryPointAddress>
-                        <urn1:DeliveryPointPostalCode>?</urn1:DeliveryPointPostalCode>
-                        <urn1:DeliveryPointCity>?</urn1:DeliveryPointCity>
-                        <urn1:CountryCode>?</urn1:CountryCode>
-                        <!--You may enter ANY elements at this point-->
-                        <!--Optional:-->
-                        <urn1:IsClosest>?</urn1:IsClosest>
-                     </urn1:DeliveryPoint>
-                     <!--Optional:-->
-                     <urn1:DeliveryNotificationMethod>?</urn1:DeliveryNotificationMethod>
-                     <!--Optional:-->
-                     <urn1:DeliveryNotificationReceiver>?</urn1:DeliveryNotificationReceiver>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:DeliveryAlternative>
-                  <urn1:Article>
-                     <urn1:ArticleNo>?</urn1:ArticleNo>
-                     <urn1:ArticleName>?</urn1:ArticleName>
-                     <urn1:PackageSize>?</urn1:PackageSize>
-                     <!--Optional:-->
-                     <urn1:PackageSizeUnit>?</urn1:PackageSizeUnit>
-                     <urn1:ProductArea>?</urn1:ProductArea>
-                     <urn1:IsOrderable>?</urn1:IsOrderable>
-                     <!--You may enter ANY elements at this point-->
-                  </urn1:Article>
-                  <urn1:NoOfArticles>?</urn1:NoOfArticles>
-                  <urn1:NoOfPcs>?</urn1:NoOfPcs>
-                  <urn1:OrderDate>?</urn1:OrderDate>
+               </urn1:Article>
+               <urn1:NoOfOrders>?</urn1:NoOfOrders>
+               <urn1:NoOfRemainingOrders>?</urn1:NoOfRemainingOrders>
+               <urn1:NoOfArticlesPerOrder>?</urn1:NoOfArticlesPerOrder>
+               <urn1:NoOfPackagesPerOrder>?</urn1:NoOfPackagesPerOrder>
+               <!--Zero or more repetitions:-->
+               <urn1:SubArticle>
+                  <urn1:ArticleNo>?</urn1:ArticleNo>
+                  <urn1:ArticleName>?</urn1:ArticleName>
+                  <urn1:PackageSize>?</urn1:PackageSize>
                   <!--Optional:-->
-                  <urn1:DeliveredDate>?</urn1:DeliveredDate>
+                  <urn1:PackageSizeUnit>?</urn1:PackageSizeUnit>
+                  <urn1:ProductArea>?</urn1:ProductArea>
+                  <urn1:IsOrderable>?</urn1:IsOrderable>
                   <!--You may enter ANY elements at this point-->
-               </urn1:Order>
-            </urn1:OrderList>
+               </urn1:SubArticle>
+               <!--1 or more repetitions:-->
+               <urn1:DeliveryAlternative>
+                  <urn1:DeliveryMethodId>?</urn1:DeliveryMethodId>
+                  <urn1:DeliveryMethodName>?</urn1:DeliveryMethodName>
+                  <urn1:DeliveryMethod>?</urn1:DeliveryMethod>
+                  <urn1:ServicePointProvider>?</urn1:ServicePointProvider>
+                  <urn1:AllowChioceOfDeliveryPoints>?</urn1:AllowChioceOfDeliveryPoints>
+                  <!--Zero or more repetitions:-->
+                  <urn1:DeliveryNotificationMethod>?</urn1:DeliveryNotificationMethod>
+                  <!--You may enter ANY elements at this point-->
+               </urn1:DeliveryAlternative>
+               <!--Optional:-->
+               <urn1:NextEarliestOrderDate>?</urn1:NextEarliestOrderDate>
+               <urn1:PrescriptionId>?</urn1:PrescriptionId>
+               <urn1:Source>?</urn1:Source>
+               <urn1:Prescriber>
+                  <urn1:PrescriberId>?</urn1:PrescriberId>
+                  <urn1:PrescriberName>?</urn1:PrescriberName>
+                  <!--Optional:-->
+                  <urn1:PrescriberTitle>?</urn1:PrescriberTitle>
+                  <!--Optional:-->
+                  <urn1:PrescriberCode>?</urn1:PrescriberCode>
+                  <!--You may enter ANY elements at this point-->
+               </urn1:Prescriber>
+               <urn1:PrescribingOrganization>
+                  <urn1:PrescribingOrganizationId>?</urn1:PrescribingOrganizationId>
+                  <urn1:PrescribingOrganizationName>?</urn1:PrescribingOrganizationName>
+                  <!--You may enter ANY elements at this point-->
+               </urn1:PrescribingOrganization>
+               <urn1:LastValidDate>?</urn1:LastValidDate>
+               <urn1:Status>?</urn1:Status>
+               <!--You may enter ANY elements at this point-->
+            </urn1:PrescriptionItem>
+            <!--Zero or more repetitions:-->
+            <urn1:OrderItem>
+               <urn1:OrderItemId>?</urn1:OrderItemId>
+               <urn1:PrescriptionItemId>?</urn1:PrescriptionItemId>
+               <urn1:DeliveryChoice>
+                  <urn1:DeliveryMethodId>?</urn1:DeliveryMethodId>
+                  <urn1:DeliveryMethod>?</urn1:DeliveryMethod>
+                  <!--Optional:-->
+                  <urn1:HomeDeliveryAdress>
+                     <urn1:Reciever>?</urn1:Reciever>
+                     <!--Optional:-->
+                     <urn1:CareOfAddress>?</urn1:CareOfAddress>
+                     <urn1:Street>?</urn1:Street>
+                     <urn1:PostalCode>?</urn1:PostalCode>
+                     <urn1:City>?</urn1:City>
+                     <!--Optional:-->
+                     <urn1:DoorCode>?</urn1:DoorCode>
+                     <urn1:Phone>?</urn1:Phone>
+                     <!--You may enter ANY elements at this point-->
+                  </urn1:HomeDeliveryAdress>
+                  <!--Optional:-->
+                  <urn1:DeliveryPoint>
+                     <urn1:DeliveryPointId>?</urn1:DeliveryPointId>
+                     <urn1:DeliveryPointName>?</urn1:DeliveryPointName>
+                     <urn1:DeliveryPointAddress>?</urn1:DeliveryPointAddress>
+                     <urn1:DeliveryPointPostalCode>?</urn1:DeliveryPointPostalCode>
+                     <urn1:DeliveryPointCity>?</urn1:DeliveryPointCity>
+                     <urn1:CountryCode>?</urn1:CountryCode>
+                     <!--You may enter ANY elements at this point-->
+                  </urn1:DeliveryPoint>
+                  <!--Zero or more repetitions:-->
+                  <urn1:DeliveryNotificationMethod>?</urn1:DeliveryNotificationMethod>
+                  <!--Optional:-->
+                  <urn1:DeliveryNotificationReceiver>?</urn1:DeliveryNotificationReceiver>
+                  <!--You may enter ANY elements at this point-->
+               </urn1:DeliveryChoice>
+               <urn1:Article>
+                  <urn1:ArticleNo>?</urn1:ArticleNo>
+                  <urn1:ArticleName>?</urn1:ArticleName>
+                  <urn1:PackageSize>?</urn1:PackageSize>
+                  <!--Optional:-->
+                  <urn1:PackageSizeUnit>?</urn1:PackageSizeUnit>
+                  <urn1:ProductArea>?</urn1:ProductArea>
+                  <urn1:IsOrderable>?</urn1:IsOrderable>
+                  <!--You may enter ANY elements at this point-->
+               </urn1:Article>
+               <urn1:NoOfArticles>?</urn1:NoOfArticles>
+               <urn1:NoOfPcs>?</urn1:NoOfPcs>
+               <urn1:OrderDate>?</urn1:OrderDate>
+               <!--Optional:-->
+               <urn1:DeliveredDate>?</urn1:DeliveredDate>
+               <!--You may enter ANY elements at this point-->
+            </urn1:OrderItem>
             <!--You may enter ANY elements at this point-->
-         </urn:SubjectOfCareTyp>
+         </urn:SubjectOfCareType>
          <urn:ResultCode>?</urn:ResultCode>
          <!--Optional:-->
          <urn:comment>?</urn:comment>
          <!--You may enter ANY elements at this point-->
       </urn:GetMedicalSupplyPrescriptionsResponse>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyPrescriptionsResponder:0:GetMedicalSupplyPrescriptions"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
+</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyPrescriptionsResponder:0:GetMedicalSupplyPrescriptions"/></con:response><con:dispatchConfig/></con:mockOperation><con:mockOperation name="RegisterMedicalSupplyOrder" id="dbaa8240-b43a-4abb-ad61-a7395d9ffb01" interface="RegisterMedicalSupplyOrderResponderBinding" operation="RegisterMedicalSupplyOrder"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:response name="Response 1" id="9aedec42-8d13-4a67-87f4-76ca98bdaeb2" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrderResponder:0" xmlns:urn1="urn:riv:crm:selfservice:medicalsupply:0">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:RegisterMedicalSupplyOrderResponse>
+         <!--Zero or more repetitions:-->
+         <urn:Order>
+            <urn1:OrderItemId>?</urn1:OrderItemId>
+            <urn1:PrescriptionItemId>?</urn1:PrescriptionItemId>
+            <urn1:DeliveryChoice>
+               <urn1:DeliveryMethodId>?</urn1:DeliveryMethodId>
+               <urn1:DeliveryMethod>?</urn1:DeliveryMethod>
+               <!--Optional:-->
+               <urn1:HomeDeliveryAdress>
+                  <urn1:Reciever>?</urn1:Reciever>
+                  <!--Optional:-->
+                  <urn1:CareOfAddress>?</urn1:CareOfAddress>
+                  <urn1:Street>?</urn1:Street>
+                  <urn1:PostalCode>?</urn1:PostalCode>
+                  <urn1:City>?</urn1:City>
+                  <!--Optional:-->
+                  <urn1:DoorCode>?</urn1:DoorCode>
+                  <urn1:Phone>?</urn1:Phone>
+                  <!--You may enter ANY elements at this point-->
+               </urn1:HomeDeliveryAdress>
+               <!--Optional:-->
+               <urn1:DeliveryPoint>
+                  <urn1:DeliveryPointId>?</urn1:DeliveryPointId>
+                  <urn1:DeliveryPointName>?</urn1:DeliveryPointName>
+                  <urn1:DeliveryPointAddress>?</urn1:DeliveryPointAddress>
+                  <urn1:DeliveryPointPostalCode>?</urn1:DeliveryPointPostalCode>
+                  <urn1:DeliveryPointCity>?</urn1:DeliveryPointCity>
+                  <urn1:CountryCode>?</urn1:CountryCode>
+                  <!--You may enter ANY elements at this point-->
+                  <!--Optional:-->
+                  <urn1:IsClosest>?</urn1:IsClosest>
+               </urn1:DeliveryPoint>
+               <!--Zero or more repetitions:-->
+               <urn1:DeliveryNotificationMethod>?</urn1:DeliveryNotificationMethod>
+               <!--Optional:-->
+               <urn1:DeliveryNotificationReceiver>?</urn1:DeliveryNotificationReceiver>
+               <!--You may enter ANY elements at this point-->
+            </urn1:DeliveryChoice>
+            <urn1:Article>
+               <urn1:ArticleNo>?</urn1:ArticleNo>
+               <urn1:ArticleName>?</urn1:ArticleName>
+               <urn1:PackageSize>?</urn1:PackageSize>
+               <!--Optional:-->
+               <urn1:PackageSizeUnit>?</urn1:PackageSizeUnit>
+               <urn1:ProductArea>?</urn1:ProductArea>
+               <urn1:IsOrderable>?</urn1:IsOrderable>
+               <!--You may enter ANY elements at this point-->
+            </urn1:Article>
+            <urn1:NoOfArticles>?</urn1:NoOfArticles>
+            <urn1:NoOfPcs>?</urn1:NoOfPcs>
+            <urn1:OrderDate>?</urn1:OrderDate>
+            <!--Optional:-->
+            <urn1:DeliveredDate>?</urn1:DeliveredDate>
+            <!--You may enter ANY elements at this point-->
+         </urn:Order>
+         <urn:ResultCode>?</urn:ResultCode>
+         <!--Optional:-->
+         <urn:comment>?</urn:comment>
+         <!--You may enter ANY elements at this point-->
+      </urn:RegisterMedicalSupplyOrderResponse>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrderResponder:0:RegisterMedicalSupplyOrder"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
