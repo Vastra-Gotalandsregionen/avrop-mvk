@@ -22,6 +22,7 @@
 
     <bean id="lakemedelsnaraProprties" class="se._1177.lmn.service.util.LakemedelsnaraProperties" factory-method="getProperties"/>
 
+    <context:component-scan base-package="se._1177.lmn.service.concurrent" />
     <context:component-scan base-package="se.vgregion.mvk.controller" />
 
     <bean class="se._1177.lmn.service.LmnServiceImpl" >

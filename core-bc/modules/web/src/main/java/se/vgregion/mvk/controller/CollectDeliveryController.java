@@ -2,13 +2,11 @@ package se.vgregion.mvk.controller;
 
 import mvk.itintegration.userprofile._2.UserProfileType;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
@@ -18,6 +16,7 @@ import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsResponseType;
 import se._1177.lmn.service.LmnService;
+import se._1177.lmn.service.concurrent.BackgroundExecutor;
 import se.vgregion.mvk.controller.model.Cart;
 
 import javax.annotation.PostConstruct;
@@ -29,8 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
@@ -52,6 +49,9 @@ public class CollectDeliveryController {
 
     @Autowired
     private Cart cart;
+
+    @Autowired
+    private BackgroundExecutor backgroundExecutor;
 
     private String zip;
     private Map<ServicePointProviderEnum, String> deliveryPointIdsMap = new HashMap<>();
@@ -345,7 +345,7 @@ public class CollectDeliveryController {
     }
 
     public void loadDeliveryPointsForAllSuppliersInBackground(final String zip) {
-        getExecutor().submit(() -> {
+        backgroundExecutor.submit(() -> {
             loadDeliveryPointsForAllSuppliers(zip);
         });
     }
@@ -399,20 +399,4 @@ public class CollectDeliveryController {
         return StringUtils.join(providers, ", ");
     }
 
-    private ExecutorService executorService; // // TODO: 2016-05-01 Make a global executorService?
-
-    public synchronized ExecutorService getExecutor() {
-        if (executorService != null) {
-            return executorService;
-        }
-        CustomizableThreadFactory threadFactory = new CustomizableThreadFactory();
-
-        threadFactory.setDaemon(true);
-        threadFactory.setThreadGroupName("backgroundTasksGroup");
-        threadFactory.setThreadNamePrefix("backgroundTask");
-
-        executorService = Executors.newCachedThreadPool(threadFactory);
-
-        return executorService;
-    }
 }
