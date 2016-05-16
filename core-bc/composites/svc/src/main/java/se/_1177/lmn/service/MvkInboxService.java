@@ -14,6 +14,7 @@ import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class MvkInboxService {
 
     public AddMessageResponseType sendInboxMessage(String pid,
                                                    List<PrescriptionItemType> prescriptionItems,
-                                                   List<DeliveryChoiceType> deliveryChoices)
+                                                   Collection<DeliveryChoiceType> deliveryChoices)
             throws MvkInboxServiceException {
 
         AddMessageType request = new AddMessageType();
@@ -72,7 +73,7 @@ public class MvkInboxService {
     }
 
     String composeMsg(List<PrescriptionItemType> prescriptionItems,
-                      List<DeliveryChoiceType> deliveryChoices) throws IOException, TemplateException {
+                      Collection<DeliveryChoiceType> deliveryChoices) throws IOException, TemplateException {
 
         Configuration cfg = new Configuration();
 

@@ -1,5 +1,6 @@
 package se.vgregion.mvk.controller;
 
+import mvk.crm.casemanagement.inbox.addmessageresponder._2.AddMessageResponseType;
 import mvk.itintegration.userprofile._2.UserProfileType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.RegisterMedicalSupplyOrderResponseType;
 import se._1177.lmn.service.LmnService;
 import se._1177.lmn.service.MvkInboxService;
+import se._1177.lmn.service.MvkInboxServiceException;
 import se.vgregion.mvk.controller.model.Cart;
 
 import javax.faces.application.FacesMessage;
@@ -144,6 +146,9 @@ public class VerifyDeliveryController {
                     case SMS:
                         notificationReceiver = collectDeliveryController.getSmsNumber();
                         break;
+                    case TELEFON:
+                        notificationReceiver = collectDeliveryController.getPhoneNumber();
+                        break;
                     default:
                         throw new RuntimeException("Unexpected notificationMethod: " + notificationMethod);
                 }
@@ -151,10 +156,10 @@ public class VerifyDeliveryController {
                 deliveryChoice.setDeliveryNotificationReceiver(notificationReceiver);
             } else {
                 AddressType address = new AddressType();
-                address.setCareOfAddress(""); // // TODO: 2016-05-02
+                address.setCareOfAddress(homeDeliveryController.getCoAddress()); // // TODO: 2016-05-02
                 address.setCity(userProfile.getCity());
                 address.setDoorCode(homeDeliveryController.getDoorCode());
-                address.setPhone(userProfile.getPhoneNumber());
+                address.setPhone(homeDeliveryController.getPhoneNumber());
                 address.setPostalCode(userProfile.getZip());
                 address.setReceiver(userProfile.getFirstName() + " " + userProfile.getLastName()); // todo Korrekt att detta är mottagarens namn?
                 address.setStreet(userProfile.getStreetAddress());
@@ -175,6 +180,18 @@ public class VerifyDeliveryController {
         if (response.getResultCode().equals(ResultCodeEnum.OK)) {
             orderSuccess = true;
 
+            try {
+                AddMessageResponseType addMessageResponse = mvkInboxService.sendInboxMessage(
+                        userProfile.getSubjectOfCareId(), cart.getItemsInCart(), deliveryChoicePerItem.values());
+
+                String msg = addMessageResponse.getMessage().getMsg();
+                FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg)); // TODO: 2016-05-12 temp
+            } catch (MvkInboxServiceException e) {
+                String msg = "Din beställning har utförts men kvittot till din inkorg har misslyckats.";
+                FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,
+                        msg));
+            }
+
             cart.emptyCart();
 
             ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false)).invalidate(); // todo Verkligen?
@@ -188,6 +205,7 @@ public class VerifyDeliveryController {
             orderSuccess = false;
         }
 
-        return "orderConfirmation" + ACTION_SUFFIX;
+        return "orderConfirmation";
+//        return "orderConfirmation" + ACTION_SUFFIX;
     }
 }

@@ -8,13 +8,17 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import se.vgregion.mvk.controller.model.Cart;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +41,9 @@ public class DeliveryController {
     @Autowired
     private HomeDeliveryController homeDeliveryController;
 
+    @Autowired
+    private CollectDeliveryController collectDeliveryController;
+
     private DeliveryMethodEnum deliveryMethod = null;//DeliveryMethodEnum.HEMLEVERANS; // Default. Will this possibly change so a user can have a personal default?
     private boolean userNeedsToChooseDeliveryMethodForEachItem;
     private Set<DeliveryMethodEnum> possibleDeliveryMethodsFittingAllItems;
@@ -44,7 +51,8 @@ public class DeliveryController {
 
     public DeliveryMethodEnum getDeliveryMethod() {
 
-        if (deliveryMethod != null && anyDeliveryMethodFitsAll() && !getDeliveryMethodForEachItem().values().contains(deliveryMethod.name())) {
+        if (deliveryMethod != null && anyDeliveryMethodFitsAll() && !getDeliveryMethodForEachItem().values().contains(
+                deliveryMethod.name())) {
             // Chosen deliveryMethod cannot be chosen or needs to be explicitly chosen.
             deliveryMethod = null;
         }
@@ -73,6 +81,9 @@ public class DeliveryController {
     }
 
     public String toDeliveryMethod() {
+
+        prepareDeliveryOptions(cart.getItemsInCart());
+
         if (anyDeliveryMethodFitsAll()) {
 
             if (deliveryMethod == null) {
@@ -89,6 +100,7 @@ public class DeliveryController {
 
                 homeDeliveryController.setNextViewIsCollectDelivery(false);
 
+                homeDeliveryController.resetChoices();
                 return "homeDelivery" + ACTION_SUFFIX;
             } else if (deliveryMethod.equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)) {
                 return "collectDelivery" + ACTION_SUFFIX;
@@ -109,10 +121,109 @@ public class DeliveryController {
                 }
             }
 
+            homeDeliveryController.resetChoices();
             homeDeliveryController.setNextViewIsCollectDelivery(true);
             return "homeDelivery" + ACTION_SUFFIX;
         }
     }
+
+    // TODO: 2016-05-16 Move this logic to the delivery controller?
+    void prepareDeliveryOptions(final List<PrescriptionItemType> chosenPrescriptionItems) {
+
+        final Set<DeliveryNotificationMethodEnum> allDeliveryNotificationMethods =
+                new HashSet<>(Arrays.asList(DeliveryNotificationMethodEnum.values()));
+
+        final Set<ServicePointProviderEnum> allServicePointProviders =
+                new HashSet<>(Arrays.asList(ServicePointProviderEnum.values()));
+
+        Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> allCollectCombinations =
+                getAllCombinationsOfProvidersAndNotificationMethods(
+                        allDeliveryNotificationMethods, allServicePointProviders);
+
+        final Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> remainingCollectCombinations =
+                new HashMap<>(allCollectCombinations);
+
+        for (PrescriptionItemType prescriptionItem : chosenPrescriptionItems) {
+
+            // Find out which deliveryNotificationMethod(s) that are available for all items.
+            // Also find out which ServicePointProvider that are available for all items.
+
+            Map<ServicePointProviderEnum, List<DeliveryNotificationMethodEnum>> collectCombinationsForItem =
+                    new HashMap<>();
+
+            // We collect info of those with UTLÄMNINGSSTÄLLE as chosen delivery method.
+            if (getDeliveryMethodForEachItem().get(prescriptionItem)
+                    .equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE.name())) {
+
+                DeliveryAlternativeType deliveryAlternative = getChosenDeliveryAlternative(prescriptionItem);
+
+                // Sum possible combinations
+                ServicePointProviderEnum itemServiceProvider = deliveryAlternative.getServicePointProvider();
+
+                collectCombinationsForItem.put(itemServiceProvider, new ArrayList<>());
+
+                for (DeliveryNotificationMethodEnum notificationMethod :
+                        deliveryAlternative.getDeliveryNotificationMethod()) {
+
+                    collectCombinationsForItem.get(itemServiceProvider).add(notificationMethod);
+                }
+
+                // We're only interested in the collect delivery options if any deliveryAlternative is collect delivery.
+                // Me check this condition as it should be equivalent to ask "is no delivery alternative collect delivery?"
+                if (collectCombinationsForItem.size() > 0) {
+
+                    // First remove all providers which aren't options...
+                    remainingCollectCombinations.keySet().retainAll(collectCombinationsForItem.keySet());
+
+                    // ... then, for each provider, remove the notification methods which aren't options.
+                    for (Map.Entry<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> remaining
+                            : remainingCollectCombinations.entrySet()) {
+
+                        remaining.getValue().retainAll(collectCombinationsForItem.get(remaining.getKey()));
+                    }
+                }
+            }
+
+        }
+
+        collectDeliveryController.setPossibleCollectCombinationsFittingAllCollectItems(remainingCollectCombinations);
+    }
+
+    DeliveryAlternativeType getChosenDeliveryAlternative(PrescriptionItemType prescriptionItem) {
+        return getDeliveryAlternativeMatchingDeliveryMethod(
+                prescriptionItem, getDeliveryMethodForEachItem().get(prescriptionItem));
+    }
+
+    private Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>>
+    getAllCombinationsOfProvidersAndNotificationMethods(
+            Set<DeliveryNotificationMethodEnum> allDeliveryNotificationMethods,
+            Set<ServicePointProviderEnum> allServicePointProviders) {
+
+        Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> allCollectCombinations = new HashMap<>();
+
+        for (ServicePointProviderEnum servicePointProvider : allServicePointProviders) {
+            allCollectCombinations.put(servicePointProvider, new HashSet<>());
+
+            for (DeliveryNotificationMethodEnum deliveryNotificationMethod : allDeliveryNotificationMethods) {
+                allCollectCombinations.get(servicePointProvider).add(deliveryNotificationMethod);
+            }
+        }
+
+        return allCollectCombinations;
+    }
+
+    private DeliveryAlternativeType getDeliveryAlternativeMatchingDeliveryMethod(PrescriptionItemType prescriptionItem,
+                                                                                 String deliveryMethodName) {
+
+        for (DeliveryAlternativeType deliveryAlternativeType : prescriptionItem.getDeliveryAlternative()) {
+            if (deliveryAlternativeType.getDeliveryMethod().name().equals(deliveryMethodName)) {
+                return deliveryAlternativeType;
+            }
+        }
+
+        throw new RuntimeException("No matching delivery method was found.");
+    }
+
 
     private void setDeliveryMethodForAllItems(DeliveryMethodEnum deliveryMethod) {
         Map<PrescriptionItemType, String> deliveryMethodForEachItem = getDeliveryMethodForEachItem();
@@ -132,7 +243,9 @@ public class DeliveryController {
         this.userNeedsToChooseDeliveryMethodForEachItem = userNeedsToChooseDeliveryMethodForEachItem;
     }
 
-    public void setPossibleDeliveryMethodsFittingAllItems(Set<DeliveryMethodEnum> possibleDeliveryMethodsFittingAllItems) {
+    public void setPossibleDeliveryMethodsFittingAllItems(
+            Set<DeliveryMethodEnum> possibleDeliveryMethodsFittingAllItems) {
+
         this.possibleDeliveryMethodsFittingAllItems = possibleDeliveryMethodsFittingAllItems;
     }
 

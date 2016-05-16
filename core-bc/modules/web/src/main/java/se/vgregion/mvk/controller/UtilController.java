@@ -34,7 +34,7 @@ public class UtilController {
         return calendar.toGregorianCalendar().getTime();
     }
 
-    public boolean isAfterToday(XMLGregorianCalendar date) {
+    public static boolean isAfterToday(XMLGregorianCalendar date) {
 
         if (date == null) {
             return false;
@@ -65,7 +65,7 @@ public class UtilController {
     public static String getStatusText(PrescriptionItemType expiredItem) {
 
         if (expiredItem.getStatus().equals(StatusEnum.LEVERERAD)) {
-            return "Inga kvarvarande uttag";
+            return "Max antal uttag uppnått";
         }
 
         if (expiredItem.getNoOfRemainingOrders() <= 0) {
@@ -111,6 +111,8 @@ public class UtilController {
                 return "Epost";
             case SMS:
                 return "SMS";
+            case TELEFON:
+                return "Telefon";
             default:
                 LOGGER.error("Unknown DeliveryNotificationMethodEnum: [" + notificationMethod + "]");
                 return "Okänt";
@@ -125,6 +127,8 @@ public class UtilController {
                 return "Epost";
             case "SMS":
                 return "SMS";
+            case "TELEFON":
+                return "Telefon";
             default:
                 LOGGER.error("Unknown DeliveryNotificationMethodEnum: [" + notificationMethod + "]");
                 return "Okänt";

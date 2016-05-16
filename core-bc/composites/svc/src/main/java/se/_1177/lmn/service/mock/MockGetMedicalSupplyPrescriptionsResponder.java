@@ -51,7 +51,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         SubjectOfCareType subjectOfCare = new SubjectOfCareType();
         subjectOfCare.setSubjectOfCareId(random.nextInt(1000) + "");
 
-        for (int i = 0; i <= 100; i++) {
+        for (int i = 0; i <= 300; i++) {
             addPrescriptionItem(random, subjectOfCare, random.nextBoolean());
         }
 
@@ -155,19 +155,25 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         deliveryAlternative.setAllowChioceOfDeliveryPoints(random.nextBoolean());
         deliveryAlternative.setDeliveryMethodName(Character.getName(random.nextInt(1000)));
 
-        DeliveryNotificationMethodEnum first = DeliveryNotificationMethodEnum.values()
-                [random.nextInt(DeliveryNotificationMethodEnum.values().length)];
-        deliveryAlternative.getDeliveryNotificationMethod().add(first);
+        // When HEMLEVERANS we set notification methods sometimes.
+        if (deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)
+                || random.nextBoolean()) {
 
-        DeliveryNotificationMethodEnum second = DeliveryNotificationMethodEnum.values()
-                [random.nextInt(DeliveryNotificationMethodEnum.values().length)];
-
-        while (second == first) {
-            second = DeliveryNotificationMethodEnum.values()
+            DeliveryNotificationMethodEnum first = DeliveryNotificationMethodEnum.values()
                     [random.nextInt(DeliveryNotificationMethodEnum.values().length)];
-        }
+            deliveryAlternative.getDeliveryNotificationMethod().add(first);
 
-        deliveryAlternative.getDeliveryNotificationMethod().add(second);
+            DeliveryNotificationMethodEnum second = DeliveryNotificationMethodEnum.values()
+                    [random.nextInt(DeliveryNotificationMethodEnum.values().length)];
+
+            while (second == first) {
+                second = DeliveryNotificationMethodEnum.values()
+                        [random.nextInt(DeliveryNotificationMethodEnum.values().length)];
+            }
+
+            deliveryAlternative.getDeliveryNotificationMethod().add(second);
+
+        }
         return deliveryAlternative;
     }
 

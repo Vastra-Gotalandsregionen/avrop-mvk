@@ -29,7 +29,7 @@ public class MockGetUserProfileResponder implements GetUserProfileResponderInter
         userProfile.setMobilePhoneNumber("0701234567");
         userProfile.setFirstName("Börje");
         userProfile.setLastName("Testare");
-        userProfile.setPhoneNumber("031 123456");
+        userProfile.setPhoneNumber("031-123456");
         userProfile.setStreetAddress("Gatan 47");
         userProfile.setZip("42137");
         userProfile.setSubjectOfCareId(ssn);

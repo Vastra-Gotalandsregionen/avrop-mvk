@@ -48,6 +48,9 @@ public class CollectDeliveryController {
     private UserProfileController userProfileController;
 
     @Autowired
+    private DeliveryController deliveryController;
+
+    @Autowired
     private Cart cart;
 
     @Autowired
@@ -58,10 +61,11 @@ public class CollectDeliveryController {
     private DeliveryNotificationMethodEnum preferredDeliveryNotificationMethod; // These gets stored in session memory
     private String email;
     private String smsNumber;
-    private Map<ServicePointProviderEnum, List<DeliveryPointType>> deliveryPointsPerProvider = new HashMap();
+    private Map<ServicePointProviderEnum, List<DeliveryPointType>> deliveryPointsPerProvider = new HashMap<>();
     private Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>>
             possibleCollectCombinationsFittingAllWithNotificationMethods = new HashMap<>();
     private Map<ServicePointProviderEnum, String> chosenDeliveryNotificationMethod;
+    private String phoneNumber;
 
     public void updateDeliverySelectItems(AjaxBehaviorEvent ajaxBehaviorEvent) {
         // Just reset deliveryPoints, making them load again when they are requested.
@@ -99,34 +103,29 @@ public class CollectDeliveryController {
         Map<ServicePointProviderEnum, List<String>> result = new HashMap<>();
 
         for (PrescriptionItemType item : cart.getItemsInCart()) {
-            for (DeliveryAlternativeType deliveryAlternative : item.getDeliveryAlternative()) {
 
-                if (deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS)) {
-                    continue; // We're only interested in collect items.
-                }
+            DeliveryAlternativeType deliveryAlternative = deliveryController.getChosenDeliveryAlternative(item);
 
-                if (!getRelevantServicePointProviders().contains(deliveryAlternative.getServicePointProvider())) {
-                    // Neither are we interested in any provider which isn't available for any item or which isn't available to all items when there is any that is.
-                    continue;
-                }
+            if (deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS)) {
+                continue; // We're only interested in collect items.
+            }
 
-                ServicePointProviderEnum provider = deliveryAlternative.getServicePointProvider();
+            ServicePointProviderEnum provider = deliveryAlternative.getServicePointProvider();
 
-                List<DeliveryNotificationMethodEnum> deliveryNotificationMethods = deliveryAlternative
-                        .getDeliveryNotificationMethod();
+            List<DeliveryNotificationMethodEnum> deliveryNotificationMethods = deliveryAlternative
+                    .getDeliveryNotificationMethod();
 
-                List<String> deliveryNotificationMethodStrings = deliveryNotificationMethods
-                        .stream()
-                        .map(e -> e.name())
-                        .collect(Collectors.toCollection(ArrayList<String>::new));
+            List<String> deliveryNotificationMethodStrings = deliveryNotificationMethods
+                    .stream()
+                    .map(Enum::name)
+                    .collect(Collectors.toList());
 
-                if (!result.containsKey(provider)) {
-                    result.put(provider, new ArrayList<>());
+            if (!result.containsKey(provider)) {
+                result.put(provider, new ArrayList<>());
 
-                    result.get(provider).addAll(deliveryNotificationMethodStrings);
-                } else {
-                    result.get(provider).retainAll(deliveryNotificationMethodStrings);
-                }
+                result.get(provider).addAll(deliveryNotificationMethodStrings);
+            } else {
+                result.get(provider).retainAll(deliveryNotificationMethodStrings);
             }
 
         }
@@ -208,7 +207,7 @@ public class CollectDeliveryController {
         return servicePointProviderForItem;
     }
 
-    List<SelectItemGroup> getSingleSelectMenuItems(ServicePointProviderEnum provider) {
+    private List<SelectItemGroup> getSingleSelectMenuItems(ServicePointProviderEnum provider) {
         SelectItemGroup group1 = new SelectItemGroup("Närmaste ombud");
         SelectItemGroup group2 = new SelectItemGroup("Övriga ombud till ditt postnummer");
 
@@ -316,6 +315,10 @@ public class CollectDeliveryController {
         return DeliveryNotificationMethodEnum.SMS;
     }
 
+    public DeliveryNotificationMethodEnum getTelefonValue() {
+        return DeliveryNotificationMethodEnum.TELEFON;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -350,7 +353,7 @@ public class CollectDeliveryController {
         });
     }
 
-    void loadDeliveryPointsForAllSuppliers(String zip) {
+    private void loadDeliveryPointsForAllSuppliers(String zip) {
 
         if (deliveryPointsPerProvider == null) {
             deliveryPointsPerProvider = new HashMap<>();
@@ -399,4 +402,11 @@ public class CollectDeliveryController {
         return StringUtils.join(providers, ", ");
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }

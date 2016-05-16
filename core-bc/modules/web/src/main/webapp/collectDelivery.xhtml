@@ -95,8 +95,17 @@
                                 <h:outputLabel for="smsInput" value="Mobiltelefon"/>
                                 <h:inputText id="smsInput" value="#{collectDeliveryController.smsNumber}">
                                     <f:ajax event="change"
-                                            execute="smsInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod"
-                                            render="collectDeliveryForm:notificationMethodRepeat:0:smsInput collectDeliveryForm:notificationMethodRepeat:1:smsInput collectDeliveryForm:notificationMethodRepeat:2:smsInput"/>
+                                            execute="smsInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
+                                            render="collectDeliveryForm:notificationMethodRepeat:0:smsInput collectDeliveryForm:notificationMethodRepeat:1:smsInput collectDeliveryForm:notificationMethodRepeat:2:smsInput collectDeliveryForm:notificationMethodRepeat:3:smsInput collectDeliveryForm:notificationMethodRepeat:4:smsInput collectDeliveryForm:notificationMethodRepeat:5:smsInput"/>
+                                </h:inputText>
+                            </div>
+
+                            <div id="phoneInputWrapper#{varStatus.index}" style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'TELEFON' ? 'block' : 'none'};">
+                                <h:outputLabel for="smsInput" value="Telefon"/>
+                                <h:inputText id="phoneInput" value="#{collectDeliveryController.phoneNumber}">
+                                    <f:ajax event="change"
+                                            execute="phoneInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
+                                            render="collectDeliveryForm:notificationMethodRepeat:0:phoneInput collectDeliveryForm:notificationMethodRepeat:1:phoneInput collectDeliveryForm:notificationMethodRepeat:2:phoneInput collectDeliveryForm:notificationMethodRepeat:3:phoneInput collectDeliveryForm:notificationMethodRepeat:4:phoneInput collectDeliveryForm:notificationMethodRepeat:5:phoneInput"/>
                                 </h:inputText>
                             </div>
 
@@ -104,8 +113,8 @@
                                 <h:outputLabel for="emailInput" value="Epost"/>
                                 <h:inputText id="emailInput" value="#{collectDeliveryController.email}">
                                     <f:ajax event="change"
-                                            execute="emailInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod"
-                                            render="collectDeliveryForm:notificationMethodRepeat:0:emailInput collectDeliveryForm:notificationMethodRepeat:1:emailInput collectDeliveryForm:notificationMethodRepeat:2:emailInput"/>
+                                            execute="emailInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
+                                            render="collectDeliveryForm:notificationMethodRepeat:0:emailInput collectDeliveryForm:notificationMethodRepeat:1:emailInput collectDeliveryForm:notificationMethodRepeat:2:emailInput collectDeliveryForm:notificationMethodRepeat:3:emailInput collectDeliveryForm:notificationMethodRepeat:4:emailInput collectDeliveryForm:notificationMethodRepeat:5:emailInput"/>
                                 </h:inputText>
                             </div>
 
@@ -133,16 +142,25 @@
                         case 'E_POST':
                             jq('#emailInputWrapper' + index).show();
                             jq('#smsInputWrapper' + index).hide();
+                            jq('#phoneInputWrapper' + index).hide();
                             jq('#letterWrapper' + index).hide();
                             break;
                         case 'SMS':
                             jq('#emailInputWrapper' + index).hide();
                             jq('#smsInputWrapper' + index).show();
+                            jq('#phoneInputWrapper' + index).hide();
+                            jq('#letterWrapper' + index).hide();
+                            break;
+                        case 'TELEFON':
+                            jq('#emailInputWrapper' + index).hide();
+                            jq('#smsInputWrapper' + index).hide();
+                            jq('#phoneInputWrapper' + index).show();
                             jq('#letterWrapper' + index).hide();
                             break;
                         case 'BREV':
                             jq('#emailInputWrapper' + index).hide();
                             jq('#smsInputWrapper' + index).hide();
+                            jq('#phoneInputWrapper' + index).hide();
                             jq('#letterWrapper' + index).show();
                             break;
                         default:
