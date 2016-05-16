@@ -8,11 +8,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._0.ArticleType;
-import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import se.vgregion.mvk.controller.model.Cart;
 
 import java.util.ArrayList;
@@ -20,6 +18,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
@@ -132,22 +131,32 @@ public class HomeDeliveryController {
         Map<PrescriptionItemType, String> deliveryMethodForEachItem = deliveryController
                 .getDeliveryMethodForEachItem();
 
-        // We want to present all items which have HEMLEVERANS as delivery method.
-        for (Map.Entry<PrescriptionItemType, String> entry : deliveryMethodForEachItem.entrySet()) {
+        Set<Map.Entry<PrescriptionItemType, String>> entries = deliveryMethodForEachItem.entrySet()
+                .stream()
+                .filter(e -> e.getValue().equals(DeliveryMethodEnum.HEMLEVERANS.name()))
+                .collect(Collectors.toSet());
 
-            if (entry.getValue().equals(DeliveryMethodEnum.HEMLEVERANS.name())) {
+        if (entries.size() == 0) {
+            remaining.clear();
+        }
 
-                for (DeliveryAlternativeType alternative : entry.getKey().getDeliveryAlternative()) {
 
-                    if (alternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS)
-                            && alternative.getDeliveryNotificationMethod() != null
-                            && alternative.getDeliveryNotificationMethod().size() > 0) {
+        // We want to present all items which have HEMLEVERANS as chosen delivery method.
+        for (Map.Entry<PrescriptionItemType, String> entry : entries) {
 
-                        // We found the HEMLEVERANS delivery alternative (we assume there's only one).
-                        remaining.retainAll(alternative.getDeliveryNotificationMethod());
-                    }
-                }
-            }
+            // Now we want to find the delivery alternative with the delivery method we are looking for (HEMLEVERANS)
+            // and also only alternatives which have at least one notification method.
+            // When found the intersection is retained.
+            entry.getKey().getDeliveryAlternative()
+                    .stream()
+                    .filter(alternative -> alternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS)
+                    && alternative.getDeliveryNotificationMethod() != null
+                    && alternative.getDeliveryNotificationMethod().size() > 0)
+                    .forEach(alternative -> {
+
+                // We found the HEMLEVERANS delivery alternative (we assume there's only one).
+                remaining.retainAll(alternative.getDeliveryNotificationMethod());
+            });
         }
 
         return remaining;

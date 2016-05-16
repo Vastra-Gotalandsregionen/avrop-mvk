@@ -61,6 +61,14 @@ public class DeliveryController {
     }
 
     public void setDeliveryMethod(DeliveryMethodEnum deliveryMethod) {
+        if (anyDeliveryMethodFitsAll() && deliveryMethod != null) {
+            // This is set for all items.
+            Map<PrescriptionItemType, String> deliveryMethodForEachItem = getDeliveryMethodForEachItem();
+
+            for (Map.Entry<PrescriptionItemType, String> entry : deliveryMethodForEachItem.entrySet()) {
+                entry.setValue(deliveryMethod.name());
+            }
+        }
         this.deliveryMethod = deliveryMethod;
     }
 
@@ -84,6 +92,8 @@ public class DeliveryController {
 
         prepareDeliveryOptions(cart.getItemsInCart());
 
+        homeDeliveryController.resetChoices();
+
         if (anyDeliveryMethodFitsAll()) {
 
             if (deliveryMethod == null) {
@@ -100,7 +110,6 @@ public class DeliveryController {
 
                 homeDeliveryController.setNextViewIsCollectDelivery(false);
 
-                homeDeliveryController.resetChoices();
                 return "homeDelivery" + ACTION_SUFFIX;
             } else if (deliveryMethod.equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)) {
                 return "collectDelivery" + ACTION_SUFFIX;
@@ -121,7 +130,6 @@ public class DeliveryController {
                 }
             }
 
-            homeDeliveryController.resetChoices();
             homeDeliveryController.setNextViewIsCollectDelivery(true);
             return "homeDelivery" + ACTION_SUFFIX;
         }

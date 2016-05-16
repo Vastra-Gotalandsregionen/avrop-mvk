@@ -29,7 +29,7 @@
 
                 <div class="clearfix">
                     <!-- If at least one method fits all. -->
-                    <h:panelGroup rendered="#{deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.hemleveransEnum) or deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.utlamningsstalleEnum)}">
+                    <h:panelGroup rendered="#{deliveryController.anyDeliveryMethodFitsAll()}">
                         <ul class="delivery-options clearfix">
                             <li>
                                 <div class="row">
