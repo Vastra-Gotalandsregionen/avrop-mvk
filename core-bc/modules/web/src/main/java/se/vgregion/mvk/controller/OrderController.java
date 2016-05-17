@@ -8,12 +8,9 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
-import se._1177.lmn.service.LmnService;
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
-import se._1177.lmn.service.util.Util;
+import se._1177.lmn.service.LmnService;
 import se.vgregion.mvk.controller.model.Cart;
 
 import javax.annotation.PostConstruct;
@@ -27,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.sun.tools.doclint.Entity.pi;
 import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 
 /**

@@ -101,7 +101,7 @@
                             </div>
 
                             <div id="phoneInputWrapper#{varStatus.index}" style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'TELEFON' ? 'block' : 'none'};">
-                                <h:outputLabel for="smsInput" value="Telefon"/>
+                                <h:outputLabel for="phoneInput" value="Telefon"/>
                                 <h:inputText id="phoneInput" value="#{collectDeliveryController.phoneNumber}">
                                     <f:ajax event="change"
                                             execute="phoneInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"

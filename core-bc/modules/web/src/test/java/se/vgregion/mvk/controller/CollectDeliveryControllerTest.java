@@ -11,6 +11,7 @@ import se.vgregion.mvk.controller.model.Cart;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,7 +67,6 @@ public class CollectDeliveryControllerTest {
         alternative3.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.BREV);
         alternative3.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.SMS);
 
-        // These two are available for DHL
         alternative4.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.BREV);
         alternative4.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.SMS);
 
@@ -103,15 +103,34 @@ public class CollectDeliveryControllerTest {
         cartField.setAccessible(true);
         cartField.set(collectDeliveryController, cart);
 
+        Map<PrescriptionItemType, String> deliveryMethodForEachItem = new HashMap<>();
+        deliveryMethodForEachItem.put(item1, "UTLÄMNINGSSTÄLLE"); // So SCHENKER and POSTNORD
+        deliveryMethodForEachItem.put(item2, "HEMLEVERANS");
+        deliveryMethodForEachItem.put(item3, "UTLÄMNINGSSTÄLLE"); // So just POSTNORD
+
+        DeliveryController deliveryController = new DeliveryController();
+        Field deliveryMethodForEachItemField = deliveryController.getClass()
+                .getDeclaredField("deliveryMethodForEachItem");
+        deliveryMethodForEachItemField.setAccessible(true);
+        deliveryMethodForEachItemField.set(deliveryController, deliveryMethodForEachItem);
+
+        Field cartFieldOnDeliveryController = deliveryController.getClass().getDeclaredField("cart");
+        cartFieldOnDeliveryController.setAccessible(true);
+        cartFieldOnDeliveryController.set(deliveryController, cart);
+
         OrderController orderController = new OrderController();
 
         Field deliveryControllerField = orderController.getClass().getDeclaredField("deliveryController");
         deliveryControllerField.setAccessible(true);
-        deliveryControllerField.set(orderController, mock(DeliveryController.class));
+        deliveryControllerField.set(orderController, deliveryController);
 
         Field collectDeliveryControllerField = orderController.getClass().getDeclaredField("collectDeliveryController");
         collectDeliveryControllerField.setAccessible(true);
         collectDeliveryControllerField.set(orderController, collectDeliveryController);
+
+        Field deliveryController2 = collectDeliveryController.getClass().getDeclaredField("deliveryController");
+        deliveryController2.setAccessible(true);
+        deliveryController2.set(collectDeliveryController, deliveryController);
 
         // This is an important preparatory step.
         orderController.prepareDeliveryOptions(cart.getItemsInCart());
