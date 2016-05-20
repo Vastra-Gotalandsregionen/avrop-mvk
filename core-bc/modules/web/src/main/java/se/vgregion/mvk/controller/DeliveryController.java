@@ -47,6 +47,8 @@ public class DeliveryController {
     private DeliveryMethodEnum deliveryMethod = null;//DeliveryMethodEnum.HEMLEVERANS; // Default. Will this possibly change so a user can have a personal default?
     private boolean userNeedsToChooseDeliveryMethodForEachItem;
     private Set<DeliveryMethodEnum> possibleDeliveryMethodsFittingAllItems;
+
+    // Chosen delivery method for each item
     private Map<PrescriptionItemType, String> deliveryMethodForEachItem = new HashMap<>();
 
     public DeliveryMethodEnum getDeliveryMethod() {
@@ -210,7 +212,9 @@ public class DeliveryController {
         // Make sure chosen items are in the map. Otherwise add them.
         for (PrescriptionItemType prescriptionItemType : cart.getItemsInCart()) {
             if (!deliveryMethodForEachItem.containsKey(prescriptionItemType)) {
-                deliveryMethodForEachItem.put(prescriptionItemType, null); // Null since we haven't chosen method yet.
+                String decidedDeliveryMethod = decideOnDeliveryMethod(prescriptionItemType);
+                
+                deliveryMethodForEachItem.put(prescriptionItemType, decidedDeliveryMethod);
             } else {
 
                 // Check if the current choice is allowed. Otherwise reset.
@@ -225,6 +229,29 @@ public class DeliveryController {
         }
 
         return deliveryMethodForEachItem;
+    }
+
+    private String decideOnDeliveryMethod(PrescriptionItemType prescriptionItem) {
+
+        List<DeliveryAlternativeType> deliveryAlternatives = prescriptionItem.getDeliveryAlternative();
+
+        Boolean homeDeliveryPossible = anyDeliveryAlternativeHasDeliveryMethod(deliveryAlternatives,
+                DeliveryMethodEnum.HEMLEVERANS);
+
+        Boolean collectDeliveryPossible = anyDeliveryAlternativeHasDeliveryMethod(deliveryAlternatives,
+                DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
+
+        if (homeDeliveryPossible && collectDeliveryPossible) {
+            return null;
+        } else if (homeDeliveryPossible && !collectDeliveryPossible) {
+            return getHemleveransValue();
+        } else if (!homeDeliveryPossible && collectDeliveryPossible) {
+            return getUtlamningsstalleValue();
+        } else {
+            String msg = prescriptionItem.getArticle().getArticleName() + " kan inte beställas.";
+            FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
+            return null;
+        }
     }
 
     public boolean deliveryMethodUsedForAnyItem(DeliveryMethodEnum deliveryMethod) {

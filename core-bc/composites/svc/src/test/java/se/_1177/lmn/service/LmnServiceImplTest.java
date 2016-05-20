@@ -13,10 +13,17 @@ import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._0.rivtabp21
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 import se._1177.lmn.service.util.Util;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -132,4 +139,61 @@ public class LmnServiceImplTest {
         assertEquals(5, holder.getNoLongerOrderable().size());
     }
 
+    @Test
+    public void sortByOrderableToday() throws Exception {
+
+        PrescriptionItemType p1, p2, p3, p4, p5;
+
+        p1 = new PrescriptionItemType();
+        p2 = new PrescriptionItemType();
+        p3 = new PrescriptionItemType();
+        p4 = new PrescriptionItemType();
+        p5 = new PrescriptionItemType();
+
+        p1.setNextEarliestOrderDate(getTodayPlusDays(-1));  // Orderable today
+        p2.setNextEarliestOrderDate(null);                  // Orderable today
+        p3.setNextEarliestOrderDate(getTodayPlusDays(1));   // Not orderable today
+        p4.setNextEarliestOrderDate(null);                  // Orderable today
+        p5.setNextEarliestOrderDate(getTodayPlusDays(0));   // Orderable today
+
+        List<PrescriptionItemType> list = new ArrayList<>(Arrays.asList(p1, p2, p3, p4, p5));
+
+        LmnServiceImpl.sortByOrderableToday(list);
+
+        // p1, p2, p4 and p5 should be among the four first and p3 the fifth in the list
+        List<PrescriptionItemType> firstFour = list.subList(0, 4);
+
+        assertTrue(firstFour.contains(p1));
+        assertTrue(firstFour.contains(p2));
+        assertTrue(firstFour.contains(p4));
+        assertTrue(firstFour.contains(p5));
+
+        assertEquals(p3, list.get(4));
+    }
+
+    private XMLGregorianCalendar getTodayPlusDays(int daysToAdd) {
+        GregorianCalendar calendar = new GregorianCalendar();
+
+        calendar.add(Calendar.DATE, daysToAdd);
+
+        return toXmlGregorianCalendar(calendar);
+    }
+
+    public XMLGregorianCalendar toXmlGregorianCalendar(GregorianCalendar calendar) {
+
+        XMLGregorianCalendar xmlGregorianCalendar = null;
+        DatatypeFactory datatypeFactory;
+        try {
+            datatypeFactory = DatatypeFactory.newInstance();
+        } catch (DatatypeConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+
+        /*// Test today
+        GregorianCalendar calendar = new GregorianCalendar();*/
+
+        xmlGregorianCalendar = datatypeFactory.newXMLGregorianCalendar(calendar);
+
+        return xmlGregorianCalendar;
+    }
 }

@@ -19,9 +19,13 @@ import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._0.rivtabp21
 import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.RegisterMedicalSupplyOrderResponseType;
 import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.RegisterMedicalSupplyOrderType;
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
+import se._1177.lmn.service.util.Util;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,10 +86,24 @@ public class LmnServiceImpl implements LmnService {
             }
         }
 
+        sortByOrderableToday(orderableItems);
+
         holder.orderable = orderableItems;
         holder.noLongerOrderable = noLongerOrderable;
 
         return holder;
+    }
+
+    static void sortByOrderableToday(List<PrescriptionItemType> orderableItems) {
+        orderableItems.sort((o1, o2) -> {
+            if (isAfterToday(o1.getNextEarliestOrderDate()) && !isAfterToday(o2.getNextEarliestOrderDate())) {
+                return 1;
+            } else if (!(isAfterToday(o1.getNextEarliestOrderDate()) && !isAfterToday(o2.getNextEarliestOrderDate()))) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
     }
 
     public GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(ServicePointProviderEnum provider,
@@ -164,4 +182,9 @@ public class LmnServiceImpl implements LmnService {
             order.getOrderRow().add(orderRow);
         }
     }
+
+    public static boolean isAfterToday(XMLGregorianCalendar date) {
+        return Util.isAfterToday(date);
+    }
 }
+

@@ -82,11 +82,19 @@ public class OrderController {
     }
 
     public List<PrescriptionItemType> getMedicalSupplyPrescriptions() {
-        return medicalSupplyPrescriptions.orderable;
+        if (medicalSupplyPrescriptions != null) {
+            return medicalSupplyPrescriptions.orderable;
+        } else {
+            return null;
+        }
     }
 
     public List<PrescriptionItemType> getNoLongerOrderableMedicalSupplyPrescriptions() {
-        return medicalSupplyPrescriptions.noLongerOrderable;
+        if (medicalSupplyPrescriptions != null) {
+            return medicalSupplyPrescriptions.noLongerOrderable;
+        } else {
+            return null;
+        }
     }
 
     public Map<String, Boolean> getChosenItemMap() {

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._0.ArticleType;
+import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
@@ -133,7 +134,8 @@ public class HomeDeliveryController {
 
         Set<Map.Entry<PrescriptionItemType, String>> entries = deliveryMethodForEachItem.entrySet()
                 .stream()
-                .filter(e -> e.getValue().equals(DeliveryMethodEnum.HEMLEVERANS.name()))
+                .filter(entry -> entry.getValue().equals(DeliveryMethodEnum.HEMLEVERANS.name())
+                        && atLeastOneHomeDeliveryMethodWithNotification(entry.getKey()))
                 .collect(Collectors.toSet());
 
         if (entries.size() == 0) {
@@ -160,6 +162,19 @@ public class HomeDeliveryController {
         }
 
         return remaining;
+    }
+
+    private boolean atLeastOneHomeDeliveryMethodWithNotification(PrescriptionItemType item) {
+
+        for (DeliveryAlternativeType deliveryAlternative : item.getDeliveryAlternative()) {
+            if (deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS)) {
+                if (deliveryAlternative.getDeliveryNotificationMethod().size() > 0) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public Map<PrescriptionItemType, String> getChosenDeliveryNotificationMethod() {

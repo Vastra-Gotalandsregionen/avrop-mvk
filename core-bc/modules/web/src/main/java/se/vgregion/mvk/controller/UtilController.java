@@ -35,21 +35,7 @@ public class UtilController {
     }
 
     public static boolean isAfterToday(XMLGregorianCalendar date) {
-
-        if (date == null) {
-            return false;
-        }
-
-        Calendar lastMilliSecondToday = Calendar.getInstance();
-
-        lastMilliSecondToday.set(Calendar.HOUR_OF_DAY, 23);
-        lastMilliSecondToday.set(Calendar.MINUTE, 59);
-        lastMilliSecondToday.set(Calendar.SECOND, 59);
-        lastMilliSecondToday.set(Calendar.MILLISECOND, 999);
-
-        Date toGregorian = new GregorianCalendar(date.getYear(), date.getMonth() - 1, date.getDay()).getTime();
-
-        return toGregorian.after(lastMilliSecondToday.getTime());
+        return Util.isAfterToday(date);
     }
 
     public static boolean isOlderThanAYear(XMLGregorianCalendar date) {
