@@ -16,7 +16,6 @@ import se.vgregion.mvk.controller.model.Cart;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -220,7 +219,7 @@ public class DeliveryController {
         for (PrescriptionItemType prescriptionItemType : cart.getItemsInCart()) {
             if (!deliveryMethodForEachItem.containsKey(prescriptionItemType)) {
                 String decidedDeliveryMethod = decideOnDeliveryMethod(prescriptionItemType);
-                
+
                 deliveryMethodForEachItem.put(prescriptionItemType, decidedDeliveryMethod);
             } else {
 
@@ -280,5 +279,34 @@ public class DeliveryController {
         return possibleDeliveryMethodsFittingAllItems.contains(DeliveryMethodEnum.HEMLEVERANS)
                 ||
                 possibleDeliveryMethodsFittingAllItems.contains(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
+    }
+
+    public List<PrescriptionItemType> sortByNumberDeliveryMethodChoices(List<PrescriptionItemType> items) {
+        List<PrescriptionItemType> newList = new ArrayList<>(items);
+
+        newList.sort((o1, o2) -> {
+            List<DeliveryAlternativeType> alternatives1 = o1.getDeliveryAlternative();
+            boolean hasBothDeliveryMethods1 =
+                    anyDeliveryAlternativeHasDeliveryMethod(alternatives1, DeliveryMethodEnum.HEMLEVERANS)
+                            &&
+                            anyDeliveryAlternativeHasDeliveryMethod(alternatives1, DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
+
+            List<DeliveryAlternativeType> alternatives2 = o2.getDeliveryAlternative();
+            boolean hasBothDeliveryMethods2 =
+                    anyDeliveryAlternativeHasDeliveryMethod(alternatives2, DeliveryMethodEnum.HEMLEVERANS)
+                            &&
+                            anyDeliveryAlternativeHasDeliveryMethod(alternatives2, DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
+
+
+            if (hasBothDeliveryMethods1 && !hasBothDeliveryMethods2) {
+                return -1;
+            } else if (!hasBothDeliveryMethods1 && hasBothDeliveryMethods2) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
+        return newList;
     }
 }
