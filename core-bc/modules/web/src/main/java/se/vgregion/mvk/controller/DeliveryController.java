@@ -53,13 +53,20 @@ public class DeliveryController {
 
     public DeliveryMethodEnum getDeliveryMethod() {
 
-        if (deliveryMethod != null && anyDeliveryMethodFitsAll() && !getDeliveryMethodForEachItem().values().contains(
-                deliveryMethod.name())) {
-            // Chosen deliveryMethod cannot be chosen or needs to be explicitly chosen.
-            deliveryMethod = null;
+        // First, check if only one choice is possible. If so, choose that.
+        if (anyDeliveryMethodFitsAll()) {
+            if (possibleDeliveryMethodsFittingAllItems.contains(DeliveryMethodEnum.HEMLEVERANS) &&
+                    !possibleDeliveryMethodsFittingAllItems.contains(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)) {
+                return DeliveryMethodEnum.HEMLEVERANS;
+            } else if (possibleDeliveryMethodsFittingAllItems.contains(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE) &&
+                    !possibleDeliveryMethodsFittingAllItems.contains(DeliveryMethodEnum.HEMLEVERANS)) {
+                return DeliveryMethodEnum.UTLÄMNINGSSTÄLLE;
+            } else {
+                return deliveryMethod;
+            }
         }
 
-        return deliveryMethod;
+        return null;
     }
 
     public void setDeliveryMethod(DeliveryMethodEnum deliveryMethod) {
