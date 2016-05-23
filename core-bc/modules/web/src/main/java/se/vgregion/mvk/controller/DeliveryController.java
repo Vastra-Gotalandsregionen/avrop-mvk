@@ -43,7 +43,7 @@ public class DeliveryController {
     @Autowired
     private CollectDeliveryController collectDeliveryController;
 
-    private DeliveryMethodEnum deliveryMethod = null;//DeliveryMethodEnum.HEMLEVERANS; // Default. Will this possibly change so a user can have a personal default?
+    private DeliveryMethodEnum deliveryMethod = null;
     private boolean userNeedsToChooseDeliveryMethodForEachItem;
     private Set<DeliveryMethodEnum> possibleDeliveryMethodsFittingAllItems;
 
@@ -165,8 +165,9 @@ public class DeliveryController {
         return allCollectCombinations;
     }
 
-    private List<DeliveryAlternativeType> getDeliveryAlternativeMatchingDeliveryMethod(PrescriptionItemType prescriptionItem,
-                                                                                       String deliveryMethodName) {
+    private List<DeliveryAlternativeType> getDeliveryAlternativeMatchingDeliveryMethod(
+            PrescriptionItemType prescriptionItem,
+            String deliveryMethodName) {
 
         List<DeliveryAlternativeType> matching = new ArrayList<>();
         for (DeliveryAlternativeType deliveryAlternativeType : prescriptionItem.getDeliveryAlternative()) {
@@ -226,7 +227,8 @@ public class DeliveryController {
                 // Check if the current choice is allowed. Otherwise reset.
                 List<String> allowedMethods = new ArrayList<>();
 
-                prescriptionItemType.getDeliveryAlternative().forEach(d -> allowedMethods.add(d.getDeliveryMethod().name()));
+                prescriptionItemType.getDeliveryAlternative().forEach(
+                        d -> allowedMethods.add(d.getDeliveryMethod().name()));
 
                 if (!allowedMethods.contains(deliveryMethodForEachItem.get(prescriptionItemType))) {
                     deliveryMethodForEachItem.put(prescriptionItemType, null);

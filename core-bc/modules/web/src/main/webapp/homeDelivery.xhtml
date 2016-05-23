@@ -29,27 +29,39 @@
 
                 <div class="input-group">
                     <h:outputLabel for="nameField" value="Namn"/>
-                    <h:inputText id="nameField" value="#{homeDeliveryController.fullName}" />
+                    <h:inputText id="nameField" value="#{homeDeliveryController.fullName}" validatorMessage="Ogiltigt namn" required="true" requiredMessage="Namn saknas">
+                        <f:validateLength minimum="3" maximum="256"/>
+                    </h:inputText>
+                    <h:message for="nameField" styleClass="alert alert-danger field-error"/>
                 </div>
 
                 <div class="input-group">
-                    <h:outputLabel for="coField" value="C/O-adress"/>
+                    <h:outputLabel for="coField" value="C/O-adress (valfri)"/>
                     <h:inputText id="coField" value="#{homeDeliveryController.coAddress}" />
                 </div>
 
                 <div class="input-group">
                     <h:outputLabel for="addressField" value="Adress"/>
-                    <h:inputText id="addressField" value="#{homeDeliveryController.address}" />
+                    <h:inputText id="addressField" value="#{homeDeliveryController.address}" required="true" requiredMessage="Adress saknas" validatorMessage="Ogiltig adress">
+                        <f:validateLength minimum="3" maximum="256"/>
+                    </h:inputText>
+                    <h:message for="addressField" styleClass="alert alert-danger field-error"/>
                 </div>
 
                 <div class="input-group">
                     <h:outputLabel for="postalNumberField" value="Postnummer"/>
-                    <h:inputText styleClass="postal-number" id="postalNumberField" value="#{homeDeliveryController.zip}" />
+                    <h:inputText styleClass="postal-number" id="postalNumberField" value="#{homeDeliveryController.zip}" required="true" requiredMessage="Postnummer saknas" validatorMessage="Ogiltigt postnummer">
+                        <f:validateRegex pattern="\d\d\d\s?\d\d" />
+                    </h:inputText>
+                    <h:message for="postalNumberField" styleClass="alert alert-danger field-error"/>
                 </div>
 
                 <div class="input-group">
                     <h:outputLabel for="cityField" value="Postort"/>
-                    <h:inputText id="cityField" value="#{homeDeliveryController.city}" />
+                    <h:inputText id="cityField" value="#{homeDeliveryController.city}" required="true" requiredMessage="Postort saknas" validatorMessage="Ogiltig postort">
+                        <f:validateLength minimum="2" maximum="256"/>
+                    </h:inputText>
+                    <h:message for="cityField" styleClass="alert alert-danger field-error"/>
                 </div>
 
                 <div class="input-group clearfix door-code-group">
@@ -63,7 +75,7 @@
                 </div>
 
                 <div class="input-group">
-                    <h:outputLabel for="phoneField" value="Telefon"/>
+                    <h:outputLabel for="phoneField" value="Telefon (valfri)"/>
                     <h:inputText id="phoneField" value="#{homeDeliveryController.phoneNumber}" />
                 </div>
 
@@ -136,7 +148,7 @@
                 </h:panelGroup>
 
                 <div class="right-align">
-                    <h:commandButton styleClass="button back-button" value="Bakåt" action="delivery?faces-redirect=true&amp;includeViewParams=true" />
+                    <h:button styleClass="button back-button" value="Bakåt" outcome="delivery" />
                     <h:commandButton styleClass="button to-be-confirmed-submit-button" value="Till adressinformation" action="#{homeDeliveryController.toVerifyDelivery}" />
                     <h:commandButton style="display: none" styleClass="button confirm-submit-button" value="Kontrollera beställning" action="#{homeDeliveryController.toVerifyDelivery}" />
                 </div>

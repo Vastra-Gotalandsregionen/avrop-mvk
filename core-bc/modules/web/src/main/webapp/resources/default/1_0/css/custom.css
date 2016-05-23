@@ -198,14 +198,38 @@ ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
 .alert-danger {
     color: #FF0000;
     background-color: #f2dede;
-    border-color: #ebccd1;
 }
 .alert {
-    border: 1px solid transparent;
+    border: none;
     border-radius: 4px;
     font-size: 1.2em;
     margin-bottom: 20px;
     padding: 15px;
+}
+
+.alert.field-error {
+    padding: 4px 8px;
+    margin-left: 16px;
+}
+
+.alert.field-error {
+    position: relative;
+    background: #f2dede;
+}
+
+.alert.field-error:after {
+    right: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(242, 222, 222, 0);
+    border-right-color: #f2dede;
+    border-width: 8px;
+    margin-top: -8px;
 }
 
 /**************************/
