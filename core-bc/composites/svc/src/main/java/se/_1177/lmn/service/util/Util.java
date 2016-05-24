@@ -8,6 +8,8 @@ import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Patrik Björk
@@ -56,5 +58,15 @@ public class Util {
         Date toGregorian = new GregorianCalendar(date.getYear(), date.getMonth() - 1, date.getDay()).getTime();
 
         return toGregorian.after(lastMilliSecondToday.getTime());
+    }
+
+    public static boolean isValidEmailAddress(String email) {
+        String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+
+        Pattern pattern = Pattern.compile(regex);
+
+        Matcher matcher = pattern.matcher(email);
+
+        return matcher.matches();
     }
 }

@@ -78,6 +78,7 @@ public class VerifyDeliveryController {
         for (PrescriptionItemType prescriptionItem : cart.getItemsInCart()) {
 
             DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
+            deliveryChoicePerItem.put(prescriptionItem, deliveryChoice);
 
             DeliveryMethodEnum deliveryMethod = DeliveryMethodEnum.fromValue(deliveryMethodForEachItem.get(
                     prescriptionItem));
@@ -88,10 +89,14 @@ public class VerifyDeliveryController {
 
                 String deliveryMethodId = null;
 
-                // Take the first deliveryAlternative with matching deliveryMethod. This assumes no two
-                // deliveryAlternatives share the same deliveryMethod. That would lead to arbitrary result.
+                // Take the first deliveryAlternative with matching deliveryMethod and service point provider. This
+                // assumes no two deliveryAlternatives share the same deliveryMethod and service point provider. That
+                // would lead to arbitrary result.
                 for (DeliveryAlternativeType deliveryAlternative : prescriptionItem.getDeliveryAlternative()) {
-                    if (deliveryAlternative.getDeliveryMethod().equals(deliveryMethod)) {
+                    if (deliveryAlternative.getDeliveryMethod().equals(deliveryMethod)
+                            &&
+                            collectDeliveryController.getServicePointProviderForItem(prescriptionItem)
+                                    .equals(deliveryAlternative.getServicePointProvider())) {
                         deliveryMethodId = deliveryAlternative.getDeliveryMethodId();
                         break;
                     }
@@ -155,6 +160,18 @@ public class VerifyDeliveryController {
 
                 deliveryChoice.setDeliveryNotificationReceiver(notificationReceiver);
             } else {
+                String deliveryMethodId = null;
+
+                // Take the first deliveryAlternative with matching deliveryMethod and service point provider. This
+                // assumes no two deliveryAlternatives share the same deliveryMethod and service point provider. That
+                // would lead to arbitrary result.
+                for (DeliveryAlternativeType deliveryAlternative : prescriptionItem.getDeliveryAlternative()) {
+                    if (deliveryAlternative.getDeliveryMethod().equals(deliveryMethod)) {
+                        deliveryMethodId = deliveryAlternative.getDeliveryMethodId();
+                        break;
+                    }
+                }
+
                 AddressType address = new AddressType();
                 address.setCareOfAddress(homeDeliveryController.getCoAddress()); // // TODO: 2016-05-02
                 address.setCity(userProfile.getCity());
@@ -165,6 +182,7 @@ public class VerifyDeliveryController {
                 address.setStreet(userProfile.getStreetAddress());
 
                 deliveryChoice.setHomeDeliveryAddress(address);
+                deliveryChoice.setDeliveryMethodId(deliveryMethodId);
             }
         }
 

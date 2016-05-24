@@ -17,9 +17,12 @@ import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsResponseType;
 import se._1177.lmn.service.LmnService;
 import se._1177.lmn.service.concurrent.BackgroundExecutor;
+import se._1177.lmn.service.util.Util;
 import se.vgregion.mvk.controller.model.Cart;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
@@ -319,6 +322,12 @@ public class CollectDeliveryController {
     }
 
     public String toVerifyDelivery() {
+        boolean success = validateNotificationInput();
+
+        if (!success) {
+            return "collectDelivery";
+        }
+
         return "verifyDelivery" + ACTION_SUFFIX;
     }
 
@@ -502,4 +511,77 @@ public class CollectDeliveryController {
         chosenDeliveryNotificationMethod = null;
         possibleCollectCombinationsFittingAllWithNotificationMethods = null;
     }
+
+    public boolean validateNotificationInput() {
+
+        final int[] count = {0};
+
+        final boolean[] validationSuccess = {true};
+
+        getDeliveryNotificationMethodsPerProvider().entrySet().forEach(entry -> {
+            String chosenDeliveryMethod = getChosenDeliveryNotificationMethod().get(entry.getKey());
+
+            if (DeliveryNotificationMethodEnum.E_POST.name().equals(chosenDeliveryMethod)) {
+                String email = getEmail();
+
+                if (email == null || "".equals(email)) {
+                    addMessage("Epost för avisering saknas", "emailInput", count[0]);
+                    validationSuccess[0] = false;
+                } else if (!Util.isValidEmailAddress(email)) {
+                    addMessage("Epost för avisering är ogiltig.", "emailInput", count[0]);
+                    validationSuccess[0] = false;
+                }
+            } else if (DeliveryNotificationMethodEnum.BREV.name().equals(chosenDeliveryMethod)) {
+                // Do nothing
+            } else if (DeliveryNotificationMethodEnum.SMS.name().equals(chosenDeliveryMethod)) {
+                String smsNumber = getSmsNumber();
+
+                if (smsNumber == null || "".equals(smsNumber)) {
+                    addMessage("SMS för avisering saknas", "smsInput", count[0]);
+                    validationSuccess[0] = false;
+                } else if (smsNumber.length() < 10) {
+                    addMessage("SMS för avisering är ogiltig.", "smsInput", count[0]);
+                    validationSuccess[0] = false;
+                }
+            } else if (DeliveryNotificationMethodEnum.TELEFON.name().equals(chosenDeliveryMethod)) {
+                String phoneNumber = getPhoneNumber();
+
+                if (phoneNumber == null || "".equals(phoneNumber)) {
+                    addMessage("Telefon för avisering saknas", "phoneInput", count[0]);
+                    validationSuccess[0] = false;
+                } else if (phoneNumber.length() < 8) {
+                    addMessage("Telefon för avisering är ogiltig.", "phoneInput", count[0]);
+                    validationSuccess[0] = false;
+                }
+            } else {
+                throw new IllegalStateException("No match for chosen notification method found.");
+            }
+
+            count[0]++;
+        });
+
+        /*if (validationFailed[0]) {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            if (!fc.isReleased()) {
+                fc.renderResponse();
+            }
+        }*/
+
+        return validationSuccess[0];
+    }
+
+    private void addMessage(String summary, String componentId, int count) {
+        FacesMessage msg = new FacesMessage(summary);
+        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+
+        FacesContext fc = FacesContext.getCurrentInstance();
+
+        fc.addMessage("collectDeliveryForm:notificationMethodRepeat:" + count + ":" + componentId, msg);
+
+        if (!fc.isReleased()) {
+            fc.renderResponse();
+        }
+    }
+
+
 }

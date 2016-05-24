@@ -66,8 +66,8 @@
                                         <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm"/>
                                     </h:outputText>.
                                     <span class="toggle-trigger info-icon expand" data-toggle-for="orderTimingInfo#{status.index}"/>
-                                    <div id="orderTimingInfo#{status.index}" style="display: none;">
-                                        Infotext...
+                                    <div id="orderTimingInfo#{status.index}" class="expanded-content" style="display: none;">
+                                        Nästa möjliga uttag
                                     </div>
                                 </h:panelGroup>
                                 #{item.article.articleName}
@@ -104,8 +104,8 @@
 
                 <span class="toggle-trigger info-icon expand" data-toggle-for="collectedProductsInfo"/>
 
-                <div id="collectedProductsInfo" style="display: none;">
-                    Infotext...
+                <div id="collectedProductsInfo" class="expanded-content" style="display: none;">
+                    Dina förskrivna och uthämtade LM
                 </div>
 
                 <div id="collected-products-wrapper" style="display: none;">

@@ -23,7 +23,7 @@
   <xs:element name='RegisterMedicalSupplyOrderResponse' type='tns:RegisterMedicalSupplyOrderResponseType' />
   <xs:complexType name='RegisterMedicalSupplyOrderType'>
     <xs:sequence>
-      <xs:element name='Order' type='core:OrderType' minOccurs='1' maxOccurs='unbounded'/>
+      <xs:element name='Order' type='core:OrderType' minOccurs='1' maxOccurs='1'/>
       <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>
   </xs:complexType>

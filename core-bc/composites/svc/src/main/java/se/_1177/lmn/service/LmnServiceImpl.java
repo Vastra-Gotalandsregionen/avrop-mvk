@@ -151,7 +151,7 @@ public class LmnServiceImpl implements LmnService {
 
         addOrderRows(prescriptionItems, order, deliveryChoicePerItem);
 
-        parameters.getOrder().add(order);
+        parameters.setOrder(order);
 
         return registerMedicalSupplyOrder.registerMedicalSupplyOrder("", parameters);
     }
@@ -178,6 +178,8 @@ public class LmnServiceImpl implements LmnService {
             orderRow.setPrescriptionId(item.getPrescriptionId());
 
             orderRow.setPrescriptionItemId(item.getPrescriptionItemId());
+
+//            orderRow.setSource(); // TODO: 2016-05-24  
 
             order.getOrderRow().add(orderRow);
         }

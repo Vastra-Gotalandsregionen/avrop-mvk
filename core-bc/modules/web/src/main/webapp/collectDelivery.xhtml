@@ -98,6 +98,7 @@
                                             execute="smsInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
                                             render="collectDeliveryForm:notificationMethodRepeat:0:smsInput collectDeliveryForm:notificationMethodRepeat:1:smsInput collectDeliveryForm:notificationMethodRepeat:2:smsInput collectDeliveryForm:notificationMethodRepeat:3:smsInput collectDeliveryForm:notificationMethodRepeat:4:smsInput collectDeliveryForm:notificationMethodRepeat:5:smsInput"/>
                                 </h:inputText>
+                                <h:message for="smsInput" styleClass="alert alert-danger field-error"/>
                             </div>
 
                             <div id="phoneInputWrapper#{varStatus.index}" style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'TELEFON' ? 'block' : 'none'};">
@@ -107,6 +108,7 @@
                                             execute="phoneInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
                                             render="collectDeliveryForm:notificationMethodRepeat:0:phoneInput collectDeliveryForm:notificationMethodRepeat:1:phoneInput collectDeliveryForm:notificationMethodRepeat:2:phoneInput collectDeliveryForm:notificationMethodRepeat:3:phoneInput collectDeliveryForm:notificationMethodRepeat:4:phoneInput collectDeliveryForm:notificationMethodRepeat:5:phoneInput"/>
                                 </h:inputText>
+                                <h:message for="phoneInput" styleClass="alert alert-danger field-error"/>
                             </div>
 
                             <div id="emailInputWrapper#{varStatus.index}" style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'E_POST' ? 'block' : 'none'};">
@@ -116,6 +118,7 @@
                                             execute="emailInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
                                             render="collectDeliveryForm:notificationMethodRepeat:0:emailInput collectDeliveryForm:notificationMethodRepeat:1:emailInput collectDeliveryForm:notificationMethodRepeat:2:emailInput collectDeliveryForm:notificationMethodRepeat:3:emailInput collectDeliveryForm:notificationMethodRepeat:4:emailInput collectDeliveryForm:notificationMethodRepeat:5:emailInput"/>
                                 </h:inputText>
+                                <h:message for="emailInput" styleClass="alert alert-danger field-error"/>
                             </div>
 
                             <div id="letterWrapper#{varStatus.index}" style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'BREV' ? 'block' : 'none'};">
@@ -131,7 +134,7 @@
                 </h:panelGroup>
 
                 <div class="right-align">
-                    <h:commandButton styleClass="button back-button" value="Bakåt" action="delivery?faces-redirect=true&amp;includeViewParams=true" />
+                    <h:button styleClass="button back-button" value="Bakåt" outcome="delivery" />
                     <h:commandButton styleClass="button" value="Kontrollera beställning" action="#{collectDeliveryController.toVerifyDelivery}" />
                 </div>
             </h:form>

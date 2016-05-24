@@ -113,6 +113,7 @@
                                                 execute="smsInput homeDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
                                                 render="homeDeliveryForm:notificationMethodRepeat:0:smsInput homeDeliveryForm:notificationMethodRepeat:1:smsInput homeDeliveryForm:notificationMethodRepeat:2:smsInput homeDeliveryForm:notificationMethodRepeat:3:smsInput homeDeliveryForm:notificationMethodRepeat:4:smsInput homeDeliveryForm:notificationMethodRepeat:5:smsInput"/>
                                     </h:inputText>
+                                    <h:message for="smsInput" styleClass="alert alert-danger field-error"/>
                                 </div>
 
                                 <div id="phoneInputWrapper#{varStatus.index}" style="display: #{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'TELEFON' ? 'block' : 'none'};">
@@ -122,6 +123,7 @@
                                                 execute="phoneInput homeDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
                                                 render="homeDeliveryForm:notificationMethodRepeat:0:phoneInput homeDeliveryForm:notificationMethodRepeat:1:phoneInput homeDeliveryForm:notificationMethodRepeat:2:phoneInput homeDeliveryForm:notificationMethodRepeat:3:phoneInput homeDeliveryForm:notificationMethodRepeat:4:phoneInput homeDeliveryForm:notificationMethodRepeat:5:phoneInput"/>
                                     </h:inputText>
+                                    <h:message for="phoneInput" styleClass="alert alert-danger field-error"/>
                                 </div>
 
                                 <div id="emailInputWrapper#{varStatus.index}" style="display: #{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'E_POST' ? 'block' : 'none'};">
@@ -131,6 +133,7 @@
                                                 execute="emailInput homeDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
                                                 render="homeDeliveryForm:notificationMethodRepeat:0:emailInput homeDeliveryForm:notificationMethodRepeat:1:emailInput homeDeliveryForm:notificationMethodRepeat:2:emailInput homeDeliveryForm:notificationMethodRepeat:3:emailInput homeDeliveryForm:notificationMethodRepeat:4:emailInput homeDeliveryForm:notificationMethodRepeat:5:emailInput"/>
                                     </h:inputText>
+                                    <h:message for="emailInput" styleClass="alert alert-danger field-error"/>
                                 </div>
 
                                 <div id="letterWrapper#{varStatus.index}" style="display: #{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'BREV' ? 'block' : 'none'};">
