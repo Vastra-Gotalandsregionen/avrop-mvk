@@ -92,15 +92,17 @@ public class MvkInboxServiceTest {
 
     private String expectedMessage = "<?xml version=\"1.0\"?>\n" +
             "<article>\n" +
-            "    <info>\n" +
-            "        <title>Beställda produkter</title>\n" +
-            "    </info>\n" +
             "\n" +
             "    <section>\n" +
+            "        <title>Beställda produkter</title>\n" +
             "            <variablelist>\n" +
             "            <varlistentry>\n" +
+            "                <term>&nbsp;</term>\n" +
+            "                <listitem>&nbsp;</listitem>\n" +
+            "            </varlistentry>\n" +
+            "            <varlistentry>\n" +
             "                <term>Produktgrupp:</term>\n" +
-            "                <listitem>DIABETES</listitem>\n" +
+            "                <listitem>Diabetes</listitem>\n" +
             "            </varlistentry>\n" +
             "            <varlistentry>\n" +
             "                <term></term>\n" +
@@ -113,8 +115,12 @@ public class MvkInboxServiceTest {
             "        </variablelist>\n" +
             "        <variablelist>\n" +
             "            <varlistentry>\n" +
+            "                <term>&nbsp;</term>\n" +
+            "                <listitem>&nbsp;</listitem>\n" +
+            "            </varlistentry>\n" +
+            "            <varlistentry>\n" +
             "                <term>Produktgrupp:</term>\n" +
-            "                <listitem>INKONTINENS</listitem>\n" +
+            "                <listitem>Inkontinens</listitem>\n" +
             "            </varlistentry>\n" +
             "            <varlistentry>\n" +
             "                <term></term>\n" +
@@ -129,41 +135,76 @@ public class MvkInboxServiceTest {
             "\n" +
             "    <section>\n" +
             "        <title>Leveransinformation</title>\n" +
-            "        <para>UTLÄMNINGSSTÄLLE:</para>\n" +
             "        <variablelist>\n" +
+            "            <varlistentry>\n" +
+            "                <term>&nbsp;</term>\n" +
+            "                <listitem>&nbsp;</listitem>\n" +
+            "            </varlistentry>\n" +
+            "                <varlistentry>\n" +
+            "                    <term></term>\n" +
+            "                    <listitem>Utlämningsställe:</listitem>\n" +
+            "                </varlistentry>\n" +
             "                <varlistentry>\n" +
             "                    <term>Matnära</term>\n" +
-            "                    <listitem></listitem>\n" +
+            "                    <listitem>&nbsp;</listitem>\n" +
             "                </varlistentry>\n" +
             "                <varlistentry>\n" +
             "                    <term>Gatan 1</term>\n" +
-            "                    <listitem></listitem>\n" +
+            "                    <listitem>&nbsp;</listitem>\n" +
             "                </varlistentry>\n" +
             "                <varlistentry>\n" +
             "                    <term>12345 Ankeborg</term>\n" +
-            "                    <listitem></listitem>\n" +
+            "                    <listitem>&nbsp;</listitem>\n" +
             "                </varlistentry>\n" +
-            "\n" +
             "        </variablelist>\n" +
-            "        <para>HEMLEVERANS:</para>\n" +
+            "\n" +
+            "            <variablelist>\n" +
+            "                <varlistentry>\n" +
+            "                    <term>&nbsp;</term>\n" +
+            "                    <listitem>&nbsp;</listitem>\n" +
+            "                </varlistentry>\n" +
+            "            </variablelist>\n" +
+            "\n" +
+            "            <variablelist>\n" +
+            "                <varlistentry>\n" +
+            "                    <term></term>\n" +
+            "                    <listitem>Sms-avisering:</listitem>\n" +
+            "                </varlistentry>\n" +
+            "                    <varlistentry>\n" +
+            "                        <term>070-2345678</term>\n" +
+            "                        <listitem>&nbsp;</listitem>\n" +
+            "                    </varlistentry>\n" +
+            "            </variablelist>\n" +
+            "            <variablelist>\n" +
+            "                <varlistentry>\n" +
+            "                    <term>&nbsp;</term>\n" +
+            "                    <listitem>&nbsp;</listitem>\n" +
+            "                </varlistentry>\n" +
+            "            </variablelist>\n" +
             "        <variablelist>\n" +
+            "            <varlistentry>\n" +
+            "                <term>&nbsp;</term>\n" +
+            "                <listitem>&nbsp;</listitem>\n" +
+            "            </varlistentry>\n" +
+            "                <varlistentry>\n" +
+            "                    <term></term>\n" +
+            "                    <listitem>Hemleverans:</listitem>\n" +
+            "                </varlistentry>\n" +
             "                <varlistentry>\n" +
             "                    <term>Kalle Karlsson</term>\n" +
-            "                    <listitem></listitem>\n" +
+            "                    <listitem>&nbsp;</listitem>\n" +
             "                </varlistentry>\n" +
             "                <varlistentry>\n" +
             "                    <term>Gatan 37</term>\n" +
-            "                    <listitem></listitem>\n" +
+            "                    <listitem>&nbsp;</listitem>\n" +
             "                </varlistentry>\n" +
             "                <varlistentry>\n" +
-            "                    <term>43213Bullerbyn</term>\n" +
-            "                    <listitem></listitem>\n" +
+            "                    <term>43213 Bullerbyn</term>\n" +
+            "                    <listitem>&nbsp;</listitem>\n" +
             "                </varlistentry>\n" +
-            "\n" +
             "        </variablelist>\n" +
             "\n" +
             "    </section>\n" +
             "\n" +
-            "    </variablelist>\n" +
             "</article>";
 }

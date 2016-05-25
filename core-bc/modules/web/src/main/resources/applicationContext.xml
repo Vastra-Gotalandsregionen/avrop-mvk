@@ -3,29 +3,35 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/task"
        xmlns:jaxws="http://cxf.apache.org/jaxws"
-       xmlns:cxf="http://cxf.apache.org/core" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:cxf="http://cxf.apache.org/core"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:http="http://cxf.apache.org/transports/http/configuration"
+       xmlns:sec="http://cxf.apache.org/configuration/security"
        xmlns:p="http://www.springframework.org/schema/p" xmlns:cache="http://www.springframework.org/schema/cache"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans.xsd
           http://www.springframework.org/schema/context
           http://www.springframework.org/schema/context/spring-context.xsd
-           http://www.springframework.org/schema/task
-            http://www.springframework.org/schema/task/spring-task.xsd
-             http://www.springframework.org/schema/cache
-              http://www.springframework.org/schema/cache/spring-cache.xsd
-       http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
-    http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+          http://www.springframework.org/schema/task
+          http://www.springframework.org/schema/task/spring-task.xsd
+          http://www.springframework.org/schema/cache
+          http://www.springframework.org/schema/cache/spring-cache.xsd
+          http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+          http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd
+          http://cxf.apache.org/configuration/security http://cxf.apache.org/schemas/configuration/security.xsd
+          http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
         "
 >
 
     <context:property-placeholder properties-ref="lakemedelsnaraProprties" ignore-resource-not-found="false"/>
 
-    <bean id="lakemedelsnaraProprties" class="se._1177.lmn.service.util.LakemedelsnaraProperties" factory-method="getProperties"/>
+    <bean id="lakemedelsnaraProprties" class="se._1177.lmn.service.util.LakemedelsnaraProperties"
+          factory-method="getProperties"/>
 
-    <context:component-scan base-package="se._1177.lmn.service.concurrent" />
-    <context:component-scan base-package="se.vgregion.mvk.controller" />
+    <context:component-scan base-package="se._1177.lmn.service.concurrent"/>
+    <context:component-scan base-package="se.vgregion.mvk.controller"/>
 
-    <bean class="se._1177.lmn.service.LmnServiceImpl" >
+    <bean class="se._1177.lmn.service.LmnServiceImpl">
         <constructor-arg index="0" ref="getMedicalSupplyDeliveryPoints"/>
         <constructor-arg index="1" ref="getMedicalSupplyPrescriptions"/>
         <constructor-arg index="2" ref="registerMedicalSupplyOrder"/>
@@ -41,23 +47,23 @@
 
     <jaxws:client id="getMedicalSupplyDeliveryPoints"
                   serviceClass="riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._0.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface"
-                  address="${GetMedicalSupplyDeliveryPointsResponderInterface.address}" />
+                  address="${GetMedicalSupplyDeliveryPointsResponderInterface.address}"/>
 
     <jaxws:client id="getMedicalSupplyPrescriptions"
                   serviceClass="riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._0.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface"
-                  address="${GetMedicalSupplyPrescriptionsResponderInterface.address}" />
+                  address="${GetMedicalSupplyPrescriptionsResponderInterface.address}"/>
 
     <jaxws:client id="registerMedicalSupplyOrder"
                   serviceClass="riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._0.rivtabp21.RegisterMedicalSupplyOrderResponderInterface"
-                  address="${RegisterMedicalSupplyOrderResponderInterface.address}" />
+                  address="${RegisterMedicalSupplyOrderResponderInterface.address}"/>
 
     <jaxws:client id="getUserProfileResponderInterface"
                   serviceClass="mvk.itintegration.userprofile.getuserprofile._2.rivtabp21.GetUserProfileResponderInterface"
-                  address="${GetUserProfileResponderInterface.address}" />
+                  address="${GetUserProfileResponderInterface.address}"/>
 
     <jaxws:client id="addMessageResponderInterface"
                   serviceClass="mvk.crm.casemanagement.inbox.addmessage._2.rivtabp21.AddMessageResponderInterface"
-                  address="${AddMessageResponderInterface.address}" />
+                  address="${AddMessageResponderInterface.address}"/>
 
     <cxf:bus>
         <cxf:outInterceptors>
@@ -74,4 +80,18 @@
     <bean id="loggingOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor">
         <property name="prettyLogging" value="true"/>
     </bean>
+
+    <http:conduit name="https://acc.tjp.minavardkontakter.se.*">
+        <http:tlsClientParameters disableCNCheck="true">
+            <sec:keyManagers keyPassword="${ssl_keystore_password}">
+                <sec:keyStore
+                        type="pkcs12"
+                        password="${ssl_keystore_password}"
+                        file="${ssl_keystore}"/>
+            </sec:keyManagers>
+            <sec:trustManagers>
+                <sec:certStore file="${ssl_trustcert}"/>
+            </sec:trustManagers>
+        </http:tlsClientParameters>
+    </http:conduit>
 </beans>

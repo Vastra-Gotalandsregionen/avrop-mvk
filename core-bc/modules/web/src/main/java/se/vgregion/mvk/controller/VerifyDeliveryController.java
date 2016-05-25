@@ -44,6 +44,9 @@ public class VerifyDeliveryController {
     private LmnService lmnService;
 
     @Autowired
+    private OrderController orderController;
+
+    @Autowired
     private DeliveryController deliveryController;
 
     @Autowired
@@ -210,7 +213,8 @@ public class VerifyDeliveryController {
                         msg));
             }
 
-            cart.emptyCart();
+//            cart.emptyCart();
+//            orderController.reset();
 
             ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false)).invalidate(); // todo Verkligen?
         } else if (response.getResultCode().equals(ResultCodeEnum.ERROR)) {
@@ -225,5 +229,9 @@ public class VerifyDeliveryController {
 
         return "orderConfirmation";
 //        return "orderConfirmation" + ACTION_SUFFIX;
+    }
+
+    public Boolean getOrderSuccess() {
+        return orderSuccess;
     }
 }

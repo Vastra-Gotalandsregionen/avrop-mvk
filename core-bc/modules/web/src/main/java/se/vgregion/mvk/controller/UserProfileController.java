@@ -1,5 +1,6 @@
 package se.vgregion.mvk.controller;
 
+import mvk.itintegration.userprofile._2.ResultCodeEnum;
 import mvk.itintegration.userprofile.getuserprofileresponder._2.GetUserProfileResponseType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import se._1177.lmn.service.MvkUserProfileService;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,6 +34,13 @@ public class UserProfileController {
             String ssn = request.getHeader("AJP_Subject_SerialNumber");
 
             userProfile = mvkUserProfileService.getUserProfile(ssn);
+
+            ResultCodeEnum resultCode = userProfile.getResultCode();
+            if (resultCode.equals(ResultCodeEnum.ERROR) || resultCode.equals(ResultCodeEnum.INFO)) {
+                String text = userProfile.getResultText();
+                FacesContext.getCurrentInstance().addMessage("",
+                        new FacesMessage(FacesMessage.SEVERITY_FATAL, text, text));
+            }
         }
 
         return userProfile;

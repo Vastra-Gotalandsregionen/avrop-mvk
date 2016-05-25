@@ -1,15 +1,17 @@
 <?xml version="1.0"?>
 <article>
-    <info>
-        <title>Beställda produkter</title>
-    </info>
 
     <section>
+        <title>Beställda produkter</title>
     <#list prescriptionItems as item>
         <variablelist>
             <varlistentry>
+                <term>&nbsp;</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
                 <term>Produktgrupp:</term>
-                <listitem>${item.article.productArea}</listitem>
+                <listitem>${item.article.productArea?capitalize}</listitem>
             </varlistentry>
             <varlistentry>
                 <term></term>
@@ -26,40 +28,89 @@
     <section>
         <title>Leveransinformation</title>
     <#list deliveryChoices as choice>
-        <para>${choice.deliveryMethod}:</para>
         <variablelist>
+            <varlistentry>
+                <term>&nbsp;</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
             <#if choice.deliveryMethod.name() == 'UTLÄMNINGSSTÄLLE'>
                 <varlistentry>
+                    <term></term>
+                    <listitem>Utlämningsställe:</listitem>
+                </varlistentry>
+                <varlistentry>
                     <term>${choice.deliveryPoint.deliveryPointName}</term>
-                    <listitem></listitem>
+                    <listitem>&nbsp;</listitem>
                 </varlistentry>
                 <varlistentry>
                     <term>${choice.deliveryPoint.deliveryPointAddress}</term>
-                    <listitem></listitem>
+                    <listitem>&nbsp;</listitem>
                 </varlistentry>
                 <varlistentry>
                     <term>${choice.deliveryPoint.deliveryPointPostalCode} ${choice.deliveryPoint.deliveryPointCity}</term>
-                    <listitem></listitem>
+                    <listitem>&nbsp;</listitem>
                 </varlistentry>
             <#else >
                 <varlistentry>
+                    <term></term>
+                    <listitem>Hemleverans:</listitem>
+                </varlistentry>
+                <varlistentry>
                     <term>${choice.homeDeliveryAddress.receiver}</term>
-                    <listitem></listitem>
+                    <listitem>&nbsp;</listitem>
                 </varlistentry>
                 <varlistentry>
                     <term>${choice.homeDeliveryAddress.street}</term>
-                    <listitem></listitem>
+                    <listitem>&nbsp;</listitem>
                 </varlistentry>
                 <varlistentry>
-                    <term>${choice.homeDeliveryAddress.postalCode}${choice.homeDeliveryAddress.city}</term>
-                    <listitem></listitem>
+                    <term>${choice.homeDeliveryAddress.postalCode} ${choice.homeDeliveryAddress.city}</term>
+                    <listitem>&nbsp;</listitem>
                 </varlistentry>
             </#if>
-
         </variablelist>
-    </#list>
 
+        <#if choice.deliveryNotificationMethod??>
+            <variablelist>
+                <varlistentry>
+                    <term>&nbsp;</term>
+                    <listitem>&nbsp;</listitem>
+                </varlistentry>
+            </variablelist>
+
+            <variablelist>
+                <varlistentry>
+                    <term></term>
+                    <listitem>${choice.deliveryNotificationMethod.name()?capitalize}-avisering:</listitem>
+                </varlistentry>
+                <#if choice.deliveryNotificationMethod.name() == 'BREV'>
+                    <varlistentry>
+                        <term>${choice.homeDeliveryAddress.receiver}</term>
+                        <listitem>&nbsp;</listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>${choice.homeDeliveryAddress.street}</term>
+                        <listitem>&nbsp;</listitem>
+                    </varlistentry>
+                    <varlistentry>
+                        <term>${choice.homeDeliveryAddress.postalCode} ${choice.homeDeliveryAddress.city}</term>
+                        <listitem>&nbsp;</listitem>
+                    </varlistentry>
+                <#else>
+                    <varlistentry>
+                        <term>${choice.deliveryNotificationReceiver}</term>
+                        <listitem>&nbsp;</listitem>
+                    </varlistentry>
+                </#if>
+            </variablelist>
+            <variablelist>
+                <varlistentry>
+                    <term>&nbsp;</term>
+                    <listitem>&nbsp;</listitem>
+                </varlistentry>
+            </variablelist>
+        </#if>
+    </#list>
     </section>
 
-    </variablelist>
 </article>

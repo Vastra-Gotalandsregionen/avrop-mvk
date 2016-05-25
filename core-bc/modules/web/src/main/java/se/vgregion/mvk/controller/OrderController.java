@@ -55,7 +55,7 @@ public class OrderController {
     private Map<String, Boolean> chosenItemMap = new HashMap<>();
 
     @PostConstruct
-    public void  init() {
+    public void init() {
         try {
             this.medicalSupplyPrescriptions = lmnService.getMedicalSupplyPrescriptionsHolder(
                     userProfileController.getUserProfile().getUserProfile().getSubjectOfCareId());
@@ -81,11 +81,27 @@ public class OrderController {
         }
     }
 
+    private synchronized void reinit() {
+        if (medicalSupplyPrescriptions == null) {
+            init();
+        }
+    }
+
+    public void reset() {
+        medicalSupplyPrescriptions = null;
+        chosenItemMap = new HashMap<>();
+    }
+
     public List<PrescriptionItemType> getMedicalSupplyPrescriptions() {
         if (medicalSupplyPrescriptions != null) {
             return medicalSupplyPrescriptions.orderable;
         } else {
-            return null;
+            reinit();
+            if (medicalSupplyPrescriptions != null) {
+                return medicalSupplyPrescriptions.orderable;
+            } else {
+                return null;
+            }
         }
     }
 

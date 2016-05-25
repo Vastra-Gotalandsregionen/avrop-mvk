@@ -4,6 +4,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import mvk.crm.casemanagement.inbox._2.CaseTypeType;
+import mvk.crm.casemanagement.inbox._2.HealthCareFacilityType;
 import mvk.crm.casemanagement.inbox._2.MessageCaseType;
 import mvk.crm.casemanagement.inbox.addmessage._2.rivtabp21.AddMessageResponderInterface;
 import mvk.crm.casemanagement.inbox.addmessageresponder._2.AddMessageResponseType;
@@ -39,15 +40,21 @@ public class MvkInboxService {
         AddMessageType request = new AddMessageType();
 
         CaseTypeType caseType = new CaseTypeType();
-        caseType.setCaseTypeDescription("Läkemedelsnära produkter");
+        caseType.setCaseTypeDescription("Beställning läkemedelsnära produkter");
+
+        HealthCareFacilityType healthCareFacility = new HealthCareFacilityType();
+        healthCareFacility.setHealthCareFacilityName("Centrum Läkemedelsnära Produkter");
+        healthCareFacility.setHsaId("2342345234"); // // TODO: 2016-05-25
 
         MessageCaseType messageCase = new MessageCaseType();
-        messageCase.setBusinessObjectId("Unikt id för denna applikation?");
+//        messageCase.setBusinessObjectId("Unikt id för denna applikation?");
 //        messageCase.setActionTime(Util.toXmlGregorianCalendar(new GregorianCalendar()));
         messageCase.setCaseType(caseType);
 //        messageCase.setCaseReadStatus(CaseReadStatusType.UNREAD);
 //        messageCase.setBooking(null);
-        messageCase.setHeaderText("Centrum Läkemedelsnära Produkter");
+        messageCase.setHeaderText("Beställning läkemedelsnära produkter");
+//        messageCase.setDetails(details);
+        messageCase.setHealthCareFacility(healthCareFacility);
 
         try {
             messageCase.setMsg(composeMsg(prescriptionItems, deliveryChoices));

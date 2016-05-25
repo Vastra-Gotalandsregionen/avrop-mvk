@@ -15,11 +15,26 @@
         <ui:include src="WEB-INF/xhtml/include/print.xhtml"/>
 
         <div>
-            <h3>Tack för din beställning, produkterna levereras inom 5 arbetsdagar</h3>
 
-            <h:form>
-                <p>Beställningen har sparats i din inkorg i mina vårdkontakter.</p>
-                <p>Skriv ut???</p>
+            <h:form>#{verifyDeliveryController.orderSuccess}
+                <div class="section">
+                    <h:panelGroup rendered="#{verifyDeliveryController.orderSuccess}">
+                        <h3>Tack för din beställning, produkterna levereras inom 5 arbetsdagar</h3>
+
+                        <p>Beställningen har sparats i din inkorg i mina vårdkontakter.</p>
+
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{not verifyDeliveryController.orderSuccess}">
+
+                        <p></p>
+
+                    </h:panelGroup>
+
+                </div>
+                <div class="right-align">
+                    <h:button styleClass="button" value="Till beställning" outcome="order"/>
+                    <!--<h:commandButton styleClass="button" value="Kontrollera beställning" action="#{collectDeliveryController.toVerifyDelivery}" />-->
+                </div>
             </h:form>
         </div>
 
