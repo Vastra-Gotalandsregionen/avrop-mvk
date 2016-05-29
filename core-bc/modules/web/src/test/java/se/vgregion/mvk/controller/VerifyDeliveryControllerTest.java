@@ -70,7 +70,7 @@ public class VerifyDeliveryControllerTest {
         GetUserProfileResponseType profileResponseType = mock(GetUserProfileResponseType.class);
         when(profileResponseType.getUserProfile()).thenReturn(userProfileType);
 
-        when(userProfileController.getUserProfile()).thenReturn(profileResponseType);
+        when(userProfileController.getUserProfile()).thenReturn(userProfileType);
 
         // DeliveryController
         DeliveryController deliveryController = mock(DeliveryController.class);

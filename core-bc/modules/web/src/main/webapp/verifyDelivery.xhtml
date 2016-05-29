@@ -14,8 +14,6 @@
 
         <h:messages showSummary="true" styleClass="alert alert-danger"/>
 
-        <ui:include src="WEB-INF/xhtml/include/print.xhtml"/>
-
         <div>
             <h3>Kontrollera din beställning</h3>
 
@@ -26,13 +24,13 @@
                         <span class="input-group">
                             <h:outputLabel for="patientName" value="Namn:"/>
                             <h:outputText styleClass="bold" id="patientName"
-                                          value="#{userProfileController.userProfile.userProfile.firstName} #{userProfileController.userProfile.userProfile.lastName}"/>
+                                          value="#{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}"/>
                         </span>
 
                         <span class="input-group">
                             <h:outputLabel for="patientPid" value="Personnummer:"/>
                             <h:outputText styleClass="bold" id="patientPid"
-                                          value="#{userProfileController.userProfile.userProfile.subjectOfCareId}"/>
+                                          value="#{userProfileController.userProfile.subjectOfCareId}"/>
                         </span>
                     </div>
                 </div>
@@ -155,9 +153,9 @@
                                 <h:panelGroup layout="block" styleClass="input-group" rendered="#{collectDeliveryController.notificationMethodUsedForAnyItem(collectDeliveryController.brevValue)}">
                                     <div>Brev-avisering (#{collectDeliveryController.providersWithNotificationMethod(collectDeliveryController.brevValue)}):</div>
                                     <div class="bold">
-                                        <div>#{userProfileController.userProfile.userProfile.firstName} #{userProfileController.userProfile.userProfile.lastName}</div>
-                                        <div>#{userProfileController.userProfile.userProfile.streetAddress}</div>
-                                        <div>#{userProfileController.userProfile.userProfile.zip} #{userProfileController.userProfile.userProfile.city}</div>
+                                        <div>#{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}</div>
+                                        <div>#{userProfileController.userProfile.streetAddress}</div>
+                                        <div>#{userProfileController.userProfile.zip} #{userProfileController.userProfile.city}</div>
                                     </div>
                                 </h:panelGroup>
                             </h:panelGroup>
@@ -182,9 +180,9 @@
                                     <h:panelGroup layout="block" styleClass="input-group" rendered="#{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'BREV'}">
                                         <div>Brev-avisering (hemleverans):</div>
                                         <div class="bold">
-                                            <div>#{userProfileController.userProfile.userProfile.firstName} #{userProfileController.userProfile.userProfile.lastName}</div>
-                                            <div>#{userProfileController.userProfile.userProfile.streetAddress}</div>
-                                            <div>#{userProfileController.userProfile.userProfile.zip} #{userProfileController.userProfile.userProfile.city}</div>
+                                            <div>#{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}</div>
+                                            <div>#{userProfileController.userProfile.streetAddress}</div>
+                                            <div>#{userProfileController.userProfile.zip} #{userProfileController.userProfile.city}</div>
                                         </div>
                                     </h:panelGroup>
 

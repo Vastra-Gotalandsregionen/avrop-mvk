@@ -5,6 +5,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 
+<ui:insert name="metadata"/>
+
 <h:head>
     <h:outputScript library="thirdparty" name="jquery.1.12.0.min.js"/>
     <h:outputScript library="thirdparty" name="jquery-ui-dialog.min.js"/>
@@ -45,7 +47,7 @@
                             <div class="_1177-logout">
                                 <a class="link-userblock" href="/Shibboleth.sso/Logout">Logga ut</a>
                             </div>
-                            <div class="_1177-currentuser">Inloggad som&#160;#{userProfileController.userProfile.userProfile.firstName} #{userProfileController.userProfile.userProfile.lastName}</div>
+                            <div class="_1177-currentuser">Inloggad som&#160;#{userProfileController.loggedInUser.firstName} #{userProfileController.loggedInUser.lastName}</div>
                         </div><!--_1177-user-->
                     </div><!--_1177-header-content-->
                 </div><!--_1177-header-->
@@ -53,20 +55,17 @@
             </header>
 
 
-            <div class="delegate-container">
+            <h:panelGroup class="delegate-container" rendered="#{userProfileController.delegate}">
                 <div class="delegate-block">
                     <div class="delegate-header">
                         <div class="_1177-delegate-title">
                             <div class="_1177-header-info">
-                                Du utför nu ärenden åt <span class="delegate-name no-wrap">Delegatnamn&#160;Delegatefternamn
-                                <!--<a href="#" data-content="Hjälpinformation.">
-                                <h:graphicImage styleClass="moreinfo helptoggle" id="delegate-toggle" library="default" alt="Mer inforamation" name="img/icon-info-1.png" /></a>--></span>
+                                Du utför nu ärenden åt <span class="delegate-name no-wrap">#{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}</span>
                                 <span class="toggle-trigger info-icon expand" data-toggle-for="delegateInfo"/>
 
-                                <div id="delegateInfo" style="display: none;">
-                                    Infotext...
+                                <div id="delegateInfo" class="expanded-content" style="display: none;">
+                                    Här utför du vårdärenden för #{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}. Det innebär att allt du gör här gäller #{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}. Den vårdgivare du har kontakt med ser vem som utför ärendet.
                                 </div>
-                                <!--<img class="moreinfo helptoggle" id="delegate-toggle" src="img/icon-info-1.png" alt="Mer information"/></a></span>-->
                             </div>
                         </div>
                         <div class="_1177-delegate-settings"><a class="_1177-delegate-settings-link link" href="#">Inställningar</a>
@@ -75,7 +74,7 @@
                     <div class="_1177-delegate-expand" id="delegate-expand" style="display: none;">Här utför du vårdärenden för&#160;Delegatnamn Delegatefternamn, 010203-0405. Det innebär att allt du gör här gäller Delegatnamn Delegatefternamn. Den vårdgivare du har kontakt med ser vem som utför ärendet.
                     </div>
                 </div>
-            </div>
+            </h:panelGroup>
 
             <div class="breadcrumbs-container">
                 <div class="breadcrumbs">

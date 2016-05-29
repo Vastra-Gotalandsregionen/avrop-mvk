@@ -39,6 +39,8 @@
 
     <bean class="se._1177.lmn.service.MvkUserProfileService">
         <constructor-arg ref="getUserProfileResponderInterface"/>
+        <constructor-arg ref="getSubjectOfCareResponderInterface"/>
+        <constructor-arg ref="getUserProfileByAgentResponderInterface"/>
     </bean>
 
     <bean class="se._1177.lmn.service.MvkInboxService">
@@ -60,6 +62,14 @@
     <jaxws:client id="getUserProfileResponderInterface"
                   serviceClass="mvk.itintegration.userprofile.getuserprofile._2.rivtabp21.GetUserProfileResponderInterface"
                   address="${GetUserProfileResponderInterface.address}"/>
+
+    <jaxws:client id="getSubjectOfCareResponderInterface"
+                  serviceClass="mvk.itintegration.userprofile.getsubjectofcare._2.rivtabp21.GetSubjectOfCareResponderInterface"
+                  address="${GetSubjectOfCareResponderInterface.address}"/>
+
+    <jaxws:client id="getUserProfileByAgentResponderInterface"
+                  serviceClass="mvk.itintegration.userprofile.getuserprofilebyagent._2.rivtabp21.GetUserProfileByAgentResponderInterface"
+                  address="${GetUserProfileByAgentResponderInterface.address}"/>
 
     <jaxws:client id="addMessageResponderInterface"
                   serviceClass="mvk.crm.casemanagement.inbox.addmessage._2.rivtabp21.AddMessageResponderInterface"
@@ -90,7 +100,7 @@
                         file="${ssl_keystore}"/>
             </sec:keyManagers>
             <sec:trustManagers>
-                <sec:certStore file="${ssl_trustcert}"/>
+                <sec:keyStore file="${ssl_truststore}" password="${ssl_truststore_password}" type="jks" />
             </sec:trustManagers>
         </http:tlsClientParameters>
     </http:conduit>

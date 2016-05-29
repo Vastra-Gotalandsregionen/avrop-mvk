@@ -7,15 +7,30 @@
       xmlns:mvk="http://java.sun.com/jsf/composite/component/mvk"
 >
 
-<ui:composition template="WEB-INF/xhtml/template/wideContent.xhtml">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:mvk="http://java.sun.com/jsf/composite/component/mvk"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:of="http://omnifaces.org/functions"
+                template="WEB-INF/xhtml/template/wideContent.xhtml">
+
+    <ui:define name="metadata">
+        <f:metadata>
+            <!--<f:viewParam name="objectId" value="#{userProfileController.objectId}" />
+            <f:viewParam name="guid" value="#{userProfileController.guid}" />-->
+            <f:viewAction action="#{orderController.possiblyReinit()}" />
+            <f:viewAction action="#{userProfileController.checkDelegate()}" />
+        </f:metadata>
+    </ui:define>
 
     <ui:define name="boxContent">
 
         <div style="display: none">#{orderController} This reference is needed in order to make possible message be added before the h:messages tag is rendered.</div>
 
         <h:messages showSummary="true" styleClass="alert alert-danger"/>
-
-        <ui:include src="WEB-INF/xhtml/include/print.xhtml" />
 
         <div class="centerareatext">
             <h3>Mina läkemedelsnära produkter</h3>
@@ -34,7 +49,7 @@
             </div>
 
             <!--<form id="j_id1980847945_2_1820a690:caseForm" name="j_id1980847945_2_1820a690:caseForm" method="post" action="/mvk/caseForm/SSO_START.xhtml" enctype="application/x-www-form-urlencoded">-->
-            <h:form>
+            <o:form includeRequestParams="true">
 
                 <h4>Mina produkter</h4>
 
@@ -72,7 +87,7 @@
                                 </h:panelGroup>
                                 #{item.article.articleName}
                                 <mvk:moreInfo item="#{item}"/>
-                                <div class="dev-temp" style="font-size: .7em;">
+                                <!--<div class="dev-temp" style="font-size: .7em;">
                                     <ul>
                                         <ui:repeat value="#{item.deliveryAlternative}" var="alternative">
                                             <li>
@@ -87,7 +102,7 @@
                                             </li>
                                         </ui:repeat>
                                     </ul>
-                                </div>
+                                </div>-->
                             </td>
                             <td>
                                 #{item.noOfRemainingOrders}/#{item.noOfOrders}
@@ -105,7 +120,7 @@
                 <span class="toggle-trigger info-icon expand" data-toggle-for="collectedProductsInfo"/>
 
                 <div id="collectedProductsInfo" class="expanded-content" style="display: none;">
-                    Dina förskrivna och uthämtade LM
+                    Dina förskrivna och uthämtade läkemedelsnära produkter
                 </div>
 
                 <div id="collected-products-wrapper" style="display: none;">
@@ -140,10 +155,12 @@
 
                 <div class="right-align">
                     <h:commandButton styleClass="button back-button" value="Bakåt" action="start?faces-redirect=true&amp;includeViewParams=true" />
-                    <h:commandButton styleClass="button" value="Till leverans" action="#{orderController.toDelivery}" />
+                    <h:commandButton styleClass="button" value="Till leverans" action="#{orderController.toDelivery}">
+                        <f:param name="guid" value="#{userProfileController.guid}"/>
+                    </h:commandButton>
                 </div>
 
-            </h:form>
+            </o:form>
         </div>
 
         <script type="text/javascript">

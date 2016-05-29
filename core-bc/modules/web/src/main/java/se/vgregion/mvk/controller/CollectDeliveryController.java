@@ -81,7 +81,7 @@ public class CollectDeliveryController {
     @PostConstruct
     public void init() {
         // Default zip is from user profile. It may be overridden if user chooses so.
-        UserProfileType userProfile = userProfileController.getUserProfile().getUserProfile();
+        UserProfileType userProfile = userProfileController.getUserProfile();
 
         zip = userProfile.getZip();
 

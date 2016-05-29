@@ -43,6 +43,9 @@ public class DeliveryController {
     @Autowired
     private CollectDeliveryController collectDeliveryController;
 
+    @Autowired
+    private UserProfileController userProfileController;
+
     private DeliveryMethodEnum deliveryMethod = null;
     private boolean userNeedsToChooseDeliveryMethodForEachItem;
     private Set<DeliveryMethodEnum> possibleDeliveryMethodsFittingAllItems;
@@ -94,6 +97,18 @@ public class DeliveryController {
 
     public String getHemleveransValue() {
         return DeliveryMethodEnum.HEMLEVERANS.name();
+    }
+
+    public String toOrder() {
+        String delegateUrlParameters = userProfileController.getDelegateUrlParameters();
+
+        String ampOrQuestionMark = delegateUrlParameters != null && delegateUrlParameters.length() > 0 ? "&amp;" : "?";
+
+        String result = "order" + delegateUrlParameters
+                + ampOrQuestionMark
+                + "faces-redirect=true&amp;includeViewParams=true";
+
+        return result;
     }
 
     public String toDeliveryMethod() {

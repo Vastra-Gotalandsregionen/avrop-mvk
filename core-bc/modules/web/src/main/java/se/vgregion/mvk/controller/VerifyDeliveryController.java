@@ -67,7 +67,7 @@ public class VerifyDeliveryController {
     private Boolean orderSuccess;
 
     public String confirmOrder() {
-        UserProfileType userProfile = userProfileController.getUserProfile().getUserProfile();
+        UserProfileType userProfile = userProfileController.getUserProfile();
 
         userProfile.getSubjectOfCareId();
 
@@ -213,10 +213,9 @@ public class VerifyDeliveryController {
                         msg));
             }
 
-//            cart.emptyCart();
-//            orderController.reset();
+            cart.emptyCart();
+            orderController.reset();
 
-            ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false)).invalidate(); // todo Verkligen?
         } else if (response.getResultCode().equals(ResultCodeEnum.ERROR)) {
             String msg = "Tekniskt fel. Försök senare.";
             FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
@@ -228,7 +227,6 @@ public class VerifyDeliveryController {
         }
 
         return "orderConfirmation";
-//        return "orderConfirmation" + ACTION_SUFFIX;
     }
 
     public Boolean getOrderSuccess() {

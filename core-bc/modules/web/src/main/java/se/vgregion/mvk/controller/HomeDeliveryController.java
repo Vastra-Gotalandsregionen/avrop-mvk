@@ -295,7 +295,7 @@ public class HomeDeliveryController {
     public String getFullName() {
 
         if (fullName == null) {
-            UserProfileType userProfile = userProfileController.getUserProfile().getUserProfile();
+            UserProfileType userProfile = userProfileController.getUserProfile();
 
             fullName = userProfile.getFirstName() + " " + userProfile.getLastName();
         }
@@ -313,7 +313,7 @@ public class HomeDeliveryController {
 
     public String getAddress() {
         if (address == null) {
-            UserProfileType userProfile = userProfileController.getUserProfile().getUserProfile();
+            UserProfileType userProfile = userProfileController.getUserProfile();
 
             address = userProfile.getStreetAddress();
         }
@@ -327,7 +327,7 @@ public class HomeDeliveryController {
 
     public String getZip() {
         if (zip == null) {
-            UserProfileType userProfile = userProfileController.getUserProfile().getUserProfile();
+            UserProfileType userProfile = userProfileController.getUserProfile();
 
             zip = userProfile.getZip();
         }
@@ -341,7 +341,7 @@ public class HomeDeliveryController {
 
     public String getCity() {
         if (city == null) {
-            UserProfileType userProfile = userProfileController.getUserProfile().getUserProfile();
+            UserProfileType userProfile = userProfileController.getUserProfile();
 
             city = userProfile.getCity();
         }
@@ -371,7 +371,7 @@ public class HomeDeliveryController {
 
     public String getPhoneNumber() {
         if (phoneNumber == null) {
-            UserProfileType userProfile = userProfileController.getUserProfile().getUserProfile();
+            UserProfileType userProfile = userProfileController.getUserProfile();
 
             phoneNumber = userProfile.getPhoneNumber();
 

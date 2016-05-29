@@ -113,6 +113,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
 
             XMLGregorianCalendar randomCalendar = getRandomCalendar(random);
             randomCalendar.setYear(c.get(Calendar.YEAR) + 1);
+            randomCalendar.setDay(random.nextInt(20) + 1); // To avoid invalid dates.
 
             prescriptionItem.setNextEarliestOrderDate(randomCalendar);
         }

@@ -12,8 +12,6 @@
 
         <h:messages showSummary="true" styleClass="alert alert-danger"/>
 
-        <ui:include src="WEB-INF/xhtml/include/print.xhtml" />
-
         <div>
             <h3>Leveranssätt</h3>
             <div>
@@ -118,10 +116,9 @@
                 </div>
 
                 <div class="right-align">
-                    <h:commandButton styleClass="button back-button" value="Bakåt" action="order?faces-redirect=true&amp;includeViewParams=true" />
+                    <h:commandButton styleClass="button back-button" value="Bakåt" action="#{deliveryController.toOrder}" />
                     <h:commandButton styleClass="button" value="Till adressinformation" action="#{deliveryController.toDeliveryMethod}" />
                 </div>
-                <!--</form>-->
             </h:form>
         </div>
     </ui:define>

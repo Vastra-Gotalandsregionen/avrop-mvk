@@ -58,7 +58,7 @@ public class OrderController {
     public void init() {
         try {
             this.medicalSupplyPrescriptions = lmnService.getMedicalSupplyPrescriptionsHolder(
-                    userProfileController.getUserProfile().getUserProfile().getSubjectOfCareId());
+                    userProfileController.getSubjectOfCareId());
 
             for (PrescriptionItemType prescriptionItem : medicalSupplyPrescriptions.orderable) {
                 String prescriptionId = prescriptionItem.getPrescriptionId();
@@ -70,7 +70,7 @@ public class OrderController {
             }
 
             collectDeliveryController.loadDeliveryPointsForAllSuppliersInBackground(
-                    userProfileController.getUserProfile().getUserProfile().getZip());
+                    userProfileController.getUserProfile().getZip());
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
@@ -81,7 +81,7 @@ public class OrderController {
         }
     }
 
-    private synchronized void reinit() {
+    public synchronized void possiblyReinit() {
         if (medicalSupplyPrescriptions == null) {
             init();
         }
@@ -96,12 +96,7 @@ public class OrderController {
         if (medicalSupplyPrescriptions != null) {
             return medicalSupplyPrescriptions.orderable;
         } else {
-            reinit();
-            if (medicalSupplyPrescriptions != null) {
-                return medicalSupplyPrescriptions.orderable;
-            } else {
-                return null;
-            }
+            return null;
         }
     }
 
@@ -133,7 +128,7 @@ public class OrderController {
             String msg = "Du har inte valt någon produkt. Välj minst en för att fortsätta.";
             FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_WARN, msg, msg));
 
-            return "order";
+            return "order" + userProfileController.getDelegateUrlParameters();
         } else {
             prepareDeliveryOptions(toCart);
 

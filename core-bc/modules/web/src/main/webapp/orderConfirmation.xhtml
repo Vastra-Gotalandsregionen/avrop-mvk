@@ -12,11 +12,9 @@
 
         <h:messages showSummary="true" styleClass="alert alert-danger"/>
 
-        <ui:include src="WEB-INF/xhtml/include/print.xhtml"/>
-
         <div>
 
-            <h:form>#{verifyDeliveryController.orderSuccess}
+            <h:form>
                 <div class="section">
                     <h:panelGroup rendered="#{verifyDeliveryController.orderSuccess}">
                         <h3>Tack för din beställning, produkterna levereras inom 5 arbetsdagar</h3>
@@ -32,8 +30,7 @@
 
                 </div>
                 <div class="right-align">
-                    <h:button styleClass="button" value="Till beställning" outcome="order"/>
-                    <!--<h:commandButton styleClass="button" value="Kontrollera beställning" action="#{collectDeliveryController.toVerifyDelivery}" />-->
+                    <h:commandButton styleClass="button" value="Till beställning" action="#{orderConfirmationController.toOrder}"/>
                 </div>
             </h:form>
         </div>

@@ -311,6 +311,7 @@ ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
 }
 
 .notification-method-select {
+    float: left;
     width: 82px;
 }
 
