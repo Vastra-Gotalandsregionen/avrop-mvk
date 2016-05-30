@@ -92,6 +92,8 @@
     </bean>
 
     <http:conduit name="https://acc.tjp.minavardkontakter.se.*">
+        <http:client ConnectionTimeout="5000" ReceiveTimeout="5000"  />
+
         <http:tlsClientParameters disableCNCheck="true">
             <sec:keyManagers keyPassword="${ssl_keystore_password}">
                 <sec:keyStore

@@ -19,8 +19,8 @@
 
     <ui:define name="metadata">
         <f:metadata>
-            <!--<f:viewParam name="objectId" value="#{userProfileController.objectId}" />
-            <f:viewParam name="guid" value="#{userProfileController.guid}" />-->
+            <f:viewParam name="objectId" value="#{userProfileController.objectId}" />
+            <f:viewParam name="guid" value="#{userProfileController.guid}" />
             <f:viewAction action="#{orderController.possiblyReinit()}" />
             <f:viewAction action="#{userProfileController.checkDelegate()}" />
         </f:metadata>
@@ -40,7 +40,7 @@
                     <p>
                     </p>
                     <p>
-                        Här kan du beställa...
+                        Här kan du beställa hem dina läkemedelsnära produkter. Antingen hem till din bostad eller till en annan leveransadress. Nedan ser du både vilka produkter du kan beställa och vilka som finns men inte går att beställa just nu. Klicka på plustecknet vid uthämtade produkter så hittar du gamla recept från 12 månader tillbaka i tiden som inte längre är giltiga.
                     </p>
                     <p></p>
 
@@ -51,67 +51,74 @@
             <!--<form id="j_id1980847945_2_1820a690:caseForm" name="j_id1980847945_2_1820a690:caseForm" method="post" action="/mvk/caseForm/SSO_START.xhtml" enctype="application/x-www-form-urlencoded">-->
             <o:form includeRequestParams="true">
 
-                <h4>Mina produkter</h4>
+                <h:panelGroup layout="block" rendered="#{orderController.medicalSupplyPrescriptions.size() eq 0}" styleClass="alert alert-warning">
+                    Inga aktuella produkter hittades. Om du förväntat dig beställningsbara produkter, kontakta support XXX.
+                </h:panelGroup>
 
-                <table class="avrop-table my-products-table contentFontSize" style="table-layout: fixed">
-                    <thead>
-                    <tr>
-                        <td class="column-0"></td>
-                        <td class="column-1">Produktgrupp/Artikel-nr.</td>
-                        <td class="column-2">Benämning</td>
-                        <td class="column-3">Uttag kvar / antal uttag</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <ui:repeat value="#{orderController.medicalSupplyPrescriptions}" var="item" varStatus="status">
-                        <tr class="#{utilController.isAfterToday(item.nextEarliestOrderDate) ? 'unavailable-row' : ''}">
-                            <td>
-                                <h:panelGroup styleClass="checkbox" rendered="#{not utilController.isAfterToday(item.nextEarliestOrderDate)}">
-                                    <h:selectBooleanCheckbox id="subscriptionCheckbox" value="#{orderController.chosenItemMap[item.prescriptionId]}" />
-                                    <h:outputLabel for="subscriptionCheckbox" />
-                                </h:panelGroup>
-                            </td>
-                            <td>
-                                #{utilController.capitalizeFully(item.article.productArea)}<br/>#{item.article.articleNo}
-                            </td>
-                            <td class="#{not utilController.isAfterToday(item.nextEarliestOrderDate) ? 'bold' : ''}">
-                                <h:panelGroup layout="block" class="alert-text" rendered="#{utilController.isAfterToday(item.nextEarliestOrderDate)}">
-                                    Kan beställas
-                                    <h:outputText value="#{utilController.toDate(item.nextEarliestOrderDate)}">
-                                        <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm"/>
-                                    </h:outputText>.
-                                    <span class="toggle-trigger info-icon expand" data-toggle-for="orderTimingInfo#{status.index}"/>
-                                    <div id="orderTimingInfo#{status.index}" class="expanded-content" style="display: none;">
-                                        Nästa möjliga uttag
-                                    </div>
-                                </h:panelGroup>
-                                #{item.article.articleName}
-                                <mvk:moreInfo item="#{item}"/>
-                                <!--<div class="dev-temp" style="font-size: .7em;">
-                                    <ul>
-                                        <ui:repeat value="#{item.deliveryAlternative}" var="alternative">
-                                            <li>
-                                                #{alternative.deliveryMethod} - #{alternative.servicePointProvider}
-                                                <ol>
-                                                    <ui:repeat value="#{alternative.deliveryNotificationMethod}" var="method">
-                                                        <li>
-                                                            #{method}
-                                                        </li>
-                                                    </ui:repeat>
-                                                </ol>
-                                            </li>
-                                        </ui:repeat>
-                                    </ul>
-                                </div>-->
-                            </td>
-                            <td>
-                                #{item.noOfRemainingOrders}/#{item.noOfOrders}
-                            </td>
+                <h:panelGroup rendered="#{orderController.medicalSupplyPrescriptions.size() gt 0}">
+                    <h4>Mina produkter</h4>
+
+                    <table class="avrop-table my-products-table contentFontSize" style="table-layout: fixed">
+                        <thead>
+                        <tr>
+                            <td class="column-0"></td>
+                            <td class="column-1">Produktgrupp/Artikel-nr.</td>
+                            <td class="column-2">Benämning</td>
+                            <td class="column-3">Uttag kvar / antal uttag</td>
                         </tr>
-                    </ui:repeat>
+                        </thead>
+                        <tbody>
+                        <ui:repeat value="#{orderController.medicalSupplyPrescriptions}" var="item" varStatus="status">
+                            <tr class="#{utilController.isAfterToday(item.nextEarliestOrderDate) ? 'unavailable-row' : ''}">
+                                <td>
+                                    <h:panelGroup styleClass="checkbox" rendered="#{not utilController.isAfterToday(item.nextEarliestOrderDate)}">
+                                        <h:selectBooleanCheckbox id="subscriptionCheckbox" value="#{orderController.chosenItemMap[item.prescriptionId]}" />
+                                        <h:outputLabel for="subscriptionCheckbox" />
+                                    </h:panelGroup>
+                                </td>
+                                <td>
+                                    #{utilController.capitalizeFully(item.article.productArea)}<br/>#{item.article.articleNo}
+                                </td>
+                                <td class="#{not utilController.isAfterToday(item.nextEarliestOrderDate) ? 'bold' : ''}">
+                                    <h:panelGroup layout="block" class="alert-text" rendered="#{utilController.isAfterToday(item.nextEarliestOrderDate)}">
+                                        Kan beställas
+                                        <h:outputText value="#{utilController.toDate(item.nextEarliestOrderDate)}">
+                                            <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm"/>
+                                        </h:outputText>.
+                                        <span class="toggle-trigger info-icon expand" data-toggle-for="orderTimingInfo#{status.index}"/>
+                                        <div id="orderTimingInfo#{status.index}" class="expanded-content" style="display: none;">
+                                            Nästa möjliga uttag
+                                        </div>
+                                    </h:panelGroup>
+                                    #{item.article.articleName}
+                                    <mvk:moreInfo item="#{item}"/>
+                                    <div class="dev-temp" style="font-size: .7em;">
+                                        <ul>
+                                            <ui:repeat value="#{item.deliveryAlternative}" var="alternative">
+                                                <li>
+                                                    #{alternative.deliveryMethod} - #{alternative.servicePointProvider}
+                                                    <ol>
+                                                        <ui:repeat value="#{alternative.deliveryNotificationMethod}" var="method">
+                                                            <li>
+                                                                #{method}
+                                                            </li>
+                                                        </ui:repeat>
+                                                    </ol>
+                                                </li>
+                                            </ui:repeat>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td>
+                                    #{item.noOfRemainingOrders}/#{item.noOfOrders}
+                                </td>
+                            </tr>
+                        </ui:repeat>
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+
+                </h:panelGroup>
 
                 <hr/>
 
@@ -154,8 +161,7 @@
                 </div>
 
                 <div class="right-align">
-                    <h:commandButton styleClass="button back-button" value="Bakåt" action="start?faces-redirect=true&amp;includeViewParams=true" />
-                    <h:commandButton styleClass="button" value="Till leverans" action="#{orderController.toDelivery}">
+                    <h:commandButton styleClass="button" value="Till leverans" action="#{orderController.toDelivery}" disabled="#{orderController.medicalSupplyPrescriptions.size() eq 0}">
                         <f:param name="guid" value="#{userProfileController.guid}"/>
                     </h:commandButton>
                 </div>

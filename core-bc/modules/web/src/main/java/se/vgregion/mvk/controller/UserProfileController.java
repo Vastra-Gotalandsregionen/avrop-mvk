@@ -6,12 +6,16 @@ import mvk.itintegration.userprofile._2.UserProfileType;
 import mvk.itintegration.userprofile.getsubjectofcareresponder._2.GetSubjectOfCareResponseType;
 import mvk.itintegration.userprofile.getuserprofilebyagentresponder._2.GetUserProfileByAgentResponseType;
 import mvk.itintegration.userprofile.getuserprofileresponder._2.GetUserProfileResponseType;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import se._1177.lmn.service.MvkUserProfileService;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -26,6 +30,8 @@ import java.util.Map;
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserProfileController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserProfileController.class);
+
     @Autowired
     private MvkUserProfileService mvkUserProfileService;
 
@@ -37,47 +43,92 @@ public class UserProfileController {
     private boolean delegate;
     private String objectId;
     private String guid;
+    private UserProfileType userProfile;
 
-    public UserProfileType getUserProfile() {
+    @PostConstruct
+    public void init() {
+        try {
+            checkDelegate();
 
-        UserProfileType toReturn = null;
-
-        if (delegate) {
-
-            if (userProfileByAgentResponse == null) {
+            if (subjectOfCareResponseLoggedInUser == null) {
                 String ssn = getSubjectCareId();
 
-                userProfileByAgentResponse = mvkUserProfileService.getUserProfileByAgent(ssn, this.objectId);
+                subjectOfCareResponseLoggedInUser = mvkUserProfileService.getSubjectOfCare(ssn);
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            String text = "Tekniskt fel.";
+            FacesContext.getCurrentInstance().addMessage("",
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, text, text));
+        }
+    }
+
+    public void updateUserProfile() {
+        UserProfileType userProfile = null;
+
+        try {
+            if (delegate) {
+
+                if (userProfileByAgentResponse == null) {
+                    updateUserProfileByAgentResponse();
+                }
+
+                userProfile = userProfileByAgentResponse.getCurrentUserProfile();
+
+                ResultCodeEnum resultCode = userProfileResponse.getResultCode();
+                if (resultCode.equals(ResultCodeEnum.ERROR) || resultCode.equals(ResultCodeEnum.INFO)) {
+                    String text = userProfileResponse.getResultText();
+                    FacesContext.getCurrentInstance().addMessage("",
+                            new FacesMessage(FacesMessage.SEVERITY_FATAL, text, text));
+                }
+
+            } else {
+
+                if (userProfileResponse == null) {
+                    String ssn = getSubjectCareId();
+
+                    userProfileResponse = mvkUserProfileService.getUserProfile(ssn);
+                }
+
+                userProfile = userProfileResponse.getUserProfile();
+
+                ResultCodeEnum resultCode = userProfileResponse.getResultCode();
+                if (resultCode.equals(ResultCodeEnum.ERROR) || resultCode.equals(ResultCodeEnum.INFO)) {
+                    String text = userProfileResponse.getResultText();
+                    FacesContext.getCurrentInstance().addMessage("",
+                            new FacesMessage(FacesMessage.SEVERITY_FATAL, text, text));
+                }
             }
 
-            toReturn = userProfileByAgentResponse.getCurrentUserProfile();
-
-            ResultCodeEnum resultCode = userProfileResponse.getResultCode();
-            if (resultCode.equals(ResultCodeEnum.ERROR) || resultCode.equals(ResultCodeEnum.INFO)) {
-                String text = userProfileResponse.getResultText();
-                FacesContext.getCurrentInstance().addMessage("",
-                        new FacesMessage(FacesMessage.SEVERITY_FATAL, text, text));
-            }
-
-        } else {
-
-            if (userProfileResponse == null) {
-                String ssn = getSubjectCareId();
-
-                userProfileResponse = mvkUserProfileService.getUserProfile(ssn);
-            }
-
-            toReturn = userProfileResponse.getUserProfile();
-
-            ResultCodeEnum resultCode = userProfileResponse.getResultCode();
-            if (resultCode.equals(ResultCodeEnum.ERROR) || resultCode.equals(ResultCodeEnum.INFO)) {
-                String text = userProfileResponse.getResultText();
-                FacesContext.getCurrentInstance().addMessage("",
-                        new FacesMessage(FacesMessage.SEVERITY_FATAL, text, text));
-            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            String text = "Tekniskt fel.";
+            FacesContext.getCurrentInstance().addMessage("",
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL, text, text));
         }
 
-        return toReturn;
+        this.userProfile = userProfile;
+
+        if (getUserProfile() != null) {
+            if (subjectOfCareResponse == null ||
+                    !subjectOfCareResponse.getSubjectOfCare().getSubjectOfCareId()
+                            .equals(getUserProfile().getSubjectOfCareId())) {
+
+                String subjectOfCareId = getUserProfile().getSubjectOfCareId();
+
+                subjectOfCareResponse = mvkUserProfileService.getSubjectOfCare(subjectOfCareId);
+            }
+        }
+    }
+
+    public UserProfileType getUserProfile() {
+        return userProfile;
+    }
+
+    private void updateUserProfileByAgentResponse() {
+        String ssn = getSubjectCareId();
+
+        userProfileByAgentResponse = mvkUserProfileService.getUserProfileByAgent(ssn, this.objectId);
     }
 
     private String getSubjectCareId() {
@@ -89,25 +140,20 @@ public class UserProfileController {
 
     public SubjectOfCareType getLoggedInUser() {
 
-        if (subjectOfCareResponseLoggedInUser == null) {
-            String ssn = getSubjectCareId();
-
-            subjectOfCareResponseLoggedInUser = mvkUserProfileService.getSubjectOfCare(ssn);
+        if (subjectOfCareResponseLoggedInUser != null) {
+            return subjectOfCareResponseLoggedInUser.getSubjectOfCare();
+        } else {
+            return null;
         }
-
-        return subjectOfCareResponseLoggedInUser.getSubjectOfCare();
     }
 
     public SubjectOfCareType getSubjectOfCare() {
 
-        if (subjectOfCareResponse == null) {
-
-            String subjectOfCareId = getUserProfile().getSubjectOfCareId();
-
-            subjectOfCareResponse = mvkUserProfileService.getSubjectOfCare(subjectOfCareId);
+        if (subjectOfCareResponse != null) {
+            return subjectOfCareResponse.getSubjectOfCare();
+        } else {
+            return null;
         }
-
-        return subjectOfCareResponse.getSubjectOfCare();
     }
 
     public void checkDelegate() {
@@ -117,18 +163,40 @@ public class UserProfileController {
         Map<String, String> requestParameterMap = externalContext.getRequestParameterMap();
 
         if (requestParameterMap.containsKey("guid")) {
-            this.guid = requestParameterMap.get("guid");
-            this.objectId = requestParameterMap.get("objectId");
+            String guid = requestParameterMap.get("guid");
+            String objectId = requestParameterMap.get("objectId");
+
+            Boolean equals = new EqualsBuilder()
+                    .append(objectId, this.objectId)
+                    .append(guid, this.guid)
+                    .build();
+            if (!equals) {
+                this.guid = guid;
+                this.objectId = objectId;
+
+                updateUserProfileByAgentResponse();
+            }
+
             this.delegate = true;
         } else {
             this.guid = null;
             this.objectId = null;
             this.delegate = false;
+
+            this.userProfileByAgentResponse = null;
+
         }
+        updateUserProfile();
     }
 
     public String getSubjectOfCareId() {
-        return getUserProfile().getSubjectOfCareId();
+        UserProfileType userProfile = getUserProfile();
+
+        if (userProfile != null) {
+            return userProfile.getSubjectOfCareId();
+        } else {
+            return null;
+        }
     }
 
     public boolean isDelegate() {
@@ -140,7 +208,7 @@ public class UserProfileController {
     }
 
     public void setObjectId(String objectId) {
-        this.objectId = objectId;
+        // Set by checkDelegate()
     }
 
     public String getGuid() {
@@ -148,12 +216,11 @@ public class UserProfileController {
     }
 
     public void setGuid(String guid) {
-        this.guid = guid;
+        // Set by checkDelegate()
     }
 
     public String getDelegateUrlParameters() {
         return guid != null ? "?guid=" + guid + "&objectId" + objectId : "";
     }
 
-    // ?guid=C8E52E08A3CEBB546F27A61416D6DC3DA0B13441E2437C953692A057E0F2F5CF&objectId=449a660049744cc586f0643cb6059a85
 }

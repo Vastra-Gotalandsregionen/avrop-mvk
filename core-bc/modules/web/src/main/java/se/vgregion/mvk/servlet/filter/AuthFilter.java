@@ -29,7 +29,9 @@ public class AuthFilter implements Filter {
         LOGGER.info("Filter init...");
     }
 
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException {
+
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
@@ -37,35 +39,42 @@ public class AuthFilter implements Filter {
 
         String env = System.getProperty("env");
 
-        if (env != null && env.equalsIgnoreCase("dev")) {
-            filterChain.doFilter(servletRequest, servletResponse);
-        } else {
-
-            String ajpSnId = request.getHeader(this.userIdHeader);
-            if (ajpSnId != null && !"".equals(ajpSnId) && ajpSnId.length() > 0) {
+        try {
+            if (env != null && env.equalsIgnoreCase("dev")) {
                 filterChain.doFilter(servletRequest, servletResponse);
             } else {
-                response.setContentType("text/html");
 
-                try (ServletOutputStream outputStream = response.getOutputStream()) {
-                    LOGGER.error("Request without " + userIdHeader + " set.");
-
-                    StringBuilder sb = new StringBuilder();
-
-                    sb.append("<!DOCTYPE html>" + System.getProperty("line.separator"));
-                    sb.append("<html>" +
-                            "<head><meta charset=\"utf-8\"></meta></head>" +
-                            "<body>");
-                    sb.append("Inloggning krävs.");
-                    sb.append("</body></html>");
-
-                    outputStream.write(sb.toString().getBytes("UTF-8"));
-                    response.setStatus(401);
+                String ajpSnId = request.getHeader(this.userIdHeader);
+                if (ajpSnId != null && !"".equals(ajpSnId) && ajpSnId.length() > 0) {
+                    filterChain.doFilter(servletRequest, servletResponse);
+                } else {
+                    writeErrorPage(response, 401, "Inloggning krävs.");
                 }
+
             }
-
+        } catch (Exception e) {
+            throw e;
         }
+    }
 
+    private void writeErrorPage(HttpServletResponse response, int statusCode, String message) throws IOException {
+        response.setContentType("text/html");
+
+        try (ServletOutputStream outputStream = response.getOutputStream()) {
+            LOGGER.error("Request without " + userIdHeader + " set.");
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("<!DOCTYPE html>" + System.getProperty("line.separator"));
+            sb.append("<html>" +
+                    "<head><meta charset=\"utf-8\"></meta></head>" +
+                    "<body>");
+            sb.append(message);
+            sb.append("</body></html>");
+
+            outputStream.write(sb.toString().getBytes("UTF-8"));
+            response.setStatus(statusCode);
+        }
     }
 
     public void destroy() {

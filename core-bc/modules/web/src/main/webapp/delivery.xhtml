@@ -41,7 +41,7 @@
                                     <h:panelGroup rendered="#{not deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.hemleveransEnum)}">
                                         <input type="radio" jsf:id="hemleveransOptionDisabled" p:name="#{hiddenItem.clientId}" disabled="disabled"
                                                value="#{deliveryController.hemleveransValue}" />
-                                        <h:outputLabel for="hemleveransOptionDisabled" value="Hemleverans"/>
+                                        <h:outputLabel for="hemleveransOptionDisabled" value="Hemleverans" styleClass="disabled"/>
                                     </h:panelGroup>
                                 </div>
                                 <p>
@@ -60,7 +60,7 @@
                                     <h:panelGroup rendered="#{not deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.utlamningsstalleEnum)}">
                                         <input type="radio" jsf:id="utlamningsstalleOptionDisabled" p:name="#{hiddenItem.clientId}" disabled="disabled"
                                                value="#{deliveryController.utlamningsstalleValue}" />
-                                        <h:outputLabel for="utlamningsstalleOptionDisabled" value="Utlämningsställe"/>
+                                        <h:outputLabel for="utlamningsstalleOptionDisabled" value="Utlämningsställe" styleClass="disabled"/>
                                     </h:panelGroup>
                                 </div>
                                 <p>
@@ -100,10 +100,14 @@
 
                                         <h:selectOneRadio value="#{deliveryController.deliveryMethodForEachItem[item]}" styleClass="single-item-delivery-choice">
 
-                                            <f:selectItem itemValue="#{deliveryController.hemleveransEnum}" itemLabel="#{utilController.capitalizeFully(deliveryController.hemleveransValue)}"
-                                                          itemDisabled="#{not deliveryController.anyDeliveryAlternativeHasDeliveryMethod(item.deliveryAlternative, deliveryController.hemleveransEnum)}"/>
+                                            <f:selectItem itemValue="#{deliveryController.hemleveransEnum}"
+                                                          itemLabel="#{utilController.capitalizeFully(deliveryController.hemleveransValue)}"
+                                                          itemDisabled="#{not deliveryController.anyDeliveryAlternativeHasDeliveryMethod(item.deliveryAlternative, deliveryController.hemleveransEnum)}"
 
-                                            <f:selectItem itemValue="#{deliveryController.utlamningsstalleEnum}" itemLabel="#{utilController.capitalizeFully(deliveryController.utlamningsstalleValue)}"
+                                            />
+
+                                            <f:selectItem itemValue="#{deliveryController.utlamningsstalleEnum}"
+                                                          itemLabel="#{utilController.capitalizeFully(deliveryController.utlamningsstalleValue)}"
                                                           itemDisabled="#{not deliveryController.anyDeliveryAlternativeHasDeliveryMethod(item.deliveryAlternative, deliveryController.utlamningsstalleEnum)}"/>
 
                                         </h:selectOneRadio>

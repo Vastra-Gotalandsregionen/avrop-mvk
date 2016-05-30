@@ -363,6 +363,14 @@ ul.delivery-options li:not(:first-child) {
     background: #E3E3E3;
 }
 
+input[disabled="disabled"]+label, input[disabled="disabled"][type="submit"] {
+    opacity: .5;
+}
+
+ul.delivery-options li input[disabled="disabled"]+label {
+    cursor: default;
+}
+
 .input-group input[type="text"] {
     border-radius: 5px;
     border: 1px solid #888;
