@@ -13,9 +13,9 @@ import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 import se._1177.lmn.service.LmnService;
 import se.vgregion.mvk.controller.model.Cart;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -90,6 +90,12 @@ public class OrderController {
     public void reset() {
         medicalSupplyPrescriptions = null;
         chosenItemMap = new HashMap<>();
+    }
+
+    public String reinit() {
+        ((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).getSession().invalidate();
+
+        return "order" + ACTION_SUFFIX;
     }
 
     public List<PrescriptionItemType> getMedicalSupplyPrescriptions() {

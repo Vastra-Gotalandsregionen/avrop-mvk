@@ -51,8 +51,9 @@
             <!--<form id="j_id1980847945_2_1820a690:caseForm" name="j_id1980847945_2_1820a690:caseForm" method="post" action="/mvk/caseForm/SSO_START.xhtml" enctype="application/x-www-form-urlencoded">-->
             <o:form includeRequestParams="true">
 
-                <h:panelGroup layout="block" rendered="#{orderController.medicalSupplyPrescriptions.size() eq 0}" styleClass="alert alert-warning">
+                <h:panelGroup layout="block" rendered="#{empty orderController.medicalSupplyPrescriptions}" styleClass="alert alert-warning">
                     Inga aktuella produkter hittades. Om du förväntat dig beställningsbara produkter, kontakta support XXX.
+                    <div><h:commandButton styleClass="button" action="#{orderController.reinit()}" value="Uppdatera"/> </div>
                 </h:panelGroup>
 
                 <h:panelGroup rendered="#{orderController.medicalSupplyPrescriptions.size() gt 0}">

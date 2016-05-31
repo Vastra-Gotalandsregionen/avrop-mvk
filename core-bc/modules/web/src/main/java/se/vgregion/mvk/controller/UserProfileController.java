@@ -32,17 +32,18 @@ public class UserProfileController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserProfileController.class);
 
+    private static final String AJP_SUBJECT_SERIAL_NUMBER = "AJP_Subject_SerialNumber";
+
     @Autowired
     private MvkUserProfileService mvkUserProfileService;
 
     @Autowired
     private OrderController orderController;
-
     private GetUserProfileResponseType userProfileResponse;
     private GetUserProfileByAgentResponseType userProfileByAgentResponse;
     private GetSubjectOfCareResponseType subjectOfCareResponseLoggedInUser;
-    private GetSubjectOfCareResponseType subjectOfCareResponse;
 
+    private GetSubjectOfCareResponseType subjectOfCareResponse;
     private boolean delegate;
     private String objectId;
     private String guid;
@@ -157,7 +158,7 @@ public class UserProfileController {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
                 .getRequest();
 
-        return request.getHeader("AJP_Subject_SerialNumber");
+        return request.getHeader(AJP_SUBJECT_SERIAL_NUMBER);
     }
 
     public SubjectOfCareType getLoggedInUser() {

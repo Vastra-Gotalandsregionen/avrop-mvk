@@ -23,7 +23,7 @@ public class AuthFilter implements Filter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthFilter.class);
 
-    private String userIdHeader = "AJP_sn_id";
+    private String userIdHeader = "AJP_Subject_SerialNumber";
 
     public void init(FilterConfig filterConfig) throws ServletException {
         LOGGER.info("Filter init...");
@@ -48,32 +48,18 @@ public class AuthFilter implements Filter {
                 if (ajpSnId != null && !"".equals(ajpSnId) && ajpSnId.length() > 0) {
                     filterChain.doFilter(servletRequest, servletResponse);
                 } else {
-                    writeErrorPage(response, 401, "Inloggning krävs.");
+                    if (!request.getRequestURI().contains("error.xhtml")
+                            && !request.getRequestURI().startsWith(request.getContextPath() + "/javax.faces.resource/")) {
+
+                        response.sendRedirect("error.xhtml");
+                    } else {
+                        filterChain.doFilter(servletRequest, servletResponse);
+                    }
                 }
 
             }
         } catch (Exception e) {
             throw e;
-        }
-    }
-
-    private void writeErrorPage(HttpServletResponse response, int statusCode, String message) throws IOException {
-        response.setContentType("text/html");
-
-        try (ServletOutputStream outputStream = response.getOutputStream()) {
-            LOGGER.error("Request without " + userIdHeader + " set.");
-
-            StringBuilder sb = new StringBuilder();
-
-            sb.append("<!DOCTYPE html>" + System.getProperty("line.separator"));
-            sb.append("<html>" +
-                    "<head><meta charset=\"utf-8\"></meta></head>" +
-                    "<body>");
-            sb.append(message);
-            sb.append("</body></html>");
-
-            outputStream.write(sb.toString().getBytes("UTF-8"));
-            response.setStatus(statusCode);
         }
     }
 

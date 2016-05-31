@@ -17,7 +17,7 @@
     <packaging>war</packaging>
 
     <build>
-        <finalName>avrop-mvk</finalName>
+        <finalName>bestallning</finalName>
     </build>
     <!--<build>
         <plugins>
