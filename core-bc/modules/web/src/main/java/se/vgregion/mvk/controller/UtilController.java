@@ -30,6 +30,12 @@ public class UtilController {
     @Value("${backToOwnProfileLink}")
     private String backToOwnProfileLink;
 
+    @Value("${logoutLink}")
+    private String logoutLink;
+
+    @Value("${settingsLink}")
+    private String settingsLink;
+
     public Date toDate(XMLGregorianCalendar calendar) {
         if (calendar == null) {
             return null;
@@ -127,5 +133,13 @@ public class UtilController {
 
     public String getBackToOwnProfileLink() {
         return backToOwnProfileLink;
+    }
+
+    public String getLogoutLink() {
+        return logoutLink;
+    }
+
+    public String getSettingsLink() {
+        return settingsLink;
     }
 }

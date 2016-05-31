@@ -1,0 +1,28 @@
+# lakemedelsnara.properties is placed in the classpath (the special directory may be added to the classpath as
+# environment variable)
+
+ssl_truststore=
+ssl_truststore_password=
+
+ssl_keystore=
+ssl_keystore_password=
+
+local.mock.service.startup=false
+
+backToOwnProfileLink=
+logoutLink=
+settingsLink=
+
+GetMedicalSupplyDeliveryPointsResponderInterface.address=
+
+GetMedicalSupplyPrescriptionsResponderInterface.address=
+
+RegisterMedicalSupplyOrderResponderInterface.address=
+
+GetUserProfileResponderInterface.address=
+
+GetUserProfileByAgentResponderInterface.address=
+
+GetSubjectOfCareResponderInterface.address=
+
+AddMessageResponderInterface.address=

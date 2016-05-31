@@ -51,7 +51,7 @@ public class UserProfileController {
 
     @PostConstruct
     public void init() {
-        try {
+
             ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
             Map<String, String> requestParameterMap = externalContext.getRequestParameterMap();
@@ -68,6 +68,7 @@ public class UserProfileController {
 
             updateUserProfile();
 
+        try {
             if (subjectOfCareResponseLoggedInUser == null) {
                 String ssn = getSubjectCareId();
 
@@ -75,9 +76,8 @@ public class UserProfileController {
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            String text = "Tekniskt fel.";
-            FacesContext.getCurrentInstance().addMessage("",
-                    new FacesMessage(FacesMessage.SEVERITY_FATAL, text, text));
+            String text = "Dina folkbokföringsuppgifter kunde inte hämtas.";
+            addErrorMessage(text);
         }
     }
 
@@ -96,8 +96,7 @@ public class UserProfileController {
                 ResultCodeEnum resultCode = userProfileByAgentResponse.getResultCode();
                 if (resultCode.equals(ResultCodeEnum.ERROR) || resultCode.equals(ResultCodeEnum.INFO)) {
                     String text = userProfileByAgentResponse.getResultText();
-                    FacesContext.getCurrentInstance().addMessage("",
-                            new FacesMessage(FacesMessage.SEVERITY_FATAL, text, text));
+                    addErrorMessage(text);
                 }
 
             } else {
@@ -113,30 +112,42 @@ public class UserProfileController {
                 ResultCodeEnum resultCode = userProfileResponse.getResultCode();
                 if (resultCode.equals(ResultCodeEnum.ERROR) || resultCode.equals(ResultCodeEnum.INFO)) {
                     String text = userProfileResponse.getResultText();
-                    FacesContext.getCurrentInstance().addMessage("",
-                            new FacesMessage(FacesMessage.SEVERITY_FATAL, text, text));
+                    addErrorMessage(text);
+                }
+            }
+
+            this.userProfile = userProfile;
+
+            if (getUserProfile() != null) {
+                if (subjectOfCareResponse == null ||
+                        !subjectOfCareResponse.getSubjectOfCare().getSubjectOfCareId()
+                                .equals(getUserProfile().getSubjectOfCareId())) {
+
+                    String subjectOfCareId = getUserProfile().getSubjectOfCareId();
+
+                    subjectOfCareResponse = mvkUserProfileService.getSubjectOfCare(subjectOfCareId);
                 }
             }
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            String text = "Tekniskt fel.";
-            FacesContext.getCurrentInstance().addMessage("",
-                    new FacesMessage(FacesMessage.SEVERITY_FATAL, text, text));
+            String text = "Din användare kunde inte hämtas.";
+            addErrorMessage(text);
         }
 
-        this.userProfile = userProfile;
+    }
 
-        if (getUserProfile() != null) {
-            if (subjectOfCareResponse == null ||
-                    !subjectOfCareResponse.getSubjectOfCare().getSubjectOfCareId()
-                            .equals(getUserProfile().getSubjectOfCareId())) {
+    private void addErrorMessage(String text) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
 
-                String subjectOfCareId = getUserProfile().getSubjectOfCareId();
-
-                subjectOfCareResponse = mvkUserProfileService.getSubjectOfCare(subjectOfCareId);
+        // Don't add duplicate error messages
+        for (FacesMessage facesMessage : facesContext.getMessageList()) {
+            if (facesMessage.getSummary().equals(text)) {
+                return;
             }
         }
+
+        facesContext.addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, text, text));
     }
 
     /**

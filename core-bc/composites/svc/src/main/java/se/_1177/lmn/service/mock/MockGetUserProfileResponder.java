@@ -36,7 +36,6 @@ public class MockGetUserProfileResponder implements GetUserProfileResponderInter
 
         response.setUserProfile(userProfile);
 
-
         return response;
     }
 }
