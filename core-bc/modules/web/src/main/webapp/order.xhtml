@@ -72,7 +72,7 @@
                             <tr class="#{utilController.isAfterToday(item.nextEarliestOrderDate) ? 'unavailable-row' : ''}">
                                 <td>
                                     <h:panelGroup styleClass="checkbox" rendered="#{not utilController.isAfterToday(item.nextEarliestOrderDate)}">
-                                        <h:selectBooleanCheckbox id="subscriptionCheckbox" value="#{orderController.chosenItemMap[item.prescriptionId]}" />
+                                        <h:selectBooleanCheckbox id="subscriptionCheckbox" value="#{orderController.chosenItemMap[item.prescriptionItemId]}" />
                                         <h:outputLabel for="subscriptionCheckbox" />
                                     </h:panelGroup>
                                 </td>

@@ -61,11 +61,11 @@ public class OrderController {
                     userProfileController.getSubjectOfCareId());
 
             for (PrescriptionItemType prescriptionItem : medicalSupplyPrescriptions.orderable) {
-                String prescriptionId = prescriptionItem.getPrescriptionId();
-                cart.addPrescriptionItemForInfo(prescriptionId, prescriptionItem);
+                String prescriptionItemId = prescriptionItem.getPrescriptionItemId();
+                cart.addPrescriptionItemForInfo(prescriptionItemId, prescriptionItem);
 
                 if (!UtilController.isAfterToday(prescriptionItem.getNextEarliestOrderDate())) {
-                    chosenItemMap.put(prescriptionId, true);
+                    chosenItemMap.put(prescriptionItemId, true);
                 }
             }
 

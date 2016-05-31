@@ -47,13 +47,15 @@
                             <div class="_1177-logout">
                                 <a class="link-userblock" href="/Shibboleth.sso/Logout">Logga ut</a>
                             </div>
-                            <div class="_1177-currentuser">Inloggad som&#160;#{userProfileController.loggedInUser.firstName} #{userProfileController.loggedInUser.lastName}</div>
+                            <h:panelGroup styleClass="_1177-currentuser" rendered="#{not userProfileController.delegate}">Inloggad som&#160;#{userProfileController.loggedInUser.firstName} #{userProfileController.loggedInUser.lastName}</h:panelGroup>
+                            <h:panelGroup styleClass="_1177-currentuser" rendered="#{userProfileController.delegate}">
+                                &#171; <a href="#{utilController.backToOwnProfileLink}">Tillbaka till #{userProfileController.loggedInUser.firstName} #{userProfileController.loggedInUser.lastName}</a>
+                            </h:panelGroup>
                         </div><!--_1177-user-->
                     </div><!--_1177-header-content-->
                 </div><!--_1177-header-->
 
             </header>
-
 
             <h:panelGroup class="delegate-container" rendered="#{userProfileController.delegate}">
                 <div class="delegate-block">

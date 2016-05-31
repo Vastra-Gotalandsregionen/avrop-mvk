@@ -147,6 +147,17 @@ public class VerifyDeliveryController {
                 switch (notificationMethod) {
                     case BREV:
                         notificationReceiver = null;
+
+                        AddressType address = new AddressType();
+//                        address.setCareOfAddress(userProfileController.getUserProfile().getC); // // TODO: 2016-05-02
+                        address.setCity(userProfile.getCity());
+//                        address.setDoorCode(homeDeliveryController.getDoorCode());
+//                        address.setPhone(homeDeliveryController.getPhoneNumber());
+                        address.setPostalCode(userProfile.getZip());
+                        address.setReceiver(userProfile.getFirstName() + " " + userProfile.getLastName()); // todo Korrekt att detta är mottagarens namn?
+                        address.setStreet(userProfile.getStreetAddress());
+
+                        deliveryChoice.setHomeDeliveryAddress(address);
                         break;
                     case E_POST:
                         notificationReceiver = collectDeliveryController.getEmail();
@@ -205,8 +216,10 @@ public class VerifyDeliveryController {
                 AddMessageResponseType addMessageResponse = mvkInboxService.sendInboxMessage(
                         userProfile.getSubjectOfCareId(), cart.getItemsInCart(), deliveryChoicePerItem.values());
 
-                String msg = addMessageResponse.getMessage().getMsg();
-                FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg)); // TODO: 2016-05-12 temp
+                if (!addMessageResponse.getResultCode().equals(mvk.crm.casemanagement.inbox._2.ResultCodeEnum.OK)) {
+                    String msg = addMessageResponse.getResultText();
+                    FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
+                }
             } catch (MvkInboxServiceException e) {
                 String msg = "Din beställning har utförts men kvittot till din inkorg har misslyckats.";
                 FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,

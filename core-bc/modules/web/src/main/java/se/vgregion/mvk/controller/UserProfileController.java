@@ -35,6 +35,9 @@ public class UserProfileController {
     @Autowired
     private MvkUserProfileService mvkUserProfileService;
 
+    @Autowired
+    private OrderController orderController;
+
     private GetUserProfileResponseType userProfileResponse;
     private GetUserProfileByAgentResponseType userProfileByAgentResponse;
     private GetSubjectOfCareResponseType subjectOfCareResponseLoggedInUser;
@@ -48,7 +51,21 @@ public class UserProfileController {
     @PostConstruct
     public void init() {
         try {
-            checkDelegate();
+            ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+
+            Map<String, String> requestParameterMap = externalContext.getRequestParameterMap();
+
+            if (requestParameterMap.containsKey("guid")) {
+                this.guid = requestParameterMap.get("guid");
+                this.objectId = requestParameterMap.get("objectId");
+                this.delegate = true;
+            } else {
+                this.guid = null;
+                this.objectId = null;
+                this.delegate = false;
+            }
+
+            updateUserProfile();
 
             if (subjectOfCareResponseLoggedInUser == null) {
                 String ssn = getSubjectCareId();
@@ -75,9 +92,9 @@ public class UserProfileController {
 
                 userProfile = userProfileByAgentResponse.getCurrentUserProfile();
 
-                ResultCodeEnum resultCode = userProfileResponse.getResultCode();
+                ResultCodeEnum resultCode = userProfileByAgentResponse.getResultCode();
                 if (resultCode.equals(ResultCodeEnum.ERROR) || resultCode.equals(ResultCodeEnum.INFO)) {
-                    String text = userProfileResponse.getResultText();
+                    String text = userProfileByAgentResponse.getResultText();
                     FacesContext.getCurrentInstance().addMessage("",
                             new FacesMessage(FacesMessage.SEVERITY_FATAL, text, text));
                 }
@@ -121,6 +138,11 @@ public class UserProfileController {
         }
     }
 
+    /**
+     * User profile by "folkbokföring".
+     *
+     * @return
+     */
     public UserProfileType getUserProfile() {
         return userProfile;
     }
@@ -156,7 +178,7 @@ public class UserProfileController {
         }
     }
 
-    public void checkDelegate() {
+    public synchronized void checkDelegate() {
 
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
@@ -170,21 +192,38 @@ public class UserProfileController {
                     .append(objectId, this.objectId)
                     .append(guid, this.guid)
                     .build();
+
+            this.delegate = true;
+
             if (!equals) {
                 this.guid = guid;
                 this.objectId = objectId;
 
+                // A change has occured
+                updateUserProfile();
+                orderController.reset();
+                orderController.init();
+
                 updateUserProfileByAgentResponse();
             }
 
-            this.delegate = true;
         } else {
-            this.guid = null;
-            this.objectId = null;
-            this.delegate = false;
+            if (this.guid != null) {
+                this.guid = null;
+                this.objectId = null;
+                this.delegate = false;
+                this.userProfileByAgentResponse = null;
 
-            this.userProfileByAgentResponse = null;
-
+                // A change has occured
+                updateUserProfile();
+                orderController.reset();
+                orderController.init();
+            } else {
+                this.guid = null;
+                this.objectId = null;
+                this.delegate = false;
+                this.userProfileByAgentResponse = null;
+            }
         }
         updateUserProfile();
     }

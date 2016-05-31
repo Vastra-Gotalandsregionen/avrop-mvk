@@ -3,6 +3,7 @@ package se.vgregion.mvk.controller;
 import org.apache.commons.lang3.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
@@ -25,6 +26,9 @@ import java.util.List;
 public class UtilController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UtilController.class);
+
+    @Value("${backToOwnProfileLink}")
+    private String backToOwnProfileLink;
 
     public Date toDate(XMLGregorianCalendar calendar) {
         if (calendar == null) {
@@ -119,5 +123,9 @@ public class UtilController {
                 LOGGER.error("Unknown DeliveryNotificationMethodEnum: [" + notificationMethod + "]");
                 return "Okänt";
         }
+    }
+
+    public String getBackToOwnProfileLink() {
+        return backToOwnProfileLink;
     }
 }

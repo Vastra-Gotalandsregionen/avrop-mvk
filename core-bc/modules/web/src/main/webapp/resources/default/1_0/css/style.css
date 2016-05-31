@@ -183,7 +183,9 @@ ul { list-style: none;
     color: white;
 }
 
-
+._1177-currentuser a {
+    color: white;
+}
 
 ._1177-user {
     position: static;

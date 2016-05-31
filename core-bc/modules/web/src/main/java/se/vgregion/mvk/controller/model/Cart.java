@@ -31,11 +31,11 @@ public class Cart {
     /**
      * Use this method to store the prescription item to fetch the info later.
      *
-     * @param prescriptionId
+     * @param prescriptionItemId
      * @param prescriptionItem
      */
-    public void addPrescriptionItemForInfo(String prescriptionId, PrescriptionItemType prescriptionItem) {
-        this.prescriptionItemInfo.put(prescriptionId, prescriptionItem);
+    public void addPrescriptionItemForInfo(String prescriptionItemId, PrescriptionItemType prescriptionItem) {
+        this.prescriptionItemInfo.put(prescriptionItemId, prescriptionItem);
     }
 
     public Map<String, PrescriptionItemType> getPrescriptionItemInfo() {

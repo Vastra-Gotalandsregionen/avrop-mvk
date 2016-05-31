@@ -118,6 +118,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
             prescriptionItem.setNextEarliestOrderDate(randomCalendar);
         }
         prescriptionItem.setPrescriptionId(random.nextInt(100000) + "");
+        prescriptionItem.setPrescriptionItemId(random.nextInt(100000) + "");
         PrescriberType prescriber = new PrescriberType();
         prescriber.setPrescriberName("Kalle Karlsson");
         prescriber.setPrescriberCode(random.nextInt(1000) + "");
