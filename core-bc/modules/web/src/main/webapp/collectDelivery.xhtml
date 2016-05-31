@@ -27,10 +27,10 @@
                 <h4>Utlämningsställe</h4>
 
                 <p>
-                    Ditt närmsta utlämningsställe baserat på ditt postnummer <span style="color:rebeccapurple">todo om postnummer inte kan hämtas</span> <a class="toggle-trigger" data-toggle-for="zipInputWrapper">Ändra postnummer</a>
+                    Ditt närmsta utlämningsställe baserat på ditt postnummer. <a class="toggle-trigger" data-toggle-for="zipInputWrapper">Ändra postnummer</a>
                 </p>
 
-                <div id="zipInputWrapper" style="display: none;">
+                <div id="zipInputWrapper" style="#{empty collectDeliveryController.zip or not collectDeliveryController.successfulSelectItems ? '' : 'display: none'};">
                     <div class="input-group">
                         <label for="zipInput">Postnummer</label>
 

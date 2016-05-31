@@ -170,4 +170,12 @@ public class CollectDeliveryControllerTest {
         assertEquals(null, dhl);
     }
 
+    @Test
+    public void isSuccessfulSelectItems() throws Exception {
+        boolean successfulSelectItems = collectDeliveryController.isSuccessfulSelectItems();
+
+        // The delivery points aren't loaded so they should not be considered successful.
+        assertFalse(successfulSelectItems);
+    }
+
 }

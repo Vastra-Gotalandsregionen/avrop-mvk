@@ -583,5 +583,20 @@ public class CollectDeliveryController {
         }
     }
 
+    public boolean isSuccessfulSelectItems() {
+        Map<ServicePointProviderEnum, List<SelectItemGroup>> deliverySelectItems = getDeliverySelectItems();
 
+        final boolean[] successfulFetch = {true};
+
+        deliverySelectItems.forEach((servicePointProviderEnum, selectItemGroups) -> {
+            for (SelectItemGroup selectItemGroup : selectItemGroups) {
+                if (selectItemGroup.getSelectItems().length < 1) {
+                    successfulFetch[0] = false;
+                    break;
+                }
+            }
+        });
+
+        return successfulFetch[0];
+    }
 }

@@ -54,7 +54,7 @@ public class OrderController {
 
     private Map<String, Boolean> chosenItemMap = new HashMap<>();
 
-    @PostConstruct
+    // This is inited by UserProfileController.
     public void init() {
         try {
             this.medicalSupplyPrescriptions = lmnService.getMedicalSupplyPrescriptionsHolder(
