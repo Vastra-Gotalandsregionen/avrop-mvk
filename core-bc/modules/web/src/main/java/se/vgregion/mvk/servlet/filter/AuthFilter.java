@@ -7,7 +7,6 @@ import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
@@ -23,7 +22,8 @@ public class AuthFilter implements Filter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthFilter.class);
 
-    private String userIdHeader = "AJP_Subject_SerialNumber";
+    private static final String USER_ID_HEADER = "AJP_Subject_SerialNumber";
+    private static final String SECURITY_LEVEL_DESCRIPTION = "AJP_SecurityLevelDescription";
 
     public void init(FilterConfig filterConfig) throws ServletException {
         LOGGER.info("Filter init...");
@@ -35,28 +35,36 @@ public class AuthFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        LOGGER.debug("RequestURI: " + request.getRequestURI());
-
-        String env = System.getProperty("env");
+        String requestURI = request.getRequestURI();
+        LOGGER.debug("RequestURI: " + requestURI);
 
         try {
-            if (env != null && env.equalsIgnoreCase("dev")) {
-                filterChain.doFilter(servletRequest, servletResponse);
-            } else {
+            String subjectSerialNumber = request.getHeader(this.USER_ID_HEADER);
+            String securityLevelDescription = request.getHeader(this.SECURITY_LEVEL_DESCRIPTION);
 
-                String ajpSnId = request.getHeader(this.userIdHeader);
-                if (ajpSnId != null && !"".equals(ajpSnId) && ajpSnId.length() > 0) {
+            String contextPath = request.getContextPath();
+            String resourcePath = contextPath + "/javax.faces.resource/";
+
+            boolean authenticated = subjectSerialNumber != null && subjectSerialNumber.length() > 0;
+
+            if (authenticated) {
+
+                boolean authenticatedWithSms = "OTP".equals(securityLevelDescription);
+
+                if (authenticatedWithSms
+                        && !requestURI.startsWith(resourcePath)
+                        && !requestURI.startsWith(contextPath + "/smsNotAuthorized.xhtml")) {
+
+                    response.sendRedirect("smsNotAuthorized.xhtml");
+                } else {
+                    filterChain.doFilter(servletRequest, servletResponse);
+                }
+            } else {
+                if (requestURI.startsWith(contextPath + "/notAuthenticated.xhtml") || requestURI.startsWith(resourcePath)) {
                     filterChain.doFilter(servletRequest, servletResponse);
                 } else {
-                    if (!request.getRequestURI().contains("error.xhtml")
-                            && !request.getRequestURI().startsWith(request.getContextPath() + "/javax.faces.resource/")) {
-
-                        response.sendRedirect("error.xhtml");
-                    } else {
-                        filterChain.doFilter(servletRequest, servletResponse);
-                    }
+                    response.sendRedirect("notAuthenticated.xhtml");
                 }
-
             }
         } catch (Exception e) {
             throw e;

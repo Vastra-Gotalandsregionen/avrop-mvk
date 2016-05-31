@@ -36,6 +36,9 @@ public class UtilController {
     @Value("${settingsLink}")
     private String settingsLink;
 
+    @Value("${mvkStartPageLink}")
+    private String mvkStartPageLink;
+
     public Date toDate(XMLGregorianCalendar calendar) {
         if (calendar == null) {
             return null;
@@ -141,5 +144,9 @@ public class UtilController {
 
     public String getSettingsLink() {
         return settingsLink;
+    }
+
+    public String getMvkStartPageLink() {
+        return mvkStartPageLink;
     }
 }
