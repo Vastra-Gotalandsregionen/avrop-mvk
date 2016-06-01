@@ -9,6 +9,7 @@ import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import se.vgregion.mvk.controller.model.Cart;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -179,8 +180,8 @@ public class CollectDeliveryController3Test {
     @Test
     public void getRelevantServicePointProviders() {
 
-        List<ServicePointProviderEnum> relevantServicePointProviders = collectDeliveryController
-                .getRelevantServicePointProviders();
+        List<ServicePointProviderEnum> relevantServicePointProviders = new ArrayList<>(collectDeliveryController
+                .getRelevantServicePointProviders().keySet());
 
         assertEquals(Arrays.asList(ServicePointProviderEnum.POSTNORD, ServicePointProviderEnum.SCHENKER),
                 relevantServicePointProviders); // No single provider is common to all.

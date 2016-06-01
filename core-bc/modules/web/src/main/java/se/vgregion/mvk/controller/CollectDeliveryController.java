@@ -117,7 +117,7 @@ public class CollectDeliveryController {
                             .map(Enum::name)
                             .collect(Collectors.toList())));
 
-            result.keySet().retainAll(getRelevantServicePointProviders());
+            result.keySet().retainAll(getRelevantServicePointProviders().keySet());
         } else {
 
             List<PrescriptionItemType> collectPrescriptionItems = getCollectPrescriptionItems();
@@ -148,7 +148,7 @@ public class CollectDeliveryController {
             }
         }
 
-        result.keySet().retainAll(getRelevantServicePointProviders());
+        result.keySet().retainAll(getRelevantServicePointProviders().keySet());
 
         return result;
     }
@@ -170,9 +170,10 @@ public class CollectDeliveryController {
             loadDeliveryPointsForAllSuppliers(zip);
         }
 
-        List<ServicePointProviderEnum> servicePointProvidersForItems = getRelevantServicePointProviders();
+        Map<ServicePointProviderEnum, List<PrescriptionItemType>> servicePointProvidersForItems =
+                getRelevantServicePointProviders();
 
-        for (ServicePointProviderEnum servicePointProviderForItem : servicePointProvidersForItems) {
+        for (ServicePointProviderEnum servicePointProviderForItem : servicePointProvidersForItems.keySet()) {
             List<SelectItemGroup> singleSelectMenuItems = getSingleSelectMenuItems(servicePointProviderForItem);
 
             selectOneMenuLists.put(servicePointProviderForItem, singleSelectMenuItems);
@@ -181,8 +182,8 @@ public class CollectDeliveryController {
         return selectOneMenuLists;
     }
 
-    List<ServicePointProviderEnum> getRelevantServicePointProviders() {
-        Set<ServicePointProviderEnum> servicePointProvidersForItems = new TreeSet<>();
+    public Map<ServicePointProviderEnum, List<PrescriptionItemType>> getRelevantServicePointProviders() {
+        Map<ServicePointProviderEnum, List<PrescriptionItemType>> servicePointProvidersForItems = new TreeMap<>();
 
         if (this.possibleCollectCombinationsFittingAllWithNotificationMethods == null) {
             initPossibleCollectCombinationsFittingAllWithNotificationMethods();
@@ -192,11 +193,14 @@ public class CollectDeliveryController {
             // We have at least one which may satisfy all prescription items. Take the first (probably there will never
             // be more than one in the collection)...
 
-            ServicePointProviderEnum provider = this.possibleCollectCombinationsFittingAllWithNotificationMethods.keySet()
-                    .iterator().next();
+            ServicePointProviderEnum provider = this.possibleCollectCombinationsFittingAllWithNotificationMethods
+                    .keySet().iterator().next();
 
             servicePointProvidersForItems.clear();
-            servicePointProvidersForItems.add(provider);
+            servicePointProvidersForItems.put(provider, cart.getItemsInCart()
+                    .stream()
+                    .filter(item -> deliveryController.getDeliveryMethodForEachItem().get(item)
+                            .equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE.name())).collect(Collectors.toList()));
         } else {
             // We don't have any single provider satisfying all items. The user needs to choose service point for the
             // provider of each item.
@@ -215,11 +219,17 @@ public class CollectDeliveryController {
                     continue;
                 }
 
-                servicePointProvidersForItems.add(servicePointProviderForItem);
+                if (servicePointProvidersForItems.containsKey(servicePointProviderForItem)) {
+                    servicePointProvidersForItems.get(servicePointProviderForItem).add(item);
+                } else {
+                    List<PrescriptionItemType> list = new ArrayList<>();
+                    list.add(item);
+                    servicePointProvidersForItems.put(servicePointProviderForItem, list);
+                }
             }
         }
 
-        return new ArrayList<>(servicePointProvidersForItems);
+        return servicePointProvidersForItems;
     }
 
     public ServicePointProviderEnum getServicePointProviderForItem(PrescriptionItemType item) {
@@ -291,7 +301,7 @@ public class CollectDeliveryController {
         }
 
         // If there are remaining entries from when the user had chosen more items to order.
-        chosenDeliveryNotificationMethod.keySet().retainAll(getRelevantServicePointProviders());
+        chosenDeliveryNotificationMethod.keySet().retainAll(getRelevantServicePointProviders().keySet());
 
         return chosenDeliveryNotificationMethod;
     }
@@ -316,7 +326,7 @@ public class CollectDeliveryController {
     }
 
     public Map<ServicePointProviderEnum, String> getDeliveryPointIdsMap() {
-        deliveryPointIdsMap.keySet().retainAll(getRelevantServicePointProviders());
+        deliveryPointIdsMap.keySet().retainAll(getRelevantServicePointProviders().keySet());
 
         return deliveryPointIdsMap;
     }

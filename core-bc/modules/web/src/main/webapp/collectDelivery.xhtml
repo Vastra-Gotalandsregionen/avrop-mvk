@@ -51,14 +51,25 @@
                             <b>Obs.</b> Valda artiklar kan inte levereras av en enskild transportör. Du behöver därför välja flera utlämningsställen.
                         </p>
                     </h:panelGroup>
-                    <ui:repeat value="#{utilController.toList(collectDeliveryController.deliverySelectItems.keySet())}" var="selectOneMenuItemsKey">
+                    <ui:repeat value="#{utilController.toList(collectDeliveryController.deliverySelectItems.keySet())}" var="selectOneMenuItemsKey" varStatus="status">
                         <div class="service-point-row row clearfix">
                             <span class="before-select">
                                 Valt utlämningsställe (#{utilController.toProviderName(selectOneMenuItemsKey)})
+                                <span class="toggle-trigger info-icon expand" data-toggle-for="articlesInfo#{status.index}" title="Visa artiklar"/>
                             </span>
                             <h:selectOneMenu id="deliveryPointMenu" value="#{collectDeliveryController.deliveryPointIdsMap[selectOneMenuItemsKey]}">
                                 <f:selectItems value="#{collectDeliveryController.deliverySelectItems[selectOneMenuItemsKey]}"/>
                             </h:selectOneMenu>
+
+                            <div id="articlesInfo#{status.index}" class="expanded-content" style="display: none;">
+                                <b>Gäller följande produkter:</b>
+                                <ul class="articles-info">
+                                    <ui:repeat value="#{collectDeliveryController.relevantServicePointProviders[selectOneMenuItemsKey]}" var="item">
+                                        <li>#{item.article.articleName}</li>
+                                    </ui:repeat>
+                                </ul>
+                            </div>
+
                         </div>
                     </ui:repeat>
                 </h:panelGroup>

@@ -60,7 +60,9 @@ public class AuthFilter implements Filter {
                     filterChain.doFilter(servletRequest, servletResponse);
                 }
             } else {
-                if (requestURI.startsWith(contextPath + "/notAuthenticated.xhtml") || requestURI.startsWith(resourcePath)) {
+                if (requestURI.startsWith(contextPath + "/notAuthenticated.xhtml")
+                        || requestURI.startsWith(resourcePath)) {
+
                     filterChain.doFilter(servletRequest, servletResponse);
                 } else {
                     response.sendRedirect("notAuthenticated.xhtml");

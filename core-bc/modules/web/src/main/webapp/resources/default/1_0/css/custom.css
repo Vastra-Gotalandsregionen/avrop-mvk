@@ -310,6 +310,12 @@ ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
     min-width: 200px;
 }
 
+ul.articles-info {
+    margin-top: 4px;
+    list-style: initial;
+    padding-left: 24px;
+}
+
 .notification-method-select {
     float: left;
     width: 82px;
