@@ -98,6 +98,7 @@ ul { list-style: none;
     background-image: -webkit-linear-gradient(#128693, #006a7b);
     background-image: linear-gradient(#128693, #006a7b);
     color: white;
+    line-height: 14px;
     text-align: center;
     text-decoration: none;
 }
@@ -110,6 +111,9 @@ ul { list-style: none;
     background-repeat: repeat;
     background-attachment: scroll;
     color: #008391;
+}
+.button.back-button:hover:not([disabled="disabled"]) {
+    border: 1px solid #6B6B6B;
 }
 ._1177-header {
     position: static;
@@ -324,9 +328,6 @@ ul { list-style: none;
 }
 
 .delegate-block {
-
-    min-width: 600px;
-    max-width: 600px;
     margin: 0px 10px 0px 0px;
     padding: 10px 15px;
     float: right;

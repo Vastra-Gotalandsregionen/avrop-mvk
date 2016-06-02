@@ -39,6 +39,9 @@ public class UtilController {
     @Value("${mvkStartPageLink}")
     private String mvkStartPageLink;
 
+    @Value("${mvkInboxLink}")
+    private String mvkInboxLink;
+
     public Date toDate(XMLGregorianCalendar calendar) {
         if (calendar == null) {
             return null;
@@ -148,5 +151,9 @@ public class UtilController {
 
     public String getMvkStartPageLink() {
         return mvkStartPageLink;
+    }
+
+    public String getMvkInboxLink() {
+        return mvkInboxLink;
     }
 }

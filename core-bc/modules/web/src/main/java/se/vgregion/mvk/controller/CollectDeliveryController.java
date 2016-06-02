@@ -520,6 +520,9 @@ public class CollectDeliveryController {
     public void resetChoices() {
         chosenDeliveryNotificationMethod = null;
         possibleCollectCombinationsFittingAllWithNotificationMethods = null;
+
+        UserProfileType userProfile = userProfileController.getUserProfile();
+        zip = userProfile.getZip();
     }
 
     public boolean validateNotificationInput() {

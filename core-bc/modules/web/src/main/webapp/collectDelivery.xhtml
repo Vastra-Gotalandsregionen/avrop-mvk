@@ -61,15 +61,14 @@
                                 <f:selectItems value="#{collectDeliveryController.deliverySelectItems[selectOneMenuItemsKey]}"/>
                             </h:selectOneMenu>
 
-                            <div id="articlesInfo#{status.index}" class="expanded-content" style="display: none;">
-                                <b>Gäller följande produkter:</b>
-                                <ul class="articles-info">
-                                    <ui:repeat value="#{collectDeliveryController.relevantServicePointProviders[selectOneMenuItemsKey]}" var="item">
-                                        <li>#{item.article.articleName}</li>
-                                    </ui:repeat>
-                                </ul>
-                            </div>
-
+                        </div>
+                        <div id="articlesInfo#{status.index}" class="expanded-content" style="display: none;">
+                            <b>Gäller följande produkter:</b>
+                            <ul class="articles-info">
+                                <ui:repeat value="#{collectDeliveryController.relevantServicePointProviders[selectOneMenuItemsKey]}" var="item">
+                                    <li>#{item.article.articleName}</li>
+                                </ui:repeat>
+                            </ul>
                         </div>
                     </ui:repeat>
                 </h:panelGroup>

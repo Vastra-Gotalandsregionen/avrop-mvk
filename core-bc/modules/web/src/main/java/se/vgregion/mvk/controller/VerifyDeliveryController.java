@@ -1,6 +1,7 @@
 package se.vgregion.mvk.controller;
 
 import mvk.crm.casemanagement.inbox.addmessageresponder._2.AddMessageResponseType;
+import mvk.itintegration.userprofile._2.SubjectOfCareType;
 import mvk.itintegration.userprofile._2.UserProfileType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -188,26 +189,33 @@ public class VerifyDeliveryController {
 
                 AddressType address = new AddressType();
                 address.setCareOfAddress(homeDeliveryController.getCoAddress()); // // TODO: 2016-05-02
-                address.setCity(userProfile.getCity());
+                address.setCity(homeDeliveryController.getCity());
                 address.setDoorCode(homeDeliveryController.getDoorCode());
                 address.setPhone(homeDeliveryController.getPhoneNumber());
-                address.setPostalCode(userProfile.getZip());
-                address.setReceiver(userProfile.getFirstName() + " " + userProfile.getLastName()); // todo Korrekt att detta är mottagarens namn?
-                address.setStreet(userProfile.getStreetAddress());
+                address.setPostalCode(homeDeliveryController.getZip());
+                address.setReceiver(homeDeliveryController.getFullName()); // todo Korrekt att detta är mottagarens namn?
+                address.setStreet(homeDeliveryController.getAddress());
 
                 deliveryChoice.setHomeDeliveryAddress(address);
                 deliveryChoice.setDeliveryMethodId(deliveryMethodId);
             }
         }
 
-        response = lmnService.registerMedicalSupplyOrder(
-                userProfile.getSubjectOfCareId(),
-                false, // todo Implementera delegat!
-                userProfile.getFirstName()
-                        + " " + userProfile.getLastName(),
-                cart.getItemsInCart(),
-                deliveryChoicePerItem
-        );
+        try {
+            SubjectOfCareType loggedInUser = userProfileController.getLoggedInUser();
+            response = lmnService.registerMedicalSupplyOrder(
+                    userProfile.getSubjectOfCareId(),
+                    userProfileController.isDelegate(),
+                    loggedInUser.getFirstName() + " " + loggedInUser.getLastName(),
+                    cart.getItemsInCart(),
+                    deliveryChoicePerItem
+            );
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            String msg = "Tekniskt fel. Försök senare.";
+            FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
+            return "verifyDelivery";
+        }
 
         if (response.getResultCode().equals(ResultCodeEnum.OK)) {
             orderSuccess = true;
@@ -229,11 +237,8 @@ public class VerifyDeliveryController {
             cart.emptyCart();
             orderController.reset();
 
-        } else if (response.getResultCode().equals(ResultCodeEnum.ERROR)) {
-            String msg = "Tekniskt fel. Försök senare.";
-            FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
-            orderSuccess = false;
-        } else if (response.getResultCode().equals(ResultCodeEnum.INFO)) {
+        } else if (response.getResultCode().equals(ResultCodeEnum.ERROR)
+                || response.getResultCode().equals(ResultCodeEnum.INFO)) {
             String msg = response.getComment();
             FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
             orderSuccess = false;
