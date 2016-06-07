@@ -38,6 +38,8 @@ public class MockGetUserProfileByAgentResponder implements GetUserProfileByAgent
         userProfile.setZip("42137");
         userProfile.setRelatives(relatives);
 
+        userProfile.setHasSmsNotification(true);
+
         GetUserProfileByAgentResponseType response = new GetUserProfileByAgentResponseType();
 
         response.setAgentName("Testförälder Testsson");

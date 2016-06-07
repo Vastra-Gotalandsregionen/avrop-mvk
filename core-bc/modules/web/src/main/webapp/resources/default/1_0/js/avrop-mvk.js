@@ -1,23 +1,24 @@
 function findMoreInfo(e) {
     var target = jq(e.target);
-    var td = target.parents('td')
-    var moreInfo = td.find('.more-info')
-    return moreInfo;
+    var td = target.parents('td');
+    return td.find('.more-info');
 }
 
 function findShowMoreLink(e) {
     var target = jq(e.target);
-    var td = target.parents('td')
+    var td = target.parents('td');
     return td.find('.show-more-link');
 }
 
 function findShowLessLink(e) {
     var target = jq(e.target);
-    var td = target.parents('td')
+    var td = target.parents('td');
     return td.find('.show-less-link');
 }
 
 function initCommon() {
+    jq('.toggle-trigger').unbind();
+
     jq('.toggle-trigger').click(function (e) {
         var forId = e.target.getAttribute('data-toggle-for');
         jq('#' + forId).toggle();
@@ -76,26 +77,22 @@ function initHomeDeliveryPage() {
     });
 }
 
-function handleProgressWithSpinner(data) {
+function handleProgressWithSpinner(data, successCallback) {
     var ajaxStatus = data.status; // Can be "begin", "success" and "complete"
 
     switch (ajaxStatus) {
         case "begin": // This is called right before ajax request is been sent
-            //showLoadingMask();
             jq('.spinner').show();
             break;
 
         case "complete": // This is called right after ajax response is received.
             jq('.spinner').hide();
-            //hideLoadingMask();
-
-            //handleResponseAnomalies(data);
-
+            
             break;
         case "success": // This is called when ajax response is successfully processed.
-            //if (completeCallback) {
-            //    completeCallback(data);
-            //}
+            if (successCallback) {
+                successCallback();
+            }
             break;
         default:
             alert(ajaxStatus);

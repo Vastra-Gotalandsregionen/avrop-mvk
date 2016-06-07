@@ -37,8 +37,12 @@ public class UserProfileController {
     @Autowired
     private MvkUserProfileService mvkUserProfileService;
 
-    @Autowired
+    /*@Autowired
     private OrderController orderController;
+
+    @Autowired
+    private CollectDeliveryController collectDeliveryController;*/
+
     private GetUserProfileResponseType userProfileResponse;
     private GetUserProfileByAgentResponseType userProfileByAgentResponse;
     private GetSubjectOfCareResponseType subjectOfCareResponseLoggedInUser;
@@ -119,9 +123,10 @@ public class UserProfileController {
             this.userProfile = userProfile;
 
             if (getUserProfile() != null) {
-                if (subjectOfCareResponse == null ||
-                        !subjectOfCareResponse.getSubjectOfCare().getSubjectOfCareId()
-                                .equals(getUserProfile().getSubjectOfCareId())) {
+                // Obviously update subjectOfCareResponse if it's null but also if we are in delegate mode
+                if (subjectOfCareResponse == null || !subjectOfCareResponse.getSubjectOfCare()
+                        .getSubjectOfCareId()
+                        .equals(getUserProfile().getSubjectOfCareId())) {
 
                     String subjectOfCareId = getUserProfile().getSubjectOfCareId();
 
@@ -210,13 +215,6 @@ public class UserProfileController {
             if (!equals) {
                 this.guid = guid;
                 this.objectId = objectId;
-
-                // A change has occured
-                updateUserProfile();
-                orderController.reset();
-                orderController.init();
-
-                updateUserProfileByAgentResponse();
             }
 
         } else {
@@ -225,11 +223,6 @@ public class UserProfileController {
                 this.objectId = null;
                 this.delegate = false;
                 this.userProfileByAgentResponse = null;
-
-                // A change has occured
-                updateUserProfile();
-                orderController.reset();
-                orderController.init();
             } else {
                 this.guid = null;
                 this.objectId = null;

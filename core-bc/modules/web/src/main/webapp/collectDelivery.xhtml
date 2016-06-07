@@ -37,7 +37,7 @@
                         <h:inputText styleClass="postal-number" value="#{collectDeliveryController.zip}" id="zipInput"/>
 
                         <h:commandButton styleClass="button" value="Sök">
-                            <f:ajax onevent="handleProgressWithSpinner" listener="#{collectDeliveryController.updateDeliverySelectItems}" execute="zipInput" render="deliveryPointMenuWrapper" />
+                            <f:ajax onevent="function(data) {handleProgressWithSpinner(data, initCommon);}" listener="#{collectDeliveryController.updateDeliverySelectItems}" execute="zipInput" render="deliveryPointMenuWrapper" />
                         </h:commandButton>
 
                         <h:graphicImage styleClass="spinner" library="default" name="img/preloader.gif" height="30px" style="display: none;"/>
