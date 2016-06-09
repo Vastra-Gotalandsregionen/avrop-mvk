@@ -27,48 +27,64 @@
                 <h4>Utlämningsställe</h4>
 
                 <p>
-                    Ditt närmsta utlämningsställe baserat på ditt postnummer. <a class="toggle-trigger" data-toggle-for="zipInputWrapper">Ändra postnummer</a>
+                    Ditt närmsta utlämningsställe baserat på ditt postnummer. <a class="toggle-trigger"
+                                                                                 data-toggle-for="zipInputWrapper">Ändra postnummer</a>
                 </p>
 
-                <div id="zipInputWrapper" style="#{empty collectDeliveryController.zip or not collectDeliveryController.successfulSelectItems ? '' : 'display: none'};">
+                <div id="zipInputWrapper"
+                     style="#{empty collectDeliveryController.zip or not collectDeliveryController.successfulSelectItems ? '' : 'display: none'};">
                     <div class="input-group">
-                        <label for="zipInput">Postnummer</label>
+                        <div class="clearfix">
+                            <label for="zipInput">Postnummer</label>
+                        </div>
 
                         <h:inputText styleClass="postal-number" value="#{collectDeliveryController.zip}" id="zipInput"/>
 
                         <h:commandButton styleClass="button" value="Sök">
-                            <f:ajax onevent="function(data) {handleProgressWithSpinner(data, initCommon);}" listener="#{collectDeliveryController.updateDeliverySelectItems}" execute="zipInput" render="deliveryPointMenuWrapper" />
+                            <f:ajax onevent="function(data) {handleProgressWithSpinner(data, initCommon);}"
+                                    listener="#{collectDeliveryController.updateDeliverySelectItems}" execute="zipInput"
+                                    render="deliveryPointMenuWrapper"/>
                         </h:commandButton>
 
-                        <h:graphicImage styleClass="spinner" library="default" name="img/preloader.gif" height="30px" style="display: none;"/>
+                        <h:graphicImage styleClass="spinner" library="default" name="img/preloader.gif" height="30px"
+                                        style="display: none;"/>
                     </div>
 
                 </div>
 
                 <h:panelGroup id="deliveryPointMenuWrapper">
-                    <h:panelGroup layout="block" rendered="#{collectDeliveryController.deliverySelectItems.size() gt 1}">
+                    <h:panelGroup layout="block"
+                                  rendered="#{collectDeliveryController.deliverySelectItems.size() gt 1}">
                         <p>
                             <b>Obs.</b> Valda artiklar kan inte levereras av en enskild transportör. Du behöver därför välja flera utlämningsställen.
                         </p>
                     </h:panelGroup>
-                    <ui:repeat value="#{utilController.toList(collectDeliveryController.deliverySelectItems.keySet())}" var="selectOneMenuItemsKey" varStatus="status">
+                    <ui:repeat value="#{utilController.toList(collectDeliveryController.deliverySelectItems.keySet())}"
+                               var="selectOneMenuItemsKey" varStatus="status">
                         <div class="service-point-row row clearfix">
-                            <span class="before-select">
+                            <div>
+                            <span class="">
                                 Valt utlämningsställe (#{utilController.toProviderName(selectOneMenuItemsKey)})
-                                <span class="toggle-trigger info-icon expand" data-toggle-for="articlesInfo#{status.index}" title="Visa artiklar"/>
+                                <span class="toggle-trigger info-icon expand"
+                                      data-toggle-for="articlesInfo#{status.index}" title="Visa artiklar"/>
                             </span>
-                            <h:selectOneMenu id="deliveryPointMenu" value="#{collectDeliveryController.deliveryPointIdsMap[selectOneMenuItemsKey]}">
-                                <f:selectItems value="#{collectDeliveryController.deliverySelectItems[selectOneMenuItemsKey]}"/>
+                                <div id="articlesInfo#{status.index}" class="expanded-content" style="display: none;">
+                                    <b>Gäller följande produkter:</b>
+                                    <ul class="articles-info">
+                                        <ui:repeat
+                                                value="#{collectDeliveryController.relevantServicePointProviders[selectOneMenuItemsKey]}"
+                                                var="item">
+                                            <li>#{item.article.articleName}</li>
+                                        </ui:repeat>
+                                    </ul>
+                                </div>
+                            </div>
+                            <h:selectOneMenu id="deliveryPointMenu"
+                                             value="#{collectDeliveryController.deliveryPointIdsMap[selectOneMenuItemsKey]}">
+                                <f:selectItems
+                                        value="#{collectDeliveryController.deliverySelectItems[selectOneMenuItemsKey]}"/>
                             </h:selectOneMenu>
 
-                        </div>
-                        <div id="articlesInfo#{status.index}" class="expanded-content" style="display: none;">
-                            <b>Gäller följande produkter:</b>
-                            <ul class="articles-info">
-                                <ui:repeat value="#{collectDeliveryController.relevantServicePointProviders[selectOneMenuItemsKey]}" var="item">
-                                    <li>#{item.article.articleName}</li>
-                                </ui:repeat>
-                            </ul>
                         </div>
                     </ui:repeat>
                 </h:panelGroup>
@@ -87,20 +103,31 @@
                 </div>
 
                 <h:panelGroup id="notificationMethodRepeatWrapper">
-                    <ui:repeat id="notificationMethodRepeat" value="#{utilController.toList(collectDeliveryController.deliveryNotificationMethodsPerProvider.keySet())}" var="provider" varStatus="varStatus">
+                    <ui:repeat id="notificationMethodRepeat"
+                               value="#{utilController.toList(collectDeliveryController.deliveryNotificationMethodsPerProvider.keySet())}"
+                               var="provider" varStatus="varStatus">
                         <div class="input-group row clearfix">
                             <div class="notification-method-input-wrapper">
                                 <label for="chosenDeliveryNotificationMethod">&#160;</label>
                                 <span class="before-select">Avi:n skickas som (#{utilController.toProviderName(provider)})</span>
-                                <h:selectOneMenu id="chosenDeliveryNotificationMethod" styleClass="notification-method-select" value="#{collectDeliveryController.chosenDeliveryNotificationMethod[provider]}" onchange="updateDeliveryNotificationMethod(this.value, #{varStatus.index})">
-                                    <f:selectItems value="#{collectDeliveryController.deliveryNotificationMethodsPerProvider[provider]}" var="notificationMethod"
-                                                   itemLabel="#{utilController.toNotificationMethodName(notificationMethod)}"
-                                                   itemValue="#{notificationMethod}"/>
+                                <h:selectOneMenu id="chosenDeliveryNotificationMethod"
+                                                 styleClass="notification-method-select"
+                                                 value="#{collectDeliveryController.chosenDeliveryNotificationMethod[provider]}"
+                                                 onchange="updateDeliveryNotificationMethod(this.value, #{varStatus.index})">
+                                    <f:selectItems
+                                            value="#{collectDeliveryController.deliveryNotificationMethodsPerProvider[provider]}"
+                                            var="notificationMethod"
+                                            itemLabel="#{utilController.toNotificationMethodName(notificationMethod)}"
+                                            itemValue="#{notificationMethod}"/>
                                 </h:selectOneMenu>
                             </div>
 
-                            <div id="smsInputWrapper#{varStatus.index}" style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'SMS' ? 'block' : 'none'};">
-                                <h:outputLabel for="smsInput" value="Mobiltelefon"/>
+                            <div id="smsInputWrapper#{varStatus.index}"
+                                 style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'SMS' ? 'block' : 'none'};">
+                                <div class="clearfix">
+                                    <h:outputLabel for="smsInput" value="Mobiltelefon"/>
+                                    <h:message for="smsInput" styleClass="small-screen alert alert-danger field-error"/>
+                                </div>
                                 <h:inputText id="smsInput" value="#{collectDeliveryController.smsNumber}">
                                     <f:ajax event="change"
                                             execute="smsInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
@@ -109,8 +136,14 @@
                                 <h:message for="smsInput" styleClass="alert alert-danger field-error"/>
                             </div>
 
-                            <div id="phoneInputWrapper#{varStatus.index}" style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'TELEFON' ? 'block' : 'none'};">
-                                <h:outputLabel for="phoneInput" value="Telefon"/>
+                            <div id="phoneInputWrapper#{varStatus.index}"
+                                 style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'TELEFON' ? 'block' : 'none'};">
+
+                                <div class="clearfix">
+                                    <h:outputLabel for="phoneInput" value="Telefon"/>
+                                    <h:message for="phoneInput" styleClass="small-screen alert alert-danger field-error"/>
+                                </div>
+
                                 <h:inputText id="phoneInput" value="#{collectDeliveryController.phoneNumber}">
                                     <f:ajax event="change"
                                             execute="phoneInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
@@ -119,8 +152,12 @@
                                 <h:message for="phoneInput" styleClass="alert alert-danger field-error"/>
                             </div>
 
-                            <div id="emailInputWrapper#{varStatus.index}" style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'E_POST' ? 'block' : 'none'};">
-                                <h:outputLabel for="emailInput" value="Epost"/>
+                            <div id="emailInputWrapper#{varStatus.index}"
+                                 style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'E_POST' ? 'block' : 'none'};">
+                                <div class="clearfix">
+                                    <h:outputLabel for="emailInput" value="Epost"/>
+                                    <h:message for="emailInput" styleClass="small-screen alert alert-danger field-error"/>
+                                </div>
                                 <h:inputText id="emailInput" value="#{collectDeliveryController.email}">
                                     <f:ajax event="change"
                                             execute="emailInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
@@ -129,7 +166,8 @@
                                 <h:message for="emailInput" styleClass="alert alert-danger field-error"/>
                             </div>
 
-                            <div id="letterWrapper#{varStatus.index}" style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'BREV' ? 'block' : 'none'};">
+                            <div id="letterWrapper#{varStatus.index}"
+                                 style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'BREV' ? 'block' : 'none'};">
                                 <div>Folkbokföringsadress:</div>
                                 <div class="bold">
                                     <div>#{userProfileController.subjectOfCare.firstName} #{userProfileController.subjectOfCare.lastName}</div>
@@ -142,8 +180,9 @@
                 </h:panelGroup>
 
                 <div class="right-align">
-                    <h:button styleClass="button back-button" value="Bakåt" outcome="delivery" />
-                    <h:commandButton styleClass="button" value="Kontrollera beställning" action="#{collectDeliveryController.toVerifyDelivery}" />
+                    <h:button styleClass="button back-button" value="Bakåt" outcome="delivery"/>
+                    <h:commandButton styleClass="button" value="Kontrollera beställning"
+                                     action="#{collectDeliveryController.toVerifyDelivery}"/>
                 </div>
             </h:form>
 

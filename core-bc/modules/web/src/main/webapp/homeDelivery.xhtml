@@ -26,37 +26,56 @@
             <h:form id="homeDeliveryForm">
 
                 <div class="input-group">
-                    <h:outputLabel for="nameField" value="Namn"/>
-                    <h:inputText id="nameField" value="#{homeDeliveryController.fullName}" validatorMessage="Ogiltigt namn" required="true" requiredMessage="Namn saknas">
+                    <div class="clearfix">
+                        <h:outputLabel for="nameField" value="Namn"/>
+                        <h:message for="nameField" styleClass="small-screen alert alert-danger field-error"/>
+                    </div>
+                    <h:inputText id="nameField" value="#{homeDeliveryController.fullName}"
+                                 validatorMessage="Ogiltigt namn" required="true" requiredMessage="Namn saknas">
                         <f:validateLength minimum="3" maximum="256"/>
                     </h:inputText>
                     <h:message for="nameField" styleClass="alert alert-danger field-error"/>
                 </div>
 
                 <div class="input-group">
-                    <h:outputLabel for="coField" value="C/O-adress (valfri)"/>
-                    <h:inputText id="coField" value="#{homeDeliveryController.coAddress}" />
+                    <div class="clearfix">
+                        <h:outputLabel for="coField" value="C/O-adress (valfri)"/>
+                    </div>
+                    <h:inputText id="coField" value="#{homeDeliveryController.coAddress}"/>
                 </div>
 
                 <div class="input-group">
-                    <h:outputLabel for="addressField" value="Adress"/>
-                    <h:inputText id="addressField" value="#{homeDeliveryController.address}" required="true" requiredMessage="Adress saknas" validatorMessage="Ogiltig adress">
+                    <div class="clearfix">
+                        <h:outputLabel for="addressField" value="Adress"/>
+                        <h:message for="addressField" styleClass="small-screen alert alert-danger field-error"/>
+                    </div>
+                    <h:inputText id="addressField" value="#{homeDeliveryController.address}" required="true"
+                                 requiredMessage="Adress saknas" validatorMessage="Ogiltig adress">
                         <f:validateLength minimum="3" maximum="256"/>
                     </h:inputText>
                     <h:message for="addressField" styleClass="alert alert-danger field-error"/>
                 </div>
 
                 <div class="input-group">
-                    <h:outputLabel for="postalNumberField" value="Postnummer"/>
-                    <h:inputText styleClass="postal-number" id="postalNumberField" value="#{homeDeliveryController.zip}" required="true" requiredMessage="Postnummer saknas" validatorMessage="Ogiltigt postnummer">
-                        <f:validateRegex pattern="\d\d\d\s?\d\d" />
+                    <div class="clearfix">
+                        <h:outputLabel for="postalNumberField" value="Postnummer"/>
+                        <h:message for="postalNumberField" styleClass="small-screen alert alert-danger field-error"/>
+                    </div>
+                    <h:inputText styleClass="postal-number" id="postalNumberField" value="#{homeDeliveryController.zip}"
+                                 required="true" requiredMessage="Postnummer saknas"
+                                 validatorMessage="Ogiltigt postnummer">
+                        <f:validateRegex pattern="\d\d\d\s?\d\d"/>
                     </h:inputText>
                     <h:message for="postalNumberField" styleClass="alert alert-danger field-error"/>
                 </div>
 
                 <div class="input-group">
-                    <h:outputLabel for="cityField" value="Postort"/>
-                    <h:inputText id="cityField" value="#{homeDeliveryController.city}" required="true" requiredMessage="Postort saknas" validatorMessage="Ogiltig postort">
+                    <div class="clearfix">
+                        <h:outputLabel for="cityField" value="Postort"/>
+                        <h:message for="cityField" styleClass="small-screen alert alert-danger field-error"/>
+                    </div>
+                    <h:inputText id="cityField" value="#{homeDeliveryController.city}" required="true"
+                                 requiredMessage="Postort saknas" validatorMessage="Ogiltig postort">
                         <f:validateLength minimum="2" maximum="256"/>
                     </h:inputText>
                     <h:message for="cityField" styleClass="alert alert-danger field-error"/>
@@ -65,19 +84,24 @@
                 <div class="input-group clearfix door-code-group">
                     <div>
                         <span>
-                            <h:outputLabel for="doorCodeField" value="Portkod (om portkod inte finns, lämna fältet blankt)"/>
+                            <h:outputLabel for="doorCodeField" style="float:none;"
+                                           value="Portkod (om portkod inte finns, lämna fältet blankt)"/>
                             <h:inputText id="doorCodeField" value="#{homeDeliveryController.doorCode}"/>
                         </span>
-                        <span id="doorCodeReminderText" class="arrow-box">Glöm inte att fylla i portkoden för att ditt paket ska kunna levereras. Portkoden är till för leverantören och delas inte med någon annan.</span>
+                        <span id="doorCodeReminderText"
+                              class="arrow-box">Glöm inte att fylla i portkoden för att ditt paket ska kunna levereras. Portkoden är till för leverantören och delas inte med någon annan.</span>
                     </div>
                 </div>
 
                 <div class="input-group">
-                    <h:outputLabel for="phoneField" value="Telefon (valfri)"/>
-                    <h:inputText id="phoneField" value="#{homeDeliveryController.phoneNumber}" />
+                    <div class="clearfix">
+                        <h:outputLabel for="phoneField" value="Telefon (valfri)"/>
+                    </div>
+                    <h:inputText id="phoneField" value="#{homeDeliveryController.phoneNumber}"/>
                 </div>
 
-                <h:panelGroup rendered="#{homeDeliveryController.deliveryNotificationMethodsPerItem.keySet().size() gt 0}">
+                <h:panelGroup
+                        rendered="#{homeDeliveryController.deliveryNotificationMethodsPerItem.keySet().size() gt 0}">
                     <hr/>
 
                     <h3>Avisering</h3>
@@ -92,20 +116,34 @@
                     </div>
 
                     <h:panelGroup id="notificationMethodRepeatWrapper">
-                        <ui:repeat id="notificationMethodRepeat" value="#{utilController.toList(homeDeliveryController.deliveryNotificationMethodsPerItem.keySet())}" var="item" varStatus="varStatus">
+                        <ui:repeat id="notificationMethodRepeat"
+                                   value="#{utilController.toList(homeDeliveryController.deliveryNotificationMethodsPerItem.keySet())}"
+                                   var="item" varStatus="varStatus">
                             <div class="input-group row clearfix">
-                                <div class="notification-method-input-wrapper">
-                                    <label for="chosenDeliveryNotificationMethod">&#160;</label>
+                                <div class="notification-method-input-wrapper input-group">
+                                    <label for="chosenDeliveryNotificationMethod" class="empty-label">&#160;</label>
                                     <span class="before-select">Avi:n skickas som #{not empty item.article.articleName ? '('.concat(item.article.articleName).concat(')') : ''}</span>
-                                    <h:selectOneMenu id="chosenDeliveryNotificationMethod" styleClass="notification-method-select" value="#{homeDeliveryController.chosenDeliveryNotificationMethod[item]}" onchange="updateDeliveryNotificationMethod(this.value, #{varStatus.index})">
-                                        <f:selectItems value="#{homeDeliveryController.deliveryNotificationMethodsPerItem[item]}" var="notificationMethod"
-                                                       itemLabel="#{utilController.toNotificationMethodName(notificationMethod)}"
-                                                       itemValue="#{notificationMethod}"/>
+                                    <h:selectOneMenu id="chosenDeliveryNotificationMethod"
+                                                     styleClass="notification-method-select"
+                                                     value="#{homeDeliveryController.chosenDeliveryNotificationMethod[item]}"
+                                                     onchange="updateDeliveryNotificationMethod(this.value, #{varStatus.index})">
+                                        <f:selectItems
+                                                value="#{homeDeliveryController.deliveryNotificationMethodsPerItem[item]}"
+                                                var="notificationMethod"
+                                                itemLabel="#{utilController.toNotificationMethodName(notificationMethod)}"
+                                                itemValue="#{notificationMethod}"/>
                                     </h:selectOneMenu>
                                 </div>
 
-                                <div id="smsInputWrapper#{varStatus.index}" style="display: #{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'SMS' ? 'block' : 'none'};">
-                                    <h:outputLabel for="smsInput" value="Mobiltelefon"/>
+                                <div id="smsInputWrapper#{varStatus.index}" class="input-group"
+                                     style="display: #{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'SMS' ? 'block' : 'none'};">
+
+                                    <div class="clearfix">
+                                        <h:outputLabel for="smsInput" value="Mobiltelefon"/>
+                                        <h:message for="smsInput"
+                                                   styleClass="small-screen alert alert-danger field-error"/>
+                                    </div>
+
                                     <h:inputText id="smsInput" value="#{homeDeliveryController.smsNumber}">
                                         <f:ajax event="change"
                                                 execute="smsInput homeDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:6:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:7:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:8:chosenDeliveryNotificationMethod"
@@ -114,8 +152,13 @@
                                     <h:message for="smsInput" styleClass="alert alert-danger field-error"/>
                                 </div>
 
-                                <div id="phoneInputWrapper#{varStatus.index}" style="display: #{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'TELEFON' ? 'block' : 'none'};">
-                                    <h:outputLabel for="phoneInput" value="Telefon"/>
+                                <div id="phoneInputWrapper#{varStatus.index}" class="input-group"
+                                     style="display: #{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'TELEFON' ? 'block' : 'none'};">
+                                    <div class="clearfix">
+                                        <h:outputLabel for="phoneInput" value="Telefon"/>
+                                        <h:message for="phoneInput"
+                                                   styleClass="small-screen alert alert-danger field-error"/>
+                                    </div>
                                     <h:inputText id="phoneInput" value="#{homeDeliveryController.phoneNumber}">
                                         <f:ajax event="change"
                                                 execute="phoneInput homeDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:6:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:7:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:8:chosenDeliveryNotificationMethod"
@@ -124,8 +167,13 @@
                                     <h:message for="phoneInput" styleClass="alert alert-danger field-error"/>
                                 </div>
 
-                                <div id="emailInputWrapper#{varStatus.index}" style="display: #{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'E_POST' ? 'block' : 'none'};">
-                                    <h:outputLabel for="emailInput" value="Epost"/>
+                                <div id="emailInputWrapper#{varStatus.index}" class="input-group"
+                                     style="display: #{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'E_POST' ? 'block' : 'none'};">
+                                    <div class="clearfix">
+                                        <h:outputLabel for="emailInput" value="Epost"/>
+                                        <h:message for="emailInput"
+                                                   styleClass="small-screen alert alert-danger field-error"/>
+                                    </div>
                                     <h:inputText id="emailInput" value="#{homeDeliveryController.email}">
                                         <f:ajax event="change"
                                                 execute="emailInput homeDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:6:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:7:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:8:chosenDeliveryNotificationMethod"
@@ -134,7 +182,8 @@
                                     <h:message for="emailInput" styleClass="alert alert-danger field-error"/>
                                 </div>
 
-                                <div id="letterWrapper#{varStatus.index}" style="display: #{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'BREV' ? 'block' : 'none'};">
+                                <div id="letterWrapper#{varStatus.index}" class="input-group"
+                                     style="display: #{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'BREV' ? 'block' : 'none'};">
                                     <div>Folkbokföringsadress:</div>
                                     <div class="bold">
                                         <div>#{userProfileController.subjectOfCare.firstName} #{userProfileController.subjectOfCare.lastName}</div>
@@ -149,9 +198,12 @@
                 </h:panelGroup>
 
                 <div class="right-align">
-                    <h:button styleClass="button back-button" value="Bakåt" outcome="delivery" />
-                    <h:commandButton styleClass="button to-be-confirmed-submit-button" value="Till adressinformation" action="#{homeDeliveryController.toVerifyDelivery}" />
-                    <h:commandButton style="display: none" styleClass="button confirm-submit-button" value="Kontrollera beställning" action="#{homeDeliveryController.toVerifyDelivery}" />
+                    <h:button styleClass="button back-button" value="Bakåt" outcome="delivery"/>
+                    <h:commandButton styleClass="button to-be-confirmed-submit-button" value="Till adressinformation"
+                                     action="#{homeDeliveryController.toVerifyDelivery}"/>
+                    <h:commandButton style="display: none" styleClass="button confirm-submit-button"
+                                     value="Kontrollera beställning"
+                                     action="#{homeDeliveryController.toVerifyDelivery}"/>
                 </div>
 
                 <div id="dialog" title="Portkod saknas" style="display: none;">
@@ -164,12 +216,14 @@
 
                     <div class="right-align">
                         <button class="button back-button cancel-button">Gå tillbaka och fyll i</button>
-                        <button class="button" onclick="jq('.confirm-submit-button').click();">Jag har ingen portkod och vill fortsätta</button>
+                        <button class="button"
+                                onclick="jq('.confirm-submit-button').click();">Jag har ingen portkod och vill fortsätta
+                        </button>
                     </div>
                 </div>
 
                 <script>
-                    jq(document).ready(function() {
+                    jq(document).ready(function () {
                         initHomeDeliveryPage();
                     })
                 </script>

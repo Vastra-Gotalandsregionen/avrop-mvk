@@ -25,12 +25,13 @@
 
             <h:form>
 
-                <div class="clearfix">
+                <div class="delivery-options-wrapper clearfix">
                     <!-- If at least one method fits all. -->
                     <h:panelGroup rendered="#{deliveryController.anyDeliveryMethodFitsAll()}">
                         <ul class="delivery-options clearfix">
                             <li>
-                                <div class="row">
+                                <div class="row-wrapper clearfix">
+                                <div class="row ">
 
                                     <h:panelGroup rendered="#{deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.hemleveransEnum)}">
                                         <input type="radio" jsf:id="hemleveransOption" p:name="#{hiddenItem.clientId}"
@@ -44,12 +45,14 @@
                                         <h:outputLabel for="hemleveransOptionDisabled" value="Hemleverans" styleClass="disabled"/>
                                     </h:panelGroup>
                                 </div>
+                                </div>
                                 <p>
                                     Hemleverans innebär att paketet levereras till din bostad och ställs utanför ytterdörren alt lägenhetsdörren om man bor i flerfamiljshus.
                                 </p>
                             </li>
                             <li>
-                                <div class="row">
+                                <div class="row-wrapper clearfix">
+                                <div class="row clearfix">
 
                                     <h:panelGroup rendered="#{deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.utlamningsstalleEnum)}">
                                         <input type="radio" jsf:id="utlamningsstalleOption" p:name="#{hiddenItem.clientId}"
@@ -62,6 +65,7 @@
                                                value="#{deliveryController.utlamningsstalleValue}" />
                                         <h:outputLabel for="utlamningsstalleOptionDisabled" value="Utlämningsställe" styleClass="disabled"/>
                                     </h:panelGroup>
+                                </div>
                                 </div>
                                 <p>
                                     Detta val innebär att paketet kommer skickas till ditt närmsta postombud. Du har möjlighet att välja utlämningsställe.

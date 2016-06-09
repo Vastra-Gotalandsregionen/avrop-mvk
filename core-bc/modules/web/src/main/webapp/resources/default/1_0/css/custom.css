@@ -321,11 +321,8 @@ ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
 .row > div,
 .row span.before-select {
     float: left;
+    line-height: 30px;
     margin-right: 24px;
-}
-
-.row .notification-method-input-wrapper .before-select {
-    min-width: 200px;
 }
 
 ul.articles-info {
@@ -360,19 +357,26 @@ ul.delivery-options li {
     padding: 24px;
 }
 
+ul.delivery-options .row {
+    overflow: visible;
+}
+
 input[type="radio"] {
     cursor: pointer;
     zoom: 2;
 }
 
+ul.delivery-options li input {
+    float: left;
+    margin-right: 4px;
+}
+
 ul.delivery-options li label {
     cursor: pointer;
     display: inline-block;
+    float: left;
     font-size: 1.3em;
     line-height: 27px;
-    padding-left: 8px;
-    position: absolute;
-    top: 0;
 }
 
 ul.delivery-options li:not(:first-child) {
@@ -471,6 +475,121 @@ ul.delivery-options li input[disabled="disabled"]+label {
     margin-top: -15px;
 }
 
+@media (max-width: 767px) {
+
+    .door-code-group span {
+        display: block;
+        float: none;
+    }
+
+    #doorCodeReminderText {
+        display: block;
+        position: relative;
+        /*margin-top:20px;*/
+        margin: 20px 0 0 0;
+
+        width: 247px;
+    }
+
+    .arrow-box:after {
+        right: 50%;
+        top: 50%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-color: rgba(227, 227, 227, 0);
+        border-bottom-color: #E3E3E3;
+        border-width: 15px;
+        margin-right: -15px;
+        margin-top: -82px;
+    }
+
+    .input-group label {
+        float: left;
+    }
+
+    .gray-box .input-group label {
+        float: none;
+    }
+
+    .small-screen.alert.field-error {
+        padding: 1px 8px;
+        display: inline;
+    }
+
+    .alert.field-error {
+        display: none;
+    }
+
+    .row > select, .row > div, .row span.before-select {
+        display: block;
+        float: none;
+    }
+
+    .notification-method-select {
+        display: block;
+        float: none;
+    }
+
+    .empty-label {
+        height: 0;
+    }
+
+    .ui-dialog button {
+        display: block;
+        width: 100%;
+    }
+}
+
+@media (max-width: 479px) {
+
+    input[type=submit], input[type=button], input[type=text], select, select.notification-method-select, a.button {
+    box-sizing: border-box;
+        display: block;
+        width: 100%;
+    }
+
+    .input-group input[type="submit"] {
+        margin: 10px 0;
+    }
+
+    .input-group input[type=text].postal-number {
+        max-width: 100%;
+    }
+
+    .row > div {
+        margin-right: 0;
+    }
+
+    ul.delivery-options li input {
+        margin-right: 1px;
+    }
+
+    ul.delivery-options .row {
+        height: 32px;
+        min-width: 150px;
+    }
+
+    ul.delivery-options {
+        overflow: visible;
+    }
+
+    .delivery-options-wrapper {
+        overflow: visible;
+    }
+
+    ul.delivery-options li label {
+        font-size: 1.2em;
+    }
+
+    .row-wrapper {
+        overflow: visible;
+    }
+}
+
 .confirm-empty-door-code {
     background: #ffffff;
     border-radius: 4px;
@@ -555,8 +674,11 @@ select::-moz-focus-inner { /*Remove button padding in FF*/
     }
 }
 
-.embedded-table.small-screen {
+.small-screen {
     display: none;
+}
+
+.embedded-table.small-screen {
     word-wrap: break-word;
 }
 
@@ -585,6 +707,8 @@ select::-moz-focus-inner { /*Remove button padding in FF*/
     }
 }
 
-@media (max-width: 767px) {
-
+@media (max-width: 479px) {
+    ul.delivery-options li {
+        padding: 8px;
+    }
 }
