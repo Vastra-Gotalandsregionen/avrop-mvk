@@ -57,7 +57,7 @@
                         <thead>
                         <tr>
                             <td class="column-0"></td>
-                            <td class="column-1">Produktgrupp/Artikel-nr.</td>
+                            <td class="column-1">Produktgrupp / Artikel-nr.</td>
                             <td class="column-2">Benämning</td>
                             <td class="column-3">Uttag kvar / antal uttag</td>
                         </tr>
@@ -137,7 +137,7 @@
                     <thead>
                     <tr>
                         <td class="column-0"></td>
-                        <td class="column-1">Produktgrupp/Artikel-nr.</td>
+                        <td class="column-1">Produktgrupp / Artikel-nr.</td>
                         <td class="column-2">Benämning</td>
                         <td class="column-3">Uttag kvar / antal uttag</td>
                     </tr>
@@ -148,7 +148,7 @@
                             <td>
                                 #{utilController.getStatusText(expiredItem)}
                             </td>
-                            <td>#{expiredItem.article.articleName}<br/>#{expiredItem.article.articleNo}</td>
+                            <td>#{utilController.capitalizeFully(expiredItem.article.productArea)}<br/>#{expiredItem.article.articleNo}</td>
                             <td>
                                 #{expiredItem.article.articleName}
                                 <mvk:moreInfo item="#{expiredItem}"/>

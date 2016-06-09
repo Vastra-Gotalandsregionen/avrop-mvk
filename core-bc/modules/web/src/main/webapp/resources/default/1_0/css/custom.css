@@ -39,7 +39,8 @@ html, body {
     width: 100%;
 }
 
-.avrop-table thead {
+.avrop-table thead,
+.embedded-table td.column-0 {
     background-color: #008391;
     background-image: -webkit-linear-gradient(#128693, #006a7b);
     background-image: linear-gradient(#128693, #006a7b);
@@ -532,4 +533,58 @@ select::-moz-focus-inner { /*Remove button padding in FF*/
         height:30px;
         line-height:30px;
     }
+}
+
+@media (max-width: 767px) {
+    body {
+        font-size: 12px;
+    }
+
+    .my-products-table .column-1 {
+        width: 79px;
+        word-wrap: break-word;
+    }
+
+    .my-products-table .column-3 {
+        width: 44px;
+    }
+
+    .my-products-table.collected-expired-products .column-0 {
+        width: 67px;
+
+    }
+}
+
+.embedded-table.small-screen {
+    display: none;
+    word-wrap: break-word;
+}
+
+.embedded-table td.column-0,
+.embedded-table.small-screen td.column-0 {
+    width: auto;
+}
+
+@media (max-width: 767px) {
+
+    .avrop-table td, .embedded-table td {
+        padding: 3px;
+    }
+
+    .embedded-table {
+        display: none;
+    }
+
+    .embedded-table.small-screen {
+        display: table;
+        width: 100%;
+    }
+
+    .embedded-table.small-screen tbody {
+        width: 100%;
+    }
+}
+
+@media (max-width: 767px) {
+
 }

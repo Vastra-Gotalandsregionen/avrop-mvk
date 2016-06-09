@@ -54,7 +54,6 @@ public class AuthFilter implements Filter {
         try {
             String subjectSerialNumber = request.getHeader(USER_ID_HEADER);
 
-
             String securityLevelDescription = request.getHeader(SECURITY_LEVEL_DESCRIPTION);
 
             handleSession(request, subjectSerialNumber);

@@ -25,8 +25,8 @@
             <table class="embedded-table">
                 <thead>
                 <tr>
-                    <td>Förpackning/ut</td>
-                    <td>Totalt antal/ut</td>
+                    <td>Förpackning / ut</td>
+                    <td>Totalt antal / ut</td>
                     <td>Förskrivare</td>
                     <td>Giltigt t.o.m.</td>
                 </tr>
@@ -43,6 +43,29 @@
                     </td>
                 </tr>
                 </tbody>
+            </table>
+
+            <table class="embedded-table small-screen">
+                <tr>
+                    <td class="column-0">Förpackning/ut</td>
+                    <td>#{item.noOfPackagesPerOrder}</td>
+                </tr>
+                <tr>
+                    <td class="column-0">Totalt antal/ut</td>
+                    <td>#{item.noOfArticlesPerOrder}</td>
+                </tr>
+                <tr>
+                    <td class="column-0">Förskrivare</td>
+                    <td>#{item.prescriber.prescriberName}</td>
+                </tr>
+                <tr>
+                    <td class="column-0">Giltigt t.o.m.</td>
+                    <td>
+                        <h:outputText value="#{utilController.toDate(item.lastValidDate)}">
+                            <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm"/>
+                        </h:outputText>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>
