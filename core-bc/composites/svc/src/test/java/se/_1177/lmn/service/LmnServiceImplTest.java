@@ -2,6 +2,7 @@ package se._1177.lmn.service;
 
 import org.junit.Before;
 import org.junit.Test;
+import riv.crm.selfservice.medicalsupply._0.ArticleType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.StatusEnum;
 import riv.crm.selfservice.medicalsupply._0.SubjectOfCareType;
@@ -46,6 +47,9 @@ public class LmnServiceImplTest {
         GetMedicalSupplyPrescriptionsResponseType response = new GetMedicalSupplyPrescriptionsResponseType();
 
         SubjectOfCareType subjectOfCare = new SubjectOfCareType();
+
+        ArticleType article = new ArticleType();
+        article.setIsOrderable(true);
 
         // Orderable
         PrescriptionItemType item1 = new PrescriptionItemType();
@@ -107,7 +111,6 @@ public class LmnServiceImplTest {
 
         item7.setLastValidDate(Util.toXmlGregorianCalendar(calendar));
 
-
         subjectOfCare.getPrescriptionItem().add(item1);
         subjectOfCare.getPrescriptionItem().add(item2);
         subjectOfCare.getPrescriptionItem().add(item3);
@@ -115,6 +118,10 @@ public class LmnServiceImplTest {
         subjectOfCare.getPrescriptionItem().add(item5);
         subjectOfCare.getPrescriptionItem().add(item6);
         subjectOfCare.getPrescriptionItem().add(item7);
+
+        for (PrescriptionItemType itemType : subjectOfCare.getPrescriptionItem()) {
+            itemType.setArticle(article);
+        }
 
         response.setSubjectOfCareType(subjectOfCare);
 
@@ -142,6 +149,12 @@ public class LmnServiceImplTest {
     @Test
     public void sortByOrderableToday() throws Exception {
 
+        ArticleType article1 = new ArticleType();
+        article1.setIsOrderable(true);
+
+        ArticleType article2 = new ArticleType();
+        article2.setIsOrderable(false);
+
         PrescriptionItemType p1, p2, p3, p4, p5;
 
         p1 = new PrescriptionItemType();
@@ -158,17 +171,24 @@ public class LmnServiceImplTest {
 
         List<PrescriptionItemType> list = new ArrayList<>(Arrays.asList(p1, p2, p3, p4, p5));
 
+        for (PrescriptionItemType itemType : list) {
+            itemType.setArticle(article1);
+        }
+
+        // We make an exception for p2. Set the non-orderable article
+        p2.setArticle(article2);
+
         LmnServiceImpl.sortByOrderableToday(list);
 
-        // p1, p2, p4 and p5 should be among the four first and p3 the fifth in the list
-        List<PrescriptionItemType> firstFour = list.subList(0, 4);
+        // p1, p4 and p5 should be among the three first and p3 the fourth in the list
+        List<PrescriptionItemType> firstThree = list.subList(0, 3);
 
-        assertTrue(firstFour.contains(p1));
-        assertTrue(firstFour.contains(p2));
-        assertTrue(firstFour.contains(p4));
-        assertTrue(firstFour.contains(p5));
+        assertTrue(firstThree.contains(p1));
+        assertTrue(firstThree.contains(p4));
+        assertTrue(firstThree.contains(p5));
 
-        assertEquals(p3, list.get(4));
+        assertEquals(p3, list.get(3));
+        assertEquals(p2, list.get(4)); // Should come last since the article isn't orderable.
     }
 
     private XMLGregorianCalendar getTodayPlusDays(int daysToAdd) {

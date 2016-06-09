@@ -95,15 +95,25 @@ public class LmnServiceImpl implements LmnService {
     }
 
     static void sortByOrderableToday(List<PrescriptionItemType> orderableItems) {
+
         orderableItems.sort((o1, o2) -> {
-            if (isAfterToday(o1.getNextEarliestOrderDate()) && !isAfterToday(o2.getNextEarliestOrderDate())) {
-                return 1;
-            } else if (!(isAfterToday(o1.getNextEarliestOrderDate()) && !isAfterToday(o2.getNextEarliestOrderDate()))) {
-                return -1;
-            } else {
-                return 0;
-            }
+            Integer sortNumber1 = getSortNumber(o1);
+            Integer sortNumber2 = getSortNumber(o2);
+
+            return sortNumber1.compareTo(sortNumber2);
         });
+    }
+
+    private static Integer getSortNumber(PrescriptionItemType item) {
+        if (!item.getArticle().isIsOrderable()) {
+            return 2;
+        }
+
+        if (isAfterToday(item.getNextEarliestOrderDate())) {
+            return 1;
+        }
+
+        return 0;
     }
 
     public GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(ServicePointProviderEnum provider,

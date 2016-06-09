@@ -64,7 +64,8 @@ public class OrderController {
                 String prescriptionItemId = prescriptionItem.getPrescriptionItemId();
                 cart.addPrescriptionItemForInfo(prescriptionItemId, prescriptionItem);
 
-                if (!UtilController.isAfterToday(prescriptionItem.getNextEarliestOrderDate())) {
+                if (!UtilController.isAfterToday(prescriptionItem.getNextEarliestOrderDate())
+                        && prescriptionItem.getArticle().isIsOrderable()) {
                     chosenItemMap.put(prescriptionItemId, true);
                 }
             }

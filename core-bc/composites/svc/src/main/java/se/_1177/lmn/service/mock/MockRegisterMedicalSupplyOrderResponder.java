@@ -8,8 +8,10 @@ import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._0.rivtabp21
 import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.ObjectFactory;
 import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.RegisterMedicalSupplyOrderResponseType;
 import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.RegisterMedicalSupplyOrderType;
+import se._1177.lmn.service.util.Util;
 
 import javax.jws.WebService;
+import java.util.GregorianCalendar;
 import java.util.Random;
 
 /**
@@ -34,6 +36,8 @@ public class MockRegisterMedicalSupplyOrderResponder
 
         for (int i = 0; i <= random.nextInt(5); i++) {
             OrderItemType orderItem = new OrderItemType();
+            orderItem.setDeliveredDate(null);
+            orderItem.setOrderDate(Util.toXmlGregorianCalendar(new GregorianCalendar()));
 
             ArticleType article = new ArticleType();
             article.setArticleName("Artikelnamn" + random.nextInt(100));
