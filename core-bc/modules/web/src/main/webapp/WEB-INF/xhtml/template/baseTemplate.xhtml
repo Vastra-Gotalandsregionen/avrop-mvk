@@ -44,9 +44,9 @@
                         </div>
 
                         <div class="_1177-user">
-                            <div class="_1177-settings">
+                            <h:panelGroup layout="block" styleClass="_1177-settings" rendered="#{!userProfileController.delegate}">
                                 <a class="link-userblock" href="#{utilController.settingsLink}">Inställningar</a>
-                            </div>
+                            </h:panelGroup>
                             <div class="_1177-logout">
                                 <a class="link-userblock" href="#{utilController.logoutLink}">Logga ut</a>
                             </div>
