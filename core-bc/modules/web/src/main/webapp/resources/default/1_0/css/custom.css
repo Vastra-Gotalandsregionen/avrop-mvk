@@ -714,6 +714,7 @@ select::-moz-focus-inner { /*Remove button padding in FF*/
 
     .avrop-table td, .embedded-table td {
         padding: 3px;
+        word-wrap: break-word;
     }
 
     .embedded-table {
