@@ -279,6 +279,12 @@ ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
     background: url("../img/toggle-close.png.xhtml?ln=default") no-repeat;
 }
 
+.delegate-block {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
 .info-icon {
     background: url("../img/icon-info-1.png.xhtml?ln=default") no-repeat;
     display: inline-block;
@@ -368,7 +374,7 @@ input[type="radio"] {
 
 ul.delivery-options li input {
     float: left;
-    margin-right: 4px;
+    margin: 0 4px 0 2px;
 }
 
 ul.delivery-options li label {
@@ -488,7 +494,7 @@ ul.delivery-options li input[disabled="disabled"]+label {
         /*margin-top:20px;*/
         margin: 20px 0 0 0;
 
-        width: 247px;
+        width: 264px;
     }
 
     .arrow-box:after {
@@ -504,7 +510,7 @@ ul.delivery-options li input[disabled="disabled"]+label {
         border-bottom-color: #E3E3E3;
         border-width: 15px;
         margin-right: -15px;
-        margin-top: -82px;
+        margin-top: -72px;
     }
 
     .input-group label {
@@ -541,6 +547,10 @@ ul.delivery-options li input[disabled="disabled"]+label {
     .ui-dialog button {
         display: block;
         width: 100%;
+    }
+
+    .delegate-block .delegate-header .expanded-content {
+        text-align: left;
     }
 }
 
@@ -587,6 +597,15 @@ ul.delivery-options li input[disabled="disabled"]+label {
 
     .row-wrapper {
         overflow: visible;
+    }
+
+    .column-row .col50 {
+        width: auto;
+        float: left;
+    }
+
+    .delegate-block {
+        padding: 6px 8px;
     }
 }
 
