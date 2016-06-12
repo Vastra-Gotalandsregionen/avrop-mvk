@@ -12,6 +12,9 @@ local.mock.service.startup=false
 backToOwnProfileLink=
 logoutLink=
 settingsLink=
+mvkStartPageLink=
+mvkInboxLink=
+mvkOtherServicesLink=
 
 GetMedicalSupplyDeliveryPointsResponderInterface.address=
 

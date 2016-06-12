@@ -8,12 +8,12 @@
 <ui:insert name="metadata"/>
 
 <h:head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <h:outputScript library="thirdparty" name="jquery.1.12.0.min.js"/>
     <h:outputScript library="thirdparty" name="jquery-ui-dialog.min.js"/>
     <!--<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>-->
     <meta title="Avrop läkemedelsnära produkter" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
 
     <link href="javax.faces.resource/img/favicon.ico.xhtml?ln=default" rel="Shortcut Icon"/>
@@ -80,13 +80,15 @@
                 </div>
 
                 <script type="application/javascript">
-                    jq('.delegate-block').css('max-width', jq('.delegate-block').css('width'));
+                    jq('.delegate-block').css('max-width', jq(".delegate-block")[0].getBoundingClientRect().width);
                 </script>
             </h:panelGroup>
 
             <div class="breadcrumbs-container">
                 <div class="breadcrumbs">
-                    <a class="link" href="#">Start</a> » <a class="link" href="#">Föregående sida</a>&#160;» Denna sida
+                    <h:form>
+                        <a class="link" href="#{utilController.mvkStartPageLink}">Start</a>&#160;»&#160;<a class="link" href="#{utilController.mvkOtherServicesLink}">Övriga tjänster</a>&#160;»&#160;<h:commandLink action="#{deliveryController.toOrder}" value="Läkemedelsnära produkter"/>&#160;»&#160;<ui:insert name="currentPage"/>
+                    </h:form>
                 </div><!--breadcrumbs-->
             </div><!--breadcrumbs-container-->
 
