@@ -76,6 +76,9 @@ public class CollectDeliveryController {
     public void updateDeliverySelectItems(AjaxBehaviorEvent ajaxBehaviorEvent) {
         // Just reset deliveryPoints, making them load again when they are requested.
         deliveryPointsPerProvider = null;
+
+        loadDeliveryPointsForAllSuppliers(zip);
+
     }
 
     @PostConstruct
@@ -165,10 +168,6 @@ public class CollectDeliveryController {
     public Map<ServicePointProviderEnum, List<SelectItemGroup>> getDeliverySelectItems() {
 
         Map<ServicePointProviderEnum, List<SelectItemGroup>> selectOneMenuLists = new HashMap<>();
-
-        if (deliveryPointsPerProvider == null) {
-            loadDeliveryPointsForAllSuppliers(zip);
-        }
 
         Map<ServicePointProviderEnum, List<PrescriptionItemType>> servicePointProvidersForItems =
                 getRelevantServicePointProviders();
@@ -470,6 +469,9 @@ public class CollectDeliveryController {
                 deliveryPointsPerProvider.put(provider, medicalSupplyDeliveryPoints.getDeliveryPoint());
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);
+                addErrorMessage("Kunde inte hämta utlämningsställen. Tjänsten svarar inte.",
+                        "collectDeliveryForm:updateDeliverySelectItemsButton");
+                break;
             }
         }
     }
@@ -594,6 +596,19 @@ public class CollectDeliveryController {
         if (!fc.isReleased()) {
             fc.renderResponse();
         }
+    }
+
+    private void addErrorMessage(String text, String clientId) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        // Don't add duplicate error messages
+        for (FacesMessage facesMessage : facesContext.getMessageList()) {
+            if (facesMessage.getSummary().equals(text)) {
+                return;
+            }
+        }
+
+        facesContext.addMessage(clientId, new FacesMessage(FacesMessage.SEVERITY_ERROR, text, text));
     }
 
     public boolean isSuccessfulSelectItems() {

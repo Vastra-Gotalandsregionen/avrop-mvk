@@ -4,6 +4,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/task"
        xmlns:jaxws="http://cxf.apache.org/jaxws"
        xmlns:p="http://www.springframework.org/schema/p" xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:http="http://cxf.apache.org/transports/http/configuration"
        xmlns:cxf="http://cxf.apache.org/core"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -14,7 +15,9 @@
           http://www.springframework.org/schema/cache
           http://www.springframework.org/schema/cache/spring-cache.xsd
           http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
-          http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">
+          http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+          http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd"
+>
 
     <context:component-scan base-package="se.vgregion.mvk.controller"/>
 
@@ -29,7 +32,6 @@
     <jaxws:client id="registerMedicalSupplyOrder"
                   serviceClass="riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._0.rivtabp21.RegisterMedicalSupplyOrderResponderInterface"
                   address="http://localhost:18081/RegisterMedicalSupplyOrder/"/>
-
 
     <cxf:bus>
         <cxf:outInterceptors>
@@ -46,4 +48,9 @@
     <bean id="loggingOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor">
         <property name="prettyLogging" value="true"/>
     </bean>
+
+    <http:conduit name="http://localhost.*">
+        <http:client ConnectionTimeout="10000" ReceiveTimeout="10000"/>
+    </http:conduit>
+
 </beans>

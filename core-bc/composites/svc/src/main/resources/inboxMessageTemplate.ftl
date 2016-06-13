@@ -81,9 +81,9 @@
             <variablelist>
                 <varlistentry>
                     <term></term>
-                    <listitem>${choice.deliveryNotificationMethod.value()?capitalize}-avisering:</listitem>
+                    <listitem>${choice.deliveryNotificationMethod.value.value()?capitalize}-avisering:</listitem>
                 </varlistentry>
-                <#if choice.deliveryNotificationMethod.name() == 'BREV'>
+                <#if choice.deliveryNotificationMethod.value.name() == 'BREV'>
                     <varlistentry>
                         <term>${choice.homeDeliveryAddress.receiver}</term>
                         <listitem>&nbsp;</listitem>

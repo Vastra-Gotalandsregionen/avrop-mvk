@@ -92,7 +92,7 @@
     </bean>
 
     <http:conduit name="https://acc.tjp.minavardkontakter.se.*">
-        <http:client ConnectionTimeout="5000" ReceiveTimeout="5000"  />
+        <http:client ConnectionTimeout="10000" ReceiveTimeout="10000"  />
 
         <http:tlsClientParameters disableCNCheck="true">
             <sec:keyManagers keyPassword="${ssl_keystore_password}">
@@ -106,4 +106,9 @@
             </sec:trustManagers>
         </http:tlsClientParameters>
     </http:conduit>
+
+    <http:conduit name="http://localhost.*">
+        <http:client ConnectionTimeout="10000" ReceiveTimeout="10000"/>
+    </http:conduit>
+
 </beans>

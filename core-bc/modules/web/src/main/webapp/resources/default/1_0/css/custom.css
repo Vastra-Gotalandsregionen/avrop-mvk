@@ -429,7 +429,8 @@ ul.delivery-options li input[disabled="disabled"]+label {
     margin: 0 0 0 10px;
 }
 
-.input-group img {
+.input-group img,
+.input-group span.alert {
     margin-left: 10px;
     vertical-align: middle;
 }

@@ -19,6 +19,7 @@ import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder.
 import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._0.ObjectFactory;
 
 import javax.jws.WebService;
+import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.Duration;
@@ -41,6 +42,11 @@ public class MockGetMedicalSupplyPrescriptionsResponder
             String logicalAddress,
             GetMedicalSupplyPrescriptionsType parameters) {
 
+        /*try {
+            Thread.sleep(11000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
         Random random = new Random(4);
 
         GetMedicalSupplyPrescriptionsResponseType response = objectFactory
@@ -75,7 +81,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
 
         orderItem.setArticle(article);
 
-        orderItem.setDeliveredDate(getRandomCalendar(random));
+        orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random)));
         DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
         deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
 //            deliveryChoice.setDeliveryPoint(); kanske todo utveckla mer på deliveryChoice...
@@ -131,6 +137,10 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.setStatus(StatusEnum.values()[random.nextInt(StatusEnum.values().length)]);
 
         subjectOfCare.getPrescriptionItem().add(prescriptionItem);
+    }
+
+    private JAXBElement<XMLGregorianCalendar> wrapInJaxBElement(XMLGregorianCalendar calendar) {
+        return new riv.crm.selfservice.medicalsupply._0.ObjectFactory().createOrderItemTypeDeliveredDate(calendar);
     }
 
     private DeliveryAlternativeType getRandomDeliveryAlternativeType(Random random) {

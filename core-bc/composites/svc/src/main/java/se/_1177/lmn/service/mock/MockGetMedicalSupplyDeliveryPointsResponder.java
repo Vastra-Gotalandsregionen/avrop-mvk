@@ -27,6 +27,12 @@ public class MockGetMedicalSupplyDeliveryPointsResponder
             String logicalAddress,
             GetMedicalSupplyDeliveryPointsType parameters) {
 
+        /*try {
+            Thread.sleep(11000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
+
         String postalCode = parameters.getPostalCode();
         ServicePointProviderEnum provider = parameters.getServicePointProvider();
 

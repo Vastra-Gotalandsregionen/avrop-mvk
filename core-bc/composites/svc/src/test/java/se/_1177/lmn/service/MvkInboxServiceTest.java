@@ -12,9 +12,11 @@ import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._0.ObjectFactory;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ProductAreaEnum;
 
+import javax.xml.bind.JAXBElement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -72,7 +74,7 @@ public class MvkInboxServiceTest {
         choice1.setDeliveryPoint(deliveryPoint);
 
         choice1.setDeliveryNotificationReceiver("070-2345678");
-        choice1.setDeliveryNotificationMethod(DeliveryNotificationMethodEnum.SMS);
+        choice1.setDeliveryNotificationMethod(wrapInJAXBElement(DeliveryNotificationMethodEnum.SMS));
 
         AddressType homeAddress = new AddressType();
         homeAddress.setStreet("Gatan 37");
@@ -90,6 +92,10 @@ public class MvkInboxServiceTest {
         String result = mvkInboxService.composeMsg(prescriptionItems, deliveryChoices);
 
         assertEquals(expectedMessage, result);
+    }
+
+    private JAXBElement<DeliveryNotificationMethodEnum> wrapInJAXBElement(DeliveryNotificationMethodEnum sms) {
+        return new ObjectFactory().createDeliveryChoiceTypeDeliveryNotificationMethod(sms);
     }
 
     @Test
@@ -135,7 +141,7 @@ public class MvkInboxServiceTest {
 
         choice1.setDeliveryPoint(deliveryPoint);
         choice1.setDeliveryNotificationReceiver("070-2345678");
-        choice1.setDeliveryNotificationMethod(DeliveryNotificationMethodEnum.BREV);
+        choice1.setDeliveryNotificationMethod(wrapInJAXBElement(DeliveryNotificationMethodEnum.BREV));
 
         choice2.setDeliveryPoint(deliveryPoint);
         choice2.setDeliveryNotificationReceiver("0731234234");

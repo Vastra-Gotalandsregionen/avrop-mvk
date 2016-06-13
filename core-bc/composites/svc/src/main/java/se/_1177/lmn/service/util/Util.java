@@ -1,5 +1,9 @@
 package se._1177.lmn.service.util;
 
+import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
+import riv.crm.selfservice.medicalsupply._0.ObjectFactory;
+
+import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -68,5 +72,11 @@ public class Util {
         Matcher matcher = pattern.matcher(email);
 
         return matcher.matches();
+    }
+
+    public static JAXBElement<DeliveryNotificationMethodEnum> wrapInJAXBElement(
+            DeliveryNotificationMethodEnum notificationMethod) {
+
+        return new ObjectFactory().createDeliveryChoiceTypeDeliveryNotificationMethod(notificationMethod);
     }
 }

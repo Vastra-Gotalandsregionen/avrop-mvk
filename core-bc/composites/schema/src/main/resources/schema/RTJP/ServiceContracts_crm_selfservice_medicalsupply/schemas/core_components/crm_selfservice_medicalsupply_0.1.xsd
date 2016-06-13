@@ -61,7 +61,7 @@
 	  <xs:element name="DeliveryMethod" type="tns:DeliveryMethodEnum" minOccurs='1' maxOccurs='1'/>
 	  <xs:element name="HomeDeliveryAddress" type="tns:AddressType" minOccurs='0' maxOccurs='1'/>
 	  <xs:element name="DeliveryPoint" type="tns:DeliveryPointType" minOccurs='0' maxOccurs='1'/>
-	  <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodEnum" minOccurs='0' maxOccurs='1'/>
+	  <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodEnum" minOccurs='0' maxOccurs='1' nillable='true'/>
 	  <xs:element name="DeliveryNotificationReceiver" type="xs:string" minOccurs='0' maxOccurs='1'/>
       <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>
@@ -85,10 +85,9 @@
 	  <xs:element name="PrescriptionItemId" type="xs:string" minOccurs='1' maxOccurs='1'/>
 	  <xs:element name="DeliveryChoice" type="tns:DeliveryChoiceType" minOccurs='1' maxOccurs='1'/>
 	  <xs:element name="Article" type="tns:ArticleType" minOccurs='1' maxOccurs='1'/>
-	  <xs:element name="NoOfArticles" type="xs:int" minOccurs='1' maxOccurs='1'/>
 	  <xs:element name="NoOfPcs" type="xs:int" minOccurs='1' maxOccurs='1'/>
 	  <xs:element name="OrderDate" type="xs:date" minOccurs='1' maxOccurs='1'/>
-	  <xs:element name="DeliveredDate" type="xs:date" minOccurs='0' maxOccurs='1'/>
+	  <xs:element name="DeliveredDate" type="xs:date" minOccurs='0' maxOccurs='1' nillable='true'/>
       <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>
   </xs:complexType>

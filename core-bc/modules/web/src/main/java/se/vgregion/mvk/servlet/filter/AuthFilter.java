@@ -25,7 +25,6 @@ public class AuthFilter implements Filter {
 
     private static final String USER_ID_HEADER = "AJP_Subject_SerialNumber";
     private static final String SECURITY_LEVEL_DESCRIPTION = "AJP_SecurityLevelDescription";
-    private static final String GUID_PARAMETER = "guid";;
 
     public void init(FilterConfig filterConfig) throws ServletException {
         LOGGER.info("Filter init...");
@@ -56,8 +55,6 @@ public class AuthFilter implements Filter {
 
             String securityLevelDescription = request.getHeader(SECURITY_LEVEL_DESCRIPTION);
 
-            handleSession(request, subjectSerialNumber);
-
             boolean authenticated = subjectSerialNumber != null && subjectSerialNumber.length() > 0;
 
             if (authenticated) {
@@ -84,35 +81,6 @@ public class AuthFilter implements Filter {
         } catch (Exception e) {
             throw e;
         }
-    }
-
-    // If any of the session attributes have changed invalidate session to start all over.
-    private void handleSession(HttpServletRequest request, String subjectSerialNumber) {
-        String sessionSubjectSerialNumber = (String) request.getSession().getAttribute(USER_ID_HEADER);
-
-        if (sessionSubjectSerialNumber != null && !sessionSubjectSerialNumber.equals(subjectSerialNumber)) {
-            // A new user has logged in. Reset session.
-            request.getSession().invalidate();
-        }
-
-        String guid = request.getParameter(GUID_PARAMETER);
-        if ("".equals(guid)) {
-            guid = null;
-        }
-
-        String sessionGuid = (String) request.getSession().getAttribute(GUID_PARAMETER);
-
-        if (guid != null && !guid.equals(sessionGuid)) {
-            request.getSession().invalidate();
-            request.getSession().setAttribute(GUID_PARAMETER, guid);
-        } else if (request.getRequestURI().endsWith("/order.xhtml")) {
-            if (!EqualsBuilder.reflectionEquals(guid, sessionGuid)) {
-                request.getSession().invalidate();
-                request.getSession().setAttribute(GUID_PARAMETER, guid);
-            }
-        }
-
-        request.getSession().setAttribute(USER_ID_HEADER, subjectSerialNumber);
     }
 
     public void destroy() {

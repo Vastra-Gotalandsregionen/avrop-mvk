@@ -42,14 +42,18 @@
 
                         <h:inputText styleClass="postal-number" value="#{collectDeliveryController.zip}" id="zipInput"/>
 
-                        <h:commandButton styleClass="button" value="Sök">
+                        <h:commandButton styleClass="button" value="Sök" id="updateDeliverySelectItemsButton">
                             <f:ajax onevent="function(data) {handleProgressWithSpinner(data, initCommon);}"
                                     listener="#{collectDeliveryController.updateDeliverySelectItems}" execute="zipInput"
-                                    render="deliveryPointMenuWrapper"/>
+                                    render="deliveryPointMenuWrapper zipMessageWrapper"/>
                         </h:commandButton>
 
                         <h:graphicImage styleClass="spinner" library="default" name="img/preloader.gif" height="30px"
                                         style="display: none;"/>
+
+                        <h:panelGroup id="zipMessageWrapper">
+                            <h:message for="updateDeliverySelectItemsButton" styleClass="alert alert-danger"/>
+                        </h:panelGroup>
                     </div>
 
                 </div>

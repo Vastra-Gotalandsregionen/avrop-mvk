@@ -21,6 +21,7 @@ import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.
 import se._1177.lmn.service.LmnService;
 import se._1177.lmn.service.MvkInboxService;
 import se._1177.lmn.service.MvkInboxServiceException;
+import se._1177.lmn.service.util.Util;
 import se.vgregion.mvk.controller.model.Cart;
 
 import javax.faces.application.FacesMessage;
@@ -141,7 +142,7 @@ public class VerifyDeliveryController {
                             "item has been chosen. That shouldn't be possible so it's a bug.");
                 }
 
-                deliveryChoice.setDeliveryNotificationMethod(notificationMethod);
+                deliveryChoice.setDeliveryNotificationMethod(Util.wrapInJAXBElement(notificationMethod));
 
                 String notificationReceiver;
 
