@@ -297,7 +297,9 @@ public class HomeDeliveryController {
         if (fullName == null) {
             UserProfileType userProfile = userProfileController.getUserProfile();
 
-            fullName = userProfile.getFirstName() + " " + userProfile.getLastName();
+            if (userProfile != null) {
+                fullName = userProfile.getFirstName() + " " + userProfile.getLastName();
+            }
         }
 
         return fullName;
@@ -315,7 +317,9 @@ public class HomeDeliveryController {
         if (address == null) {
             UserProfileType userProfile = userProfileController.getUserProfile();
 
-            address = userProfile.getStreetAddress();
+            if (userProfile != null) {
+                address = userProfile.getStreetAddress();
+            }
         }
 
         return address;
@@ -329,7 +333,9 @@ public class HomeDeliveryController {
         if (zip == null) {
             UserProfileType userProfile = userProfileController.getUserProfile();
 
-            zip = userProfile.getZip();
+            if (userProfile != null) {
+                zip = userProfile.getZip();
+            }
         }
 
         return zip;
@@ -343,7 +349,9 @@ public class HomeDeliveryController {
         if (city == null) {
             UserProfileType userProfile = userProfileController.getUserProfile();
 
-            city = userProfile.getCity();
+            if (userProfile != null) {
+                city = userProfile.getCity();
+            }
         }
 
         return city;
@@ -373,10 +381,12 @@ public class HomeDeliveryController {
         if (phoneNumber == null) {
             UserProfileType userProfile = userProfileController.getUserProfile();
 
-            phoneNumber = userProfile.getPhoneNumber();
+            if (userProfile != null) {
+                phoneNumber = userProfile.getPhoneNumber();
 
-            if (phoneNumber == null || "".equals(phoneNumber)) {
-                phoneNumber = userProfile.getMobilePhoneNumber();
+                if (phoneNumber == null || "".equals(phoneNumber)) {
+                    phoneNumber = userProfile.getMobilePhoneNumber();
+                }
             }
         }
 

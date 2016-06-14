@@ -70,8 +70,10 @@ public class OrderController {
                 }
             }
 
-            collectDeliveryController.loadDeliveryPointsForAllSuppliersInBackground(
-                    userProfileController.getUserProfile().getZip());
+            if (userProfileController.getUserProfile() != null) {
+                collectDeliveryController.loadDeliveryPointsForAllSuppliersInBackground(
+                        userProfileController.getUserProfile().getZip());
+            }
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);

@@ -37,6 +37,7 @@ public class MockGetUserProfileByAgentResponder implements GetUserProfileByAgent
         userProfile.setStreetAddress("Gatan 47");
         userProfile.setZip("42137");
         userProfile.setRelatives(relatives);
+        userProfile.setSubjectOfCareId("201010101010");
 
         userProfile.setHasSmsNotification(true);
 

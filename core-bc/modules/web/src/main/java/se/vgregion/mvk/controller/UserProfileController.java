@@ -56,21 +56,21 @@ public class UserProfileController {
     @PostConstruct
     public void init() {
 
-            ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
-            Map<String, String> requestParameterMap = externalContext.getRequestParameterMap();
+        Map<String, String> requestParameterMap = externalContext.getRequestParameterMap();
 
-            if (requestParameterMap.containsKey("guid")) {
-                this.guid = requestParameterMap.get("guid");
-                this.objectId = requestParameterMap.get("objectId");
-                this.delegate = true;
-            } else {
-                this.guid = null;
-                this.objectId = null;
-                this.delegate = false;
-            }
+        if (requestParameterMap.containsKey("guid")) {
+            this.guid = requestParameterMap.get("guid");
+            this.objectId = requestParameterMap.get("objectId");
+            this.delegate = true;
+        } else {
+            this.guid = null;
+            this.objectId = null;
+            this.delegate = false;
+        }
 
-            updateUserProfile();
+        updateUserProfile();
 
         try {
             if (subjectOfCareResponseLoggedInUser == null) {
@@ -122,6 +122,13 @@ public class UserProfileController {
 
             this.userProfile = userProfile;
 
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            String text = "Din användare kunde inte hämtas.";
+            addErrorMessage(text);
+        }
+
+        try {
             if (getUserProfile() != null) {
                 // Obviously update subjectOfCareResponse if it's null but also if we are in delegate mode
                 if (subjectOfCareResponse == null || !subjectOfCareResponse.getSubjectOfCare()
@@ -136,9 +143,15 @@ public class UserProfileController {
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            String text = "Din användare kunde inte hämtas.";
+            String text = "Dina folkbokföringsuppgifter kunde inte hämtas.";
             addErrorMessage(text);
         }
+
+        /*} catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            String text = "Din användare kunde inte hämtas.";
+            addErrorMessage(text);
+        }*/
 
     }
 

@@ -86,12 +86,16 @@ public class CollectDeliveryController {
         // Default zip is from user profile. It may be overridden if user chooses so.
         UserProfileType userProfile = userProfileController.getUserProfile();
 
-        zip = userProfile.getZip();
+        if (userProfile != null) {
+            zip = userProfile.getZip();
 
-        if (userProfile.isHasSmsNotification() != null && userProfile.isHasSmsNotification()) {
-            preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.SMS;
-        } else if (userProfile.isHasMailNotification() != null && userProfile.isHasMailNotification()) {
-            preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.E_POST;
+            if (userProfile.isHasSmsNotification() != null && userProfile.isHasSmsNotification()) {
+                preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.SMS;
+            } else if (userProfile.isHasMailNotification() != null && userProfile.isHasMailNotification()) {
+                preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.E_POST;
+            } else {
+                preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.BREV;
+            }
         } else {
             preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.BREV;
         }
@@ -524,7 +528,10 @@ public class CollectDeliveryController {
         possibleCollectCombinationsFittingAllWithNotificationMethods = null;
 
         UserProfileType userProfile = userProfileController.getUserProfile();
-        zip = userProfile.getZip();
+
+        if (userProfile != null) {
+            zip = userProfile.getZip();
+        }
     }
 
     public boolean validateNotificationInput() {

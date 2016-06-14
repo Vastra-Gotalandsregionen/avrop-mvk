@@ -18,6 +18,12 @@ public class MockGetUserProfileResponder implements GetUserProfileResponderInter
     public GetUserProfileResponseType getUserProfile(GetUserProfileType request) {
         String ssn = request.getSubjectOfCare();
 
+        /*try {
+            Thread.sleep(11000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
+
         GetUserProfileResponseType response = new GetUserProfileResponseType();
         response.setIsActive(true);
         response.setResultCode(ResultCodeEnum.OK);

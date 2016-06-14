@@ -17,6 +17,12 @@ public class MockGetSubjectOfCareResponder implements GetSubjectOfCareResponderI
     @Override
     public GetSubjectOfCareResponseType getSubjectOfCare(GetSubjectOfCareType request) {
 
+        /*try {
+            Thread.sleep(11000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
+
         GetSubjectOfCareResponseType response = new GetSubjectOfCareResponseType();
 
         SubjectOfCareType subjectOfCare = new SubjectOfCareType();
