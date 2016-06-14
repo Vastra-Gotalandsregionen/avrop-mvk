@@ -176,9 +176,9 @@
                                  style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'BREV' ? 'block' : 'none'};">
                                 <div>Folkbokföringsadress:</div>
                                 <div class="bold address-rows">
-                                    <div>#{userProfileController.subjectOfCare.firstName} #{userProfileController.subjectOfCare.lastName}</div>
-                                    <div>#{userProfileController.subjectOfCare.streetAddress}</div>
-                                    <div>#{userProfileController.subjectOfCare.zip} #{userProfileController.subjectOfCare.city}</div>
+                                    <div>#{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}</div>
+                                    <div>#{userProfileController.userProfile.streetAddress}</div>
+                                    <div>#{userProfileController.userProfile.zip} #{userProfileController.userProfile.city}</div>
                                 </div>
                             </div>
                         </div>

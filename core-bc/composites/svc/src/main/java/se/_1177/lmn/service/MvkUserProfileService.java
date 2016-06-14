@@ -18,14 +18,11 @@ import org.springframework.stereotype.Service;
 public class MvkUserProfileService {
 
     private GetUserProfileResponderInterface getUserProfileResponderInterface;
-    private GetSubjectOfCareResponderInterface getSubjectOfCareResponderInterface;
     private GetUserProfileByAgentResponderInterface getUserProfileByAgentResponderInterface;
 
     public MvkUserProfileService(GetUserProfileResponderInterface getUserProfileResponderInterface,
-                                 GetSubjectOfCareResponderInterface getSubjectOfCareResponderInterface,
                                  GetUserProfileByAgentResponderInterface getUserProfileByAgentResponderInterface) {
         this.getUserProfileResponderInterface = getUserProfileResponderInterface;
-        this.getSubjectOfCareResponderInterface = getSubjectOfCareResponderInterface;
         this.getUserProfileByAgentResponderInterface = getUserProfileByAgentResponderInterface;
     }
 
@@ -37,22 +34,6 @@ public class MvkUserProfileService {
         GetUserProfileResponseType userProfile = getUserProfileResponderInterface.getUserProfile(request);
 
         return userProfile;
-    }
-
-    /**
-     * To get "folkbokföringsadress".
-     *
-     * @param subjectOfCare
-     * @return
-     */
-    public GetSubjectOfCareResponseType getSubjectOfCare(String subjectOfCare) {
-        GetSubjectOfCareType request = new GetSubjectOfCareType();
-
-        request.setSubjectOfCare(subjectOfCare);
-
-        GetSubjectOfCareResponseType response = getSubjectOfCareResponderInterface.getSubjectOfCare(request);
-
-        return response;
     }
 
     public GetUserProfileByAgentResponseType getUserProfileByAgent(String subjectOfCare, String objectId) {

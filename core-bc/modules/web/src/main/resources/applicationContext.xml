@@ -39,7 +39,6 @@
 
     <bean class="se._1177.lmn.service.MvkUserProfileService">
         <constructor-arg ref="getUserProfileResponderInterface"/>
-        <constructor-arg ref="getSubjectOfCareResponderInterface"/>
         <constructor-arg ref="getUserProfileByAgentResponderInterface"/>
     </bean>
 
@@ -62,10 +61,6 @@
     <jaxws:client id="getUserProfileResponderInterface"
                   serviceClass="mvk.itintegration.userprofile.getuserprofile._2.rivtabp21.GetUserProfileResponderInterface"
                   address="${GetUserProfileResponderInterface.address}"/>
-
-    <jaxws:client id="getSubjectOfCareResponderInterface"
-                  serviceClass="mvk.itintegration.userprofile.getsubjectofcare._2.rivtabp21.GetSubjectOfCareResponderInterface"
-                  address="${GetSubjectOfCareResponderInterface.address}"/>
 
     <jaxws:client id="getUserProfileByAgentResponderInterface"
                   serviceClass="mvk.itintegration.userprofile.getuserprofilebyagent._2.rivtabp21.GetUserProfileByAgentResponderInterface"

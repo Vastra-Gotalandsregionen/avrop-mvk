@@ -55,7 +55,7 @@ public class LmnServiceImplLocalIT {
     }
 
     @Test
-    public void smokeTest() throws Exception {
+    public void smokmeTest() throws Exception {
         GetMedicalSupplyDeliveryPointsType parameters = new GetMedicalSupplyDeliveryPointsType();
 
         parameters.setPostalCode("12345");

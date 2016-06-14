@@ -13,7 +13,6 @@ public class MockWebServiceServer {
     private static Endpoint endpoint4;
     private static Endpoint endpoint5;
     private static Endpoint endpoint6;
-    private static Endpoint endpoint7;
 
     public static void main(String[] args) {
         publishEndpoints(18080);
@@ -46,9 +45,6 @@ public class MockWebServiceServer {
                 endpointBase + "/GetUserProfileByAgent",
                 new MockGetUserProfileByAgentResponder());
 
-        endpoint7 = Endpoint.publish(
-                endpointBase + "/GetSubjectOfCare",
-                new MockGetSubjectOfCareResponder());
     }
 
     public static void shutdown() {
@@ -56,23 +52,20 @@ public class MockWebServiceServer {
             endpoint1.stop();
         }
 
-        if (endpoint1 != null) {
+        if (endpoint2 != null) {
             endpoint2.stop();
         }
-        if (endpoint1 != null) {
+        if (endpoint3 != null) {
             endpoint3.stop();
         }
-        if (endpoint1 != null) {
+        if (endpoint4 != null) {
             endpoint4.stop();
         }
-        if (endpoint1 != null) {
+        if (endpoint5 != null) {
             endpoint5.stop();
         }
-        if (endpoint1 != null) {
+        if (endpoint6 != null) {
             endpoint6.stop();
-        }
-        if (endpoint1 != null) {
-            endpoint7.stop();
         }
     }
 

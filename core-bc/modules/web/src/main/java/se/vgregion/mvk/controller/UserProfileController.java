@@ -3,7 +3,6 @@ package se.vgregion.mvk.controller;
 import mvk.itintegration.userprofile._2.ResultCodeEnum;
 import mvk.itintegration.userprofile._2.SubjectOfCareType;
 import mvk.itintegration.userprofile._2.UserProfileType;
-import mvk.itintegration.userprofile.getsubjectofcareresponder._2.GetSubjectOfCareResponseType;
 import mvk.itintegration.userprofile.getuserprofilebyagentresponder._2.GetUserProfileByAgentResponseType;
 import mvk.itintegration.userprofile.getuserprofileresponder._2.GetUserProfileResponseType;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -37,17 +36,10 @@ public class UserProfileController {
     @Autowired
     private MvkUserProfileService mvkUserProfileService;
 
-    /*@Autowired
-    private OrderController orderController;
-
-    @Autowired
-    private CollectDeliveryController collectDeliveryController;*/
-
     private GetUserProfileResponseType userProfileResponse;
+    private GetUserProfileResponseType userProfileResponseLoggedInUser;
     private GetUserProfileByAgentResponseType userProfileByAgentResponse;
-    private GetSubjectOfCareResponseType subjectOfCareResponseLoggedInUser;
 
-    private GetSubjectOfCareResponseType subjectOfCareResponse;
     private boolean delegate;
     private String objectId;
     private String guid;
@@ -70,19 +62,20 @@ public class UserProfileController {
             this.delegate = false;
         }
 
-        updateUserProfile();
-
         try {
-            if (subjectOfCareResponseLoggedInUser == null) {
+            if (userProfileResponseLoggedInUser == null) {
                 String ssn = getSubjectCareId();
 
-                subjectOfCareResponseLoggedInUser = mvkUserProfileService.getSubjectOfCare(ssn);
+                userProfileResponseLoggedInUser = mvkUserProfileService.getUserProfile(ssn);
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            String text = "Dina folkbokföringsuppgifter kunde inte hämtas.";
+            String text = "Din användare kunde inte hämtas.";
             addErrorMessage(text);
         }
+
+        updateUserProfile();
+
     }
 
     public void updateUserProfile() {
@@ -105,19 +98,24 @@ public class UserProfileController {
 
             } else {
 
-                if (userProfileResponse == null) {
-                    String ssn = getSubjectCareId();
+                if (userProfileResponseLoggedInUser != null) {
+                    userProfileResponse = userProfileResponseLoggedInUser;
+                } else {
+                    if (userProfileResponse == null) {
+                        String ssn = getSubjectCareId();
 
-                    userProfileResponse = mvkUserProfileService.getUserProfile(ssn);
+                        userProfileResponse = mvkUserProfileService.getUserProfile(ssn);
+                    }
+
+                    ResultCodeEnum resultCode = userProfileResponse.getResultCode();
+                    if (resultCode.equals(ResultCodeEnum.ERROR) || resultCode.equals(ResultCodeEnum.INFO)) {
+                        String text = userProfileResponse.getResultText();
+                        addErrorMessage(text);
+                    }
+
                 }
 
                 userProfile = userProfileResponse.getUserProfile();
-
-                ResultCodeEnum resultCode = userProfileResponse.getResultCode();
-                if (resultCode.equals(ResultCodeEnum.ERROR) || resultCode.equals(ResultCodeEnum.INFO)) {
-                    String text = userProfileResponse.getResultText();
-                    addErrorMessage(text);
-                }
             }
 
             this.userProfile = userProfile;
@@ -127,31 +125,6 @@ public class UserProfileController {
             String text = "Din användare kunde inte hämtas.";
             addErrorMessage(text);
         }
-
-        try {
-            if (getUserProfile() != null) {
-                // Obviously update subjectOfCareResponse if it's null but also if we are in delegate mode
-                if (subjectOfCareResponse == null || !subjectOfCareResponse.getSubjectOfCare()
-                        .getSubjectOfCareId()
-                        .equals(getUserProfile().getSubjectOfCareId())) {
-
-                    String subjectOfCareId = getUserProfile().getSubjectOfCareId();
-
-                    subjectOfCareResponse = mvkUserProfileService.getSubjectOfCare(subjectOfCareId);
-                }
-            }
-
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            String text = "Dina folkbokföringsuppgifter kunde inte hämtas.";
-            addErrorMessage(text);
-        }
-
-        /*} catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            String text = "Din användare kunde inte hämtas.";
-            addErrorMessage(text);
-        }*/
 
     }
 
@@ -192,17 +165,8 @@ public class UserProfileController {
 
     public SubjectOfCareType getLoggedInUser() {
 
-        if (subjectOfCareResponseLoggedInUser != null) {
-            return subjectOfCareResponseLoggedInUser.getSubjectOfCare();
-        } else {
-            return null;
-        }
-    }
-
-    public SubjectOfCareType getSubjectOfCare() {
-
-        if (subjectOfCareResponse != null) {
-            return subjectOfCareResponse.getSubjectOfCare();
+        if (userProfileResponseLoggedInUser != null) {
+            return userProfileResponseLoggedInUser.getUserProfile();
         } else {
             return null;
         }
