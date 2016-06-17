@@ -335,7 +335,8 @@ public class CollectDeliveryController {
     }
 
     public String toVerifyDelivery() {
-        boolean success = validateNotificationInput();
+        boolean success = validateCollectDeliveryPoint();
+        success = success && validateNotificationInput();
 
         if (!success) {
             return "collectDelivery";
@@ -473,8 +474,8 @@ public class CollectDeliveryController {
                 deliveryPointsPerProvider.put(provider, medicalSupplyDeliveryPoints.getDeliveryPoint());
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);
-                addErrorMessage("Kunde inte hämta utlämningsställen. Tjänsten svarar inte.",
-                        "collectDeliveryForm:updateDeliverySelectItemsButton");
+                addErrorMessage("Kunde inte hämta utlämningsställen.",
+                        "");
                 break;
             }
         }
@@ -534,6 +535,21 @@ public class CollectDeliveryController {
         }
     }
 
+    public boolean validateCollectDeliveryPoint() {
+
+        boolean success[] = new boolean[]{true};
+
+        deliveryPointIdsMap.entrySet().forEach(entry -> {
+            if (entry.getValue() == null) {
+                success[0] = false;
+                addErrorMessage("Du har inte valt utlämningsställe för " + UtilController.toProviderName(entry.getKey()),
+                        "collectDeliveryForm:updateDeliverySelectItemsButton");
+            }
+        });
+
+        return success[0];
+    }
+
     public boolean validateNotificationInput() {
 
         final int[] count = {0};
@@ -547,10 +563,10 @@ public class CollectDeliveryController {
                 String email = getEmail();
 
                 if (email == null || "".equals(email)) {
-                    addMessage("Epost för avisering saknas", "emailInput", count[0]);
+                    addMessage("Epost för avisering saknas", "emailInput", count[0] + "");
                     validationSuccess[0] = false;
                 } else if (!Util.isValidEmailAddress(email)) {
-                    addMessage("Epost för avisering är ogiltig.", "emailInput", count[0]);
+                    addMessage("Epost för avisering är ogiltig.", "emailInput", count[0] + "");
                     validationSuccess[0] = false;
                 }
             } else if (DeliveryNotificationMethodEnum.BREV.name().equals(chosenDeliveryMethod)) {
@@ -559,20 +575,20 @@ public class CollectDeliveryController {
                 String smsNumber = getSmsNumber();
 
                 if (smsNumber == null || "".equals(smsNumber)) {
-                    addMessage("SMS för avisering saknas", "smsInput", count[0]);
+                    addMessage("Mobiltelefon för avisering saknas", "smsInput", count[0] + "");
                     validationSuccess[0] = false;
                 } else if (smsNumber.length() < 10) {
-                    addMessage("SMS för avisering är ogiltig.", "smsInput", count[0]);
+                    addMessage("Mobiltelefon för avisering är ogiltig.", "smsInput", count[0] + "");
                     validationSuccess[0] = false;
                 }
             } else if (DeliveryNotificationMethodEnum.TELEFON.name().equals(chosenDeliveryMethod)) {
                 String phoneNumber = getPhoneNumber();
 
                 if (phoneNumber == null || "".equals(phoneNumber)) {
-                    addMessage("Telefon för avisering saknas", "phoneInput", count[0]);
+                    addMessage("Telefon för avisering saknas", "phoneInput", count[0] + "");
                     validationSuccess[0] = false;
                 } else if (phoneNumber.length() < 8) {
-                    addMessage("Telefon för avisering är ogiltig.", "phoneInput", count[0]);
+                    addMessage("Telefon för avisering är ogiltig.", "phoneInput", count[0] + "");
                     validationSuccess[0] = false;
                 }
             } else {
@@ -592,7 +608,7 @@ public class CollectDeliveryController {
         return validationSuccess[0];
     }
 
-    private void addMessage(String summary, String componentId, int count) {
+    private void addMessage(String summary, String componentId, String count) {
         FacesMessage msg = new FacesMessage(summary);
         msg.setSeverity(FacesMessage.SEVERITY_ERROR);
 

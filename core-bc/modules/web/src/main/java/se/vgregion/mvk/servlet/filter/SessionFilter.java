@@ -19,6 +19,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+import static javax.swing.text.html.CSS.getAttribute;
+
 /**
  * @author Patrik Björk
  */
@@ -29,6 +31,7 @@ public class SessionFilter implements Filter {
 
     private static final String USER_ID_HEADER = "AJP_Subject_SerialNumber";
     private static final String GUID_PARAMETER = "guid";;
+    private static final String OBJECTID_PARAMETER = "objectId";;
 
     public void init(FilterConfig filterConfig) throws ServletException {
     }
@@ -69,7 +72,6 @@ public class SessionFilter implements Filter {
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
-
     }
 
     private boolean redirectIfInAppropriateRequest(HttpServletRequest request, HttpServletResponse response)
@@ -87,19 +89,31 @@ public class SessionFilter implements Filter {
                 List<PrescriptionItemType> itemsInCart = ((Cart) cart).getItemsInCart();
 
                 if (itemsInCart == null || itemsInCart.size() == 0) {
-                    response.sendRedirect(request.getContextPath() + "/order.xhtml");
+                    redirectToOrderPage(request, response);
                     return true;
                 } else {
                     return false;
                 }
             } else {
-                response.sendRedirect(request.getContextPath() + "/order.xhtml");
+                redirectToOrderPage(request, response);
                 return true;
             }
         } else {
-            response.sendRedirect(request.getContextPath() + "/order.xhtml");
+            redirectToOrderPage(request, response);
             return true;
         }
+    }
+
+    private void redirectToOrderPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession();
+
+        String queryString = "";
+        Object sessionGuid = session.getAttribute(GUID_PARAMETER);
+        if (sessionGuid != null && !"".equals(sessionGuid)) {
+            Object sessionObjectId = session.getAttribute(OBJECTID_PARAMETER);
+            queryString = "?guid=" + sessionGuid + "&objectId=" + sessionObjectId;
+        }
+        response.sendRedirect(request.getContextPath() + "/order.xhtml" + queryString);
     }
 
     // If any of the session attributes have changed invalidate session to start all over.
@@ -112,6 +126,8 @@ public class SessionFilter implements Filter {
         }
 
         String guid = request.getParameter(GUID_PARAMETER);
+        String objectId = request.getParameter(OBJECTID_PARAMETER);
+
         if ("".equals(guid)) {
             guid = null;
         }
@@ -121,6 +137,7 @@ public class SessionFilter implements Filter {
         if (guid != null && !guid.equals(sessionGuid)) {
             request.getSession().invalidate();
             request.getSession().setAttribute(GUID_PARAMETER, guid);
+            request.getSession().setAttribute(OBJECTID_PARAMETER, objectId);
         } else if (request.getRequestURI().endsWith("/order.xhtml")) {
             if (!EqualsBuilder.reflectionEquals(guid, sessionGuid)) {
                 request.getSession().invalidate();

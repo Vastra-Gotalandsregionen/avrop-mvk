@@ -12,14 +12,16 @@
 
     <ui:define name="boxContent">
 
-        <h:messages showSummary="true" styleClass="alert alert-danger"/>
+        <h:panelGroup id="messagesWrapper">
+            <h:messages showSummary="true" styleClass="alert alert-danger"/>
+        </h:panelGroup>
 
         <div>
             <h3>Hämta på utlämningsställe</h3>
             <div class="page-introduction">
                 <div>
                     <p>
-                        Här väljer du utlämningsställe. Du kan även välja att någon annan/kontaktperson ska hämta ut paketet. Det vill säga en annan person än du själv har rättighet att hämta ut paketet.
+                        Här väljer du utlämningsställe.
                     </p>
                 </div>
             </div>
@@ -45,15 +47,12 @@
                         <h:commandButton styleClass="button" value="Sök" id="updateDeliverySelectItemsButton">
                             <f:ajax onevent="function(data) {handleProgressWithSpinner(data, initCommon);}"
                                     listener="#{collectDeliveryController.updateDeliverySelectItems}" execute="zipInput"
-                                    render="deliveryPointMenuWrapper zipMessageWrapper"/>
+                                    render="deliveryPointMenuWrapper messagesWrapper"/>
                         </h:commandButton>
 
                         <h:graphicImage styleClass="spinner" library="default" name="img/preloader.gif" height="30px"
                                         style="display: none;"/>
 
-                        <h:panelGroup id="zipMessageWrapper">
-                            <h:message for="updateDeliverySelectItemsButton" styleClass="alert alert-danger"/>
-                        </h:panelGroup>
                     </div>
 
                 </div>
@@ -80,7 +79,7 @@
                                         <ui:repeat
                                                 value="#{collectDeliveryController.relevantServicePointProviders[selectOneMenuItemsKey]}"
                                                 var="item">
-                                            <li>#{item.article.articleName}</li>
+                                            <li>#{item.article.articleNo} - #{item.article.articleName}</li>
                                         </ui:repeat>
                                     </ul>
                                 </div>

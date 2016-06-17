@@ -64,13 +64,13 @@ public class UserProfileController {
 
         try {
             if (userProfileResponseLoggedInUser == null) {
-                String ssn = getSubjectCareId();
+                String ssn = getSubjectCareIdLoggedInUser();
 
                 userProfileResponseLoggedInUser = mvkUserProfileService.getUserProfile(ssn);
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            String text = "Din användare kunde inte hämtas.";
+            String text = "Dina inställningar och din adress kunde inte hämtas.";
             addErrorMessage(text);
         }
 
@@ -102,7 +102,7 @@ public class UserProfileController {
                     userProfileResponse = userProfileResponseLoggedInUser;
                 } else {
                     if (userProfileResponse == null) {
-                        String ssn = getSubjectCareId();
+                        String ssn = getSubjectCareIdLoggedInUser();
 
                         userProfileResponse = mvkUserProfileService.getUserProfile(ssn);
                     }
@@ -122,7 +122,7 @@ public class UserProfileController {
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            String text = "Din användare kunde inte hämtas.";
+            String text = "Dina inställningar och din adress kunde inte hämtas.";
             addErrorMessage(text);
         }
 
@@ -151,12 +151,12 @@ public class UserProfileController {
     }
 
     private void updateUserProfileByAgentResponse() {
-        String ssn = getSubjectCareId();
+        String ssn = getSubjectCareIdLoggedInUser();
 
         userProfileByAgentResponse = mvkUserProfileService.getUserProfileByAgent(ssn, this.objectId);
     }
 
-    private String getSubjectCareId() {
+    public String getSubjectCareIdLoggedInUser() {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
                 .getRequest();
 
@@ -210,16 +210,6 @@ public class UserProfileController {
         updateUserProfile();
     }
 
-    public String getSubjectOfCareId() {
-        UserProfileType userProfile = getUserProfile();
-
-        if (userProfile != null) {
-            return userProfile.getSubjectOfCareId();
-        } else {
-            return null;
-        }
-    }
-
     public boolean isDelegate() {
         return delegate;
     }
@@ -241,7 +231,7 @@ public class UserProfileController {
     }
 
     public String getDelegateUrlParameters() {
-        return guid != null ? "?guid=" + guid + "&objectId" + objectId : "";
+        return guid != null ? "?guid=" + guid + "&objectId=" + objectId : "";
     }
 
 }

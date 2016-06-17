@@ -3,7 +3,9 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:o="http://omnifaces.org/ui"
+>
 
 <ui:insert name="metadata"/>
 
@@ -86,9 +88,9 @@
 
             <div class="breadcrumbs-container">
                 <div class="breadcrumbs">
-                    <h:form>
-                        <a class="link" href="#{utilController.mvkStartPageLink}">Start</a>&#160;»&#160;<a class="link" href="#{utilController.mvkOtherServicesLink}">Övriga tjänster</a>&#160;»&#160;<h:commandLink action="#{deliveryController.toOrder}" value="Läkemedelsnära produkter"/>&#160;»&#160;<ui:insert name="currentPage"/>
-                    </h:form>
+                    <o:form>
+                        <a class="link" href="#{utilController.mvkStartPageLink}">Start</a>&#160;»&#160;<a class="link" href="#{utilController.mvkOtherServicesLink}">Övriga tjänster</a>&#160;»&#160;<a href="#{request.contextPath}/order.xhtml#{userProfileController.delegateUrlParameters}">Läkemedelsnära produkter</a>&#160;»&#160;<ui:insert name="currentPage"/>
+                    </o:form>
                 </div><!--breadcrumbs-->
             </div><!--breadcrumbs-container-->
 

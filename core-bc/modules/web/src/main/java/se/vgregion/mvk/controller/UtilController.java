@@ -140,6 +140,23 @@ public class UtilController {
         }
     }
 
+    public static String toSubjectOfCareIdWithHyphen(String subjectOfCareId) {
+        if (subjectOfCareId == null) {
+            return null;
+        }
+
+        if (subjectOfCareId.length() == 10) {
+            return subjectOfCareId.substring(0, 6) + "-" + subjectOfCareId.substring(6, 10);
+        } else if (subjectOfCareId.length() == 12) {
+            return subjectOfCareId.substring(0, 8) + "-" + subjectOfCareId.substring(8, 12);
+        } else if (subjectOfCareId.contains("-")) {
+            return subjectOfCareId;
+        } else {
+            LOGGER.warn("Could not read and insert hyphen in subjectOfCareId=" + subjectOfCareId);
+            return subjectOfCareId;
+        }
+    }
+
     public String getBackToOwnProfileLink() {
         return backToOwnProfileLink;
     }

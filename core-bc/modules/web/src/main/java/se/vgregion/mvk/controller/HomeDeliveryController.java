@@ -245,10 +245,10 @@ public class HomeDeliveryController {
                 String smsNumber = getSmsNumber();
 
                 if (smsNumber == null || "".equals(smsNumber)) {
-                    addMessage("SMS för avisering saknas", "smsInput", count[0]);
+                    addMessage("Mobiltelefon för avisering saknas", "smsInput", count[0]);
                     validationSuccess[0] = false;
                 } else if (smsNumber.length() < 10) {
-                    addMessage("SMS för avisering är ogiltig.", "smsInput", count[0]);
+                    addMessage("Mobiltelefon för avisering är ogiltig.", "smsInput", count[0]);
                     validationSuccess[0] = false;
                 }
             } else if (DeliveryNotificationMethodEnum.TELEFON.name().equals(chosenDeliveryMethod)) {

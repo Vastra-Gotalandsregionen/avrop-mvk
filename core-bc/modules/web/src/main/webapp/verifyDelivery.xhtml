@@ -32,7 +32,7 @@
                         <span class="input-group">
                             <h:outputLabel for="patientPid" value="Personnummer: "/>
                             <h:outputText styleClass="bold" id="patientPid"
-                                          value="#{userProfileController.userProfile.subjectOfCareId}"/>
+                                          value="#{utilController.toSubjectOfCareIdWithHyphen(userProfileController.userProfile.subjectOfCareId)}"/>
                         </span>
                     </div>
                 </div>

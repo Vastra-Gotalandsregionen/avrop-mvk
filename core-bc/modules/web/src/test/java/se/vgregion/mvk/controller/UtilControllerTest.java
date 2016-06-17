@@ -69,7 +69,16 @@ public class UtilControllerTest {
         XMLGregorianCalendar tomorrow = xmlGregorianCalendar;
 
         assertTrue(utilController.isAfterToday(tomorrow));
+    }
 
+    @Test
+    public void toSubjectOfCareIdWithHyphen() {
+        assertEquals("121212-1212",     utilController.toSubjectOfCareIdWithHyphen("1212121212"));
+        assertEquals("19121212-1212",   utilController.toSubjectOfCareIdWithHyphen("191212121212"));
+        assertEquals("121212-1212",     utilController.toSubjectOfCareIdWithHyphen("121212-1212"));
+        assertEquals("19121212-1212",   utilController.toSubjectOfCareIdWithHyphen("19121212-1212"));
+        assertEquals("asdfjal",         utilController.toSubjectOfCareIdWithHyphen("asdfjal"));
+        assertEquals(null,              utilController.toSubjectOfCareIdWithHyphen(null));
     }
 
 }

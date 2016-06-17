@@ -57,8 +57,13 @@ public class OrderController {
     // This is inited by UserProfileController.
     public void init() {
         try {
+            if (userProfileController.getUserProfile() == null) {
+                // We don't need to add a message here since a message should already be added to inform the user.
+                return;
+            }
+
             this.medicalSupplyPrescriptions = lmnService.getMedicalSupplyPrescriptionsHolder(
-                    userProfileController.getSubjectOfCareId());
+                    userProfileController.getUserProfile().getSubjectOfCareId());
 
             for (PrescriptionItemType prescriptionItem : medicalSupplyPrescriptions.orderable) {
                 String prescriptionItemId = prescriptionItem.getPrescriptionItemId();
@@ -78,7 +83,7 @@ public class OrderController {
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
 
-            String msg = "Internt kommunikationsfel. Dina produkter kunde inte hämtas. Försök senare.";
+            String msg = "Dina produkter kunde inte hämtas. Försök senare eller kontakta kundtjänst.";
 
             FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
         }

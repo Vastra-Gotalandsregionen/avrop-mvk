@@ -74,6 +74,7 @@ function initHomeDeliveryPage() {
     jq('.cancel-button').on('click', function (e) {
         e.preventDefault();
         confirmDialog.dialog('close');
+        jq('#homeDeliveryForm\\:doorCodeField').focus();
     });
 }
 

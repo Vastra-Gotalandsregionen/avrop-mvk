@@ -20,6 +20,12 @@ public class MockGetUserProfileByAgentResponder implements GetUserProfileByAgent
     @Override
     public GetUserProfileByAgentResponseType getUserProfileByAgent(GetUserProfileByAgentType request) {
 
+        /*try {
+            Thread.sleep(11000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
+
         RelativeType relative = new RelativeType();
         relative.setSubjectOfCareId(request.getSubjectOfCareId());
         relative.setRelativeType(RelativeTypeType.PARENT);

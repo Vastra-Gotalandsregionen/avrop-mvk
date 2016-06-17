@@ -31,6 +31,7 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
+import static riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum.E_POST;
 import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 
 /**
@@ -70,8 +71,6 @@ public class VerifyDeliveryController {
 
     public String confirmOrder() {
         UserProfileType userProfile = userProfileController.getUserProfile();
-
-        userProfile.getSubjectOfCareId();
 
         RegisterMedicalSupplyOrderResponseType response;
 
@@ -150,16 +149,18 @@ public class VerifyDeliveryController {
                     case BREV:
                         notificationReceiver = null;
 
-                        AddressType address = new AddressType();
-//                        address.setCareOfAddress(userProfileController.getUserProfile().getC); // // TODO: 2016-05-02
-                        address.setCity(userProfile.getCity());
-//                        address.setDoorCode(homeDeliveryController.getDoorCode());
-//                        address.setPhone(homeDeliveryController.getPhoneNumber());
-                        address.setPostalCode(userProfile.getZip());
-                        address.setReceiver(userProfile.getFirstName() + " " + userProfile.getLastName()); // todo Korrekt att detta är mottagarens namn?
-                        address.setStreet(userProfile.getStreetAddress());
+                        /* This is only relevant for the inbox message. Home address is not relevant for collect
+                        delivery but it does no harm if it's included in the web service message. */
+                        if (userProfile != null) {
 
-                        deliveryChoice.setHomeDeliveryAddress(address);
+                            AddressType address = new AddressType();
+                            address.setCity(userProfile.getCity());
+                            address.setPostalCode(userProfile.getZip());
+                            address.setReceiver(userProfile.getFirstName() + " " + userProfile.getLastName());
+                            address.setStreet(userProfile.getStreetAddress());
+
+                            deliveryChoice.setHomeDeliveryAddress(address);
+                        }
                         break;
                     case E_POST:
                         notificationReceiver = collectDeliveryController.getEmail();
@@ -189,12 +190,12 @@ public class VerifyDeliveryController {
                 }
 
                 AddressType address = new AddressType();
-                address.setCareOfAddress(homeDeliveryController.getCoAddress()); // // TODO: 2016-05-02
+                address.setCareOfAddress(homeDeliveryController.getCoAddress());
                 address.setCity(homeDeliveryController.getCity());
                 address.setDoorCode(homeDeliveryController.getDoorCode());
                 address.setPhone(homeDeliveryController.getPhoneNumber());
                 address.setPostalCode(homeDeliveryController.getZip());
-                address.setReceiver(homeDeliveryController.getFullName()); // todo Korrekt att detta är mottagarens namn?
+                address.setReceiver(homeDeliveryController.getFullName());
                 address.setStreet(homeDeliveryController.getAddress());
 
                 deliveryChoice.setHomeDeliveryAddress(address);
@@ -203,46 +204,62 @@ public class VerifyDeliveryController {
         }
 
         try {
-            SubjectOfCareType loggedInUser = userProfileController.getLoggedInUser();
-            response = lmnService.registerMedicalSupplyOrder(
-                    userProfile.getSubjectOfCareId(),
-                    userProfileController.isDelegate(),
-                    loggedInUser.getFirstName() + " " + loggedInUser.getLastName(),
-                    cart.getItemsInCart(),
-                    deliveryChoicePerItem
-            );
+            String subjectOfCareId = userProfileController.getUserProfile().getSubjectOfCareId();
+
+            try {
+
+                SubjectOfCareType loggedInUser = userProfileController.getLoggedInUser();
+                String orderer = loggedInUser.getFirstName() + " " + loggedInUser.getLastName(); // // TODO: 2016-06-16 Ska man få beställa om orderer inte är tillgänglig
+
+                response = lmnService.registerMedicalSupplyOrder(
+                        subjectOfCareId,
+                        userProfileController.isDelegate(),
+                        orderer,
+                        cart.getItemsInCart(),
+                        deliveryChoicePerItem
+                );
+            } catch (Exception e) {
+                LOGGER.error(e.getMessage(), e);
+                String msg = "Tekniskt fel. Försök senare.";
+                FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,
+                        msg));
+                return "verifyDelivery";
+            }
+
+            if (response.getResultCode().equals(ResultCodeEnum.OK)) {
+                orderSuccess = true;
+
+                try {
+                    AddMessageResponseType addMessageResponse = mvkInboxService.sendInboxMessage(
+                            userProfile.getSubjectOfCareId(), cart.getItemsInCart(), deliveryChoicePerItem.values());
+
+                    if (!addMessageResponse.getResultCode().equals(mvk.crm.casemanagement.inbox._2.ResultCodeEnum.OK)) {
+                        String msg = addMessageResponse.getResultText();
+                        FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                msg,
+                                msg));
+                    }
+                } catch (MvkInboxServiceException e) {
+                    String msg = "Din beställning har utförts men tyvärr kunde inget kvitto skickas till din inkorg.";
+                    FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,
+                            msg));
+                }
+
+                cart.emptyCart();
+                orderController.reset();
+
+            } else if (response.getResultCode().equals(ResultCodeEnum.ERROR)
+                    || response.getResultCode().equals(ResultCodeEnum.INFO)) {
+                String msg = response.getComment();
+                FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,
+                        msg));
+                orderSuccess = false;
+            }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             String msg = "Tekniskt fel. Försök senare.";
             FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
             return "verifyDelivery";
-        }
-
-        if (response.getResultCode().equals(ResultCodeEnum.OK)) {
-            orderSuccess = true;
-
-            try {
-                AddMessageResponseType addMessageResponse = mvkInboxService.sendInboxMessage(
-                        userProfile.getSubjectOfCareId(), cart.getItemsInCart(), deliveryChoicePerItem.values());
-
-                if (!addMessageResponse.getResultCode().equals(mvk.crm.casemanagement.inbox._2.ResultCodeEnum.OK)) {
-                    String msg = addMessageResponse.getResultText();
-                    FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
-                }
-            } catch (MvkInboxServiceException e) {
-                String msg = "Din beställning har utförts men kvittot till din inkorg har misslyckats.";
-                FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,
-                        msg));
-            }
-
-            cart.emptyCart();
-            orderController.reset();
-
-        } else if (response.getResultCode().equals(ResultCodeEnum.ERROR)
-                || response.getResultCode().equals(ResultCodeEnum.INFO)) {
-            String msg = response.getComment();
-            FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
-            orderSuccess = false;
         }
 
         return "orderConfirmation";
