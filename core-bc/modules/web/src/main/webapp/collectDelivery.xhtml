@@ -14,6 +14,10 @@
 
         <h:panelGroup id="messagesWrapper">
             <h:messages showSummary="true" styleClass="alert alert-danger"/>
+
+            <h:panelGroup layout="block" rendered="#{collectDeliveryController.collectDeliveryPointsFetchFailed}" styleClass="alert alert-danger">
+                Utlämningsställen för postnumret kunde inte hämtas. Försök med ett annat postnummer eller kontakta kundtjänst.
+            </h:panelGroup>
         </h:panelGroup>
 
         <div>

@@ -474,8 +474,7 @@ public class CollectDeliveryController {
                 deliveryPointsPerProvider.put(provider, medicalSupplyDeliveryPoints.getDeliveryPoint());
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);
-                addErrorMessage("Kunde inte hämta utlämningsställen.",
-                        "");
+                // We don't need to add a message here since we show a message by a condition in the view.
                 break;
             }
         }
@@ -649,5 +648,17 @@ public class CollectDeliveryController {
         });
 
         return successfulFetch[0];
+    }
+
+    public Boolean getCollectDeliveryPointsFetchFailed() {
+
+        for (Map.Entry<ServicePointProviderEnum, List<SelectItemGroup>> entry : getDeliverySelectItems().entrySet()) {
+            if (entry.getValue().get(0).getSelectItems().length < 1) {
+                // The 1 would be the closest collect delivery point. Here we don't have one since it must have failed.
+                return true;
+            }
+        }
+
+        return false;
     }
 }
