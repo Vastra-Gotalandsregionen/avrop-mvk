@@ -56,7 +56,8 @@
                                     #{item.article.articleNo}
                                 </td>
                                 <td>
-                                    #{item.article.articleName}
+                                    <span class="bold">#{item.article.articleName}</span>
+                                    <mvk:moreInfo item="#{item}"/>
                                 </td>
                                 <td>
                                     #{item.noOfRemainingOrders}/#{item.noOfOrders}
@@ -202,6 +203,12 @@
 
             </h:form>
         </div>
+
+        <script type="text/javascript">
+            jq(document).ready(function () {
+                initOrderPage();
+            });
+        </script>
 
     </ui:define>
 </ui:composition>

@@ -19,8 +19,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-import static javax.swing.text.html.CSS.getAttribute;
-
 /**
  * @author Patrik Björk
  */
@@ -30,8 +28,9 @@ public class SessionFilter implements Filter {
     private static final Logger LOGGER = LoggerFactory.getLogger(SessionFilter.class);
 
     private static final String USER_ID_HEADER = "AJP_Subject_SerialNumber";
-    private static final String GUID_PARAMETER = "guid";;
+    private static final String SHIB_SESSION_ID_HEADER = "AJP_Shib-Session-ID";
     private static final String OBJECTID_PARAMETER = "objectId";;
+    private static final String START_PAGE_SUFFIX = "/order.xhtml";
 
     public void init(FilterConfig filterConfig) throws ServletException {
     }
@@ -77,7 +76,7 @@ public class SessionFilter implements Filter {
     private boolean redirectIfInAppropriateRequest(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
-        if (request.getServletPath().startsWith("/order.xhtml")) {
+        if (request.getServletPath().startsWith(START_PAGE_SUFFIX)) {
             return false;
         }
 
@@ -108,12 +107,11 @@ public class SessionFilter implements Filter {
         HttpSession session = request.getSession();
 
         String queryString = "";
-        Object sessionGuid = session.getAttribute(GUID_PARAMETER);
-        if (sessionGuid != null && !"".equals(sessionGuid)) {
-            Object sessionObjectId = session.getAttribute(OBJECTID_PARAMETER);
-            queryString = "?guid=" + sessionGuid + "&objectId=" + sessionObjectId;
+        Object sessionObjectId = session.getAttribute(OBJECTID_PARAMETER);
+        if (sessionObjectId != null && !"".equals(sessionObjectId)) {
+            queryString = "?objectId=" + sessionObjectId;
         }
-        response.sendRedirect(request.getContextPath() + "/order.xhtml" + queryString);
+        response.sendRedirect(request.getContextPath() + START_PAGE_SUFFIX + queryString);
     }
 
     // If any of the session attributes have changed invalidate session to start all over.
@@ -125,26 +123,32 @@ public class SessionFilter implements Filter {
             request.getSession().invalidate();
         }
 
-        String guid = request.getParameter(GUID_PARAMETER);
         String objectId = request.getParameter(OBJECTID_PARAMETER);
 
-        if ("".equals(guid)) {
-            guid = null;
+        if ("".equals(objectId)) {
+            objectId = null;
         }
 
-        String sessionGuid = (String) request.getSession().getAttribute(GUID_PARAMETER);
+        String sessionObjectId = (String) request.getSession().getAttribute(OBJECTID_PARAMETER);
+        String sessionShibSessionId = (String) request.getSession().getAttribute(SHIB_SESSION_ID_HEADER);
 
-        if (guid != null && !guid.equals(sessionGuid)) {
+        String shibSessionIdFromRequest = request.getHeader(SHIB_SESSION_ID_HEADER);
+
+        if (!EqualsBuilder.reflectionEquals(sessionShibSessionId, shibSessionIdFromRequest)) {
             request.getSession().invalidate();
-            request.getSession().setAttribute(GUID_PARAMETER, guid);
+        }
+
+        if (objectId != null && !objectId.equals(sessionObjectId)) {
+            request.getSession().invalidate();
             request.getSession().setAttribute(OBJECTID_PARAMETER, objectId);
-        } else if (request.getRequestURI().endsWith("/order.xhtml")) {
-            if (!EqualsBuilder.reflectionEquals(guid, sessionGuid)) {
+        } else if (request.getRequestURI().endsWith(START_PAGE_SUFFIX)) {
+            if (!EqualsBuilder.reflectionEquals(objectId, sessionObjectId)) {
                 request.getSession().invalidate();
-                request.getSession().setAttribute(GUID_PARAMETER, guid);
+                request.getSession().setAttribute(OBJECTID_PARAMETER, objectId);
             }
         }
 
+        request.getSession().setAttribute(SHIB_SESSION_ID_HEADER, shibSessionIdFromRequest);
         request.getSession().setAttribute(USER_ID_HEADER, subjectSerialNumber);
     }
 

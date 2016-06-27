@@ -121,6 +121,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
             randomCalendar.setYear(c.get(Calendar.YEAR) + 1);
             randomCalendar.setDay(random.nextInt(20) + 1); // To avoid invalid dates.
 
+//            prescriptionItem.setNextEarliestOrderDate(null);
             prescriptionItem.setNextEarliestOrderDate(randomCalendar);
         }
         prescriptionItem.setPrescriptionId(random.nextInt(100000) + "");

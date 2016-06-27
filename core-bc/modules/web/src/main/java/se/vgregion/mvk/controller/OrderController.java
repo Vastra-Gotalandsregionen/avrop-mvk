@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._0.ResultCodeEnum;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._0.GetMedicalSupplyPrescriptionsResponseType;
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 import se._1177.lmn.service.LmnService;
 import se.vgregion.mvk.controller.model.Cart;
@@ -64,6 +66,18 @@ public class OrderController {
 
             this.medicalSupplyPrescriptions = lmnService.getMedicalSupplyPrescriptionsHolder(
                     userProfileController.getUserProfile().getSubjectOfCareId());
+
+            GetMedicalSupplyPrescriptionsResponseType supplyPrescriptionsResponse =
+                    this.medicalSupplyPrescriptions.getSupplyPrescriptionsResponse();
+
+            if (!supplyPrescriptionsResponse.getResultCode().equals(ResultCodeEnum.OK)) {
+                String msg = supplyPrescriptionsResponse.getComment();
+
+                FacesContext facesContext = FacesContext.getCurrentInstance();
+                facesContext.addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
+
+                return;
+            }
 
             for (PrescriptionItemType prescriptionItem : medicalSupplyPrescriptions.orderable) {
                 String prescriptionItemId = prescriptionItem.getPrescriptionItemId();

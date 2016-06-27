@@ -42,7 +42,6 @@ public class UserProfileController {
 
     private boolean delegate;
     private String objectId;
-    private String guid;
     private UserProfileType userProfile;
 
     @PostConstruct
@@ -52,12 +51,10 @@ public class UserProfileController {
 
         Map<String, String> requestParameterMap = externalContext.getRequestParameterMap();
 
-        if (requestParameterMap.containsKey("guid")) {
-            this.guid = requestParameterMap.get("guid");
+        if (requestParameterMap.containsKey("objectId")) {
             this.objectId = requestParameterMap.get("objectId");
             this.delegate = true;
         } else {
-            this.guid = null;
             this.objectId = null;
             this.delegate = false;
         }
@@ -178,30 +175,25 @@ public class UserProfileController {
 
         Map<String, String> requestParameterMap = externalContext.getRequestParameterMap();
 
-        if (requestParameterMap.containsKey("guid")) {
-            String guid = requestParameterMap.get("guid");
+        if (requestParameterMap.containsKey("objectId")) {
             String objectId = requestParameterMap.get("objectId");
 
             Boolean equals = new EqualsBuilder()
                     .append(objectId, this.objectId)
-                    .append(guid, this.guid)
                     .build();
 
             this.delegate = true;
 
             if (!equals) {
-                this.guid = guid;
                 this.objectId = objectId;
             }
 
         } else {
-            if (this.guid != null) {
-                this.guid = null;
+            if (this.objectId != null) {
                 this.objectId = null;
                 this.delegate = false;
                 this.userProfileByAgentResponse = null;
             } else {
-                this.guid = null;
                 this.objectId = null;
                 this.delegate = false;
                 this.userProfileByAgentResponse = null;
@@ -222,16 +214,8 @@ public class UserProfileController {
         // Set by checkDelegate()
     }
 
-    public String getGuid() {
-        return guid;
-    }
-
-    public void setGuid(String guid) {
-        // Set by checkDelegate()
-    }
-
     public String getDelegateUrlParameters() {
-        return guid != null ? "?guid=" + guid + "&objectId=" + objectId : "";
+        return objectId != null ? "?objectId=" + objectId : "";
     }
 
 }

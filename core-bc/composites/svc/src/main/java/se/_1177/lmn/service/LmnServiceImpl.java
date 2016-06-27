@@ -58,18 +58,18 @@ public class LmnServiceImpl implements LmnService {
 
     @Override
     public MedicalSupplyPrescriptionsHolder getMedicalSupplyPrescriptionsHolder(String subjectOfCareId) {
-        GetMedicalSupplyPrescriptionsResponseType medicalSupplyPrescriptions = getMedicalSupplyPrescriptions(subjectOfCareId);
+        GetMedicalSupplyPrescriptionsResponseType response = getMedicalSupplyPrescriptions(subjectOfCareId);
 
         MedicalSupplyPrescriptionsHolder holder = new MedicalSupplyPrescriptionsHolder();
 
-        holder.supplyPrescriptionsResponse = medicalSupplyPrescriptions;
+        holder.supplyPrescriptionsResponse = response;
 
         // Separate those which have zero remaining items to order and those which have valid date older than a year
 
         List<PrescriptionItemType> orderableItems = new ArrayList<>();
         List<PrescriptionItemType> noLongerOrderable = new ArrayList<>();
 
-        for (PrescriptionItemType item : medicalSupplyPrescriptions.getSubjectOfCareType().getPrescriptionItem()) {
+        for (PrescriptionItemType item : response.getSubjectOfCareType().getPrescriptionItem()) {
 
             if (item.getNoOfRemainingOrders() <= 0 || !item.getStatus().equals(StatusEnum.AKTIV)) {
                 noLongerOrderable.add(item);
