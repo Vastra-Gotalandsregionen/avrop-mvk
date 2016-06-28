@@ -31,7 +31,10 @@ public class MockRegisterMedicalSupplyOrderResponder
 
         RegisterMedicalSupplyOrderResponseType response = objectFactory.createRegisterMedicalSupplyOrderResponseType();
 
-//        response.setResultCode(ResultCodeEnum.ERROR);
+        /*response.setResultCode(ResultCodeEnum.ERROR);
+
+        response.setComment("Det gick bara inte...");*/
+
         response.setResultCode(ResultCodeEnum.OK);
 
         for (int i = 0; i <= random.nextInt(5); i++) {

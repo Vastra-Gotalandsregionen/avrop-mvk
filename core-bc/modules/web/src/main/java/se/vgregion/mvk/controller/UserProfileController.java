@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import se._1177.lmn.service.MvkUserProfileService;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +34,9 @@ public class UserProfileController {
 
     @Autowired
     private MvkUserProfileService mvkUserProfileService;
+
+    @Autowired
+    private UtilController utilController;
 
     private GetUserProfileResponseType userProfileResponse;
     private GetUserProfileResponseType userProfileResponseLoggedInUser;
@@ -64,15 +66,20 @@ public class UserProfileController {
                 String ssn = getSubjectCareIdLoggedInUser();
 
                 userProfileResponseLoggedInUser = mvkUserProfileService.getUserProfile(ssn);
+
+                ResultCodeEnum resultCode = userProfileResponseLoggedInUser.getResultCode();
+                if (resultCode.equals(ResultCodeEnum.ERROR) || resultCode.equals(ResultCodeEnum.INFO)) {
+                    String text = userProfileResponseLoggedInUser.getResultText();
+                    utilController.addErrorMessageWithCustomerServiceInfo(text);
+                }
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             String text = "Dina inställningar och din adress kunde inte hämtas.";
-            addErrorMessage(text);
+            utilController.addErrorMessageWithCustomerServiceInfo(text);
         }
 
         updateUserProfile();
-
     }
 
     public void updateUserProfile() {
@@ -90,7 +97,7 @@ public class UserProfileController {
                 ResultCodeEnum resultCode = userProfileByAgentResponse.getResultCode();
                 if (resultCode.equals(ResultCodeEnum.ERROR) || resultCode.equals(ResultCodeEnum.INFO)) {
                     String text = userProfileByAgentResponse.getResultText();
-                    addErrorMessage(text);
+                    utilController.addErrorMessageWithCustomerServiceInfo(text);
                 }
 
             } else {
@@ -107,7 +114,7 @@ public class UserProfileController {
                     ResultCodeEnum resultCode = userProfileResponse.getResultCode();
                     if (resultCode.equals(ResultCodeEnum.ERROR) || resultCode.equals(ResultCodeEnum.INFO)) {
                         String text = userProfileResponse.getResultText();
-                        addErrorMessage(text);
+                        utilController.addErrorMessageWithCustomerServiceInfo(text);
                     }
 
                 }
@@ -120,22 +127,8 @@ public class UserProfileController {
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             String text = "Dina inställningar och din adress kunde inte hämtas.";
-            addErrorMessage(text);
+            utilController.addErrorMessageWithCustomerServiceInfo(text);
         }
-
-    }
-
-    private void addErrorMessage(String text) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-
-        // Don't add duplicate error messages
-        for (FacesMessage facesMessage : facesContext.getMessageList()) {
-            if (facesMessage.getSummary().equals(text)) {
-                return;
-            }
-        }
-
-        facesContext.addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, text, text));
     }
 
     /**

@@ -49,8 +49,11 @@ public class MockGetUserProfileByAgentResponder implements GetUserProfileByAgent
 
         GetUserProfileByAgentResponseType response = new GetUserProfileByAgentResponseType();
 
-        response.setAgentName("Testförälder Testsson");
         response.setCurrentUserProfile(userProfile);
+        response.setAgentName("Testförälder Testsson");
+
+//        response.setResultCode(ResultCodeEnum.ERROR);
+//        response.setResultText("Ett mycket allvarligt fel");
         response.setResultCode(ResultCodeEnum.OK);
 
         return response;

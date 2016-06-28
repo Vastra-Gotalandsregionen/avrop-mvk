@@ -4,6 +4,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:o="http://omnifaces.org/ui"
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 
 <ui:composition template="WEB-INF/xhtml/template/wideContent.xhtml">
@@ -13,10 +14,12 @@
     <ui:define name="boxContent">
 
         <h:panelGroup id="messagesWrapper">
-            <h:messages showSummary="true" styleClass="alert alert-danger"/>
+            <o:messages showSummary="true" styleClass="alert alert-danger" escape="false"/>
 
-            <h:panelGroup layout="block" rendered="#{collectDeliveryController.collectDeliveryPointsFetchFailed}" styleClass="alert alert-danger">
+            <h:panelGroup layout="block" rendered="#{collectDeliveryController.showStandardErrorMessage}" styleClass="alert alert-danger">
                 Utlämningsställen för postnumret kunde inte hämtas. Försök med ett annat postnummer eller kontakta kundtjänst.
+                <br/>
+                <h:outputText escape="false" value="#{utilController.customerServiceInfo}"/>
             </h:panelGroup>
         </h:panelGroup>
 

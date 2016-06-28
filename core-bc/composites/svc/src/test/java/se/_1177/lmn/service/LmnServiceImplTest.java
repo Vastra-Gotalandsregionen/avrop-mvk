@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import riv.crm.selfservice.medicalsupply._0.ArticleType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._0.ResultCodeEnum;
 import riv.crm.selfservice.medicalsupply._0.StatusEnum;
 import riv.crm.selfservice.medicalsupply._0.SubjectOfCareType;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._0.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface;
@@ -124,6 +125,7 @@ public class LmnServiceImplTest {
         }
 
         response.setSubjectOfCareType(subjectOfCare);
+        response.setResultCode(ResultCodeEnum.OK);
 
         when(medicalSupplyPrescriptions.getMedicalSupplyPrescriptions(
                 anyString(),

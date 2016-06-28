@@ -25,7 +25,7 @@
 
         <div style="display: none">#{orderController} This reference is needed in order to make possible message be added before the h:messages tag is rendered.</div>
 
-        <h:messages showSummary="true" styleClass="alert alert-danger"/>
+        <o:messages showSummary="true" styleClass="alert alert-danger" escape="false"/>
 
         <div class="centerareatext">
             <h3>Mina läkemedelsnära produkter</h3>
@@ -47,7 +47,7 @@
             <o:form includeRequestParams="true">
 
                 <h:panelGroup layout="block" rendered="#{empty orderController.medicalSupplyPrescriptions}" styleClass="alert alert-warning">
-                    Inga aktuella produkter hittades. Om du förväntat dig beställningsbara produkter, kontakta support XXX.
+                    Inga aktuella produkter hittades. Om du förväntat dig beställningsbara produkter, kontakta kundtjänst på #{utilController.customerServicePhoneNumber}.
                     <div><h:commandButton styleClass="button" action="#{orderController.reinit()}" value="Uppdatera"/> </div>
                 </h:panelGroup>
 
@@ -81,7 +81,7 @@
                                             Ej beställningsbar
                                             <span class="toggle-trigger info-icon expand" data-toggle-for="notOrderable#{status.index}"/>
                                             <div id="notOrderable#{status.index}" class="expanded-content" style="display: none;">
-                                                Kontakta kundtjänst på telefon XXXXX vid eventuella frågor.
+                                                Kontakta kundtjänst på telefon #{utilController.customerServicePhoneNumber} vid eventuella frågor.
                                             </div>
                                         </h:panelGroup>
                                         <h:panelGroup layout="block" class="alert-text" rendered="#{item.article.isOrderable and utilController.isAfterToday(item.nextEarliestOrderDate)}">

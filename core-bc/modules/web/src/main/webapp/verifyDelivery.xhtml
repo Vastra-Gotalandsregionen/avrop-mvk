@@ -4,6 +4,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:o="http://omnifaces.org/ui"
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:mvk="http://java.sun.com/jsf/composite/component/mvk"
 >
@@ -14,7 +15,7 @@
 
     <ui:define name="boxContent">
 
-        <h:messages showSummary="true" styleClass="alert alert-danger"/>
+        <o:messages showSummary="true" styleClass="alert alert-danger" escape="false"/>
 
         <div>
             <h3>Kontrollera din beställning</h3>

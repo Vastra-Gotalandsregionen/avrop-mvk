@@ -26,6 +26,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
+import javax.xml.ws.WebServiceException;
+import javax.xml.ws.soap.SOAPFaultException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -55,6 +57,9 @@ public class CollectDeliveryController {
 
     @Autowired
     private DeliveryController deliveryController;
+
+    @Autowired
+    private UtilController utilController;
 
     @Autowired
     private Cart cart;
@@ -472,10 +477,18 @@ public class CollectDeliveryController {
             try {
                 medicalSupplyDeliveryPoints = lmnService.getMedicalSupplyDeliveryPoints(provider, zip);
                 deliveryPointsPerProvider.put(provider, medicalSupplyDeliveryPoints.getDeliveryPoint());
+            } catch (SOAPFaultException e) {
+                LOGGER.error(e.getMessage(), e);
+
+                // TODO: 2016-06-28 Add error message when the webservice rarely replies with SOAP exception.
+//                utilController.addErrorMessageWithCustomerServiceInfo("Ett fel mot underliggande system inträffade. Försök senare eller kontakta kundtjänst.");
+            } catch (WebServiceException e) {
+                LOGGER.error(e.getMessage(), e);
+
+                utilController.addErrorMessageWithCustomerServiceInfo("Ett fel mot underliggande system inträffade. Försök senare eller kontakta kundtjänst.");
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);
                 // We don't need to add a message here since we show a message by a condition in the view.
-                break;
             }
         }
     }
@@ -650,7 +663,12 @@ public class CollectDeliveryController {
         return successfulFetch[0];
     }
 
-    public Boolean getCollectDeliveryPointsFetchFailed() {
+    public Boolean getShowStandardErrorMessage() {
+
+        // We only show standard message when we don't show any other messages.
+        if (FacesContext.getCurrentInstance().getMessageList().size() > 0) {
+            return false;
+        }
 
         for (Map.Entry<ServicePointProviderEnum, List<SelectItemGroup>> entry : getDeliverySelectItems().entrySet()) {
             if (entry.getValue().get(0).getSelectItems().length < 1) {

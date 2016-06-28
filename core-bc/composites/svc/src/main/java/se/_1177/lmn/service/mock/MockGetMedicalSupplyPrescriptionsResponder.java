@@ -52,6 +52,13 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         GetMedicalSupplyPrescriptionsResponseType response = objectFactory
                 .createGetMedicalSupplyPrescriptionsResponseType();
 
+        /*int j = 1;
+        if (j == 1) {
+            response.setResultCode(ResultCodeEnum.ERROR);
+            response.setComment("Felmeddelandet");
+            return response;
+        }*/
+
         response.setResultCode(ResultCodeEnum.OK);
 
         SubjectOfCareType subjectOfCare = new SubjectOfCareType();

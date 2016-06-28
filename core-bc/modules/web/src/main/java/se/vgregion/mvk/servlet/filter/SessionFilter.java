@@ -29,8 +29,10 @@ public class SessionFilter implements Filter {
 
     private static final String USER_ID_HEADER = "AJP_Subject_SerialNumber";
     private static final String SHIB_SESSION_ID_HEADER = "AJP_Shib-Session-ID";
-    private static final String OBJECTID_PARAMETER = "objectId";;
+    private static final String OBJECTID_PARAMETER = "objectId";
+
     private static final String START_PAGE_SUFFIX = "/order.xhtml";
+    private static final String SMS_NOT_AUTHORIZED_PAGE_SUFFIX = "/smsNotAuthorized.xhtml";
 
     public void init(FilterConfig filterConfig) throws ServletException {
     }
@@ -55,19 +57,14 @@ public class SessionFilter implements Filter {
             return;
         }
 
-        try {
-            String subjectSerialNumber = request.getHeader(USER_ID_HEADER);
+        String subjectSerialNumber = request.getHeader(USER_ID_HEADER);
 
-            handleSessionInvalidation(request, subjectSerialNumber);
+        handleSessionInvalidation(request, subjectSerialNumber);
 
-            boolean redirect = redirectIfInAppropriateRequest(request, response);
+        boolean redirect = redirectIfInAppropriateRequest(request, response);
 
-            if (redirect) {
-                return;
-            }
-
-        } catch (Exception e) {
-            throw e;
+        if (redirect) {
+            return;
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
@@ -76,7 +73,8 @@ public class SessionFilter implements Filter {
     private boolean redirectIfInAppropriateRequest(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
-        if (request.getServletPath().startsWith(START_PAGE_SUFFIX)) {
+        String servletPath = request.getServletPath();
+        if (servletPath.startsWith(START_PAGE_SUFFIX) || servletPath.startsWith(SMS_NOT_AUTHORIZED_PAGE_SUFFIX)) {
             return false;
         }
 

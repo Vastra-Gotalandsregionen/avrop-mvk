@@ -50,6 +50,9 @@ public class OrderController {
     private LmnService lmnService;
 
     @Autowired
+    private UtilController utilController;
+
+    @Autowired
     private Cart cart;
 
     private MedicalSupplyPrescriptionsHolder medicalSupplyPrescriptions;
@@ -99,7 +102,7 @@ public class OrderController {
 
             String msg = "Dina produkter kunde inte hämtas. Försök senare eller kontakta kundtjänst.";
 
-            FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
+            utilController.addErrorMessageWithCustomerServiceInfo(msg);
         }
     }
 

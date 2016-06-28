@@ -62,6 +62,9 @@ public class VerifyDeliveryController {
     private UserProfileController userProfileController;
 
     @Autowired
+    private UtilController utilController;
+
+    @Autowired
     private MvkInboxService mvkInboxService;
 
     @Autowired
@@ -251,8 +254,10 @@ public class VerifyDeliveryController {
             } else if (response.getResultCode().equals(ResultCodeEnum.ERROR)
                     || response.getResultCode().equals(ResultCodeEnum.INFO)) {
                 String msg = response.getComment();
-                FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,
-                        msg));
+
+                utilController.addErrorMessageWithCustomerServiceInfo("Ett tekniskt fel inträffade när din beställning skulle bekräftas. Beställningen kommer inte att kunna genomföras eller sparas. Försök senare eller kontakta kundtjänst.");
+                utilController.addErrorMessageWithCustomerServiceInfo(msg);
+
                 orderSuccess = false;
             }
         } catch (Exception e) {

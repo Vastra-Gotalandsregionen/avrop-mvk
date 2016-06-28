@@ -7,6 +7,7 @@ import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
 import riv.crm.selfservice.medicalsupply._0.OrderRowType;
 import riv.crm.selfservice.medicalsupply._0.OrderType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._0.ResultCodeEnum;
 import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply._0.StatusEnum;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._0.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface;
@@ -23,9 +24,6 @@ import se._1177.lmn.service.util.Util;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,27 +67,29 @@ public class LmnServiceImpl implements LmnService {
         List<PrescriptionItemType> orderableItems = new ArrayList<>();
         List<PrescriptionItemType> noLongerOrderable = new ArrayList<>();
 
-        for (PrescriptionItemType item : response.getSubjectOfCareType().getPrescriptionItem()) {
+        if (response.getResultCode().equals(ResultCodeEnum.OK)) {
+            for (PrescriptionItemType item : response.getSubjectOfCareType().getPrescriptionItem()) {
 
-            if (item.getNoOfRemainingOrders() <= 0 || !item.getStatus().equals(StatusEnum.AKTIV)) {
-                noLongerOrderable.add(item);
-            } else {
-                // Check date
-                XMLGregorianCalendar lastValidDate = item.getLastValidDate();
-                boolean olderThanAYear = isOlderThanAYear(lastValidDate);
-                if (olderThanAYear) {
+                if (item.getNoOfRemainingOrders() <= 0 || !item.getStatus().equals(StatusEnum.AKTIV)) {
                     noLongerOrderable.add(item);
                 } else {
-                    // Neither old nor "out of stock" or status other than AKTIV.
-                    orderableItems.add(item);
+                    // Check date
+                    XMLGregorianCalendar lastValidDate = item.getLastValidDate();
+                    boolean olderThanAYear = isOlderThanAYear(lastValidDate);
+                    if (olderThanAYear) {
+                        noLongerOrderable.add(item);
+                    } else {
+                        // Neither old nor "out of stock" or status other than AKTIV.
+                        orderableItems.add(item);
+                    }
                 }
             }
+
+            sortByOrderableToday(orderableItems);
+
+            holder.orderable = orderableItems;
+            holder.noLongerOrderable = noLongerOrderable;
         }
-
-        sortByOrderableToday(orderableItems);
-
-        holder.orderable = orderableItems;
-        holder.noLongerOrderable = noLongerOrderable;
 
         return holder;
     }

@@ -11,12 +11,13 @@ import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply._0.StatusEnum;
 import se._1177.lmn.service.util.Util;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -44,6 +45,12 @@ public class UtilController {
 
     @Value("${mvkOtherServicesLink}")
     private String mvkOtherServicesLink;
+
+    @Value("${customerServiceInfo}")
+    private String customerServiceInfo;
+
+    @Value("${customerServicePhoneNumber}")
+    private String customerServicePhoneNumber;
 
     public Date toDate(XMLGregorianCalendar calendar) {
         if (calendar == null) {
@@ -157,6 +164,10 @@ public class UtilController {
         }
     }
 
+    public String getCustomerServiceInfo() {
+        return customerServiceInfo;
+    }
+
     public String getBackToOwnProfileLink() {
         return backToOwnProfileLink;
     }
@@ -180,4 +191,45 @@ public class UtilController {
     public String getMvkOtherServicesLink() {
         return mvkOtherServicesLink;
     }
+
+    public String getCustomerServicePhoneNumber() {
+        return customerServicePhoneNumber;
+    }
+
+    public void addErrorMessageWithCustomerServiceInfo(String text) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        if (facesContext != null) {
+
+            Iterator<FacesMessage> messages = facesContext.getMessages();
+
+            while (messages.hasNext()) {
+                FacesMessage next = messages.next();
+
+                if (!messages.hasNext()) {
+                    // The last message
+                    if (next.getSummary().equals(customerServiceInfo)) {
+                        messages.remove();
+                    }
+                }
+            }
+
+            boolean add = true;
+            // Don't add duplicate error messages
+            List<FacesMessage> messageList = facesContext.getMessageList();
+            for (FacesMessage facesMessage : messageList) {
+                if (facesMessage.getSummary().equals(text)) {
+                    add = false;
+                }
+            }
+
+            if (add) {
+                facesContext.addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, text, text));
+            }
+
+            facesContext.addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, customerServiceInfo,
+                    customerServiceInfo));
+        }
+    }
+
 }
