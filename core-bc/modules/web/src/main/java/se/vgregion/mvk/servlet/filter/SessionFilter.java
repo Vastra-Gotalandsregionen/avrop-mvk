@@ -33,6 +33,7 @@ public class SessionFilter implements Filter {
 
     private static final String START_PAGE_SUFFIX = "/order.xhtml";
     private static final String SMS_NOT_AUTHORIZED_PAGE_SUFFIX = "/smsNotAuthorized.xhtml";
+    private static final String NOT_AUTHENTICATED_PAGE_SUFFIX = "/notAuthenticated.xhtml";
 
     public void init(FilterConfig filterConfig) throws ServletException {
     }
@@ -74,7 +75,7 @@ public class SessionFilter implements Filter {
             throws IOException {
 
         String servletPath = request.getServletPath();
-        if (servletPath.startsWith(START_PAGE_SUFFIX) || servletPath.startsWith(SMS_NOT_AUTHORIZED_PAGE_SUFFIX)) {
+        if (servletPath.startsWith(START_PAGE_SUFFIX) || anyPublicPage(servletPath)) {
             return false;
         }
 
@@ -99,6 +100,11 @@ public class SessionFilter implements Filter {
             redirectToOrderPage(request, response);
             return true;
         }
+    }
+
+    private boolean anyPublicPage(String servletPath) {
+        return servletPath.startsWith(SMS_NOT_AUTHORIZED_PAGE_SUFFIX)
+                || servletPath.startsWith(NOT_AUTHENTICATED_PAGE_SUFFIX);
     }
 
     private void redirectToOrderPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
