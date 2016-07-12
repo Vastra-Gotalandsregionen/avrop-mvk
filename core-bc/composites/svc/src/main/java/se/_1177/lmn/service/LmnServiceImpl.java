@@ -45,13 +45,17 @@ public class LmnServiceImpl implements LmnService {
 
     private Map<String, DeliveryPointType> deliveryPointIdToDeliveryPoint = new HashMap<>();
 
+    private String logicalAddress;
+
     public LmnServiceImpl(
             GetMedicalSupplyDeliveryPointsResponderInterface medicalSupplyDeliveryPoint,
             GetMedicalSupplyPrescriptionsResponderInterface medicalSupplyPrescriptions,
-            RegisterMedicalSupplyOrderResponderInterface registerMedicalSupplyOrder) {
+            RegisterMedicalSupplyOrderResponderInterface registerMedicalSupplyOrder,
+            String logicalAddress) {
         this.medicalSupplyDeliveryPoint = medicalSupplyDeliveryPoint;
         this.medicalSupplyPrescriptions = medicalSupplyPrescriptions;
         this.registerMedicalSupplyOrder = registerMedicalSupplyOrder;
+        this.logicalAddress = logicalAddress;
     }
 
     @Override
@@ -124,7 +128,7 @@ public class LmnServiceImpl implements LmnService {
         parameters.setServicePointProvider(provider);
 
         GetMedicalSupplyDeliveryPointsResponseType medicalSupplyDeliveryPoints = medicalSupplyDeliveryPoint
-                .getMedicalSupplyDeliveryPoints("", parameters);
+                .getMedicalSupplyDeliveryPoints(logicalAddress, parameters);
 
         for (DeliveryPointType deliveryPoint : medicalSupplyDeliveryPoints.getDeliveryPoint()) {
             deliveryPointIdToDeliveryPoint.put(deliveryPoint.getDeliveryPointId(), deliveryPoint);
@@ -139,7 +143,7 @@ public class LmnServiceImpl implements LmnService {
         parameters.setSubjectOfCareId(subjectOfCareId);
 
         GetMedicalSupplyPrescriptionsResponseType medicalSupplyPrescriptions = this.medicalSupplyPrescriptions
-                .getMedicalSupplyPrescriptions("", parameters);
+                .getMedicalSupplyPrescriptions(logicalAddress, parameters);
 
         return medicalSupplyPrescriptions;
     }
@@ -163,7 +167,7 @@ public class LmnServiceImpl implements LmnService {
 
         parameters.setOrder(order);
 
-        return registerMedicalSupplyOrder.registerMedicalSupplyOrder("", parameters);
+        return registerMedicalSupplyOrder.registerMedicalSupplyOrder(logicalAddress, parameters);
     }
 
     @Override

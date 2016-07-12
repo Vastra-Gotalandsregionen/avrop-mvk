@@ -649,6 +649,82 @@ ul.delivery-options li input[disabled="disabled"]+label {
     opacity: .7;
 }
 
+.row-wrapper {
+    padding-top: 1px;
+}
+/* Radio buttons */
+
+input[type=radio] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: #ccc;
+    height: 25px;
+    width: 25px;
+    zoom: 1;
+    border-radius: 50%;
+    border: 5px solid #ccc;
+    box-shadow: 0 0 0 1px #128592;
+}
+
+input[type=radio]:checked {
+    background: #006a7b;
+}
+
+input[type=radio]:disabled {
+    opacity: .5;
+}
+
+input[type=radio] {
+    outline: none;
+}
+/*.avrop-table label {
+    position: relative;
+    float: left;
+    clear: left;
+    display: block;
+    padding-left: 28px;
+    margin-bottom: 12px;
+    line-height: 22px;
+    !*font-size: 18px;*!
+    !*color: #666;*!
+    cursor: pointer;
+}
+.avrop-table label:before {
+    background: #fff;
+    content: "";
+    position: absolute;
+    display: inline-block;
+    top: 0;
+    left: 0;
+    width: 23px;
+    height: 23px;
+    border: 1px solid #bbb;
+
+    border-radius: 100%;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+
+    box-shadow: inset 0 0 3px 0 #ccc;
+    -moz-box-shadow: inset 0 0 3px 0 #ccc;
+    -webkit-box-shadow: inset 0 0 3px 0 #ccc;
+}
+.avrop-table input[type="radio"] {
+    display: none;
+}
+.avrop-table input[type="radio"]:checked + label:before {
+    content: "\2022";
+    text-align: center;
+    line-height: 18px;
+    !*line-height: 15px;*!
+    font-family: Tahoma;
+    font-size: 38px;
+    !*font-size: 44px;*!
+    color: #008391;
+    text-indent: 2px;
+    text-shadow: 0 0 4px #bbb;
+}*/
+
 /* Override jQuery to fix issue in IE where mask didn't get any size. */
 body .ui-front.ui-widget-overlay {
     width: 50000px;

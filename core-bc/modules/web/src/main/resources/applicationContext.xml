@@ -35,6 +35,7 @@
         <constructor-arg index="0" ref="getMedicalSupplyDeliveryPoints"/>
         <constructor-arg index="1" ref="getMedicalSupplyPrescriptions"/>
         <constructor-arg index="2" ref="registerMedicalSupplyOrder"/>
+        <constructor-arg index="3" value="${rtjp.logicalAddress}"/>
     </bean>
 
     <bean class="se._1177.lmn.service.MvkUserProfileService">
@@ -89,6 +90,36 @@
     <http:conduit name="https://acc.tjp.minavardkontakter.se.*">
         <http:client ConnectionTimeout="10000" ReceiveTimeout="10000"  />
 
+        <http:tlsClientParameters disableCNCheck="true">
+            <sec:keyManagers keyPassword="${ssl_keystore_password}">
+                <sec:keyStore
+                        type="pkcs12"
+                        password="${ssl_keystore_password}"
+                        file="${ssl_keystore}"/>
+            </sec:keyManagers>
+            <sec:trustManagers>
+                <sec:keyStore file="${ssl_truststore}" password="${ssl_truststore_password}" type="jks" />
+            </sec:trustManagers>
+        </http:tlsClientParameters>
+    </http:conduit>
+
+    <http:conduit name="https://rtjptest.vgregion.sjunet.org.*">
+        <http:client ConnectionTimeout="10000" ReceiveTimeout="10000"  />
+
+        <http:tlsClientParameters disableCNCheck="true">
+            <sec:keyManagers keyPassword="${ssl_keystore_password}">
+                <sec:keyStore
+                        type="pkcs12"
+                        password="${ssl_keystore_password}"
+                        file="${ssl_keystore}"/>
+            </sec:keyManagers>
+            <sec:trustManagers>
+                <sec:keyStore file="${ssl_truststore}" password="${ssl_truststore_password}" type="jks" />
+            </sec:trustManagers>
+        </http:tlsClientParameters>
+    </http:conduit>
+
+    <http:conduit name="https://rtjptest.vgregion.se.*">
         <http:tlsClientParameters disableCNCheck="true">
             <sec:keyManagers keyPassword="${ssl_keystore_password}">
                 <sec:keyStore

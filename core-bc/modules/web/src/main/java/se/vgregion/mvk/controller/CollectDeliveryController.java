@@ -480,8 +480,7 @@ public class CollectDeliveryController {
             } catch (SOAPFaultException e) {
                 LOGGER.error(e.getMessage(), e);
 
-                // TODO: 2016-06-28 Add error message when the webservice rarely replies with SOAP exception.
-//                utilController.addErrorMessageWithCustomerServiceInfo("Ett fel mot underliggande system inträffade. Försök senare eller kontakta kundtjänst.");
+                utilController.addErrorMessageWithCustomerServiceInfo("Ett fel mot underliggande system inträffade. Försök senare eller kontakta kundtjänst.");
             } catch (WebServiceException e) {
                 LOGGER.error(e.getMessage(), e);
 
