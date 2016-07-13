@@ -5,26 +5,26 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>se.vgregion.mvk</groupId>
+        <groupId>se.1177.lmn</groupId>
         <artifactId>core-bc</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../..</relativePath>
     </parent>
 
-    <groupId>se.vgregion.mvk</groupId>
+    <groupId>se.1177.lmn</groupId>
     <artifactId>svc</artifactId>
     <version>1.0-SNAPSHOT</version>
 
 
     <dependencies>
         <dependency>
-            <groupId>se.vgregion.mvk</groupId>
+            <groupId>se.1177.lmn</groupId>
             <artifactId>schema</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>se.vgregion.mvk</groupId>
+            <groupId>se.1177.lmn</groupId>
             <artifactId>types</artifactId>
             <version>${project.version}</version>
         </dependency>

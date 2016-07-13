@@ -19,8 +19,6 @@
           http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd"
 >
 
-    <context:component-scan base-package="se.vgregion.mvk.controller"/>
-
     <jaxws:client id="getMedicalSupplyDeliveryPoints"
                   serviceClass="riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._0.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface"
                   address="http://localhost:18081/GetMedicalSupplyDeliveryPoints/"/>
