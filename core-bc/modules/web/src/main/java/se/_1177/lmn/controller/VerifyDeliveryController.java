@@ -1,4 +1,4 @@
-package se.vgregion.mvk.controller;
+package se._1177.lmn.controller;
 
 import mvk.crm.casemanagement.inbox.addmessageresponder._2.AddMessageResponseType;
 import mvk.itintegration.userprofile._2.SubjectOfCareType;
@@ -22,17 +22,13 @@ import se._1177.lmn.service.LmnService;
 import se._1177.lmn.service.MvkInboxService;
 import se._1177.lmn.service.MvkInboxServiceException;
 import se._1177.lmn.service.util.Util;
-import se.vgregion.mvk.controller.model.Cart;
+import se._1177.lmn.controller.model.Cart;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum.E_POST;
-import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 
 /**
  * @author Patrik Björk

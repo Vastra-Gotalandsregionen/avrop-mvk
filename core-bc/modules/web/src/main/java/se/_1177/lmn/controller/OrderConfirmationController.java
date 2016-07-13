@@ -1,4 +1,4 @@
-package se.vgregion.mvk.controller;
+package se._1177.lmn.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

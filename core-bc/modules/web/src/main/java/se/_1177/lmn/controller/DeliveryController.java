@@ -1,4 +1,4 @@
-package se.vgregion.mvk.controller;
+package se._1177.lmn.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,7 @@ import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
-import se.vgregion.mvk.controller.model.Cart;
+import se._1177.lmn.controller.model.Cart;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;

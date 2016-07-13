@@ -1,4 +1,4 @@
-package se.vgregion.mvk.controller;
+package se._1177.lmn.controller;
 
 import mvk.itintegration.userprofile._2.UserProfileType;
 import mvk.itintegration.userprofile.getuserprofileresponder._2.GetUserProfileResponseType;
@@ -8,12 +8,11 @@ import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
-import se.vgregion.mvk.controller.model.Cart;
+import se._1177.lmn.controller.model.Cart;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

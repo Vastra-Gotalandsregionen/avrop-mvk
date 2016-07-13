@@ -1,10 +1,10 @@
-package se.vgregion.mvk.servlet.filter;
+package se._1177.lmn.servlet.filter;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
-import se.vgregion.mvk.controller.model.Cart;
+import se._1177.lmn.controller.model.Cart;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -62,7 +62,7 @@ public class SessionFilter implements Filter {
 
         handleSessionInvalidation(request, subjectSerialNumber);
 
-        boolean redirect = redirectIfInAppropriateRequest(request, response);
+        boolean redirect = redirectIfInappropriateRequest(request, response);
 
         if (redirect) {
             return;
@@ -71,7 +71,7 @@ public class SessionFilter implements Filter {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    private boolean redirectIfInAppropriateRequest(HttpServletRequest request, HttpServletResponse response)
+    private boolean redirectIfInappropriateRequest(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
         String servletPath = request.getServletPath();

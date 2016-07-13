@@ -1,6 +1,5 @@
-package se.vgregion.mvk.servlet.filter;
+package se._1177.lmn.servlet.filter;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +39,12 @@ public class AuthFilter implements Filter {
 
         String requestURI = request.getRequestURI();
         LOGGER.debug("RequestURI: " + requestURI);
+
+        String env = System.getProperty("env");
+        if (env != null && env.equalsIgnoreCase("dev")) {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
 
         String contextPath = request.getContextPath();
         String resourcePath = contextPath + "/javax.faces.resource/";

@@ -1,4 +1,4 @@
-package se.vgregion.mvk.controller;
+package se._1177.lmn.controller;
 
 import org.apache.commons.lang3.text.WordUtils;
 import org.slf4j.Logger;

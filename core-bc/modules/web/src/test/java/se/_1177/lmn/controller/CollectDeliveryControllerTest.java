@@ -1,4 +1,4 @@
-package se.vgregion.mvk.controller;
+package se._1177.lmn.controller;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -7,8 +7,9 @@ import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
-import se.vgregion.mvk.controller.model.Cart;
+import se._1177.lmn.controller.model.Cart;
 
+import javax.faces.context.FacesContext;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -176,6 +177,28 @@ public class CollectDeliveryControllerTest {
 
         // The delivery points aren't loaded so they should not be considered successful.
         assertFalse(successfulSelectItems);
+    }
+
+    @Test
+    public void validateNotificationInput() throws Exception {
+
+        ThreadLocal<FacesContext> instance = new ThreadLocal<FacesContext>() {
+            protected FacesContext initialValue() { return (null); }
+        };
+
+        FacesContext mock = mock(FacesContext.class);
+
+        instance.set(mock);
+
+        Field declaredField = FacesContext.class.getDeclaredField("instance");
+        declaredField.setAccessible(true);
+        declaredField.set(null, instance);
+
+        boolean success = collectDeliveryController.validateNotificationInput();
+
+        // Preconditions are that POSTNORD is provider and SMS is the chosen delivery notification method but any
+        // value isn't entered, so validation fails.
+        assertFalse(success);
     }
 
 }

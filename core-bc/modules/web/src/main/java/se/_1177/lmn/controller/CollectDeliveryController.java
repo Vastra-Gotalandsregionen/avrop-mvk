@@ -1,4 +1,4 @@
-package se.vgregion.mvk.controller;
+package se._1177.lmn.controller;
 
 import mvk.itintegration.userprofile._2.UserProfileType;
 import org.apache.commons.lang3.StringUtils;
@@ -15,10 +15,10 @@ import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsResponseType;
+import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.service.LmnService;
 import se._1177.lmn.service.concurrent.BackgroundExecutor;
 import se._1177.lmn.service.util.Util;
-import se.vgregion.mvk.controller.model.Cart;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;

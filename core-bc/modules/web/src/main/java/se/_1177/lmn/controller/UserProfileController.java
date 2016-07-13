@@ -1,4 +1,4 @@
-package se.vgregion.mvk.controller;
+package se._1177.lmn.controller;
 
 import mvk.itintegration.userprofile._2.ResultCodeEnum;
 import mvk.itintegration.userprofile._2.SubjectOfCareType;

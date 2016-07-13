@@ -1,4 +1,4 @@
-package se.vgregion.mvk.controller.model;
+package se._1177.lmn.controller.model;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;

@@ -29,7 +29,7 @@
           factory-method="getProperties"/>
 
     <context:component-scan base-package="se._1177.lmn.service.concurrent"/>
-    <context:component-scan base-package="se.vgregion.mvk.controller"/>
+    <context:component-scan base-package="se._1177.lmn.controller"/>
 
     <bean class="se._1177.lmn.service.LmnServiceImpl">
         <constructor-arg index="0" ref="getMedicalSupplyDeliveryPoints"/>
