@@ -99,7 +99,7 @@ public class LmnServiceImplTest {
         item6.setNoOfRemainingOrders(0);
         item6.setLastValidDate(Util.toXmlGregorianCalendar(new GregorianCalendar()));
 
-        // Not orderable - last valid date older than a year
+        // Not orderable - last valid date older than today
         PrescriptionItemType item7 = new PrescriptionItemType();
         item7.setNextEarliestOrderDate(null);
         item7.setStatus(StatusEnum.AKTIV);
@@ -107,7 +107,6 @@ public class LmnServiceImplTest {
         item7.setLastValidDate(Util.toXmlGregorianCalendar(new GregorianCalendar()));
 
         calendar = new GregorianCalendar();
-        calendar.add(Calendar.YEAR, -1);
         calendar.add(Calendar.DATE, -1);
 
         item7.setLastValidDate(Util.toXmlGregorianCalendar(calendar));

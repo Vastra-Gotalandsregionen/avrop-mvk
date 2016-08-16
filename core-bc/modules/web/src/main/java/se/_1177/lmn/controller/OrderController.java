@@ -10,6 +10,7 @@ import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ResultCodeEnum;
+import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._0.GetMedicalSupplyPrescriptionsResponseType;
 import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
@@ -82,6 +83,7 @@ public class OrderController {
                 return;
             }
 
+            Set<ServicePointProviderEnum> allRelevantProviders = new HashSet<>();
             for (PrescriptionItemType prescriptionItem : medicalSupplyPrescriptions.orderable) {
                 String prescriptionItemId = prescriptionItem.getPrescriptionItemId();
                 cart.addPrescriptionItemForInfo(prescriptionItemId, prescriptionItem);
@@ -89,12 +91,18 @@ public class OrderController {
                 if (!UtilController.isAfterToday(prescriptionItem.getNextEarliestOrderDate())
                         && prescriptionItem.getArticle().isIsOrderable()) {
                     chosenItemMap.put(prescriptionItemId, true);
+
+                    prescriptionItem.getDeliveryAlternative().forEach(alternative -> {
+                        if (!alternative.getServicePointProvider().equals(ServicePointProviderEnum.INGEN)) {
+                            allRelevantProviders.add(alternative.getServicePointProvider());
+                        }
+                    });
                 }
             }
 
             if (userProfileController.getUserProfile() != null) {
-                collectDeliveryController.loadDeliveryPointsForAllSuppliersInBackground(
-                        userProfileController.getUserProfile().getZip());
+                collectDeliveryController.loadDeliveryPointsForRelevantSuppliersInBackground(
+                        userProfileController.getUserProfile().getZip(), allRelevantProviders);
             }
 
         } catch (Exception e) {

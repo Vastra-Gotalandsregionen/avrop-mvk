@@ -79,8 +79,8 @@ public class LmnServiceImpl implements LmnService {
                 } else {
                     // Check date
                     XMLGregorianCalendar lastValidDate = item.getLastValidDate();
-                    boolean olderThanAYear = isOlderThanAYear(lastValidDate);
-                    if (olderThanAYear) {
+                    boolean beforeToday = Util.isBeforeToday(lastValidDate);
+                    if (beforeToday) {
                         noLongerOrderable.add(item);
                     } else {
                         // Neither old nor "out of stock" or status other than AKTIV.

@@ -31,6 +31,7 @@ import javax.xml.ws.soap.SOAPFaultException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -82,7 +83,14 @@ public class CollectDeliveryController {
         // Just reset deliveryPoints, making them load again when they are requested.
         deliveryPointsPerProvider = null;
 
-        loadDeliveryPointsForAllSuppliers(zip);
+        Set<ServicePointProviderEnum> allRelevantProvider = new HashSet<>();
+        for (PrescriptionItemType prescriptionItem : cart.getItemsInCart()) {
+            prescriptionItem.getDeliveryAlternative().forEach(alternative -> {
+                allRelevantProvider.add(alternative.getServicePointProvider());
+            });
+        }
+
+        loadDeliveryPointsForRelevantSuppliers(zip, allRelevantProvider);
 
     }
 
@@ -101,6 +109,10 @@ public class CollectDeliveryController {
             } else {
                 preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.BREV;
             }
+
+            smsNumber = userProfile.getMobilePhoneNumber();
+            email = userProfile.getEmail();
+
         } else {
             preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.BREV;
         }
@@ -453,21 +465,19 @@ public class CollectDeliveryController {
         this.possibleCollectCombinationsFittingAllWithNotificationMethods = possibleDeliveryNotificationMethods;
     }
 
-    public void loadDeliveryPointsForAllSuppliersInBackground(final String zip) {
+    public void loadDeliveryPointsForRelevantSuppliersInBackground(final String zip, final Set<ServicePointProviderEnum> allRelevantProvider) {
         backgroundExecutor.submit(() -> {
-            loadDeliveryPointsForAllSuppliers(zip);
+            loadDeliveryPointsForRelevantSuppliers(zip, allRelevantProvider);
         });
     }
 
-    private void loadDeliveryPointsForAllSuppliers(String zip) {
+    private void loadDeliveryPointsForRelevantSuppliers(String zip, Set<ServicePointProviderEnum> providers) {
 
         if (deliveryPointsPerProvider == null) {
             deliveryPointsPerProvider = new HashMap<>();
         }
 
-        ServicePointProviderEnum[] allProviders = ServicePointProviderEnum.values();
-
-        for (ServicePointProviderEnum provider : allProviders) {
+        for (ServicePointProviderEnum provider : providers) {
 
             if (provider.equals(ServicePointProviderEnum.INGEN)) {
                 continue;

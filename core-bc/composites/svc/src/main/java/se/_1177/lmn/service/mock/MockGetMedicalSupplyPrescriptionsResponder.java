@@ -88,7 +88,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
 
         orderItem.setArticle(article);
 
-        orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random)));
+        orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
         DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
         deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
 //            deliveryChoice.setDeliveryPoint(); kanske todo utveckla mer på deliveryChoice...
@@ -118,13 +118,13 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.getDeliveryAlternative().add(deliveryAlternative2);
 
         if (!nextPossibleOrderDateInFuture) {
-            prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random));
+            prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random, -365));
         } else {
             Calendar c = Calendar.getInstance();
 
             c.add(Calendar.MONTH, 1);
 
-            XMLGregorianCalendar randomCalendar = getRandomCalendar(random);
+            XMLGregorianCalendar randomCalendar = getRandomCalendar(random, 0);
             randomCalendar.setYear(c.get(Calendar.YEAR) + 1);
             randomCalendar.setDay(random.nextInt(20) + 1); // To avoid invalid dates.
 
@@ -139,7 +139,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriber.setPrescriberId(random.nextInt(1000) + "");
         prescriber.setPrescriberTitle("Läkare");
         prescriptionItem.setPrescriber(prescriber);
-        prescriptionItem.setLastValidDate(getRandomCalendar(random));
+        prescriptionItem.setLastValidDate(getRandomCalendar(random, 665L));
         prescriptionItem.setNoOfArticlesPerOrder(random.nextInt(5) * 1000 + 1000);
         prescriptionItem.setNoOfPackagesPerOrder(random.nextInt(5) * 50 + 50);
         prescriptionItem.setStatus(StatusEnum.values()[random.nextInt(StatusEnum.values().length)]);
@@ -197,7 +197,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         return deliveryAlternative;
     }
 
-    private XMLGregorianCalendar getRandomCalendar(Random random) {
+    private XMLGregorianCalendar getRandomCalendar(Random random, long offset) {
         XMLGregorianCalendar xmlGregorianCalendar = null;
         DatatypeFactory datatypeFactory;
         try {
@@ -210,7 +210,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
 
         Period period = Period.ofDays(random.nextInt(730));
 
-        long timeToSubtract = -period.getDays() * 24L * 60L * 60L * 1000L;
+        long timeToSubtract = (offset - period.getDays()) * 24L * 60L * 60L * 1000L;
 
         Duration duration = datatypeFactory.newDuration(timeToSubtract);
 

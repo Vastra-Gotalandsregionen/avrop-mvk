@@ -2,7 +2,10 @@ package se._1177.lmn.service.util;
 
 import org.junit.Test;
 
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -39,4 +42,16 @@ public class UtilTest {
         }
     }
 
+    @Test
+    public void isBeforeToday() {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.add(Calendar.DATE, -1);
+        XMLGregorianCalendar yesterday = Util.toXmlGregorianCalendar((GregorianCalendar) calendar);
+        assertTrue(Util.isBeforeToday(yesterday));
+
+        calendar.add(Calendar.DATE, 1);
+        XMLGregorianCalendar today = Util.toXmlGregorianCalendar((GregorianCalendar) calendar);
+        assertFalse(Util.isBeforeToday(today));
+    }
 }

@@ -15,6 +15,7 @@ import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.service.util.Util;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import java.util.ArrayList;
@@ -57,9 +58,35 @@ public class HomeDeliveryController {
     private String zip;
     private String city;
 
+    private DeliveryNotificationMethodEnum preferredDeliveryNotificationMethod;
+
     private String smsNumber;
     private String email;
     private String phoneNumber;
+
+    @PostConstruct
+    public void init() {
+        // Default zip is from user profile. It may be overridden if user chooses so.
+        UserProfileType userProfile = userProfileController.getUserProfile();
+
+        if (userProfile != null) {
+            zip = userProfile.getZip();
+
+            if (userProfile.isHasSmsNotification() != null && userProfile.isHasSmsNotification()) {
+                preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.SMS;
+            } else if (userProfile.isHasMailNotification() != null && userProfile.isHasMailNotification()) {
+                preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.E_POST;
+            } else {
+                preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.BREV;
+            }
+
+            smsNumber = userProfile.getMobilePhoneNumber();
+            email = userProfile.getEmail();
+
+        } else {
+            preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.BREV;
+        }
+    }
 
 
     private void addMessage(String summary, String componentId, int count) {
@@ -171,13 +198,13 @@ public class HomeDeliveryController {
             entry.getKey().getDeliveryAlternative()
                     .stream()
                     .filter(alternative -> alternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS)
-                    && alternative.getDeliveryNotificationMethod() != null
-                    && alternative.getDeliveryNotificationMethod().size() > 0)
+                            && alternative.getDeliveryNotificationMethod() != null
+                            && alternative.getDeliveryNotificationMethod().size() > 0)
                     .forEach(alternative -> {
 
-                // We found the HEMLEVERANS delivery alternative (we assume there's only one).
-                remaining.retainAll(alternative.getDeliveryNotificationMethod());
-            });
+                        // We found the HEMLEVERANS delivery alternative (we assume there's only one).
+                        remaining.retainAll(alternative.getDeliveryNotificationMethod());
+                    });
         }
 
         return remaining;
@@ -216,8 +243,14 @@ public class HomeDeliveryController {
         deliveryNotificationMethodsPerProvider.entrySet().stream()
                 .filter(entry -> entry.getValue() != null && entry.getValue().size() > 0)
                 .forEach(entry -> {
-            chosenDeliveryNotificationMethod.put(entry.getKey(), entry.getValue().get(0));
-        });
+                    if (entry.getValue().contains(preferredDeliveryNotificationMethod.name())) {
+                        chosenDeliveryNotificationMethod.put(entry.getKey(), preferredDeliveryNotificationMethod.name());
+                    } else {
+                        // In case the preferred one isn't available.
+                        String defaultNotificationMethod = entry.getValue().size() > 0 ? entry.getValue().get(0) : null;
+                        chosenDeliveryNotificationMethod.put(entry.getKey(), defaultNotificationMethod);
+                    }
+                });
     }
 
     public boolean validateNotificationInput() {

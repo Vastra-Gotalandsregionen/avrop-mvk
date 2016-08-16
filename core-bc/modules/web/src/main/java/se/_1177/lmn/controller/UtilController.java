@@ -88,7 +88,7 @@ public class UtilController {
             return "Makulerad förskrivning";
         }
 
-        if (isOlderThanAYear(expiredItem.getLastValidDate())) {
+        if (Util.isBeforeToday(expiredItem.getLastValidDate())) {
             return "För gammal förskrivning";
         }
 

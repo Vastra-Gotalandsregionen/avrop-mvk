@@ -12,7 +12,7 @@
             <div class="alert alert-danger">
                 Ett tekniskt fel har inträffat. Gå tillbaka till <h:commandLink action="order?faces-redirect=true&amp;includeViewParams=true">startsidan</h:commandLink>.
                 <br/>
-                #{utilController.customerServiceInfo}
+                <h:outputText escape="false" value="#{utilController.customerServiceInfo}"/>
             </div>
         </h:form>
     </ui:define>

@@ -64,6 +64,24 @@ public class Util {
         return toGregorian.after(lastMilliSecondToday.getTime());
     }
 
+    public static boolean isBeforeToday(XMLGregorianCalendar date) {
+
+        if (date == null) {
+            return false;
+        }
+
+        Calendar firstMilliSecondToday = Calendar.getInstance();
+
+        firstMilliSecondToday.set(Calendar.HOUR_OF_DAY, 0);
+        firstMilliSecondToday.set(Calendar.MINUTE, 0);
+        firstMilliSecondToday.set(Calendar.SECOND, 0);
+        firstMilliSecondToday.set(Calendar.MILLISECOND, 0);
+
+        Date toGregorian = new GregorianCalendar(date.getYear(), date.getMonth() - 1, date.getDay()).getTime();
+
+        return toGregorian.before(firstMilliSecondToday.getTime());
+    }
+
     public static boolean isValidEmailAddress(String email) {
         String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
 
