@@ -26,6 +26,12 @@ function initCommon() {
         jq(e.target).toggleClass('expand');
         jq(e.target).toggleClass('minimize');
     });
+
+    jq('.full-page-submit').click(function () {
+        setTimeout(function () {
+            jq('.full-page-submit').attr('disabled', 'disabled');
+        }, 100);
+    })
 }
 
 function initOrderPage() {
@@ -50,6 +56,40 @@ function initOrderPage() {
 
         findShowMoreLink(e).show();
         findShowLessLink(e).hide();
+    });
+
+    var confirmOrderButton = jq('.confirm-order-button');
+
+    var processLoadingText = function () {
+        setTimeout(function () {
+            var text = confirmOrderButton.attr('value');
+            switch (text) {
+                case 'Bearbetar   ':
+                    confirmOrderButton.attr('value', 'Bearbetar.  ');
+                    break;
+                case 'Bearbetar.  ':
+                    confirmOrderButton.attr('value', 'Bearbetar.. ');
+                    break;
+                case 'Bearbetar.. ':
+                    confirmOrderButton.attr('value', 'Bearbetar...');
+                    break;
+                case 'Bearbetar...':
+                    confirmOrderButton.attr('value', 'Bearbetar   ');
+                    break;
+                default:
+                    break;
+            }
+
+            processLoadingText();
+        }, 300);
+    };
+
+    confirmOrderButton.click(function (e) {
+        var width = confirmOrderButton.css('width');
+        confirmOrderButton.css('min-width', width);
+        confirmOrderButton.attr('value', 'Bearbetar...');
+
+        processLoadingText();
     });
 
 }

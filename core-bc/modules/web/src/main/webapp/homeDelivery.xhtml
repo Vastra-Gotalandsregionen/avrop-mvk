@@ -201,10 +201,10 @@
                 </h:panelGroup>
 
                 <div class="right-align">
-                    <h:button styleClass="button back-button" value="Bakåt" outcome="delivery"/>
-                    <h:commandButton styleClass="button to-be-confirmed-submit-button" value="Till adressinformation"
+                    <h:button styleClass="button back-button full-page-submit" value="Bakåt" outcome="delivery"/>
+                    <h:commandButton styleClass="button to-be-confirmed-submit-button" value="Kontrollera beställning"
                                      action="#{homeDeliveryController.toVerifyDelivery}"/>
-                    <h:commandButton style="display: none" styleClass="button confirm-submit-button"
+                    <h:commandButton style="display: none" styleClass="button confirm-submit-button full-page-submit"
                                      value="Kontrollera beställning"
                                      action="#{homeDeliveryController.toVerifyDelivery}"/>
                 </div>

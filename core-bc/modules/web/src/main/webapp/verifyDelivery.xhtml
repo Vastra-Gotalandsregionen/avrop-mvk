@@ -197,9 +197,9 @@
                 </div>
 
                 <div class="right-align">
-                    <h:commandButton styleClass="button back-button" value="Bakåt" action="homeDelivery?faces-redirect=true&amp;includeViewParams=true" rendered="#{deliveryController.deliveryMethod eq deliveryController.hemleveransValue}" />
-                    <h:commandButton styleClass="button back-button" value="Bakåt" action="collectDelivery?faces-redirect=true&amp;includeViewParams=true" rendered="#{deliveryController.deliveryMethod eq deliveryController.utlamningsstalleValue}"/>
-                    <h:commandButton styleClass="button" value="Beställ / Bekräfta beställning" action="#{verifyDeliveryController.confirmOrder}" />
+                    <h:commandButton styleClass="button back-button full-page-submit" value="Bakåt" action="homeDelivery?faces-redirect=true&amp;includeViewParams=true" rendered="#{deliveryController.deliveryMethod eq deliveryController.hemleveransValue}" />
+                    <h:commandButton styleClass="button back-button full-page-submit" value="Bakåt" action="collectDelivery?faces-redirect=true&amp;includeViewParams=true" rendered="#{deliveryController.deliveryMethod eq deliveryController.utlamningsstalleValue}"/>
+                    <h:commandButton styleClass="button confirm-order-button full-page-submit" value="Beställ / Bekräfta beställning" action="#{verifyDeliveryController.confirmOrder}" />
                 </div>
 
             </h:form>

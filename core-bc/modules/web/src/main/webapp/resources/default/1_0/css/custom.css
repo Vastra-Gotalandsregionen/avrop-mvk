@@ -142,10 +142,10 @@ input[type="button"].back-button {
 
 }
 
-button.back-button:hover,
-.button.back-button:hover,
-input[type="submit"].back-button:hover,
-input[type="button"].back-button:hover {
+button.back-button:hover:not([disabled="disabled"]),
+.button.back-button:hover:not([disabled="disabled"]),
+input[type="submit"].back-button:hover:not([disabled="disabled"]),
+input[type="button"].back-button:hover:not([disabled="disabled"]) {
     background-color: #ffffff;
     background-image: none;
     /*background-color: #929292;*/
@@ -401,7 +401,9 @@ ul.delivery-options li:not(:first-child) {
     background: #E3E3E3;
 }
 
-input[disabled="disabled"]+label, input[disabled="disabled"][type="submit"] {
+input[disabled="disabled"]+label,
+input[disabled="disabled"][type="submit"],
+input[disabled="disabled"][type="button"] {
     opacity: .5;
 }
 

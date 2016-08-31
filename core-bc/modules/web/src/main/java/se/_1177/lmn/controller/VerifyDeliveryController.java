@@ -222,6 +222,12 @@ public class VerifyDeliveryController {
                 String msg = "Tekniskt fel. Försök senare.";
                 FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,
                         msg));
+
+                // We don't know whether the order actually got registered. Even though an exception occurred it may
+                // have been registered. To play safe we reset the fetched prescriptions if the numbers left to order
+                // has changed.
+                orderController.reset();
+
                 return "verifyDelivery";
             }
 
