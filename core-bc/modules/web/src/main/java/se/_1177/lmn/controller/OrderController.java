@@ -77,8 +77,7 @@ public class OrderController {
             if (!supplyPrescriptionsResponse.getResultCode().equals(ResultCodeEnum.OK)) {
                 String msg = supplyPrescriptionsResponse.getComment();
 
-                FacesContext facesContext = FacesContext.getCurrentInstance();
-                facesContext.addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
+                utilController.addErrorMessageWithCustomerServiceInfo(msg);
 
                 return;
             }

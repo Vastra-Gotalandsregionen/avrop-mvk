@@ -26,6 +26,4 @@ GetUserProfileResponderInterface.address=
 
 GetUserProfileByAgentResponderInterface.address=
 
-GetSubjectOfCareResponderInterface.address=
-
 AddMessageResponderInterface.address=

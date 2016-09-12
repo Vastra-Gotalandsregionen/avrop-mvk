@@ -535,6 +535,13 @@ public class CollectDeliveryController {
         this.phoneNumber = phoneNumber;
     }
 
+    /**
+     * Returns the collection of all {@link ServicePointProviderEnum}s mapped to a {@link Set} of
+     * {@link DeliveryNotificationMethodEnum} of which all are available for all chosen {@link PrescriptionItemType}s.
+     *
+     * @return The combinations of {@link ServicePointProviderEnum}s and the {@link DeliveryNotificationMethodEnum}s
+     * they are mapped to are available for all {@link PrescriptionItemType}s
+     */
     public Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>>
     getPossibleCollectCombinationsFittingAllWithNotificationMethods() {
 

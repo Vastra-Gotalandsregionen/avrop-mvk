@@ -40,7 +40,7 @@
 
                 <h4>Produkter</h4>
 
-                <h:panelGroup rendered="#{deliveryController.anyDeliveryMethodFitsAll() and collectDeliveryController.possibleCollectCombinationsFittingAllWithNotificationMethods.size() gt 0}">
+                <h:panelGroup rendered="#{deliveryController.anyDeliveryMethodFitsAll() and deliveryController.deliveryMethod eq 'HEMLEVERANS' or (deliveryController.anyDeliveryMethodFitsAll() and deliveryController.deliveryMethod eq 'UTLÄMNINGSSTÄLLE' and collectDeliveryController.possibleCollectCombinationsFittingAllWithNotificationMethods.size() gt 0)}">
                     <table class="avrop-table my-products-table contentFontSize verify-delivery" style="table-layout: fixed">
                         <thead>
                         <tr>
@@ -69,7 +69,7 @@
                     </table>
                 </h:panelGroup>
 
-                <h:panelGroup rendered="#{not (deliveryController.anyDeliveryMethodFitsAll() and collectDeliveryController.possibleCollectCombinationsFittingAllWithNotificationMethods.size() gt 0)}">
+                <h:panelGroup rendered="#{not (deliveryController.anyDeliveryMethodFitsAll() and deliveryController.deliveryMethod eq 'HEMLEVERANS' or (deliveryController.anyDeliveryMethodFitsAll() and deliveryController.deliveryMethod eq 'UTLÄMNINGSSTÄLLE' and collectDeliveryController.possibleCollectCombinationsFittingAllWithNotificationMethods.size() gt 0))}">
                     <table class="avrop-table my-products-table contentFontSize verify-delivery" style="table-layout: fixed">
                         <thead>
                         <tr>
@@ -87,7 +87,8 @@
                                     #{item.article.articleNo}
                                 </td>
                                 <td>
-                                    #{item.article.articleName}
+                                    <span class="bold">#{item.article.articleName}</span>
+                                    <mvk:moreInfo item="#{item}"/>
                                 </td>
                                 <td>
                                     #{item.noOfRemainingOrders}/#{item.noOfOrders}

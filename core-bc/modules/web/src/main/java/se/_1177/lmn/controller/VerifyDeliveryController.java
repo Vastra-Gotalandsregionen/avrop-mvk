@@ -106,8 +106,8 @@ public class VerifyDeliveryController {
                 }
 
                 if (deliveryMethodId == null) {
-                    FacesContext.getCurrentInstance().addMessage("", new FacesMessage("Kunde inte genomföra " +
-                            "beställning. Försök senare."));
+                    String msg = "Kunde inte genomföra beställning. Försök senare.";
+                    utilController.addErrorMessageWithCustomerServiceInfo(msg);
 
                     return "verifyDelivery";
                 }
@@ -220,8 +220,7 @@ public class VerifyDeliveryController {
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);
                 String msg = "Tekniskt fel. Försök senare.";
-                FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,
-                        msg));
+                utilController.addErrorMessageWithCustomerServiceInfo(msg);
 
                 // We don't know whether the order actually got registered. Even though an exception occurred it may
                 // have been registered. To play safe we reset the fetched prescriptions if the numbers left to order
@@ -246,8 +245,7 @@ public class VerifyDeliveryController {
                     }
                 } catch (MvkInboxServiceException e) {
                     String msg = "Din beställning har utförts men tyvärr kunde inget kvitto skickas till din inkorg.";
-                    FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,
-                            msg));
+                    utilController.addErrorMessageWithCustomerServiceInfo(msg);
                 }
 
                 cart.emptyCart();
@@ -265,7 +263,8 @@ public class VerifyDeliveryController {
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             String msg = "Tekniskt fel. Försök senare.";
-            FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
+            utilController.addErrorMessageWithCustomerServiceInfo(msg);
+
             return "verifyDelivery";
         }
 

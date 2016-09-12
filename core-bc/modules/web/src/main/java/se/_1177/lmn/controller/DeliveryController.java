@@ -46,6 +46,9 @@ public class DeliveryController {
     @Autowired
     private UserProfileController userProfileController;
 
+    @Autowired
+    private UtilController utilController;
+
     private DeliveryMethodEnum deliveryMethod = null;
     private boolean userNeedsToChooseDeliveryMethodForEachItem;
     private Set<DeliveryMethodEnum> possibleDeliveryMethodsFittingAllItems;
@@ -62,6 +65,10 @@ public class DeliveryController {
                 return DeliveryMethodEnum.HEMLEVERANS;
             } else if (possibleDeliveryMethodsFittingAllItems.contains(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE) &&
                     !possibleDeliveryMethodsFittingAllItems.contains(DeliveryMethodEnum.HEMLEVERANS)) {
+                return DeliveryMethodEnum.UTLÄMNINGSSTÄLLE;
+            } else if (deliveryMethod == null
+                    && possibleDeliveryMethodsFittingAllItems.contains(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)) {
+                // If no deliveryMethod is chosen yet and UTLÄMNINGSSTÄLLE is available, make that default choice.
                 return DeliveryMethodEnum.UTLÄMNINGSSTÄLLE;
             } else {
                 return deliveryMethod;
@@ -272,7 +279,7 @@ public class DeliveryController {
             return getUtlamningsstalleValue();
         } else {
             String msg = prescriptionItem.getArticle().getArticleName() + " kan inte beställas.";
-            FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
+            utilController.addErrorMessageWithCustomerServiceInfo(msg);
             return null;
         }
     }
