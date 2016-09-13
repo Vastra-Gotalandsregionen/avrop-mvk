@@ -141,4 +141,6 @@
         <http:client ConnectionTimeout="10000" ReceiveTimeout="10000"/>
     </http:conduit>
 
+    <task:annotation-driven executor="oneThreadExecutor"/>
+    <task:executor id="oneThreadExecutor" pool-size="1"/>
 </beans>

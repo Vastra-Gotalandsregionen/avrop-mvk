@@ -2,6 +2,7 @@ package se._1177.lmn.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
 import riv.crm.selfservice.medicalsupply._0.OrderRowType;
@@ -27,8 +28,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static se._1177.lmn.service.util.Util.isOlderThanAYear;
 
 /**
  * @author Patrik Björk
@@ -118,6 +117,18 @@ public class LmnServiceImpl implements LmnService {
         }
 
         return 0;
+    }
+
+    @Scheduled(cron = "0 0/15 0-3,4-23 * * ?")
+    public void keepWebServiceAwake() {
+        // This delays the external web service going into "sleep mode" where it becomes slower than preferred. We allow
+        // it to go into sleep mode between 3 and 4 in the night only.
+        try {
+            LOGGER.info("Scheduled operation...");
+            getMedicalSupplyDeliveryPoints(ServicePointProviderEnum.POSTNORD, "41648");
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+        }
     }
 
     public GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(ServicePointProviderEnum provider,
