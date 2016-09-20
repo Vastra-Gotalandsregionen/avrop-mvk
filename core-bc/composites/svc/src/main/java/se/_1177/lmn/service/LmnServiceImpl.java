@@ -3,6 +3,7 @@ package se._1177.lmn.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.util.StopWatch;
 import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
 import riv.crm.selfservice.medicalsupply._0.OrderRowType;
@@ -119,10 +120,11 @@ public class LmnServiceImpl implements LmnService {
         return 0;
     }
 
-    @Scheduled(cron = "0 0/15 0-3,4-23 * * ?")
+    // Every fifteen minutes all the time except when time is 3-something in the night.
+    @Scheduled(cron = "0 0/15 0-2,4-23 * * ?")
     public void keepWebServiceAwake() {
         // This delays the external web service going into "sleep mode" where it becomes slower than preferred. We allow
-        // it to go into sleep mode between 3 and 4 in the night only.
+        // it to go into sleep mode when time is 3.XX in the night only.
         try {
             LOGGER.info("Scheduled operation...");
             getMedicalSupplyDeliveryPoints(ServicePointProviderEnum.POSTNORD, "41648");
@@ -178,7 +180,18 @@ public class LmnServiceImpl implements LmnService {
 
         parameters.setOrder(order);
 
-        return registerMedicalSupplyOrder.registerMedicalSupplyOrder(logicalAddress, parameters);
+        StopWatch stopWatch = new StopWatch();
+
+        stopWatch.start();
+
+        RegisterMedicalSupplyOrderResponseType response = registerMedicalSupplyOrder
+                .registerMedicalSupplyOrder(logicalAddress, parameters);
+
+        stopWatch.stop();
+
+        LOGGER.info("Time to registerMedicalSupplyOrder: " + stopWatch.getTotalTimeMillis() + " millis.");
+
+        return response;
     }
 
     @Override

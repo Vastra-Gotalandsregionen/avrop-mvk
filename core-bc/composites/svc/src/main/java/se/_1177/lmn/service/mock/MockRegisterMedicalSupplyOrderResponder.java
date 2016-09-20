@@ -35,6 +35,12 @@ public class MockRegisterMedicalSupplyOrderResponder
 
         response.setComment("Det gick bara inte...");*/
 
+        /*try {
+            Thread.sleep(21000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
+
         response.setResultCode(ResultCodeEnum.OK);
 
         for (int i = 0; i <= random.nextInt(5); i++) {
