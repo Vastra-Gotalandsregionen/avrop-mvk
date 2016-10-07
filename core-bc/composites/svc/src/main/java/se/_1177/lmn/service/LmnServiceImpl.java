@@ -217,7 +217,7 @@ public class LmnServiceImpl implements LmnService {
 
             orderRow.setPrescriptionItemId(item.getPrescriptionItemId());
 
-//            orderRow.setSource(); // TODO: 2016-05-24  
+            orderRow.setSource(item.getSource());
 
             order.getOrderRow().add(orderRow);
         }
