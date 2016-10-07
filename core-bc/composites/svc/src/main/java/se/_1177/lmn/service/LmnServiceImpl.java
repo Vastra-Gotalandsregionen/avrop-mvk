@@ -31,6 +31,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * This implementation handles all communication with the source system which is responsible for prescriptions,
+ * delivery places and registering orders. This class uses web service proxy interfaces to communicate with the external
+ * system.
+ *
  * @author Patrik Björk
  */
 public class LmnServiceImpl implements LmnService {
@@ -58,6 +62,17 @@ public class LmnServiceImpl implements LmnService {
         this.logicalAddress = logicalAddress;
     }
 
+    /**
+     * Fetches {@link PrescriptionItemType}s for a specific person. The prescriptions are separated into orderable items
+     * and no longer orderable items. A prescription item is no longer orderable if it either has status other than
+     * AKTIV, has number of remaining orders less than or equal to zero, or last valid date is before today. The items
+     * are sorted according to how "orderable" they are (see
+     * {@link LmnServiceImpl#getSortNumber(riv.crm.selfservice.medicalsupply._0.PrescriptionItemType)}).
+     *
+     * @param subjectOfCareId the subject of care id of the user or the inhabitant the user is delegate for
+     * @return the fetched, sorted and separated {@link PrescriptionItemType}s contained in a
+     * {@link MedicalSupplyPrescriptionsHolder}
+     */
     @Override
     public MedicalSupplyPrescriptionsHolder getMedicalSupplyPrescriptionsHolder(String subjectOfCareId) {
         GetMedicalSupplyPrescriptionsResponseType response = getMedicalSupplyPrescriptions(subjectOfCareId);
@@ -66,7 +81,8 @@ public class LmnServiceImpl implements LmnService {
 
         holder.supplyPrescriptionsResponse = response;
 
-        // Separate those which have zero remaining items to order and those which have valid date older than a year
+        // Separate those which have zero remaining items to order and those which have last valid date older than a
+        // year.
 
         List<PrescriptionItemType> orderableItems = new ArrayList<>();
         List<PrescriptionItemType> noLongerOrderable = new ArrayList<>();
@@ -120,6 +136,11 @@ public class LmnServiceImpl implements LmnService {
         return 0;
     }
 
+    /**
+     * This method's only purpose is to delay the external web service from going into "sleep mode" where it becomes
+     * slower than preferred. We allow it to go into sleep mode when time is 3.XX in the night only. This method is
+     * executed by schedule.
+     */
     // Every fifteen minutes all the time except when time is 3-something in the night.
     @Scheduled(cron = "0 0/15 0-2,4-23 * * ?")
     public void keepWebServiceAwake() {
@@ -133,6 +154,14 @@ public class LmnServiceImpl implements LmnService {
         }
     }
 
+    /**
+     * Fetches {@link DeliveryPointType}s. It also has the side-effect of storing entries in a {@link Map} where the id
+     * of a {@link DeliveryPointType} is mapped to the {@link DeliveryPointType} itself, for reuse at a later stage.
+     *
+     * @param provider the {@link ServicePointProviderEnum}
+     * @param postalCode the postal code
+     * @return a {@link GetMedicalSupplyDeliveryPointsResponseType} containing {@link DeliveryPointType}s.
+     */
     public GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(ServicePointProviderEnum provider,
                                                                                      String postalCode) {
         GetMedicalSupplyDeliveryPointsType parameters = new GetMedicalSupplyDeliveryPointsType();
@@ -150,6 +179,12 @@ public class LmnServiceImpl implements LmnService {
         return medicalSupplyDeliveryPoints;
     }
 
+    /**
+     * Fetches the {@link PrescriptionItemType}s available to a user or the inhabitant the user is delegate for.
+     *
+     * @param subjectOfCareId the subject of care id of the user or the inhabitant the user is delegate for.
+     * @return a {@link GetMedicalSupplyDeliveryPointsResponseType} containing the {@link PrescriptionItemType}
+     */
     public GetMedicalSupplyPrescriptionsResponseType getMedicalSupplyPrescriptions(String subjectOfCareId) {
         GetMedicalSupplyPrescriptionsType parameters = new GetMedicalSupplyPrescriptionsType();
 
@@ -161,6 +196,17 @@ public class LmnServiceImpl implements LmnService {
         return medicalSupplyPrescriptions;
     }
 
+    /**
+     * Sends a request to the source system to register a medical supply order. It assembles a
+     * {@link RegisterMedicalSupplyOrderType} which is sent to the source system.
+     *
+     * @param subjectOfCareId the subject of care id of the user or the inhabitant the user is delegate for
+     * @param orderByDelegate whether the order is made by a delegate
+     * @param orderer the name of the person who makes the order
+     * @param prescriptionItems the {@link PrescriptionItemType}s which are ordered
+     * @param deliveryChoicePerItem the {@link DeliveryChoiceType} for each {@link PrescriptionItemType}
+     * @return the {@link RegisterMedicalSupplyOrderResponseType}
+     */
     @Override
     public RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrder(
             String subjectOfCareId,

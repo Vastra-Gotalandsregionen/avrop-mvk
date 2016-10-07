@@ -182,15 +182,9 @@ public class UserProfileController {
             }
 
         } else {
-            if (this.objectId != null) {
-                this.objectId = null;
-                this.delegate = false;
-                this.userProfileByAgentResponse = null;
-            } else {
-                this.objectId = null;
-                this.delegate = false;
-                this.userProfileByAgentResponse = null;
-            }
+            this.objectId = null;
+            this.delegate = false;
+            this.userProfileByAgentResponse = null;
         }
         updateUserProfile();
     }
