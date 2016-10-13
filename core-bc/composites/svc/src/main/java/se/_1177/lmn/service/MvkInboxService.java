@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Class for sending messages to a user's inbox in 1177 Vårdguiden e-tjänster.
+ *
  * @author Patrik Björk
  */
 @Service
@@ -36,6 +38,14 @@ public class MvkInboxService {
         this.addMessageResponderInterface = addMessageResponderInterface;
     }
 
+    /**
+     * Send a message to the user's inbox. The message is composed by a freemarker template.
+     * @param pid
+     * @param prescriptionItems
+     * @param deliveryChoices
+     * @return
+     * @throws MvkInboxServiceException
+     */
     public AddMessageResponseType sendInboxMessage(String pid,
                                                    List<PrescriptionItemType> prescriptionItems,
                                                    Collection<DeliveryChoiceType> deliveryChoices)
@@ -48,16 +58,11 @@ public class MvkInboxService {
 
         HealthCareFacilityType healthCareFacility = new HealthCareFacilityType();
         healthCareFacility.setHealthCareFacilityName("Centrum Läkemedelsnära Produkter");
-        healthCareFacility.setHsaId("2342345234"); // // TODO: 2016-05-25
+        healthCareFacility.setHsaId("SE2321000131-S000000016964"); // SE2321000131-S000000016964 = Mottagningen "Läkemedelsnära produkter"
 
         MessageCaseType messageCase = new MessageCaseType();
-//        messageCase.setBusinessObjectId("Unikt id för denna applikation?");
-//        messageCase.setActionTime(Util.toXmlGregorianCalendar(new GregorianCalendar()));
         messageCase.setCaseType(caseType);
-//        messageCase.setCaseReadStatus(CaseReadStatusType.UNREAD);
-//        messageCase.setBooking(null);
         messageCase.setHeaderText("Beställning läkemedelsnära produkter");
-//        messageCase.setDetails(details);
         messageCase.setHealthCareFacility(healthCareFacility);
 
         try {
@@ -71,7 +76,7 @@ public class MvkInboxService {
         request.setMessage(messageCase);
         request.setSubjectOfCareId(pid);
         request.setNotify(false);
-        request.setSourceSystem("HSA-ID för Läkemedelsnära produktor");
+        request.setSourceSystem("SE2321000131-S000000016964"); // SE2321000131-S000000016964 = Mottagningen "Läkemedelsnära produkter"
 
         AddMessageResponseType response = null;
         try {

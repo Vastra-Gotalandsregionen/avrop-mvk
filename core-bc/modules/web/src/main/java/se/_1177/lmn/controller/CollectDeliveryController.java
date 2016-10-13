@@ -42,6 +42,8 @@ import java.util.stream.Collectors;
 import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 
 /**
+ * Controller class which handles the model for the view where collect delivery is chosen.
+ *
  * @author Patrik Björk
  */
 @Component
@@ -94,6 +96,10 @@ public class CollectDeliveryController {
 
     }
 
+    /**
+     * Initializes the class by fetching the user profile to populate the model with user properties such as zip,
+     * preferred delivery notification method, sms telephone number and email.
+     */
     @PostConstruct
     public void init() {
         // Default zip is from user profile. It may be overridden if user chooses so.
@@ -134,22 +140,18 @@ public class CollectDeliveryController {
 
         if (getPossibleCollectCombinationsFittingAllWithNotificationMethods().size() > 0) {
 
-            // Populate result map.
-            possibleCollectCombinationsFittingAllWithNotificationMethods.entrySet()
-                    .forEach(e -> result.put(e.getKey(), e.getValue()
-                            .stream()
-                            .map(Enum::name)
-                            .collect(Collectors.toList())));
+            result.putAll(transform(possibleCollectCombinationsFittingAllWithNotificationMethods));
 
             result.keySet().retainAll(getRelevantServicePointProviders().keySet());
         } else {
 
             List<PrescriptionItemType> collectPrescriptionItems = getCollectPrescriptionItems();
 
-
             for (PrescriptionItemType item : collectPrescriptionItems) {
                 ServicePointProviderEnum servicePointProviderForItem = getServicePointProviderForItem(item);
 
+                // Make a list where the number of first level entries will be equal to the number of delivery
+                // alternatives where the service point provider equals servicePointProviderForItem.
                 List<List<String>> listOfListsWithNotificationMethodNames = item.getDeliveryAlternative()
                         .stream()
                         .filter(alternative -> alternative.getServicePointProvider()
@@ -177,6 +179,20 @@ public class CollectDeliveryController {
         return result;
     }
 
+    private Map<ServicePointProviderEnum, List<String>> transform(Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> possibleCollectCombinationsFittingAllWithNotificationMethods) {
+        // Populate result map. Transform a Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> to
+        // a Map<ServicePointProviderEnum, List<String>> instance.
+        Map<ServicePointProviderEnum, List<String>> toPutInto = new TreeMap<>();
+        possibleCollectCombinationsFittingAllWithNotificationMethods.entrySet()
+                .forEach(e -> toPutInto.put(e.getKey(), e.getValue()
+                        .stream()
+                        .map(Enum::name)
+                        .collect(Collectors.toList())));
+        return toPutInto;
+    }
+
+    // All items which are chosen to be delivered by collect delivery. Note that the items may be chosen for delivery
+    // methods on an individual basis if no single delivery method suits all items.
     private List<PrescriptionItemType> getCollectPrescriptionItems() {
 
         return cart.getItemsInCart()
@@ -252,6 +268,13 @@ public class CollectDeliveryController {
         return servicePointProvidersForItems;
     }
 
+    /**
+     * Finds a {@link ServicePointProviderEnum} which is available to all items chosen for collect delivery, or, if no
+     * such {@link ServicePointProviderEnum} can be found, chooses the {@link ServicePointProviderEnum} for the first
+     * {@link DeliveryAlternativeType} with UTLÄMNINGSSTÄLLE as {@link DeliveryMethodEnum}.
+     * @param item
+     * @return
+     */
     public ServicePointProviderEnum getServicePointProviderForItem(PrescriptionItemType item) {
         ServicePointProviderEnum servicePointProviderForItem = null;
         Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> commonDenominator =
