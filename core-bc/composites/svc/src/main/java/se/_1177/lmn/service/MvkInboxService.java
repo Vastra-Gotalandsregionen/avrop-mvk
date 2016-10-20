@@ -40,6 +40,7 @@ public class MvkInboxService {
 
     /**
      * Send a message to the user's inbox. The message is composed by a freemarker template.
+     *
      * @param pid
      * @param prescriptionItems
      * @param deliveryChoices

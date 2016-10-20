@@ -24,7 +24,7 @@ The Medical Supply service provides the following features:
 * Placing orders.
 
 ## General technical description
-The application is written in the Java language and runs in a servlet container such as e.g. Apache Tomcat. 
+The application is written in the Java language for backend and Facelets for view layer and runs in a servlet container such as e.g. Apache Tomcat. 
 
 Prerequsites in order to build the application:
 
@@ -50,7 +50,7 @@ Normally the application checks a header to check which user is authenticated. I
 * Start the JVM with VM property -Denv=dev. This relies on the mock services not caring about the identity of the user but instead create responses independent of the identity.
 
 ### Preparing test certificates
-To run in a test environment with authentication protection the easiest way is to issue test BankId at https://demo.bankid.com. Issue BandIds with personal identity numbers as the people listed in the Region of Västra Götaland in [https://softronic.atlassian.net/wiki/pages/viewpage.action?pageId=66191421](https://softronic.atlassian.net/wiki/pages/viewpage.action?pageId=66191421).
+To run in a test environment with authentication protection the easiest way is to issue test BankId at https://demo.bankid.com. Issue BandIds with personal identity numbers as the people listed in the Region of Västra Götaland in [https://softronic.atlassian.net/wiki/pages/viewpage.action?pageId=66191421](https://softronic.atlassian.net/wiki/pages/viewpage.action?pageId=66191421). That is necessary in order to properly use the User Profile service and the Inbox service.
 
 ### Web services
 All integrations are run over SOAP over HTTPS with mutual authentication. The contracts are included in the schema maven module and source code for proxy service interfaces is generated during maven build. Apache CXF is leveraged for the web service communication. During build classes are generated which are used as web service proxy interfaces, as well as related domain classes.
