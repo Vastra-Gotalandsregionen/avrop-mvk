@@ -21,9 +21,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
+ * This controller is responsible for keeping the current user which may be split in two persons if the logged in user
+ * is a delegate. It reacts to changes in "delegate state". It is does not correspond the a specific view but applies
+ * to all views.
+ *
  * @author Patrik Björk
  */
-// TODO Figure out whether it's better to have request scope here and cache result or have session scope without needing to cache.
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserProfileController {
@@ -182,16 +185,11 @@ public class UserProfileController {
             }
 
         } else {
-            if (this.objectId != null) {
-                this.objectId = null;
-                this.delegate = false;
-                this.userProfileByAgentResponse = null;
-            } else {
-                this.objectId = null;
-                this.delegate = false;
-                this.userProfileByAgentResponse = null;
-            }
+            this.objectId = null;
+            this.delegate = false;
+            this.userProfileByAgentResponse = null;
         }
+
         updateUserProfile();
     }
 

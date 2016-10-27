@@ -26,6 +26,11 @@ import java.util.Set;
 import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 
 /**
+ * Controller class which handles the model for the view where delivery type is chosen. Either
+ * DeliveryMethodEnum.HEMLEVERANS or DeliveryMethodEnum.UTLÄMNINGSSTÄLLE is chosen for all or, if none of them are
+ * available for all {@link PrescriptionItemType}s, a {@link DeliveryMethodEnum} is chosen for each
+ * {@link PrescriptionItemType}.
+ *
  * @author Patrik Björk
  */
 @Component
@@ -56,6 +61,12 @@ public class DeliveryController {
     // Chosen delivery method for each item
     private Map<PrescriptionItemType, String> deliveryMethodForEachItem = new HashMap<>();
 
+    /**
+     * If both methods are available, choose UTLÄMNINGSSTÄLLE since that is preferred by design. If only one method is
+     * available, choose that. If none are available, return null.
+     *
+     * @return the {@link DeliveryMethodEnum} according to the logic above
+     */
     public DeliveryMethodEnum getDeliveryMethod() {
 
         // First, check if only one choice is possible. If so, choose that.
@@ -118,6 +129,14 @@ public class DeliveryController {
         return result;
     }
 
+    /**
+     * This method validates the user has made all necessary choices or it will add error messages to be presented to
+     * the user. It also has the side-effects that it resets state for {@link HomeDeliveryController} and
+     * {@link CollectDeliveryController}. It also decides outcome; either the user should stay at the delivery view, or
+     * be taken to homeDelivery view, or be taken to collectDelivery view.
+     *
+     * @return the action outcome
+     */
     public String toDeliveryMethod() {
 
         homeDeliveryController.resetChoices();

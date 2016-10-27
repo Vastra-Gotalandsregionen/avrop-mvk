@@ -13,12 +13,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Interface for fetching and storing information in the Sesam LMN web service.
+ *
  * @author Patrik Björk
  */
 public interface LmnService {
     MedicalSupplyPrescriptionsHolder getMedicalSupplyPrescriptionsHolder(String subjectOfCareId);
 
-    GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(ServicePointProviderEnum provider, String postalCode);
+    GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(ServicePointProviderEnum provider,
+                                                                              String postalCode);
 
     GetMedicalSupplyPrescriptionsResponseType getMedicalSupplyPrescriptions(String subjectOfCareId);
 

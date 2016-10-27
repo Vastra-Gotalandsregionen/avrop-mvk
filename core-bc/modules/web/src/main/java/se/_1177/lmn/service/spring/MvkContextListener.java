@@ -10,6 +10,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 /**
+ * This class is responsible for starting up the mock web service if the properties configuration says so.
+ *
  * @author Patrik Björk
  */
 public class MvkContextListener extends ContextLoader implements ServletContextListener {

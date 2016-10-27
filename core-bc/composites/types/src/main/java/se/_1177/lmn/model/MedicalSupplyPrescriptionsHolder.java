@@ -6,6 +6,9 @@ import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder.
 import java.util.List;
 
 /**
+ * Class which aggregates orderable {@link PrescriptionItemType}s, noLongerOrderable {@link PrescriptionItemType}s, and
+ * the {@link GetMedicalSupplyPrescriptionsResponseType} which the two former are based from.
+ *
  * @author Patrik Björk
  */
 public class MedicalSupplyPrescriptionsHolder {

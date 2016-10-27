@@ -7,7 +7,9 @@ ssl_truststore_password=
 ssl_keystore=
 ssl_keystore_password=
 
-local.mock.service.startup=false
+local.mock.service.startup=
+
+rtjp.logicalAddress=
 
 backToOwnProfileLink=
 logoutLink=
@@ -15,6 +17,9 @@ settingsLink=
 mvkStartPageLink=
 mvkInboxLink=
 mvkOtherServicesLink=
+
+customerServicePhoneNumber=
+customerServiceInfo=
 
 GetMedicalSupplyDeliveryPointsResponderInterface.address=
 

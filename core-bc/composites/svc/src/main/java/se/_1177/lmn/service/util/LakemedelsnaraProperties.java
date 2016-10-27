@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Singleton class keeping the properties which are loaded from a file on the classpath.
+ */
 public class LakemedelsnaraProperties {
     private static final Logger LOGGER = LoggerFactory.getLogger(LakemedelsnaraProperties.class);
     private static final String PROPERTIES_FILENAME = "lakemedelsnara.properties";

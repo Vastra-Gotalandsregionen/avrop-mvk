@@ -21,6 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * Utility controller mainly called from the views.
+ *
  * @author Patrik Björk
  */
 @Component

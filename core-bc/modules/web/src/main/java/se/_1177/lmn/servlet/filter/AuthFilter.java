@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * This class handles authentication and authorization. It checks that relevant headers are set by the SAML SP proxy and
+ * that the user is not logged in with SMS.
+ *
  * @author Patrik Björk
  */
 @WebFilter("*")
@@ -26,7 +29,7 @@ public class AuthFilter implements Filter {
     private static final String SECURITY_LEVEL_DESCRIPTION = "AJP_SecurityLevelDescription";
 
     public void init(FilterConfig filterConfig) throws ServletException {
-        LOGGER.info("Filter init...");
+
     }
 
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
