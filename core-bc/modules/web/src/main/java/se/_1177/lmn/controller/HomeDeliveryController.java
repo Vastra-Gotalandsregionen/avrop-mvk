@@ -112,6 +112,17 @@ public class HomeDeliveryController {
         }
     }
 
+    /**
+     * Initially when the project is launched, there won't be any home delivery alternatives with notifications, but
+     * there may be in the future, and the web service contract says it's possible so the application must support it.
+     * This method tries to find overlapping {@link DeliveryNotificationMethodEnum}s which are available for all
+     * {@link PrescriptionItemType}s which have any {@link DeliveryNotificationMethodEnum} at all. Then the user is only
+     * need to choose once. If no overlapping {@link DeliveryNotificationMethodEnum}s are found the user needs to choose
+     * a {@link DeliveryNotificationMethodEnum} for each {@link PrescriptionItemType}.
+     *
+     * @return {@link PrescriptionItemType}s mapped to possible {@link DeliveryNotificationMethodEnum}s as
+     * {@link String}s.
+     */
     public Map<PrescriptionItemType, List<String>> getDeliveryNotificationMethodsPerItem() {
         if (deliveryNotificationMethodsPerItem == null) {
             List<DeliveryNotificationMethodEnum> overlapping = findOverlappingDeliveryNotificationMethods();

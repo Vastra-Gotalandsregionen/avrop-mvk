@@ -20,6 +20,9 @@ import java.io.IOException;
 import java.util.List;
 
 /**
+ * This filter is responsible for invalidating the session if the user changes. There is no way the user can log out of
+ * the application. The user can log out of the SAML IDP and SP but the application does not get to know when this
+ * happens. So the session is either invalidated because of the container's timeout setting or if the user has changed.
  * @author Patrik Björk
  */
 @WebFilter("*")

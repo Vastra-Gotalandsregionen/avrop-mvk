@@ -31,6 +31,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * This class corresponds to the verifyDelivery view. The main concern is to confirm/register the order.
+ *
  * @author Patrik Björk
  */
 @Component
@@ -68,6 +70,11 @@ public class VerifyDeliveryController {
 
     private Boolean orderSuccess;
 
+    /**
+     * This method's main purpose is to register the order and send an inbox message if successful.
+     *
+     * @return the action outcome
+     */
     public String confirmOrder() {
         UserProfileType userProfile = userProfileController.getUserProfile();
 
@@ -80,8 +87,119 @@ public class VerifyDeliveryController {
 
         for (PrescriptionItemType prescriptionItem : cart.getItemsInCart()) {
 
-            DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
+            CreateDeliveryChoiceWithResult createDeliveryChoiceWithResult = new CreateDeliveryChoiceWithResult(
+                    userProfile, deliveryMethodForEachItem, prescriptionItem).createDeliveryChoice();
+
+            if (createDeliveryChoiceWithResult.isFailed()) {
+                return "verifyDelivery";
+            }
+
+            DeliveryChoiceType deliveryChoice = createDeliveryChoiceWithResult.getDeliveryChoice();
+
             deliveryChoicePerItem.put(prescriptionItem, deliveryChoice);
+        }
+
+        try {
+            String subjectOfCareId = userProfileController.getUserProfile().getSubjectOfCareId();
+
+            try {
+
+                SubjectOfCareType loggedInUser = userProfileController.getLoggedInUser();
+                String orderer = loggedInUser.getFirstName() + " " + loggedInUser.getLastName();
+
+                // Register the order
+                response = lmnService.registerMedicalSupplyOrder(
+                        subjectOfCareId,
+                        userProfileController.isDelegate(),
+                        orderer,
+                        cart.getItemsInCart(),
+                        deliveryChoicePerItem
+                );
+            } catch (Exception e) {
+                LOGGER.error(e.getMessage(), e);
+                String msg = "Tekniskt fel. Försök senare.";
+                utilController.addErrorMessageWithCustomerServiceInfo(msg);
+
+                // We don't know whether the order actually got registered. Even though an exception occurred it may
+                // have been registered. To play safe we reset the fetched prescriptions if the numbers left to order
+                // has changed.
+                orderController.reset();
+
+                return "verifyDelivery";
+            }
+
+            // Handle result
+            if (response.getResultCode().equals(ResultCodeEnum.OK)) {
+                orderSuccess = true;
+
+                try {
+                    AddMessageResponseType addMessageResponse = mvkInboxService.sendInboxMessage(
+                            userProfile.getSubjectOfCareId(), cart.getItemsInCart(), deliveryChoicePerItem.values());
+
+                    if (!addMessageResponse.getResultCode().equals(mvk.crm.casemanagement.inbox._2.ResultCodeEnum.OK)) {
+                        String msg = addMessageResponse.getResultText();
+                        FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                msg,
+                                msg));
+                    }
+                } catch (MvkInboxServiceException e) {
+                    String msg = "Din beställning har utförts men tyvärr kunde inget kvitto skickas till din inkorg.";
+                    utilController.addErrorMessageWithCustomerServiceInfo(msg);
+                }
+
+                cart.emptyCart();
+                orderController.reset();
+
+            } else if (response.getResultCode().equals(ResultCodeEnum.ERROR)
+                    || response.getResultCode().equals(ResultCodeEnum.INFO)) {
+                String msg = response.getComment();
+
+                utilController.addErrorMessageWithCustomerServiceInfo("Ett tekniskt fel inträffade när din beställning skulle bekräftas. Beställningen kommer inte att kunna genomföras eller sparas. Försök senare eller kontakta kundtjänst.");
+                utilController.addErrorMessageWithCustomerServiceInfo(msg);
+
+                orderSuccess = false;
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            String msg = "Tekniskt fel. Försök senare.";
+            utilController.addErrorMessageWithCustomerServiceInfo(msg);
+
+            return "verifyDelivery";
+        }
+
+        return "orderConfirmation";
+    }
+
+    public Boolean getOrderSuccess() {
+        return orderSuccess;
+    }
+
+    private class CreateDeliveryChoiceWithResult {
+        private boolean failed;
+        private UserProfileType userProfile;
+        private Map<PrescriptionItemType, String> deliveryMethodForEachItem;
+        private PrescriptionItemType prescriptionItem;
+        private DeliveryChoiceType deliveryChoice;
+
+        public CreateDeliveryChoiceWithResult(UserProfileType userProfile,
+                                              Map<PrescriptionItemType,
+                                              String> deliveryMethodForEachItem,
+                                              PrescriptionItemType prescriptionItem) {
+            this.userProfile = userProfile;
+            this.deliveryMethodForEachItem = deliveryMethodForEachItem;
+            this.prescriptionItem = prescriptionItem;
+        }
+
+        boolean isFailed() {
+            return failed;
+        }
+
+        public DeliveryChoiceType getDeliveryChoice() {
+            return deliveryChoice;
+        }
+
+        public CreateDeliveryChoiceWithResult createDeliveryChoice() {
+            deliveryChoice = new DeliveryChoiceType();
 
             DeliveryMethodEnum deliveryMethod = DeliveryMethodEnum.fromValue(deliveryMethodForEachItem.get(
                     prescriptionItem));
@@ -109,7 +227,8 @@ public class VerifyDeliveryController {
                     String msg = "Kunde inte genomföra beställning. Försök senare.";
                     utilController.addErrorMessageWithCustomerServiceInfo(msg);
 
-                    return "verifyDelivery";
+                    failed = true;
+                    return this;
                 }
 
                 deliveryChoice.setDeliveryMethodId(deliveryMethodId);
@@ -200,78 +319,8 @@ public class VerifyDeliveryController {
                 deliveryChoice.setHomeDeliveryAddress(address);
                 deliveryChoice.setDeliveryMethodId(deliveryMethodId);
             }
+            failed = false;
+            return this;
         }
-
-        try {
-            String subjectOfCareId = userProfileController.getUserProfile().getSubjectOfCareId();
-
-            try {
-
-                SubjectOfCareType loggedInUser = userProfileController.getLoggedInUser();
-                String orderer = loggedInUser.getFirstName() + " " + loggedInUser.getLastName(); // // TODO: 2016-06-16 Ska man få beställa om orderer inte är tillgänglig
-
-                response = lmnService.registerMedicalSupplyOrder(
-                        subjectOfCareId,
-                        userProfileController.isDelegate(),
-                        orderer,
-                        cart.getItemsInCart(),
-                        deliveryChoicePerItem
-                );
-            } catch (Exception e) {
-                LOGGER.error(e.getMessage(), e);
-                String msg = "Tekniskt fel. Försök senare.";
-                utilController.addErrorMessageWithCustomerServiceInfo(msg);
-
-                // We don't know whether the order actually got registered. Even though an exception occurred it may
-                // have been registered. To play safe we reset the fetched prescriptions if the numbers left to order
-                // has changed.
-                orderController.reset();
-
-                return "verifyDelivery";
-            }
-
-            if (response.getResultCode().equals(ResultCodeEnum.OK)) {
-                orderSuccess = true;
-
-                try {
-                    AddMessageResponseType addMessageResponse = mvkInboxService.sendInboxMessage(
-                            userProfile.getSubjectOfCareId(), cart.getItemsInCart(), deliveryChoicePerItem.values());
-
-                    if (!addMessageResponse.getResultCode().equals(mvk.crm.casemanagement.inbox._2.ResultCodeEnum.OK)) {
-                        String msg = addMessageResponse.getResultText();
-                        FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                msg,
-                                msg));
-                    }
-                } catch (MvkInboxServiceException e) {
-                    String msg = "Din beställning har utförts men tyvärr kunde inget kvitto skickas till din inkorg.";
-                    utilController.addErrorMessageWithCustomerServiceInfo(msg);
-                }
-
-                cart.emptyCart();
-                orderController.reset();
-
-            } else if (response.getResultCode().equals(ResultCodeEnum.ERROR)
-                    || response.getResultCode().equals(ResultCodeEnum.INFO)) {
-                String msg = response.getComment();
-
-                utilController.addErrorMessageWithCustomerServiceInfo("Ett tekniskt fel inträffade när din beställning skulle bekräftas. Beställningen kommer inte att kunna genomföras eller sparas. Försök senare eller kontakta kundtjänst.");
-                utilController.addErrorMessageWithCustomerServiceInfo(msg);
-
-                orderSuccess = false;
-            }
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            String msg = "Tekniskt fel. Försök senare.";
-            utilController.addErrorMessageWithCustomerServiceInfo(msg);
-
-            return "verifyDelivery";
-        }
-
-        return "orderConfirmation";
-    }
-
-    public Boolean getOrderSuccess() {
-        return orderSuccess;
     }
 }

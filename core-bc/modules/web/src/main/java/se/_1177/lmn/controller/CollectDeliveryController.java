@@ -42,7 +42,8 @@ import java.util.stream.Collectors;
 import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 
 /**
- * Controller class which handles the model for the view where collect delivery is chosen.
+ * Controller class which handles the model for the view where collect delivery is chosen. The complex part comes when
+ * no single service point provider fits all {@link PrescriptionItemType}s. Then
  *
  * @author Patrik Björk
  */
@@ -202,6 +203,10 @@ public class CollectDeliveryController {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Method called to list one or multiple delivery point selects - one for each provider.
+     * @return
+     */
     public Map<ServicePointProviderEnum, List<SelectItemGroup>> getDeliverySelectItems() {
 
         Map<ServicePointProviderEnum, List<SelectItemGroup>> selectOneMenuLists = new HashMap<>();
@@ -218,6 +223,14 @@ public class CollectDeliveryController {
         return selectOneMenuLists;
     }
 
+    /**
+     * This method's job is to either find one common denominator for which {@link ServicePointProviderEnum} is
+     * available for all {@link PrescriptionItemType}s. If no such {@link ServicePointProviderEnum} exists, make a map
+     * with the {@link ServicePointProviderEnum} for all {@link PrescriptionItemType}s mapped to a list of all
+     * {@link PrescriptionItemType}s which have that {@link ServicePointProviderEnum} as its option.
+     *
+     * @return
+     */
     public Map<ServicePointProviderEnum, List<PrescriptionItemType>> getRelevantServicePointProviders() {
         Map<ServicePointProviderEnum, List<PrescriptionItemType>> servicePointProvidersForItems = new TreeMap<>();
 
@@ -272,8 +285,10 @@ public class CollectDeliveryController {
      * Finds a {@link ServicePointProviderEnum} which is available to all items chosen for collect delivery, or, if no
      * such {@link ServicePointProviderEnum} can be found, chooses the {@link ServicePointProviderEnum} for the first
      * {@link DeliveryAlternativeType} with UTLÄMNINGSSTÄLLE as {@link DeliveryMethodEnum}.
-     * @param item
-     * @return
+     *
+     * @param item the {@link PrescriptionItemType} to determine {@link ServicePointProviderEnum} for
+     * @return The determined {@link ServicePointProviderEnum}. If all {@link PrescriptionItemType}s have a common
+     * {@link ServicePointProviderEnum} that one is chosen.
      */
     public ServicePointProviderEnum getServicePointProviderForItem(PrescriptionItemType item) {
         ServicePointProviderEnum servicePointProviderForItem = null;
@@ -434,6 +449,14 @@ public class CollectDeliveryController {
         return smsNumber;
     }
 
+    /**
+     * This method aims to find combinations of {@link ServicePointProviderEnum}s with possible
+     * {@link DeliveryNotificationMethodEnum}s. The algorithm is to start with all {@link ServicePointProviderEnum}s and
+     * "fill" all entries with the {@link DeliveryNotificationMethodEnum}s of the first {@link PrescriptionItemType}
+     * iterated. As more {@link PrescriptionItemType}s are iterated both the {@link DeliveryNotificationMethodEnum}s,
+     * for each {@link ServicePointProviderEnum}, as well as {@link ServicePointProviderEnum} are removed as they are
+     * determined as unavailable for all {@link PrescriptionItemType}s.
+     */
     public void initPossibleCollectCombinationsFittingAllWithNotificationMethods() {
 
         if (possibleCollectCombinationsFittingAllWithNotificationMethods == null) {
@@ -601,6 +624,11 @@ public class CollectDeliveryController {
         return success[0];
     }
 
+    /**
+     * Validate that all delivery notifications that should be set are set.
+     *
+     * @return <code>true</code> if all are set and <code>false</code> otherwise
+     */
     public boolean validateNotificationInput() {
 
         final int[] count = {0};
@@ -685,6 +713,12 @@ public class CollectDeliveryController {
         facesContext.addMessage(clientId, new FacesMessage(FacesMessage.SEVERITY_ERROR, text, text));
     }
 
+    /**
+     * Determines whether the fetch of {@link DeliveryPointType}s for each {@link ServicePointProviderEnum} was
+     * successful.
+     *
+     * @return <code>true</code> if successful, false otherwise
+     */
     public boolean isSuccessfulSelectItems() {
         Map<ServicePointProviderEnum, List<SelectItemGroup>> deliverySelectItems = getDeliverySelectItems();
 

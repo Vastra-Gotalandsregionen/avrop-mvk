@@ -60,7 +60,12 @@ public class OrderController {
 
     private Map<String, Boolean> chosenItemMap = new HashMap<>();
 
-    // This is inited by UserProfileController.
+    /**
+     * This is called by UserProfileController. It fetches the {@link PrescriptionItemType}s, preserves them in a map
+     * where the id is mapped to the instance, and also triggers loading of
+     * {@link riv.crm.selfservice.medicalsupply._0.DeliveryPointType}s for all {@link ServicePointProviderEnum}s that
+     * are relevant, i.e. they are available for at least one orderable {@link PrescriptionItemType}.
+     */
     public void init() {
         try {
             if (userProfileController.getUserProfile() == null) {
