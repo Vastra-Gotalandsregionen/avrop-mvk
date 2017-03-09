@@ -13,6 +13,7 @@ import riv.crm.selfservice.medicalsupply._0.ResultCodeEnum;
 import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._0.GetMedicalSupplyPrescriptionsResponseType;
 import se._1177.lmn.controller.model.Cart;
+import se._1177.lmn.controller.model.PrescriptionItemInfo;
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 import se._1177.lmn.service.LmnService;
 
@@ -56,6 +57,9 @@ public class OrderController {
     @Autowired
     private Cart cart;
 
+    @Autowired
+    private PrescriptionItemInfo prescriptionItemInfo;
+
     private MedicalSupplyPrescriptionsHolder medicalSupplyPrescriptions;
 
     private Map<String, Boolean> chosenItemMap = new HashMap<>();
@@ -90,7 +94,8 @@ public class OrderController {
             Set<ServicePointProviderEnum> allRelevantProviders = new HashSet<>();
             for (PrescriptionItemType prescriptionItem : medicalSupplyPrescriptions.orderable) {
                 String prescriptionItemId = prescriptionItem.getPrescriptionItemId();
-                cart.addPrescriptionItemForInfo(prescriptionItemId, prescriptionItem);
+                prescriptionItemInfo.addPrescriptionItemForInfo(prescriptionItemId, prescriptionItem);
+//                cart.addPrescriptionItemForInfo(prescriptionItemId, prescriptionItem);
 
                 if (!UtilController.isAfterToday(prescriptionItem.getNextEarliestOrderDate())
                         && prescriptionItem.getArticle().isIsOrderable()) {
@@ -161,7 +166,7 @@ public class OrderController {
 
         for (Map.Entry<String, Boolean> entry : chosenItemMap.entrySet()) {
             if (entry.getValue()) {
-                toCart.add(cart.getPrescriptionItemInfo().get(entry.getKey()));
+                toCart.add(prescriptionItemInfo.getPrescriptionItemInfo().get(entry.getKey()));
             }
         }
 
@@ -172,12 +177,21 @@ public class OrderController {
             FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_WARN, msg, msg));
 
             return "order" + userProfileController.getDelegateUrlParameters();
+        } else if (choiceForSubArticlesIsNeeded(cart.getItemsInCart())) {
+            prepareDeliveryOptions(toCart);
+            return "subArticle" + ACTION_SUFFIX;
         } else {
             prepareDeliveryOptions(toCart);
 
             return "delivery" + ACTION_SUFFIX;
         }
 
+    }
+
+    boolean choiceForSubArticlesIsNeeded(List<PrescriptionItemType> itemsInCart) {
+        // At least two subarticles are needed for a choice to be needed
+        return itemsInCart.stream().anyMatch(prescriptionItemType ->
+                prescriptionItemType.getSubArticle() != null && prescriptionItemType.getSubArticle().size() > 1);
     }
 
     void prepareDeliveryOptions(final List<PrescriptionItemType> chosenPrescriptionItems) {

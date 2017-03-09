@@ -1,0 +1,4 @@
+input[type=range] {
+    position: relative !important;
+    top: 16px !important;
+}

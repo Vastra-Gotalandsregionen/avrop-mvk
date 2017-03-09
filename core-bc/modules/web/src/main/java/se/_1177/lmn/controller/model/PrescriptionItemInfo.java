@@ -15,18 +15,9 @@ import java.util.Map;
  */
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class Cart {
+public class PrescriptionItemInfo {
 
-    private List<PrescriptionItemType> itemsInCart = new ArrayList<>();
     private Map<String, PrescriptionItemType> prescriptionItemInfo = new HashMap<>();
-
-    public List<PrescriptionItemType> getItemsInCart() {
-        return itemsInCart;
-    }
-
-    public void setItemsInCart(List<PrescriptionItemType> itemsInCart) {
-        this.itemsInCart = itemsInCart;
-    }
 
     /**
      * Use this method to store the prescription item to fetch the info later.
@@ -34,16 +25,15 @@ public class Cart {
      * @param prescriptionItemId
      * @param prescriptionItem
      */
-    /*public void addPrescriptionItemForInfo(String prescriptionItemId, PrescriptionItemType prescriptionItem) {
+    public void addPrescriptionItemForInfo(String prescriptionItemId, PrescriptionItemType prescriptionItem) {
         this.prescriptionItemInfo.put(prescriptionItemId, prescriptionItem);
     }
 
     public Map<String, PrescriptionItemType> getPrescriptionItemInfo() {
         return prescriptionItemInfo;
-    }*/
+    }
 
     public void emptyCart() {
-        itemsInCart = new ArrayList<>();
         prescriptionItemInfo = new HashMap<>();
     }
 }

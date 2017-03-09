@@ -25,8 +25,10 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -67,6 +69,9 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         for (int i = 0; i <= 300; i++) {
             addPrescriptionItem(random, subjectOfCare, random.nextBoolean());
         }
+
+        // Add determined item
+        addSpecificPrescriptionItem(random, subjectOfCare);
 
         response.setSubjectOfCareType(subjectOfCare);
 
@@ -143,6 +148,85 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.setNoOfArticlesPerOrder(random.nextInt(5) * 1000 + 1000);
         prescriptionItem.setNoOfPackagesPerOrder(random.nextInt(5) * 50 + 50);
         prescriptionItem.setStatus(StatusEnum.values()[random.nextInt(StatusEnum.values().length)]);
+
+        subjectOfCare.getPrescriptionItem().add(prescriptionItem);
+    }
+
+    private void addSpecificPrescriptionItem(Random random, SubjectOfCareType subjectOfCare) {
+        OrderItemType orderItem = new OrderItemType();
+
+        List<ArticleType> subArticles = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            ArticleType subArticle = new ArticleType();
+            subArticle.setArticleName("Artikelnamn" + " - Särskild näring - Smak " + i);
+            subArticle.setArticleNo(random.nextInt(100000) + "");
+            subArticle.setIsOrderable(true);
+            subArticle.setPackageSize(4);
+            subArticle.setPackageSizeUnit("st");
+            subArticle.setProductArea(ProductAreaEnum.SÄRNÄR);
+
+            subArticles.add(subArticle);
+        }
+
+//        orderItem.setArticle(subArticle1);
+
+        orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
+        DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
+        deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+//            deliveryChoice.setDeliveryPoint(); kanske todo utveckla mer på deliveryChoice...
+        orderItem.setDeliveryChoice(deliveryChoice);
+
+        subjectOfCare.getOrderItem().add(orderItem);
+
+        PrescriptionItemType prescriptionItem = new PrescriptionItemType();
+
+        ArticleType article2 = new ArticleType();
+        article2.setArticleName("Artikelnamn" + " - Särskild näring2");
+        article2.setArticleNo(random.nextInt(100000) + "");
+        article2.setIsOrderable(true);
+        article2.setPackageSize(20);
+        article2.setPackageSizeUnit("st");
+        article2.setProductArea(ProductAreaEnum.SÄRNÄR);
+
+        prescriptionItem.getSubArticle().addAll(subArticles);
+
+        prescriptionItem.setArticle(article2);
+
+        prescriptionItem.setNoOfOrders(4);
+        prescriptionItem.setNoOfRemainingOrders(3);
+
+        DeliveryAlternativeType deliveryAlternative = getRandomDeliveryAlternativeType(random);
+        prescriptionItem.getDeliveryAlternative().add(deliveryAlternative);
+
+        DeliveryAlternativeType deliveryAlternative2 = getRandomDeliveryAlternativeType(random);
+        prescriptionItem.getDeliveryAlternative().add(deliveryAlternative2);
+
+//        if (!nextPossibleOrderDateInFuture) {
+            prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random, -365));
+//        } else {
+//            Calendar c = Calendar.getInstance();
+//
+//            c.add(Calendar.MONTH, 1);
+//
+//            XMLGregorianCalendar randomCalendar = getRandomCalendar(random, 0);
+//            randomCalendar.setYear(c.get(Calendar.YEAR) + 1);
+//            randomCalendar.setDay(random.nextInt(20) + 1); // To avoid invalid dates.
+//
+//            prescriptionItem.setNextEarliestOrderDate(null);
+//            prescriptionItem.setNextEarliestOrderDate(randomCalendar);
+//        }
+        prescriptionItem.setPrescriptionId(random.nextInt(100000) + "");
+        prescriptionItem.setPrescriptionItemId(random.nextInt(100000) + "");
+        PrescriberType prescriber = new PrescriberType();
+        prescriber.setPrescriberName("Kalle Karlsson");
+        prescriber.setPrescriberCode(random.nextInt(1000) + "");
+        prescriber.setPrescriberId(random.nextInt(1000) + "");
+        prescriber.setPrescriberTitle("Läkare");
+        prescriptionItem.setPrescriber(prescriber);
+        prescriptionItem.setLastValidDate(getRandomCalendar(random, 665L));
+        prescriptionItem.setNoOfArticlesPerOrder(65);
+        prescriptionItem.setNoOfPackagesPerOrder(2);
+        prescriptionItem.setStatus(StatusEnum.AKTIV);
 
         subjectOfCare.getPrescriptionItem().add(prescriptionItem);
     }
