@@ -102,11 +102,6 @@ public class VerifyDeliveryControllerTest {
         Field userProfileControllerField = clazz.getDeclaredField("userProfileController");
         userProfileControllerField.setAccessible(true);
         userProfileControllerField.set(verifyDeliveryController, userProfileController);
-
-        Field deliveryControllerField = clazz.getDeclaredField("deliveryController");
-        deliveryControllerField.setAccessible(true);
-        deliveryControllerField.set(verifyDeliveryController, deliveryController);
-
     }
 
     @Test
