@@ -8,6 +8,7 @@ import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import se._1177.lmn.controller.model.Cart;
+import se._1177.lmn.controller.model.PrescriptionItemInfo;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static se._1177.lmn.service.util.CartUtil.createOrderRow;
 
 /**
  * @author Patrik Björk
@@ -25,6 +27,7 @@ import static org.mockito.Mockito.mock;
 public class CollectDeliveryController2Test {
 
     private CollectDeliveryController collectDeliveryController;
+    private PrescriptionItemInfo prescriptionItemInfo;
 
     private PrescriptionItemType item1, item2, item3;
 
@@ -32,11 +35,17 @@ public class CollectDeliveryController2Test {
     public void setup() throws Exception {
 
         collectDeliveryController = new CollectDeliveryController();
+        prescriptionItemInfo = new PrescriptionItemInfo();
 
         Field preferredDeliveryNotificationMethod = collectDeliveryController.getClass()
                 .getDeclaredField("preferredDeliveryNotificationMethod");
         preferredDeliveryNotificationMethod.setAccessible(true);
         preferredDeliveryNotificationMethod.set(collectDeliveryController, DeliveryNotificationMethodEnum.SMS);
+
+        Field prescriptionItemInfoField = collectDeliveryController.getClass()
+                .getDeclaredField("prescriptionItemInfo");
+        prescriptionItemInfoField.setAccessible(true);
+        prescriptionItemInfoField.set(collectDeliveryController, prescriptionItemInfo);
 
         Cart cart = new Cart();
 
@@ -82,6 +91,10 @@ public class CollectDeliveryController2Test {
         item2 = new PrescriptionItemType();
         item3 = new PrescriptionItemType();
 
+        item1.setPrescriptionItemId("1");
+        item2.setPrescriptionItemId("2");
+        item3.setPrescriptionItemId("3");
+
         // Which delivery alternatives that are added to each item doesn't matter as long as all delivery alternatives
         // are added to any item.
         item1.getDeliveryAlternative().add(alternative1); // UTLÄMNINGSSTÄLLE, SCHENKER
@@ -98,9 +111,13 @@ public class CollectDeliveryController2Test {
         // Now no delivery method is common to all items, and of those with UTLÄMNINGSSTÄLLE, SCHENKER is the common
         // denominator.
 
-        cart.getItemsInCart().add(item1);
-        cart.getItemsInCart().add(item2);
-        cart.getItemsInCart().add(item3);
+        cart.getOrderRows().add(createOrderRow(item1).get());
+        cart.getOrderRows().add(createOrderRow(item2).get());
+        cart.getOrderRows().add(createOrderRow(item3).get());
+
+        prescriptionItemInfo.getChosenPrescriptionItemInfo().put(item1.getPrescriptionItemId(), item1);
+        prescriptionItemInfo.getChosenPrescriptionItemInfo().put(item2.getPrescriptionItemId(), item2);
+        prescriptionItemInfo.getChosenPrescriptionItemInfo().put(item3.getPrescriptionItemId(), item3);
 
         Field cartField = collectDeliveryController.getClass().getDeclaredField("cart");
 
@@ -122,6 +139,10 @@ public class CollectDeliveryController2Test {
         cartFieldOnDeliveryController.setAccessible(true);
         cartFieldOnDeliveryController.set(deliveryController, cart);
 
+        Field prescriptionItemInfoFieldOnDeliveryController = deliveryController.getClass().getDeclaredField("prescriptionItemInfo");
+        prescriptionItemInfoFieldOnDeliveryController.setAccessible(true);
+        prescriptionItemInfoFieldOnDeliveryController.set(deliveryController, prescriptionItemInfo);
+
         OrderController orderController = new OrderController();
 
         Field deliveryControllerField = orderController.getClass().getDeclaredField("deliveryController");
@@ -137,7 +158,7 @@ public class CollectDeliveryController2Test {
         deliveryController2.set(collectDeliveryController, deliveryController);
 
         // This is an important preparatory step.
-        orderController.prepareDeliveryOptions(cart.getItemsInCart());
+        orderController.prepareDeliveryOptions(prescriptionItemInfo.getPrescriptionItems(cart.getOrderRows()));
     }
 
     @Test

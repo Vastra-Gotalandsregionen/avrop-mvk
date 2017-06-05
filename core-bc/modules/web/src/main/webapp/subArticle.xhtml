@@ -67,9 +67,14 @@
                 width: 400px;
             }
 
+            @media (max-width: 767px) {
+                .sub-article-name {
+                    width: 320px;
+                }
+            }
+
             .sub-article-row {
-                height: 36px;
-                margin-bottom: 8px;
+                line-height: 36px;
             }
 
             .circle-icon {
@@ -114,147 +119,9 @@
                 width: 200px;
             }
 
-            input[type=range] {
-                -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
-                width: 100%; /* Specific width is required for Firefox. */
-                background: transparent; /* Otherwise white in Chrome */
-
-                width: 200px;
-                padding: 0;
-
-                position: absolute;
-                top: 28px;
-            }
-
-            input[type=range]::-webkit-slider-thumb {
-                -webkit-appearance: none;
-            }
-
-            input[type=range]:focus {
-                outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
-            }
-
-            input[type=range]::-ms-track {
-                width: 100%;
-                cursor: pointer;
-
-                /* Hides the slider so custom styles can be added */
-                background: transparent;
-                border-color: transparent;
-                color: transparent;
-            }
-
-            /* Special styling for WebKit/Blink */
-            input[type=range]::-webkit-slider-thumb {
-                -webkit-appearance: none;
-                /*border: 1px solid #000000;*/
-                height: 28px;
-                width: 28px;
-                border: 1px solid #008391;
-                border-radius: 50%;
-                background: #008391;
-                cursor: pointer;
-                margin-top: -10px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
-                /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; !* Add cool effects to your sliders! *!*/
-            }
-
-            input[type=range]::-webkit-slider-thumb:hover {
-                background: #ffffff;
-            }
-
-            /* All the same stuff for Firefox */
-            input[type=range]::-moz-range-thumb {
-                /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
-                border: 1px solid #008391;
-                height: 28px;
-                width: 28px;
-                border-radius: 50%;
-                background: #008391;
-                cursor: pointer;
-            }
-
-            input[type=range]::-moz-range-thumb:hover {
-                background: #ffffff;
-            }
-
-            /* All the same stuff for IE */
-            input[type=range]::-ms-thumb {
-                /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
-                /*border: 1px solid #000000;*/
-                border: 1px solid #008391;
-                height: 28px;
-                width: 28px;
-                border-radius: 50%;
-                /*background: #ffffff;*/
-                background: #008391;
-                cursor: pointer;
-
-                margin-top: 0;
-            }
-
-            input[type=range]::-ms-thumb:hover {
-                /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
-                background: #ffffff;
-            }
-
-            input[type=range]::-webkit-slider-runnable-track {
-                width: 100%;
-                height: 8.4px;
-                cursor: pointer;
-                /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
-                background: #e3e3e3;
-                /*background: #3071a9;*/
-                border-radius: 3px;
-                /*border: 0.2px solid #010101;*/
-            }
-
-            input[type=range]:focus::-webkit-slider-runnable-track {
-                /*background: #367ebd;*/
-            }
-
-            input[type=range]::-moz-range-track {
-                width: 100%;
-                height: 8.4px;
-                cursor: pointer;
-                /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
-                background: #e3e3e3;
-                /*background: #3071a9;*/
-                border-radius: 3px;
-                /*border: 0.2px solid #010101;*/
-            }
-
-            input[type=range]::-ms-track {
-                width: 100%;
-                height: 8.4px;
-                cursor: pointer;
-                background: transparent;
-                border-color: transparent;
-                border-width: 16px 0;
-                color: transparent;
-            }
-
-            input[type=range]::-ms-fill-lower {
-                background: #e3e3e3;
-                /*border: 0.2px solid #010101;*/
-                border-radius: 3px 0 0 3px;
-                /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
-            }
-
-            input[type=range]:focus::-ms-fill-lower {
-                background: #e3e3e3;
-                /*background: #3071a9;*/
-            }
-
-            input[type=range]::-ms-fill-upper {
-                background: #e3e3e3;
-                /*background: #3071a9;*/
-                /*border: 0.2px solid #010101;*/
-                border-radius: 0 3px 3px 0;
-                /*box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;*/
-            }
-
-            input[type=range]:focus::-ms-fill-upper {
-                /*background: #367ebd;*/
+            .sub-article-row > span  {
+                float: left;
+                margin-bottom: 8px;
             }
         </h:outputStylesheet>
 
@@ -272,28 +139,25 @@
 
             <h:form>
                 <div id="app" v-cloak="">
-                    <ui:repeat value="#{subArticleController.prescriptionItems}" var="prescriptionItem"
+                    <ui:repeat value="#{subArticleController.articleWithSubArticlesModels}" var="articleWithSubArticlesModel"
                                varStatus="parentArticleStatus">
-                        <h2>#{prescriptionItem.parentArticleName}</h2>
-                        <!--<div>-->
-                            <!--<table id="subArticlesTable">-->
+                        <h2>#{articleWithSubArticlesModel.parentArticleName}</h2>
+                        <h3>Totalt antal förpackningar: {{jsonData[#{parentArticleStatus.index}].totalOrderSize}} st</h3>
                             <div class="sub-articles-table">
-                            <!--<ul>-->
-                                <ui:repeat value="#{prescriptionItem.subArticles}" var="subArticle"
+
+                                <ui:repeat value="#{articleWithSubArticlesModel.subArticles}" var="subArticle"
                                            varStatus="subArticleStatus">
-                                    <div class="sub-article-row">
-                                        <!--#{subArticle.name}:-->
-                                        <span class="sub-article-name"><h:inputText style="display: none" id="jsfInputRepeated"
+                                    <div class="sub-article-row clearfix">
+                                        <span class="sub-article-name">
+
+                                            <h:inputText style="display: none" id="jsfInputRepeated"
                                                      styleClass="jsf-input-#{parentArticleStatus.index}-#{subArticleStatus.index}"
                                                      value="#{subArticle.orderCount}"/>
+
                                             {{jsonData[#{parentArticleStatus.index}].subArticles[#{subArticleStatus.index}].name}}
                                         </span>
-                                        <span class="range-wrapper">
-                                            <input type="range" step="1" min="0"
-                                                   max="#{prescriptionItem.totalOrderSize}" v-if="seen"
-                                                   v-model="jsonData[#{parentArticleStatus.index}].subArticles[#{subArticleStatus.index}].orderCount"/>
-                                        </span>
-                                        <span>
+
+                                        <span class="sub-article-number-wrapper">
                                             <span class="circle-icon minus" data-parent-article-index="#{parentArticleStatus.index}" data-sub-article-index="#{subArticleStatus.index}"><span class="circle-icon-content">&#8211;</span></span>
                                             <input type="text" class="short-number-input"
                                                    v-model="jsonData[#{parentArticleStatus.index}].subArticles[#{subArticleStatus.index}].orderCount" tabindex="1#{parentArticleStatus.index}#{subArticleStatus.index}"/>
@@ -301,7 +165,6 @@
                                         </span>
                                     </div>
                                 </ui:repeat>
-                                <h3>Totalt antal förpackningar: {{jsonData[#{parentArticleStatus.index}].totalOrderSize}} st</h3>
 
                             </div>
                     </ui:repeat>

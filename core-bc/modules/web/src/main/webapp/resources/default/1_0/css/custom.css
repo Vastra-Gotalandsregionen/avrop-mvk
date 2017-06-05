@@ -569,6 +569,12 @@ ul.delivery-options li input[disabled="disabled"]+label {
         width: 100%;
     }
 
+    .sub-article-row input[type=text] {
+        box-sizing: content-box;
+        display: inline;
+        width: 24px;
+    }
+
     .input-group input[type="submit"] {
         margin: 10px 0;
     }
@@ -776,6 +782,10 @@ select::-moz-focus-inner { /*Remove button padding in FF*/
     }
 }
 
+.verify-delivery .column-4 {
+    width: 200px;
+}
+
 .small-screen {
     display: none;
 }
@@ -794,6 +804,19 @@ select::-moz-focus-inner { /*Remove button padding in FF*/
     width: 24px;
 }
 
+table.sub-articles-table {
+    table-layout: auto;
+}
+
+table.sub-articles-list td {
+    border: none;
+    padding: 3px 8px 2px 0;
+}
+
+.paragraph {
+    margin-top: 12px;
+}
+
 @media (max-width: 767px) {
 
     .avrop-table td, .embedded-table td {
@@ -805,7 +828,7 @@ select::-moz-focus-inner { /*Remove button padding in FF*/
         display: none;
     }
 
-    .embedded-table.small-screen {
+    .embedded-table.small-screen, .embedded-table.always-show {
         display: table;
         width: 100%;
     }

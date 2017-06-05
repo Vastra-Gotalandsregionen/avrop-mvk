@@ -8,15 +8,21 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._0.ArticleType;
+import riv.crm.selfservice.medicalsupply._0.OrderRowType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import se._1177.lmn.controller.model.ArticleWithSubArticlesModel;
 import se._1177.lmn.controller.model.Cart;
+import se._1177.lmn.controller.model.PrescriptionItemInfo;
 import se._1177.lmn.controller.model.SubArticleDto;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 
 /**
  * @author Patrik Björk
@@ -31,33 +37,21 @@ public class SubArticleController {
     private Cart cart;
 
     @Autowired
+    private PrescriptionItemInfo prescriptionItemInfo;
+
+    @Autowired
     private UserProfileController userProfileController;
 
     private List<ArticleWithSubArticlesModel> articleWithSubArticlesModels;
-    /*private MyObject[] myObjects = new MyObject[] {
-            new MyObject("1", getNumber() + ""),
-            new MyObject("2", (20 - getNumber()) + "")
-    };*/
 
-    /*private int number;
+    private Map<String, ArticleType> subArticleIdToArticle = new HashMap<>();
 
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }*/
-
-//    public MyObject[] getMyObjects() {
-//        return myObjects;
-//    }
     @PostConstruct
     public void init() {
         articleWithSubArticlesModels = makeDtoModel(getThoseWhereChoiceIsNeeded());
     }
 
-    public List<ArticleWithSubArticlesModel> getPrescriptionItems() {
+    public List<ArticleWithSubArticlesModel> getArticleWithSubArticlesModels() {
         return articleWithSubArticlesModels;
     }
 
@@ -72,14 +66,14 @@ public class SubArticleController {
 
             model.setParentArticleName(prescriptionItemType.getArticle().getArticleName());
 
+            model.setPrescriptionItemId(prescriptionItemType.getPrescriptionItemId());
+
             int numbersStillInNeedToDistribute = prescriptionItemType.getNoOfPackagesPerOrder();
             float numberSubArticlesLeftToDistributeTo = prescriptionItemType.getSubArticle().size();
 
             model.setTotalOrderSize(numbersStillInNeedToDistribute);
 
-            int nextOrderCountNumberToDistribute;// = ((int) Math.ceil(numbersStillInNeedToDistribute / numberSubArticlesLeftToDistributeTo));
-//            numbersStillInNeedToDistribute -= nextOrderCountNumberToDistribute;
-//            numberSubArticlesLeftToDistributeTo -= 1;
+            int nextOrderCountNumberToDistribute;
 
             for (ArticleType subArticle : prescriptionItemType.getSubArticle()) {
                 // Update these values for this iteration
@@ -89,19 +83,24 @@ public class SubArticleController {
 
                 SubArticleDto subArticleDto = new SubArticleDto();
                 subArticleDto.setName(subArticle.getArticleName());
+                subArticleDto.setArticleNo(subArticle.getArticleNo());
                 subArticleDto.setOrderCount(nextOrderCountNumberToDistribute);
                 model.getSubArticles().add(subArticleDto);
 
-
+                subArticleIdToArticle.put(subArticle.getArticleNo(), subArticle);
             }
 
             list.add(model);
         }
+
         return list;
     }
 
     private List<PrescriptionItemType> getThoseWhereChoiceIsNeeded() {
-        return cart.getItemsInCart().stream().filter(prescriptionItemType ->
+        List<PrescriptionItemType> prescriptionItemsInCart = prescriptionItemInfo
+                .getChosenPrescriptionItemInfoList();
+
+        return prescriptionItemsInCart.stream().filter(prescriptionItemType ->
                     prescriptionItemType.getSubArticle() != null && prescriptionItemType.getSubArticle().size() > 1
             ).collect(Collectors.toList());
     }
@@ -119,14 +118,39 @@ public class SubArticleController {
     }
 
     public String toDelivery() {
+        // The sub articles were not added in the previous step since more information was needed.
+        complementCartWithSubArticles();
 
-        System.out.println();
-
-        return null;
+        return "delivery" + ACTION_SUFFIX;
     }
-    /*public void action() {
-//        System.out.println(this.number++);
-//        this.myObjects[0].setValue("" + (Integer.parseInt(this.myObjects[0].getValue()) ));
-    }*/
+
+    private void complementCartWithSubArticles() {
+        for (ArticleWithSubArticlesModel articleWithSubArticlesModel : articleWithSubArticlesModels) {
+
+            List<SubArticleDto> subArticlesToOrder = articleWithSubArticlesModel.getSubArticles()
+                    .stream()
+                    .filter(subArticleDto -> subArticleDto.getOrderCount() > 0)
+                    .collect(Collectors.toList());
+
+            for (SubArticleDto subArticleDto : subArticlesToOrder) {
+                ArticleType subArticle = subArticleIdToArticle.get(subArticleDto.getArticleNo());
+
+                OrderRowType orderRowType = new OrderRowType();
+
+                orderRowType.setArticle(subArticle);
+                orderRowType.setNoOfPackages(subArticleDto.getOrderCount());
+                orderRowType.setNoOfPcs(subArticleDto.getOrderCount() * subArticle.getPackageSize());
+
+                PrescriptionItemType prescriptionItem = prescriptionItemInfo.getPrescriptionItem(
+                        articleWithSubArticlesModel.getPrescriptionItemId());
+
+                orderRowType.setPrescriptionId(prescriptionItem.getPrescriptionId());
+                orderRowType.setPrescriptionItemId(prescriptionItem.getPrescriptionItemId());
+                orderRowType.setSource(prescriptionItem.getSource());
+
+                cart.getOrderRows().add(orderRowType);
+            }
+        }
+    }
 }
 

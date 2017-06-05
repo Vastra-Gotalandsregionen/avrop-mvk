@@ -7,18 +7,19 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
+import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import se._1177.lmn.controller.model.Cart;
+import se._1177.lmn.controller.model.PrescriptionItemInfo;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -41,6 +42,9 @@ public class DeliveryController {
 
     @Autowired
     private Cart cart;
+
+    @Autowired
+    private PrescriptionItemInfo prescriptionItemInfo;
 
     @Autowired
     private HomeDeliveryController homeDeliveryController;
@@ -165,10 +169,12 @@ public class DeliveryController {
                 throw new RuntimeException("Unexpected " + DeliveryMethodEnum.class.getCanonicalName());
             }
         } else {
-            // The user must have chosen both delivery methods and thus needs to go through both views.
+            // The user must have chosen both delivery methods and thus needs to go through both home delivery and
+            // collect delivery views.
 
             // Validate delivery method is chosen for all items
-            for (String deliveryMethod : getDeliveryMethodForEachItem().values()) {
+            Map<PrescriptionItemType, String> deliveryMethodForEachItem = getDeliveryMethodForEachItem();
+            for (String deliveryMethod : deliveryMethodForEachItem.values()) {
                 if (deliveryMethod == null) {
                     String msg = "Du måste välja leveranssätt för alla produkter.";
                     FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,
@@ -177,6 +183,18 @@ public class DeliveryController {
                     return "delivery";
                 }
             }
+
+            // Validation passed. Set what we know for each order row, i.e. delivery method for the delivery choice of
+            // the order row.
+            cart.getOrderRows().forEach(orderRowType -> {
+                DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
+
+                PrescriptionItemType prescriptionItem = prescriptionItemInfo.getPrescriptionItem(orderRowType);
+                String deliveryMethodString = deliveryMethodForEachItem.get(prescriptionItem);
+
+                deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.fromValue(deliveryMethodString));
+                orderRowType.setDeliveryChoice(deliveryChoice);
+            });
 
             homeDeliveryController.setNextViewIsCollectDelivery(true);
             return "homeDelivery" + ACTION_SUFFIX;
@@ -225,13 +243,13 @@ public class DeliveryController {
     }
 
     private void setDeliveryMethodForAllItems(DeliveryMethodEnum deliveryMethod) {
-        Map<PrescriptionItemType, String> deliveryMethodForEachItem = getDeliveryMethodForEachItem();
+        cart.getOrderRows().forEach(orderRowType -> {
+            DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
 
-        Iterator<PrescriptionItemType> iterator = deliveryMethodForEachItem.keySet().iterator();
+            deliveryChoice.setDeliveryMethod(deliveryMethod);
 
-        while (iterator.hasNext()) {
-            deliveryMethodForEachItem.put(iterator.next(), deliveryMethod.name());
-        }
+            orderRowType.setDeliveryChoice(deliveryChoice);
+        });
     }
 
     public boolean isUserNeedsToChooseDeliveryMethodForEachItem() {
@@ -255,10 +273,13 @@ public class DeliveryController {
     public Map<PrescriptionItemType, String> getDeliveryMethodForEachItem() {
 
         // Remove all which don't exist in cart since there may be remaining items from previous choices.
-        deliveryMethodForEachItem.keySet().retainAll(cart.getItemsInCart());
+        List<PrescriptionItemType> prescriptionItemsInCart = prescriptionItemInfo
+                .getPrescriptionItems(cart.getOrderRows());
+
+        deliveryMethodForEachItem.keySet().retainAll(prescriptionItemsInCart);
 
         // Make sure chosen items are in the map. Otherwise add them.
-        for (PrescriptionItemType prescriptionItemType : cart.getItemsInCart()) {
+        for (PrescriptionItemType prescriptionItemType : prescriptionItemsInCart) {
             if (!deliveryMethodForEachItem.containsKey(prescriptionItemType)) {
                 String decidedDeliveryMethod = decideOnDeliveryMethod(prescriptionItemType);
 

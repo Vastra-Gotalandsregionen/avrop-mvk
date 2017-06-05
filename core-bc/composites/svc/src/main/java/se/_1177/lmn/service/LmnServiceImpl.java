@@ -203,7 +203,7 @@ public class LmnServiceImpl implements LmnService {
      * @param subjectOfCareId the subject of care id of the user or the inhabitant the user is delegate for
      * @param orderByDelegate whether the order is made by a delegate
      * @param orderer the name of the person who makes the order
-     * @param prescriptionItems the {@link PrescriptionItemType}s which are ordered
+     * @param orderRows the {@link OrderRowType}s which are ordered
      * @param deliveryChoicePerItem the {@link DeliveryChoiceType} for each {@link PrescriptionItemType}
      * @return the {@link RegisterMedicalSupplyOrderResponseType}
      */
@@ -212,7 +212,7 @@ public class LmnServiceImpl implements LmnService {
             String subjectOfCareId,
             boolean orderByDelegate,
             String orderer, // May be delegate
-            List<PrescriptionItemType> prescriptionItems,
+            List<OrderRowType> orderRows,
             Map<PrescriptionItemType, DeliveryChoiceType> deliveryChoicePerItem) {
         RegisterMedicalSupplyOrderType parameters = new RegisterMedicalSupplyOrderType();
 
@@ -222,7 +222,7 @@ public class LmnServiceImpl implements LmnService {
         order.setOrderByDelegate(orderByDelegate);
         order.setOrderer(orderer);
 
-        addOrderRows(prescriptionItems, order, deliveryChoicePerItem);
+        order.getOrderRow().addAll(orderRows);
 
         parameters.setOrder(order);
 
@@ -243,30 +243,6 @@ public class LmnServiceImpl implements LmnService {
     @Override
     public DeliveryPointType getDeliveryPointById(String deliveryPointId) {
         return deliveryPointIdToDeliveryPoint.get(deliveryPointId);
-    }
-
-    void addOrderRows(List<PrescriptionItemType> articleNumbers, OrderType order, Map<PrescriptionItemType, DeliveryChoiceType> deliveryChoicePerItem) {
-        for (PrescriptionItemType item : articleNumbers) {
-            OrderRowType orderRow = new OrderRowType();
-
-            DeliveryChoiceType deliveryChoice = deliveryChoicePerItem.get(item);
-
-            orderRow.setDeliveryChoice(deliveryChoice);
-
-            orderRow.setArticle(item.getArticle());
-
-            orderRow.setNoOfPackages(item.getNoOfPackagesPerOrder());
-
-            orderRow.setNoOfPcs(item.getNoOfArticlesPerOrder());
-
-            orderRow.setPrescriptionId(item.getPrescriptionId());
-
-            orderRow.setPrescriptionItemId(item.getPrescriptionItemId());
-
-            orderRow.setSource(item.getSource());
-
-            order.getOrderRow().add(orderRow);
-        }
     }
 
     public static boolean isAfterToday(XMLGregorianCalendar date) {

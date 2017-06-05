@@ -15,6 +15,7 @@ import java.util.HashMap;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static se._1177.lmn.service.util.CartUtil.createOrderRow;
 
 /**
  * @author Patrik Björk
@@ -90,9 +91,9 @@ public class VerifyDeliveryControllerTest {
 
         // The cart
         Cart cart = new Cart();
-        cart.getItemsInCart().add(item1);
-        cart.getItemsInCart().add(item2);
-        cart.getItemsInCart().add(item3);
+        cart.getOrderRows().add(createOrderRow(item1).get());
+        cart.getOrderRows().add(createOrderRow(item2).get());
+        cart.getOrderRows().add(createOrderRow(item3).get());
 
         // Inject
         verifyDeliveryController = new VerifyDeliveryController();

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._0.OrderRowType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ResultCodeEnum;
 import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
@@ -26,8 +27,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
+import static se._1177.lmn.service.util.CartUtil.createOrderRow;
 import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 
 /**
@@ -64,6 +67,8 @@ public class OrderController {
 
     private Map<String, Boolean> chosenItemMap = new HashMap<>();
 
+    private Map<String, PrescriptionItemType> prescriptionItemInfosToPresent = new HashMap<>();
+
     /**
      * This is called by UserProfileController. It fetches the {@link PrescriptionItemType}s, preserves them in a map
      * where the id is mapped to the instance, and also triggers loading of
@@ -94,8 +99,7 @@ public class OrderController {
             Set<ServicePointProviderEnum> allRelevantProviders = new HashSet<>();
             for (PrescriptionItemType prescriptionItem : medicalSupplyPrescriptions.orderable) {
                 String prescriptionItemId = prescriptionItem.getPrescriptionItemId();
-                prescriptionItemInfo.addPrescriptionItemForInfo(prescriptionItemId, prescriptionItem);
-//                cart.addPrescriptionItemForInfo(prescriptionItemId, prescriptionItem);
+                prescriptionItemInfosToPresent.put(prescriptionItemId, prescriptionItem);
 
                 if (!UtilController.isAfterToday(prescriptionItem.getNextEarliestOrderDate())
                         && prescriptionItem.getArticle().isIsOrderable()) {
@@ -162,26 +166,43 @@ public class OrderController {
 
     public String toDelivery() {
 
-        List<PrescriptionItemType> toCart = new ArrayList<>();
+        List<OrderRowType> toCart = new ArrayList<>();
+
+        boolean anyArticleWithSubArticles = false;
+
+        prescriptionItemInfo.getChosenPrescriptionItemInfo().clear();
 
         for (Map.Entry<String, Boolean> entry : chosenItemMap.entrySet()) {
             if (entry.getValue()) {
-                toCart.add(prescriptionItemInfo.getPrescriptionItemInfo().get(entry.getKey()));
+                PrescriptionItemType prescriptionItem = prescriptionItemInfosToPresent.get(entry.getKey());
+
+                prescriptionItemInfo.getChosenPrescriptionItemInfo()
+                        .put(prescriptionItem.getPrescriptionItemId(), prescriptionItem);
+
+                if (prescriptionItem.getSubArticle() != null && prescriptionItem.getSubArticle().size() > 0) {
+                    anyArticleWithSubArticles = true;
+                }
+
+                Optional<OrderRowType> orderRow = createOrderRow(prescriptionItem);
+
+                // We can only add orderRows for those not having sub-articles for now. Sub-articles will be added in
+                // the next step if such are present.
+                orderRow.ifPresent(toCart::add);
             }
         }
 
         cart.setItemsInCart(toCart);
 
-        if (cart.getItemsInCart().size() == 0) {
+        if (prescriptionItemInfo.getChosenPrescriptionItemInfo().size() == 0) {
             String msg = "Du har inte valt någon produkt. Välj minst en för att fortsätta.";
             FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_WARN, msg, msg));
 
             return "order" + userProfileController.getDelegateUrlParameters();
-        } else if (choiceForSubArticlesIsNeeded(cart.getItemsInCart())) {
-            prepareDeliveryOptions(toCart);
+        } else if (anyArticleWithSubArticles) {
+            prepareDeliveryOptions(prescriptionItemInfo.getChosenPrescriptionItemInfoList());
             return "subArticle" + ACTION_SUFFIX;
         } else {
-            prepareDeliveryOptions(toCart);
+            prepareDeliveryOptions(prescriptionItemInfo.getChosenPrescriptionItemInfoList());
 
             return "delivery" + ACTION_SUFFIX;
         }

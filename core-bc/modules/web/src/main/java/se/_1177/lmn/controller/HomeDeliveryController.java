@@ -7,12 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import riv.crm.selfservice.medicalsupply._0.AddressType;
 import riv.crm.selfservice.medicalsupply._0.ArticleType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
+import riv.crm.selfservice.medicalsupply._0.OrderRowType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import se._1177.lmn.controller.model.Cart;
+import se._1177.lmn.controller.model.PrescriptionItemInfo;
 import se._1177.lmn.service.util.Util;
 
 import javax.annotation.PostConstruct;
@@ -45,6 +48,9 @@ public class HomeDeliveryController {
 
     @Autowired
     private DeliveryController deliveryController;
+
+    @Autowired
+    private PrescriptionItemInfo prescriptionItemInfo;
 
     private Map<PrescriptionItemType, List<String>> deliveryNotificationMethodsPerItem;
     private Map<PrescriptionItemType, String> chosenDeliveryNotificationMethod;
@@ -105,11 +111,49 @@ public class HomeDeliveryController {
             return "homeDelivery";
         }
 
+        List<OrderRowType> orderRowsWithHomeDelivery = cart.getOrderRows().stream()
+                .filter(orderRowType -> homeDeliveryChosen(orderRowType)).collect(Collectors.toList());
+
+        // Add info from this step to the order rows
+        orderRowsWithHomeDelivery.forEach(orderRowType -> {
+            // Add info from this step to the order rows.
+            String deliveryMethodId = null;
+
+            PrescriptionItemType prescriptionItem = prescriptionItemInfo.getPrescriptionItem(orderRowType);
+
+            // Take the first deliveryAlternative with matching deliveryMethod and service point provider. This
+            // assumes no two deliveryAlternatives share the same deliveryMethod and service point provider. That
+            // would lead to arbitrary result.
+            for (DeliveryAlternativeType deliveryAlternative : prescriptionItem.getDeliveryAlternative()) {
+                if (deliveryAlternative.getDeliveryMethod().equals(orderRowType.getDeliveryChoice().getDeliveryMethod())) {
+                    deliveryMethodId = deliveryAlternative.getDeliveryMethodId();
+                    break;
+                }
+            }
+
+            AddressType address = new AddressType();
+            address.setCareOfAddress(getCoAddress());
+            address.setCity(getCity());
+            address.setDoorCode(getDoorCode());
+            address.setPhone(getPhoneNumber());
+            address.setPostalCode(getZip());
+            address.setReceiver(getFullName());
+            address.setStreet(getAddress());
+
+            orderRowType.getDeliveryChoice().setHomeDeliveryAddress(address);
+            orderRowType.getDeliveryChoice().setDeliveryMethodId(deliveryMethodId);
+        });
+
+
         if (nextViewIsCollectDelivery) {
             return "collectDelivery" + ACTION_SUFFIX;
         } else {
             return "verifyDelivery" + ACTION_SUFFIX;
         }
+    }
+
+    private boolean homeDeliveryChosen(OrderRowType orderRowType) {
+        return orderRowType.getDeliveryChoice().getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS);
     }
 
     /**

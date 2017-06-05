@@ -5,6 +5,7 @@ import java.util.List;
 
 public class ArticleWithSubArticlesModel {
     private String parentArticleName;
+    private String prescriptionItemId;
     private int totalOrderSize;
     private List<SubArticleDto> subArticles = new ArrayList<>();
 
@@ -14,6 +15,14 @@ public class ArticleWithSubArticlesModel {
 
     public void setParentArticleName(String parentArticleName) {
         this.parentArticleName = parentArticleName;
+    }
+
+    public String getPrescriptionItemId() {
+        return prescriptionItemId;
+    }
+
+    public void setPrescriptionItemId(String prescriptionItemId) {
+        this.prescriptionItemId = prescriptionItemId;
     }
 
     public int getTotalOrderSize() {

@@ -2,6 +2,7 @@ package se._1177.lmn.service;
 
 import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._0.OrderRowType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsResponseType;
@@ -29,7 +30,7 @@ public interface LmnService {
             String subjectOfCareId,
             boolean orderByDelegate,
             String orderer, // May be delegate
-            List<PrescriptionItemType> prescriptionItems,
+            List<OrderRowType> orderRows,
             Map<PrescriptionItemType, DeliveryChoiceType> deliveryChoicePerItem);
 
     DeliveryPointType getDeliveryPointById(String deliveryPointId);

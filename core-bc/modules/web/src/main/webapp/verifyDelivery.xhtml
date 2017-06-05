@@ -50,7 +50,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <ui:repeat value="#{cart.itemsInCart}" var="item" varStatus="status">
+                        <ui:repeat value="#{prescriptionItemInfo.getPrescriptionItems(cart.orderRows)}" var="item" varStatus="status">
                             <tr>
                                 <td>
                                     #{utilController.capitalizeFully(item.article.productArea)}<br/>
@@ -58,7 +58,26 @@
                                 </td>
                                 <td>
                                     <span class="bold">#{item.article.articleName}</span>
+
                                     <mvk:moreInfo item="#{item}"/>
+
+                                    <h:panelGroup class="paragraph" layout="block" rendered="#{not empty item.subArticle}">
+                                    <table class="embedded-table sub-articles-table always-show">
+                                        <thead>
+                                        <tr>
+                                            <td>Vald produkt</td>
+                                            <td>Förpackningar</td>
+                                        </tr>
+                                        </thead>
+                                        <ui:repeat value="#{item.subArticle}" var="subArticle">
+                                            <tr style="#{empty cart.getOrderCountForSubArticle(subArticle.articleNo) ? 'display:none' : ''}">
+                                                <td>#{subArticle.articleName}:</td>
+                                                <td>#{cart.getOrderCountForSubArticle(subArticle.articleNo)}</td>
+                                            </tr>
+                                        </ui:repeat>
+                                    </table>
+                                    </h:panelGroup>
+
                                 </td>
                                 <td>
                                     #{item.noOfRemainingOrders}/#{item.noOfOrders}
@@ -80,7 +99,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <ui:repeat value="#{cart.itemsInCart}" var="item" varStatus="status">
+                        <ui:repeat value="#{prescriptionItemInfo.getPrescriptionItems(cart.orderRows)}" var="item" varStatus="status">
                             <tr>
                                 <td>
                                     #{utilController.capitalizeFully(item.article.productArea)}<br/>
@@ -89,6 +108,23 @@
                                 <td>
                                     <span class="bold">#{item.article.articleName}</span>
                                     <mvk:moreInfo item="#{item}"/>
+
+                                    <h:panelGroup class="paragraph" layout="block" rendered="#{not empty item.subArticle}">
+                                        <table class="embedded-table sub-articles-table always-show">
+                                            <thead>
+                                            <tr>
+                                                <td>Vald produkt</td>
+                                                <td>Förpackningar</td>
+                                            </tr>
+                                            </thead>
+                                            <ui:repeat value="#{item.subArticle}" var="subArticle">
+                                                <tr style="#{empty cart.getOrderCountForSubArticle(subArticle.articleNo) ? 'display:none' : ''}">
+                                                    <td>#{subArticle.articleName}:</td>
+                                                    <td>#{cart.getOrderCountForSubArticle(subArticle.articleNo)}</td>
+                                                </tr>
+                                            </ui:repeat>
+                                        </table>
+                                    </h:panelGroup>
                                 </td>
                                 <td>
                                     #{item.noOfRemainingOrders}/#{item.noOfOrders}
