@@ -15,8 +15,8 @@ import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
 import se._1177.lmn.controller.model.SubArticleDto;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,9 +101,13 @@ public class SubArticleController {
         List<PrescriptionItemType> prescriptionItemsInCart = prescriptionItemInfo
                 .getChosenPrescriptionItemInfoList();
 
-        return prescriptionItemsInCart.stream().filter(prescriptionItemType ->
-                    prescriptionItemType.getSubArticle() != null && prescriptionItemType.getSubArticle().size() > 1
-            ).collect(Collectors.toList());
+        List<PrescriptionItemType> result = prescriptionItemsInCart.stream().filter(prescriptionItemType ->
+                prescriptionItemType.getSubArticle() != null && prescriptionItemType.getSubArticle().size() > 1
+        ).collect(Collectors.toList());
+
+        result.sort(Comparator.comparing(o -> o.getArticle().getArticleName()));
+
+        return result;
     }
 
     public String toOrder() {
