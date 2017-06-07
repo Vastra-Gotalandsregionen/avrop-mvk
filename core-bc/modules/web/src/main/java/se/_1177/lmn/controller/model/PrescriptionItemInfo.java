@@ -7,6 +7,7 @@ import riv.crm.selfservice.medicalsupply._0.OrderRowType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -44,7 +45,11 @@ public class PrescriptionItemInfo {
 
         orderRows.forEach(orderRow -> prescriptionItems.add(getPrescriptionItem(orderRow)));
 
-        return new ArrayList<>(prescriptionItems);
+        List<PrescriptionItemType> result = new ArrayList<>(prescriptionItems);
+
+        result.sort(Comparator.comparing(o -> o.getArticle().getArticleName()));
+
+        return new ArrayList<>(result);
     }
 
     public List<PrescriptionItemType> getChosenPrescriptionItemInfoList() {

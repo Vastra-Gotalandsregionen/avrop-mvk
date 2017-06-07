@@ -26,6 +26,7 @@ import se._1177.lmn.service.util.Util;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,7 +106,7 @@ public class LmnServiceImpl implements LmnService {
                 }
             }
 
-            sortByOrderableToday(orderableItems);
+            sortByOrderableTodayAndArticleName(orderableItems);
 
             holder.orderable = orderableItems;
             holder.noLongerOrderable = noLongerOrderable;
@@ -114,14 +115,12 @@ public class LmnServiceImpl implements LmnService {
         return holder;
     }
 
-    static void sortByOrderableToday(List<PrescriptionItemType> orderableItems) {
+    static void sortByOrderableTodayAndArticleName(List<PrescriptionItemType> orderableItems) {
 
-        orderableItems.sort((o1, o2) -> {
-            Integer sortNumber1 = getSortNumber(o1);
-            Integer sortNumber2 = getSortNumber(o2);
+        Comparator<PrescriptionItemType> comparator = Comparator.comparing(o -> getSortNumber(o));
+        comparator = comparator.thenComparing(o -> o.getArticle().getArticleName());
 
-            return sortNumber1.compareTo(sortNumber2);
-        });
+        orderableItems.sort(comparator);
     }
 
     private static Integer getSortNumber(PrescriptionItemType item) {

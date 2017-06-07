@@ -149,13 +149,27 @@ public class LmnServiceImplTest {
     }
 
     @Test
-    public void sortByOrderableToday() throws Exception {
+    public void sortByOrderableTodayAndArticleName() throws Exception {
 
         ArticleType article1 = new ArticleType();
+        article1.setArticleName("ccc");
         article1.setIsOrderable(true);
 
         ArticleType article2 = new ArticleType();
+        article2.setArticleName("bbb");
         article2.setIsOrderable(false);
+
+        ArticleType article3 = new ArticleType();
+        article3.setArticleName("aaa");
+        article3.setIsOrderable(true);
+
+        ArticleType article4 = new ArticleType();
+        article4.setArticleName("fff");
+        article4.setIsOrderable(true);
+
+        ArticleType article5 = new ArticleType();
+        article5.setArticleName("eee");
+        article5.setIsOrderable(true);
 
         PrescriptionItemType p1, p2, p3, p4, p5;
 
@@ -173,14 +187,15 @@ public class LmnServiceImplTest {
 
         List<PrescriptionItemType> list = new ArrayList<>(Arrays.asList(p1, p2, p3, p4, p5));
 
-        for (PrescriptionItemType itemType : list) {
-            itemType.setArticle(article1);
-        }
+        p1.setArticle(article1); // "ccc"
+        p3.setArticle(article3); // "aaa"
+        p4.setArticle(article4); // "fff"
+        p5.setArticle(article5); // "eee"
 
         // We make an exception for p2. Set the non-orderable article
         p2.setArticle(article2);
 
-        LmnServiceImpl.sortByOrderableToday(list);
+        LmnServiceImpl.sortByOrderableTodayAndArticleName(list);
 
         // p1, p4 and p5 should be among the three first and p3 the fourth in the list
         List<PrescriptionItemType> firstThree = list.subList(0, 3);
@@ -189,8 +204,14 @@ public class LmnServiceImplTest {
         assertTrue(firstThree.contains(p4));
         assertTrue(firstThree.contains(p5));
 
-        assertEquals(p3, list.get(3));
+        assertEquals(p3, list.get(3)); // Is orderable but not today
         assertEquals(p2, list.get(4)); // Should come last since the article isn't orderable.
+
+        // Verify the order of the first three which should be ordered alphabetically by article name.
+        assertEquals(p1, list.get(0));
+        assertEquals(p4, list.get(2));
+        assertEquals(p5, list.get(1));
+
     }
 
     private XMLGregorianCalendar getTodayPlusDays(int daysToAdd) {

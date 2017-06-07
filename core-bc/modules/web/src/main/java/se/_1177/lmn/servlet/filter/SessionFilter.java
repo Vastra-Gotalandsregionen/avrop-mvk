@@ -85,9 +85,10 @@ public class SessionFilter implements Filter {
         HttpSession session = request.getSession(false);
 
         if (session != null) {
-            Object cart = session.getAttribute("scopedTarget.cart");
-            if (cart != null) {
-                Map<String, PrescriptionItemType> itemsInCart = ((PrescriptionItemInfo) cart).getChosenPrescriptionItemInfo();
+            Object prescriptionItemInfo = session.getAttribute("scopedTarget.prescriptionItemInfo");
+            if (prescriptionItemInfo != null) {
+                Map<String, PrescriptionItemType> itemsInCart = ((PrescriptionItemInfo) prescriptionItemInfo)
+                        .getChosenPrescriptionItemInfo();
 
                 if (itemsInCart == null || itemsInCart.size() == 0) {
                     redirectToOrderPage(request, response);

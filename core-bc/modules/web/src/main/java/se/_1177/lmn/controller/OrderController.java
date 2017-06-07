@@ -63,6 +63,9 @@ public class OrderController {
     @Autowired
     private PrescriptionItemInfo prescriptionItemInfo;
 
+    @Autowired
+    private SubArticleController subArticleController;
+
     private MedicalSupplyPrescriptionsHolder medicalSupplyPrescriptions;
 
     private Map<String, Boolean> chosenItemMap = new HashMap<>();
@@ -191,7 +194,7 @@ public class OrderController {
             }
         }
 
-        cart.setItemsInCart(toCart);
+        cart.setOrderRows(toCart);
 
         if (prescriptionItemInfo.getChosenPrescriptionItemInfo().size() == 0) {
             String msg = "Du har inte valt någon produkt. Välj minst en för att fortsätta.";
@@ -200,6 +203,9 @@ public class OrderController {
             return "order" + userProfileController.getDelegateUrlParameters();
         } else if (anyArticleWithSubArticles) {
             prepareDeliveryOptions(prescriptionItemInfo.getChosenPrescriptionItemInfoList());
+
+            subArticleController.init();
+
             return "subArticle" + ACTION_SUFFIX;
         } else {
             prepareDeliveryOptions(prescriptionItemInfo.getChosenPrescriptionItemInfoList());

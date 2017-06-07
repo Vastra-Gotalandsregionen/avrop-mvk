@@ -46,7 +46,6 @@ public class SubArticleController {
 
     private Map<String, ArticleType> subArticleIdToArticle = new HashMap<>();
 
-    @PostConstruct
     public void init() {
         articleWithSubArticlesModels = makeDtoModel(getThoseWhereChoiceIsNeeded());
     }
@@ -77,7 +76,9 @@ public class SubArticleController {
 
             for (ArticleType subArticle : prescriptionItemType.getSubArticle()) {
                 // Update these values for this iteration
-                nextOrderCountNumberToDistribute = ((int) Math.ceil(numbersStillInNeedToDistribute / numberSubArticlesLeftToDistributeTo));
+                nextOrderCountNumberToDistribute = ((int) Math.ceil(numbersStillInNeedToDistribute
+                        / numberSubArticlesLeftToDistributeTo));
+
                 numbersStillInNeedToDistribute -= nextOrderCountNumberToDistribute;
                 numberSubArticlesLeftToDistributeTo -= 1;
 

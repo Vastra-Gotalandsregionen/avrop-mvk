@@ -24,6 +24,9 @@
                 <version>2.2</version>
                 <configuration>
                     <path>/bestallning</path>
+                    <additionalClassesDirs>
+                        <dir>/opt/data/lakemedelsnara/properties</dir>
+                    </additionalClassesDirs>
                 </configuration>
             </plugin>
         </plugins>

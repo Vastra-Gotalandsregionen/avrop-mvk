@@ -21,7 +21,7 @@ public class Cart {
         return orderRows;
     }
 
-    public void setItemsInCart(List<OrderRowType> itemsInCart) {
+    public void setOrderRows(List<OrderRowType> itemsInCart) {
         this.orderRows = itemsInCart;
     }
 

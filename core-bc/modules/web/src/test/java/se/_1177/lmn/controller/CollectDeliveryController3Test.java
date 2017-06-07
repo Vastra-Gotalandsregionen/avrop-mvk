@@ -2,6 +2,7 @@ package se._1177.lmn.controller;
 
 import org.junit.Before;
 import org.junit.Test;
+import riv.crm.selfservice.medicalsupply._0.ArticleType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
@@ -94,6 +95,12 @@ public class CollectDeliveryController3Test {
         item1.setPrescriptionItemId("1");
         item2.setPrescriptionItemId("2");
         item3.setPrescriptionItemId("3");
+
+        ArticleType article = new ArticleType();
+        article.setArticleName("doesn't matter here");
+        item1.setArticle(article);
+        item2.setArticle(article);
+        item3.setArticle(article);
 
         // Which delivery alternatives that are added to each item doesn't matter as long as all delivery alternatives
         // are added to any item.
