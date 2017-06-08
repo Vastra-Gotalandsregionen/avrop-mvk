@@ -117,8 +117,11 @@ public class OrderController {
             }
 
             if (userProfileController.getUserProfile() != null) {
+
                 collectDeliveryController.loadDeliveryPointsForRelevantSuppliersInBackground(
-                        userProfileController.getUserProfile().getZip(), allRelevantProviders);
+                        userProfileController.getUserProfile().getZip(),
+                        allRelevantProviders,
+                        userProfileController.getUserProfile().getCountyCode());
             }
 
         } catch (Exception e) {

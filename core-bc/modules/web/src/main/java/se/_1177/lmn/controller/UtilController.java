@@ -3,12 +3,14 @@ package se._1177.lmn.controller;
 import org.apache.commons.lang3.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply._0.StatusEnum;
+import se._1177.lmn.service.LmnService;
 import se._1177.lmn.service.util.Util;
 
 import javax.faces.application.FacesMessage;
@@ -48,11 +50,8 @@ public class UtilController {
     @Value("${mvkOtherServicesLink}")
     private String mvkOtherServicesLink;
 
-    @Value("${customerServiceInfo}")
-    private String customerServiceInfo;
-
-    @Value("${customerServicePhoneNumber}")
-    private String customerServicePhoneNumber;
+    @Autowired
+    private LmnService lmnService;
 
     public Date toDate(XMLGregorianCalendar calendar) {
         if (calendar == null) {
@@ -167,7 +166,7 @@ public class UtilController {
     }
 
     public String getCustomerServiceInfo() {
-        return customerServiceInfo;
+        return lmnService.getCustomerServiceInfo();
     }
 
     public String getBackToOwnProfileLink() {
@@ -195,7 +194,7 @@ public class UtilController {
     }
 
     public String getCustomerServicePhoneNumber() {
-        return customerServicePhoneNumber;
+        return lmnService.getCustomerServicePhoneNumber();
     }
 
     public void addErrorMessageWithCustomerServiceInfo(String text) {
@@ -204,6 +203,8 @@ public class UtilController {
         if (facesContext != null) {
 
             Iterator<FacesMessage> messages = facesContext.getMessages();
+
+            String customerServiceInfo = getCustomerServiceInfo();
 
             while (messages.hasNext()) {
                 FacesMessage next = messages.next();

@@ -52,15 +52,22 @@ public class LmnServiceImpl implements LmnService {
 
     private String logicalAddress;
 
+    private String customerServicePhoneNumber;
+    private String customerServiceInfo;
+
     public LmnServiceImpl(
             GetMedicalSupplyDeliveryPointsResponderInterface medicalSupplyDeliveryPoint,
             GetMedicalSupplyPrescriptionsResponderInterface medicalSupplyPrescriptions,
             RegisterMedicalSupplyOrderResponderInterface registerMedicalSupplyOrder,
-            String logicalAddress) {
+            String logicalAddress,
+            String customerServicePhoneNumber,
+            String customerServiceInfo) {
         this.medicalSupplyDeliveryPoint = medicalSupplyDeliveryPoint;
         this.medicalSupplyPrescriptions = medicalSupplyPrescriptions;
         this.registerMedicalSupplyOrder = registerMedicalSupplyOrder;
         this.logicalAddress = logicalAddress;
+        this.customerServicePhoneNumber = customerServicePhoneNumber;
+        this.customerServiceInfo = customerServiceInfo;
     }
 
     /**
@@ -242,6 +249,24 @@ public class LmnServiceImpl implements LmnService {
     @Override
     public DeliveryPointType getDeliveryPointById(String deliveryPointId) {
         return deliveryPointIdToDeliveryPoint.get(deliveryPointId);
+    }
+
+    @Override
+    public String getCustomerServicePhoneNumber() {
+        return customerServicePhoneNumber;
+    }
+
+    public void setCustomerServicePhoneNumber(String customerServicePhoneNumber) {
+        this.customerServicePhoneNumber = customerServicePhoneNumber;
+    }
+
+    @Override
+    public String getCustomerServiceInfo() {
+        return customerServiceInfo;
+    }
+
+    public void setCustomerServiceInfo(String customerServiceInfo) {
+        this.customerServiceInfo = customerServiceInfo;
     }
 
     public static boolean isAfterToday(XMLGregorianCalendar date) {

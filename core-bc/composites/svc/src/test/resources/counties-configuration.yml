@@ -1,0 +1,16 @@
+counties:
+  14:
+    getMedicalSupplyDeliveryPointsAddress: http://localhost:18080/GetMedicalSupplyDeliveryPoints
+    getMedicalSupplyPrescriptionsAddress: http://localhost:18080/GetMedicalSupplyPrescriptions
+    registerMedicalSupplyOrderAddress: http://localhost:18080/RegisterMedicalSupplyOrder
+    customerServicePhoneNumber: 010-441 30 90
+    customerServiceInfo: <br/>Kundtjänst Stomi- och diabetesprodukter:<br/>041234234 vardagar 08:00 till 16:30 (onsdag till 10:00)
+    rtjpLogicalAddress: SE2222222222-E000000000001
+
+  1234:
+    getMedicalSupplyDeliveryPointsAddress: http://localhost/GetMedicalSupplyDeliveryPoints
+    getMedicalSupplyPrescriptionsAddress: http://localhost/GetMedicalSupplyPrescriptions
+    registerMedicalSupplyOrderAddress: http://localhost/RegisterMedicalSupplyOrder
+    customerServicePhoneNumber: 12345
+    customerServiceInfo: <br/>Kundtjänst Häx- och trollprodukter:<br/>012345 vardagar 08:00 till 16:30 (onsdag till 10:00)
+    rtjpLogicalAddress: SE2222222222-E333333333333

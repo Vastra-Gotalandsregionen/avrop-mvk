@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import se._1177.lmn.service.MvkUserProfileService;
+import se._1177.lmn.service.ThreadLocalStore;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
@@ -126,6 +127,7 @@ public class UserProfileController {
             }
 
             this.userProfile = userProfile;
+            ThreadLocalStore.setCountyCode(userProfile.getCountyCode());
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);

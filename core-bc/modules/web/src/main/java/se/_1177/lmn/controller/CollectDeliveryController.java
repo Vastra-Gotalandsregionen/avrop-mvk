@@ -21,6 +21,7 @@ import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder
 import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
 import se._1177.lmn.service.LmnService;
+import se._1177.lmn.service.ThreadLocalStore;
 import se._1177.lmn.service.concurrent.BackgroundExecutor;
 import se._1177.lmn.service.util.Util;
 
@@ -634,9 +635,13 @@ public class CollectDeliveryController {
         this.possibleCollectCombinationsFittingAllWithNotificationMethods = possibleDeliveryNotificationMethods;
     }
 
-    public void loadDeliveryPointsForRelevantSuppliersInBackground(final String zip, final Set<ServicePointProviderEnum> allRelevantProvider) {
+    public void loadDeliveryPointsForRelevantSuppliersInBackground(final String zip,
+                                                                   final Set<ServicePointProviderEnum> allRelevantProvider,
+                                                                   final String countyCode) {
         backgroundExecutor.submit(() -> {
+            ThreadLocalStore.setCountyCode(countyCode);
             loadDeliveryPointsForRelevantSuppliers(zip, allRelevantProvider);
+            ThreadLocalStore.setCountyCode(null);
         });
     }
 

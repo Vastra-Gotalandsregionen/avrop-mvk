@@ -140,6 +140,8 @@ public class LmnServiceImplTest {
                 medicalSupplyDeliveryPoints,
                 medicalSupplyPrescriptions,
                 registerMedicalSupplyOrder,
+                "",
+                "",
                 "");
 
         MedicalSupplyPrescriptionsHolder holder = service.getMedicalSupplyPrescriptionsHolder("aslkjsdfljk");
