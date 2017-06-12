@@ -53,6 +53,20 @@
                   serviceClass="mvk.crm.casemanagement.inbox.addmessage._2.rivtabp21.AddMessageResponderInterface"
                   address="${AddMessageResponderInterface.address}"/>
 
+    <http:conduit name="https://.*">
+        <http:tlsClientParameters disableCNCheck="true">
+            <sec:keyManagers keyPassword="${ssl_keystore_password}">
+                <sec:keyStore
+                        type="pkcs12"
+                        password="${ssl_keystore_password}"
+                        file="${ssl_keystore}"/>
+            </sec:keyManagers>
+            <sec:trustManagers>
+                <sec:keyStore file="${ssl_truststore}" password="${ssl_truststore_password}" type="jks" />
+            </sec:trustManagers>
+        </http:tlsClientParameters>
+    </http:conduit>
+
     <http:conduit name=".*RegisterMedicalSupplyOrderResponder.*">
         <http:client ConnectionTimeout="10000" ReceiveTimeout="30000"/>
     </http:conduit>
