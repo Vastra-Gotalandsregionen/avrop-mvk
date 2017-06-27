@@ -7,6 +7,7 @@ import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.OrderItemType;
 import riv.crm.selfservice.medicalsupply._0.PrescriberType;
+import riv.crm.selfservice.medicalsupply._0.PrescribingOrganizationType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._0.ProductAreaEnum;
 import riv.crm.selfservice.medicalsupply._0.ResultCodeEnum;
@@ -138,12 +139,18 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         }
         prescriptionItem.setPrescriptionId(random.nextInt(100000) + "");
         prescriptionItem.setPrescriptionItemId(random.nextInt(100000) + "");
+
         PrescriberType prescriber = new PrescriberType();
         prescriber.setPrescriberName("Kalle Karlsson");
         prescriber.setPrescriberCode(random.nextInt(1000) + "");
         prescriber.setPrescriberId(random.nextInt(1000) + "");
         prescriber.setPrescriberTitle("Läkare");
         prescriptionItem.setPrescriber(prescriber);
+
+        PrescribingOrganizationType prescribingOrganization = new PrescribingOrganizationType();
+        prescribingOrganization.setPrescribingOrganizationName("Organisation " + random.nextInt());
+        prescriptionItem.setPrescribingOrganization(prescribingOrganization);
+
         prescriptionItem.setLastValidDate(getRandomCalendar(random, 665L));
         prescriptionItem.setNoOfArticlesPerOrder(random.nextInt(5) * 1000 + 1000);
         prescriptionItem.setNoOfPackagesPerOrder(random.nextInt(5) * 50 + 50);

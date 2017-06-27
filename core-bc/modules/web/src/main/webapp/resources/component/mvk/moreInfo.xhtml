@@ -28,6 +28,7 @@
                     <td>Förpackning / uttag</td>
                     <td>Totalt antal / uttag</td>
                     <td>Förskrivare</td>
+                    <td class="${empty item.prescribingOrganization ? 'hidden' : ''}">Förskrivande enhet</td>
                     <td>Giltigt t.o.m.</td>
                 </tr>
                 </thead>
@@ -36,6 +37,7 @@
                     <td>#{item.noOfPackagesPerOrder}</td>
                     <td>#{item.noOfArticlesPerOrder}</td>
                     <td>#{item.prescriber.prescriberName}</td>
+                    <td class="${empty item.prescribingOrganization ? 'hidden' : ''}">#{item.prescribingOrganization.prescribingOrganizationName}</td>
                     <td>
                         <h:outputText value="#{utilController.toDate(item.lastValidDate)}">
                             <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm"/>
@@ -57,6 +59,10 @@
                 <tr>
                     <td class="column-0">Förskrivare</td>
                     <td>#{item.prescriber.prescriberName}</td>
+                </tr>
+                <tr class="${empty item.prescribingOrganization ? 'hidden' : ''}">
+                    <td class="column-0">Förskrivande organisation</td>
+                    <td>#{item.prescribingOrganization.prescribingOrganizationName}</td>
                 </tr>
                 <tr>
                     <td class="column-0">Giltigt t.o.m.</td>

@@ -3,7 +3,6 @@ var realOldVal = JSON.parse(JSON.stringify(app.jsonData));
 var subArticlesPriority = {};
 
 app.$watch('jsonData', function (newVal, oldVal) {
-//                        console.log('old: ' + JSON.stringify(realOldVal) + ', new: ' + JSON.stringify(newVal));
     if (JSON.stringify(newVal) === JSON.stringify(realOldVal)) {
         console.log("Nothing's changed...");
         return;
@@ -12,7 +11,6 @@ app.$watch('jsonData', function (newVal, oldVal) {
         var changedIndex = null;
         var diff = null;
         for (var index in newVal[outerIndex].subArticles) {
-//                            console.log('old: ' + realOldVal[index].value + ', new: ' + newVal[index].value);
             var newOrderCount = Number(newVal[outerIndex].subArticles[index].orderCount);
             var oldOrderCount = Number(realOldVal[outerIndex].subArticles[index].orderCount);
             if (newOrderCount !== oldOrderCount) {
@@ -37,10 +35,7 @@ app.$watch('jsonData', function (newVal, oldVal) {
 
             // Find other range(s) to compensate for the change...
             var numbersLeftToRegulate = diff;
-//                            var theIndexToCompensate = 1 - changedIndex;
 
-//                                var newValue = Number(newVal[outerIndex].subArticles[changedIndex].orderCount);
-//                            var valueForTheIndexToCompensate = 20 - newValue;
             var loopIndex = 0;
             while (numbersLeftToRegulate !== 0) {
                 var subArticleIndexToInvestigate = subArticlesPriority[outerIndex][loopIndex];
@@ -74,22 +69,11 @@ app.$watch('jsonData', function (newVal, oldVal) {
             // Sync values to JSF components
             for (var index in app.jsonData[outerIndex].subArticles) {
                 document.getElementsByClassName('jsf-input-' + outerIndex + '-' + index)[0].value = app.jsonData[outerIndex].subArticles[index].orderCount;
-//                            console.log('old: ' + realOldVal[index].value + ', new: ' + newVal[index].value);
-//                                var newOrderCount = Number(newVal[0].subArticles[index].orderCount);
-//                                var oldOrderCount = Number(realOldVal[0].subArticles[index].orderCount);
-//                                if (newOrderCount !== oldOrderCount) {
-//                                    changedIndex = index;
-//                                    diff = newOrderCount - oldOrderCount;
-//                                }
             }
-            /*document.getElementsByClassName('jsf-input' + changedIndex)[0].value = newValue;
-             app.jsonData[0].subArticles[theIndexToCompensate].orderCount = valueForTheIndexToCompensate;
-             document.getElementsByClassName('jsf-input' + theIndexToCompensate)[0].value = valueForTheIndexToCompensate;*/
             realOldVal = JSON.parse(JSON.stringify(newVal));
         }
     }
 }, {deep: true});
-//                };
 
 jq('.circle-icon').click(function (e) {
     var parentArticleIndex = e.target.getAttribute('data-parent-article-index');

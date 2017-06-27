@@ -21,6 +21,7 @@ public class LmnServiceRoutingImpl implements LmnService {
     private static final Logger LOGGER = LoggerFactory.getLogger(LmnServiceRoutingImpl.class);
 
     private final Map<String, LmnService> countyCodeToLmnService;
+    private final String DEFAULT_COUNTY_CODE = "default";
 
     public LmnServiceRoutingImpl(
             Map<String, LmnService> countyCodeToLmnService) {
@@ -81,9 +82,10 @@ public class LmnServiceRoutingImpl implements LmnService {
             LOGGER.info("Scheduled operation...");
             ThreadLocalStore.setCountyCode("14");
             getMedicalSupplyDeliveryPoints(ServicePointProviderEnum.POSTNORD, "41648");
-            ThreadLocalStore.setCountyCode(null);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
+        } finally {
+            ThreadLocalStore.setCountyCode(null);
         }
     }
 
@@ -91,14 +93,14 @@ public class LmnServiceRoutingImpl implements LmnService {
         String countyCode = ThreadLocalStore.getCountyCode();
 
         if (countyCode == null) {
-            countyCode = "default";
+            countyCode = DEFAULT_COUNTY_CODE;
         }
 
         LmnService lmnService = this.countyCodeToLmnService.get(countyCode);
 
         if (lmnService == null) {
             // We expect the configuration to contain a "default" county.
-            lmnService = this.countyCodeToLmnService.get("default");
+            lmnService = this.countyCodeToLmnService.get(DEFAULT_COUNTY_CODE);
 
             // Last resort. We don't want exceptions when the customer service properties are called from the views.
             // That would cause a blank page.

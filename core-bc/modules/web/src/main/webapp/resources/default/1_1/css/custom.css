@@ -33,6 +33,10 @@ html, body {
     font-weight: bold;
 }
 
+.hidden {
+    display: none;
+}
+
 .avrop-table, .embedded-table {
     border-collapse: collapse;
     table-layout: fixed;
@@ -51,6 +55,7 @@ html, body {
     border: 1px solid #000000;
     padding: 8px;
     box-sizing: border-box;
+    word-wrap: break-word;
 }
 
 .my-products-table .column-0 {
@@ -768,7 +773,7 @@ select::-moz-focus-inner { /*Remove button padding in FF*/
     }
 
     .my-products-table .column-1 {
-        width: 79px;
+        width: 80px;
         word-wrap: break-word;
     }
 
@@ -817,11 +822,10 @@ table.sub-articles-list td {
     margin-top: 12px;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 960px) {
 
     .avrop-table td, .embedded-table td {
         padding: 3px;
-        word-wrap: break-word;
     }
 
     .embedded-table {
