@@ -88,6 +88,9 @@ public class OrderController {
             this.medicalSupplyPrescriptions = lmnService.getMedicalSupplyPrescriptionsHolder(
                     userProfileController.getUserProfile().getSubjectOfCareId());
 
+            this.prescriptionItemInfo.setLatestOrderItemsByArticleNo(
+                    this.medicalSupplyPrescriptions.getLatestOrderedNumbersByArticleNo());
+
             GetMedicalSupplyPrescriptionsResponseType supplyPrescriptionsResponse =
                     this.medicalSupplyPrescriptions.getSupplyPrescriptionsResponse();
 
@@ -216,12 +219,6 @@ public class OrderController {
             return "delivery" + ACTION_SUFFIX;
         }
 
-    }
-
-    boolean choiceForSubArticlesIsNeeded(List<PrescriptionItemType> itemsInCart) {
-        // At least two subarticles are needed for a choice to be needed
-        return itemsInCart.stream().anyMatch(prescriptionItemType ->
-                prescriptionItemType.getSubArticle() != null && prescriptionItemType.getSubArticle().size() > 1);
     }
 
     void prepareDeliveryOptions(final List<PrescriptionItemType> chosenPrescriptionItems) {

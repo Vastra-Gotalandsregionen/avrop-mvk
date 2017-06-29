@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._0.ArticleType;
+import riv.crm.selfservice.medicalsupply._0.OrderItemType;
 import riv.crm.selfservice.medicalsupply._0.OrderRowType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import se._1177.lmn.controller.model.ArticleWithSubArticlesModel;
@@ -55,10 +56,14 @@ public class SubArticleController {
     }
 
     public String getJsonData() {
+        return jsonEncode(articleWithSubArticlesModels);
+    }
+
+    String jsonEncode(List<ArticleWithSubArticlesModel> articleWithSubArticlesModels) {
         return Json.encode(articleWithSubArticlesModels);
     }
 
-    private List<ArticleWithSubArticlesModel> makeDtoModel(List<PrescriptionItemType> thoseWhereChoiceIsNeeded) {
+    List<ArticleWithSubArticlesModel> makeDtoModel(List<PrescriptionItemType> thoseWhereChoiceIsNeeded) {
         List<ArticleWithSubArticlesModel> list = new ArrayList<>();
         for (PrescriptionItemType prescriptionItemType : thoseWhereChoiceIsNeeded) {
             ArticleWithSubArticlesModel model = new ArticleWithSubArticlesModel();
@@ -74,10 +79,35 @@ public class SubArticleController {
 
             int nextOrderCountNumberToDistribute;
 
+            Map<String, Map<String, OrderItemType>> latestOrderItemsByArticleNoAndPrescriptionItem = prescriptionItemInfo
+                    .getLatestOrderItemsByArticleNoAndPrescriptionItem();
+
+            Map<String, OrderItemType> latestOrderedForThisPrescriptionItem =
+                    latestOrderItemsByArticleNoAndPrescriptionItem.get(prescriptionItemType.getPrescriptionItemId());
+
+            boolean thisPrescriptionItemHasBeenOrderedBefore = latestOrderedForThisPrescriptionItem != null;
+
             for (ArticleType subArticle : prescriptionItemType.getSubArticle()) {
                 // Update these values for this iteration
-                nextOrderCountNumberToDistribute = ((int) Math.ceil(numbersStillInNeedToDistribute
-                        / numberSubArticlesLeftToDistributeTo));
+
+                if (latestOrderedForThisPrescriptionItem != null && latestOrderedForThisPrescriptionItem.get(subArticle.getArticleNo()) != null) {
+                    Integer previouslyOrderedPcs = latestOrderedForThisPrescriptionItem.get(subArticle.getArticleNo()).getNoOfPcs();
+
+                    Integer previouslyOrderedPackages = previouslyOrderedPcs / subArticle.getPackageSize();
+
+                    nextOrderCountNumberToDistribute = Math.min(
+                            previouslyOrderedPackages,
+                            numbersStillInNeedToDistribute
+                    );
+                } else if (thisPrescriptionItemHasBeenOrderedBefore) {
+                    // This subArticle wasn't ordered at the last order occasion.
+                    nextOrderCountNumberToDistribute = 0;
+                } else {
+                    int numberByDefaultUniformDistribution = (int) Math.ceil(numbersStillInNeedToDistribute
+                            / numberSubArticlesLeftToDistributeTo);
+
+                    nextOrderCountNumberToDistribute = numberByDefaultUniformDistribution;
+                }
 
                 numbersStillInNeedToDistribute -= nextOrderCountNumberToDistribute;
                 numberSubArticlesLeftToDistributeTo -= 1;
@@ -102,7 +132,7 @@ public class SubArticleController {
                 .getChosenPrescriptionItemInfoList();
 
         List<PrescriptionItemType> result = prescriptionItemsInCart.stream().filter(prescriptionItemType ->
-                prescriptionItemType.getSubArticle() != null && prescriptionItemType.getSubArticle().size() > 1
+                prescriptionItemType.getSubArticle() != null && prescriptionItemType.getSubArticle().size() > 0
         ).collect(Collectors.toList());
 
         result.sort(Comparator.comparing(o -> o.getArticle().getArticleName()));

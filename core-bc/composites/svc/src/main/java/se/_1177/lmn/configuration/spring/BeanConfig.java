@@ -110,8 +110,8 @@ public class BeanConfig {
     }
 
     private void addLoggingInterceptors(JaxWsProxyFactoryBean bean) {
-        LoggingOutInterceptor loggingOutInterceptor = new LoggingOutInterceptor();
-        LoggingInInterceptor loggingInInterceptor = new LoggingInInterceptor();
+        LoggingOutInterceptor loggingOutInterceptor = new LoggingOutInterceptor(-1);
+        LoggingInInterceptor loggingInInterceptor = new LoggingInInterceptor(-1);
 
         loggingOutInterceptor.setPrettyLogging(true);
         loggingInInterceptor.setPrettyLogging(true);

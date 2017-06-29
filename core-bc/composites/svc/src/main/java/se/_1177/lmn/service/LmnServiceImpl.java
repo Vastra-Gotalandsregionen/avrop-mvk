@@ -6,6 +6,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.StopWatch;
 import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._0.OrderItemType;
 import riv.crm.selfservice.medicalsupply._0.OrderRowType;
 import riv.crm.selfservice.medicalsupply._0.OrderType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
@@ -24,12 +25,18 @@ import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 import se._1177.lmn.service.util.Util;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * This implementation handles all communication with the source system which is responsible for prescriptions,
@@ -96,7 +103,9 @@ public class LmnServiceImpl implements LmnService {
         List<PrescriptionItemType> noLongerOrderable = new ArrayList<>();
 
         if (response.getResultCode().equals(ResultCodeEnum.OK)) {
-            for (PrescriptionItemType item : response.getSubjectOfCareType().getPrescriptionItem()) {
+            List<PrescriptionItemType> prescriptions = response.getSubjectOfCareType().getPrescriptionItem();
+
+            for (PrescriptionItemType item : prescriptions) {
 
                 if (item.getNoOfRemainingOrders() <= 0 || !item.getStatus().equals(StatusEnum.AKTIV)) {
                     noLongerOrderable.add(item);
@@ -115,11 +124,62 @@ public class LmnServiceImpl implements LmnService {
 
             sortByOrderableTodayAndArticleName(orderableItems);
 
+            Map<String, Map<String, OrderItemType>> latestOrderItemsByArticleNoAndPrescriptionItem =
+                    latestOrderItemsByArticleNoAndPrescriptionItem(response);
+
             holder.orderable = orderableItems;
             holder.noLongerOrderable = noLongerOrderable;
+            holder.latestOrderItemsByArticleNoAndPrescriptionItem = latestOrderItemsByArticleNoAndPrescriptionItem;
         }
 
         return holder;
+    }
+
+    static Map<String, Map<String, OrderItemType>> latestOrderItemsByArticleNoAndPrescriptionItem(
+            GetMedicalSupplyPrescriptionsResponseType prescriptionsResponseType) {
+
+        Map<String, OrderItemType> latestOrderItemsByArticleNo = new HashMap<>();
+
+        for (OrderItemType item : prescriptionsResponseType.getSubjectOfCareType().getOrderItem()) {
+            String articleNo = item.getArticle().getArticleNo();
+            if (!latestOrderItemsByArticleNo.containsKey(articleNo)) {
+                latestOrderItemsByArticleNo.put(articleNo, item);
+                continue;
+            }
+
+            OrderItemType storedInMap = latestOrderItemsByArticleNo.get(articleNo);
+            if (storedInMap.getOrderDate().compare(item.getOrderDate()) < 0) {
+                // The storedInMap is older (less) -> replace with the newer
+                latestOrderItemsByArticleNo.put(articleNo, item);
+            }
+        }
+
+        Map<String, Map<String, OrderItemType>> latestOrderItemsByArticleNoAndPrescriptionItem =
+                latestOrderItemsByArticleNo.entrySet().stream()
+                .collect(Collectors.groupingBy(
+                        entry -> entry.getValue().getPrescriptionItemId(),
+                        Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+
+        // Go through each prescriptionItem and remove those articles which weren't ordered last (there may be articles
+        // ordered last out the the order items of exactly that article, but the article may not have been ordered at
+        // all at the last order. Then it should be removed. So we first find out the last date for each prescription
+        // item.
+
+        for (Map.Entry<String, Map<String, OrderItemType>> entry : latestOrderItemsByArticleNoAndPrescriptionItem.entrySet()) {
+            XMLGregorianCalendar latestOrderDate;
+            Optional<XMLGregorianCalendar> max = entry.getValue().values().stream().map(OrderItemType::getOrderDate).max(XMLGregorianCalendar::compare);
+
+            if (max.isPresent()) {
+                latestOrderDate = max.get();
+            } else {
+                throw new RuntimeException("Order dates are expected.");
+            }
+
+            // Remove all which are not ordered at the last order date.
+            entry.getValue().entrySet().removeIf(e -> !e.getValue().getOrderDate().equals(latestOrderDate));
+        }
+
+        return latestOrderItemsByArticleNoAndPrescriptionItem;
     }
 
     static void sortByOrderableTodayAndArticleName(List<PrescriptionItemType> orderableItems) {

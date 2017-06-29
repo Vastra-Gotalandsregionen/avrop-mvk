@@ -134,6 +134,8 @@ public class VerifyDeliveryController {
                 utilController.addErrorMessageWithCustomerServiceInfo(msg);
 
                 orderSuccess = false;
+
+                resetCartAndRelated();
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);

@@ -3,6 +3,7 @@ package se._1177.lmn.controller.model;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import riv.crm.selfservice.medicalsupply._0.OrderItemType;
 import riv.crm.selfservice.medicalsupply._0.OrderRowType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 
@@ -23,11 +24,12 @@ public class PrescriptionItemInfo {
 
     private Map<String, PrescriptionItemType> chosenPrescriptionItemInfo = new HashMap<>();
 
+    private Map<String, Map<String, OrderItemType>> latestOrderItemsByArticleNoAndPrescriptionItem;
+
     public Map<String, PrescriptionItemType> getChosenPrescriptionItemInfo() {
         return chosenPrescriptionItemInfo;
     }
 
-    // todo Should be called when same method is called in Cart
     public void emptyChosenPrescriptionItems() {
         chosenPrescriptionItemInfo = new HashMap<>();
     }
@@ -54,5 +56,13 @@ public class PrescriptionItemInfo {
 
     public List<PrescriptionItemType> getChosenPrescriptionItemInfoList() {
         return new ArrayList<>(chosenPrescriptionItemInfo.values());
+    }
+
+    public Map<String, Map<String, OrderItemType>> getLatestOrderItemsByArticleNoAndPrescriptionItem() {
+        return latestOrderItemsByArticleNoAndPrescriptionItem;
+    }
+
+    public void setLatestOrderItemsByArticleNo(Map<String, Map<String, OrderItemType>> latestOrderItemsByArticleNoAndPrescriptionItem) {
+        this.latestOrderItemsByArticleNoAndPrescriptionItem = latestOrderItemsByArticleNoAndPrescriptionItem;
     }
 }

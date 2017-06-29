@@ -84,9 +84,11 @@ public class MockGetMedicalSupplyPrescriptionsResponder
     private void addPrescriptionItem(Random random, SubjectOfCareType subjectOfCare, boolean nextPossibleOrderDateInFuture) {
         OrderItemType orderItem = new OrderItemType();
 
+        String articleNo = "100" + random.nextInt(20);
+
         ArticleType article = new ArticleType();
         article.setArticleName("Artikelnamn" + random.nextInt(100));
-        article.setArticleNo(random.nextInt(100000) + "");
+        article.setArticleNo(articleNo);
         article.setIsOrderable(random.nextBoolean());
         article.setPackageSize(random.nextInt(100));
         article.setPackageSizeUnit("Enhet" + random.nextInt(100));
@@ -95,9 +97,9 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         orderItem.setArticle(article);
 
         orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
+        orderItem.setOrderDate(getRandomCalendar(random, 0));
         DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
         deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
-//            deliveryChoice.setDeliveryPoint(); kanske todo utveckla mer på deliveryChoice...
         orderItem.setDeliveryChoice(deliveryChoice);
 
         subjectOfCare.getOrderItem().add(orderItem);
@@ -106,7 +108,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
 
         ArticleType article2 = new ArticleType();
         article2.setArticleName("Artikelnamn" + random.nextInt(100));
-        article2.setArticleNo(random.nextInt(100000) + "");
+        article2.setArticleNo(articleNo);
         article2.setIsOrderable(random.nextBoolean());
         article2.setPackageSize(random.nextInt(100));
         article2.setPackageSizeUnit("Enhet" + random.nextInt(100));
@@ -160,7 +162,6 @@ public class MockGetMedicalSupplyPrescriptionsResponder
     }
 
     private void addSpecificPrescriptionItem(Random random, SubjectOfCareType subjectOfCare) {
-        OrderItemType orderItem = new OrderItemType();
 
         List<ArticleType> subArticles = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
@@ -173,17 +174,18 @@ public class MockGetMedicalSupplyPrescriptionsResponder
             subArticle.setProductArea(ProductAreaEnum.SÄRNÄR);
 
             subArticles.add(subArticle);
+
+            OrderItemType orderItem = new OrderItemType();
+            orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
+            orderItem.setOrderDate(getRandomCalendar(random, 0));
+            DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
+            deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+            orderItem.setDeliveryChoice(deliveryChoice);
+            orderItem.setArticle(subArticle);
+            orderItem.setNoOfPcs(random.nextInt(8) * subArticle.getPackageSize());
+
+            subjectOfCare.getOrderItem().add(orderItem);
         }
-
-//        orderItem.setArticle(subArticle1);
-
-        orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
-        DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
-        deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
-//            deliveryChoice.setDeliveryPoint(); kanske todo utveckla mer på deliveryChoice...
-        orderItem.setDeliveryChoice(deliveryChoice);
-
-        subjectOfCare.getOrderItem().add(orderItem);
 
         PrescriptionItemType prescriptionItem = new PrescriptionItemType();
 
@@ -191,7 +193,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         article2.setArticleName("Artikelnamn" + " - Särskild näring2");
         article2.setArticleNo(random.nextInt(100000) + "");
         article2.setIsOrderable(true);
-        article2.setPackageSize(20);
+        article2.setPackageSize(2);
         article2.setPackageSizeUnit("st");
         article2.setProductArea(ProductAreaEnum.SÄRNÄR);
 
@@ -208,20 +210,8 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         DeliveryAlternativeType deliveryAlternative2 = getRandomDeliveryAlternativeType(random);
         prescriptionItem.getDeliveryAlternative().add(deliveryAlternative2);
 
-//        if (!nextPossibleOrderDateInFuture) {
-            prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random, -365));
-//        } else {
-//            Calendar c = Calendar.getInstance();
-//
-//            c.add(Calendar.MONTH, 1);
-//
-//            XMLGregorianCalendar randomCalendar = getRandomCalendar(random, 0);
-//            randomCalendar.setYear(c.get(Calendar.YEAR) + 1);
-//            randomCalendar.setDay(random.nextInt(20) + 1); // To avoid invalid dates.
-//
-//            prescriptionItem.setNextEarliestOrderDate(null);
-//            prescriptionItem.setNextEarliestOrderDate(randomCalendar);
-//        }
+        prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random, -365));
+
         prescriptionItem.setPrescriptionId(random.nextInt(100000) + "");
         prescriptionItem.setPrescriptionItemId(random.nextInt(100000) + "");
         PrescriberType prescriber = new PrescriberType();
@@ -231,11 +221,21 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriber.setPrescriberTitle("Läkare");
         prescriptionItem.setPrescriber(prescriber);
         prescriptionItem.setLastValidDate(getRandomCalendar(random, 665L));
-        prescriptionItem.setNoOfArticlesPerOrder(65);
-        prescriptionItem.setNoOfPackagesPerOrder(2);
+        prescriptionItem.setNoOfArticlesPerOrder(32);
+        prescriptionItem.setNoOfPackagesPerOrder(16);
         prescriptionItem.setStatus(StatusEnum.AKTIV);
 
         subjectOfCare.getPrescriptionItem().add(prescriptionItem);
+
+        OrderItemType orderItem = new OrderItemType();
+        orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
+        DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
+        deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        orderItem.setDeliveryChoice(deliveryChoice);
+        orderItem.setArticle(article2);
+        orderItem.setNoOfPcs(article2.getPackageSize() * prescriptionItem.getNoOfPackagesPerOrder());
+
+        subjectOfCare.getOrderItem().add(orderItem);
     }
 
     private JAXBElement<XMLGregorianCalendar> wrapInJaxBElement(XMLGregorianCalendar calendar) {
