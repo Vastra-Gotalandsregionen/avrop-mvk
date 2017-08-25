@@ -3,9 +3,9 @@ package se._1177.lmn.controller.model;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import riv.crm.selfservice.medicalsupply._0.OrderItemType;
-import riv.crm.selfservice.medicalsupply._0.OrderRowType;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._1.OrderItemType;
+import riv.crm.selfservice.medicalsupply._1.OrderRowType;
+import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
 
 import java.util.ArrayList;
 import java.util.Comparator;

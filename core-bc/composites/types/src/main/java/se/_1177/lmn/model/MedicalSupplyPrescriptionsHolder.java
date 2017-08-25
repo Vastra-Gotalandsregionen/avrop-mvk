@@ -1,8 +1,8 @@
 package se._1177.lmn.model;
 
-import riv.crm.selfservice.medicalsupply._0.OrderItemType;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._0.GetMedicalSupplyPrescriptionsResponseType;
+import riv.crm.selfservice.medicalsupply._1.OrderItemType;
+import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsResponseType;
 
 import java.util.List;
 import java.util.Map;

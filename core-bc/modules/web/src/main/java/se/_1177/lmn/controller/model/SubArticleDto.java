@@ -4,6 +4,8 @@ public class SubArticleDto {
     private String name;
     private int orderCount;
     private String articleNo;
+    private String thumbnailUrl;
+    private String imageUrl;
 
     public String getName() {
         return name;
@@ -27,5 +29,21 @@ public class SubArticleDto {
 
     public String getArticleNo() {
         return articleNo;
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

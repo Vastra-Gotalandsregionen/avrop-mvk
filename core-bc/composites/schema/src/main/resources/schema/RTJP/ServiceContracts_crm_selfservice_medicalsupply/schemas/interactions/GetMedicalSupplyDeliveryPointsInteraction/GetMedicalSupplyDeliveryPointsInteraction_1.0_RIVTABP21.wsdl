@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements. See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership. VGR licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License. You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied. See the License for the
+ specific language governing permissions and limitations
+ under the License.
+ -->		
+<wsdl:definitions name='GetMedicalSupplyDeliveryPointsInteraction' xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tjsr='urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyDeliveryPointsResponder:1' xmlns:tjsi='urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyDeliveryPointsInitiator:1' xmlns:tns='urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyDeliveryPoints:1:rivtabp21' targetNamespace='urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyDeliveryPoints:1:rivtabp21' xmlns:itr='urn:riv:itintegration:registry:1'>
+  <xs:annotation>
+    <xs:documentation>
+			 Tjänsteinteraktionens namn: GetMedicalSupplyDeliveryPointsInteraction
+			 Beskrivning: 
+			   Tjänsten levererar information om vilka utlämningsställen man kan välja på och kapslar på så vis in kännedom om vilken/vilka leverantörer som används och utseendet på deras API:er bakom en tjänst som exponeras via tjänsteplattformen. Utlämningsställen baserat på postnummer och utlämningsställesaktören vi vill hämta utlämningsställen för.
+			 Revisioner: 
+			 Tjänstedomän: crm:selfservice:medicalsupply
+			 Tjänsteinteraktionstyp: Fråga-Svar
+			 WS-profil: RIVTABP21
+			 Förvaltas av: VGR
+			 </xs:documentation>
+  </xs:annotation>
+  <wsdl:types>
+    <xs:schema targetNamespace='urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyDeliveryPoints:1:rivtabp21'>
+      <xs:import schemaLocation='GetMedicalSupplyDeliveryPointsResponder_1.0.xsd' namespace='urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyDeliveryPointsResponder:1' />
+      <xs:import schemaLocation='../../core_components/itintegration_registry_1.0.xsd' namespace='urn:riv:itintegration:registry:1' />
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name='GetMedicalSupplyDeliveryPointsRequest'>
+    <wsdl:part name='LogicalAddress' element='itr:LogicalAddress'>
+      <wsdl:documentation>The organisation number of the receiving institution</wsdl:documentation>
+    </wsdl:part>
+    <wsdl:part name='parameters' element='tjsr:GetMedicalSupplyDeliveryPoints' />
+  </wsdl:message>
+  <wsdl:message name='GetMedicalSupplyDeliveryPointsResponse'>
+    <wsdl:part name='parameters' element='tjsr:GetMedicalSupplyDeliveryPointsResponse' />
+  </wsdl:message>
+  <wsdl:portType name='GetMedicalSupplyDeliveryPointsResponderInterface'>
+    <wsdl:operation name='GetMedicalSupplyDeliveryPoints'>
+      <wsdl:input message='tns:GetMedicalSupplyDeliveryPointsRequest' />
+      <wsdl:output message='tns:GetMedicalSupplyDeliveryPointsResponse' />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name='GetMedicalSupplyDeliveryPointsResponderBinding' type='tns:GetMedicalSupplyDeliveryPointsResponderInterface'>
+    <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http' />
+    <wsdl:operation name='GetMedicalSupplyDeliveryPoints'>
+      <soap:operation soapAction='urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyDeliveryPointsResponder:1:GetMedicalSupplyDeliveryPoints' style='document' />
+      <wsdl:input>
+        <soap:header use='literal' message='tns:GetMedicalSupplyDeliveryPointsRequest' part='LogicalAddress' />
+        <soap:body use='literal' parts='parameters' />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use='literal' />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name='GetMedicalSupplyDeliveryPointsResponderService'>
+    <wsdl:port name='GetMedicalSupplyDeliveryPointsResponderPort' binding='tns:GetMedicalSupplyDeliveryPointsResponderBinding'>
+      <soap:address location='http://tempuri.org' />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

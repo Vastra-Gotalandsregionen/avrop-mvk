@@ -2,11 +2,11 @@ package se._1177.lmn.controller;
 
 import org.junit.Before;
 import org.junit.Test;
-import riv.crm.selfservice.medicalsupply._0.ArticleType;
-import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
-import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
+import riv.crm.selfservice.medicalsupply._1.ArticleType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
 import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
 
@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum.BREV;
-import static riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum.E_POST;
-import static riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum.SMS;
+import static riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum.BREV;
+import static riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum.E_POST;
+import static riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum.SMS;
 import static se._1177.lmn.service.util.CartUtil.createOrderRow;
 
 /**

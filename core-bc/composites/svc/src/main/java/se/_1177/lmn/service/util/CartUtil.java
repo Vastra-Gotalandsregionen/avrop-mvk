@@ -1,7 +1,7 @@
 package se._1177.lmn.service.util;
 
-import riv.crm.selfservice.medicalsupply._0.OrderRowType;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._1.OrderRowType;
+import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
 
 import java.util.Optional;
 

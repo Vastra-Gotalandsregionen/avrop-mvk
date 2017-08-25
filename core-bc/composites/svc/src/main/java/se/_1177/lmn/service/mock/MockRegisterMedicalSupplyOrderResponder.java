@@ -1,13 +1,13 @@
 package se._1177.lmn.service.mock;
 
-import riv.crm.selfservice.medicalsupply._0.ArticleType;
-import riv.crm.selfservice.medicalsupply._0.OrderItemType;
-import riv.crm.selfservice.medicalsupply._0.ProductAreaEnum;
-import riv.crm.selfservice.medicalsupply._0.ResultCodeEnum;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._0.rivtabp21.RegisterMedicalSupplyOrderResponderInterface;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.ObjectFactory;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.RegisterMedicalSupplyOrderResponseType;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.RegisterMedicalSupplyOrderType;
+import riv.crm.selfservice.medicalsupply._1.ArticleType;
+import riv.crm.selfservice.medicalsupply._1.OrderItemType;
+import riv.crm.selfservice.medicalsupply._1.ProductAreaEnum;
+import riv.crm.selfservice.medicalsupply._1.ResultCodeEnum;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._1.rivtabp21.RegisterMedicalSupplyOrderResponderInterface;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.ObjectFactory;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.RegisterMedicalSupplyOrderResponseType;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.RegisterMedicalSupplyOrderType;
 import se._1177.lmn.service.util.Util;
 
 import javax.jws.WebService;

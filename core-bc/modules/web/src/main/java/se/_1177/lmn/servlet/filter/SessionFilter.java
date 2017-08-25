@@ -3,7 +3,7 @@ package se._1177.lmn.servlet.filter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
 
 import javax.servlet.Filter;

@@ -18,7 +18,7 @@
             <plugin>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-codegen-plugin</artifactId>
-                <version>3.1.6</version>
+                <version>3.1.12</version>
                 <executions>
                     <execution>
                         <id>generate-sources</id>
@@ -28,13 +28,13 @@
                             <wsdlOptions>
                                 <!-- RTJP services -->
                                 <wsdlOption>
-                                    <wsdl>${basedir}/src/main/resources/schema/RTJP/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyDeliveryPointsInteraction/GetMedicalSupplyDeliveryPointsInteraction_0.1_RIVTABP21.wsdl</wsdl>
+                                    <wsdl>${basedir}/src/main/resources/schema/RTJP/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyDeliveryPointsInteraction/GetMedicalSupplyDeliveryPointsInteraction_1.0_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
-                                    <wsdl>${basedir}/src/main/resources/schema/RTJP/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyPrescriptionsInteraction/GetMedicalSupplyPrescriptionsInteraction_0.1_RIVTABP21.wsdl</wsdl>
+                                    <wsdl>${basedir}/src/main/resources/schema/RTJP/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyPrescriptionsInteraction/GetMedicalSupplyPrescriptionsInteraction_1.0_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
-                                    <wsdl>${basedir}/src/main/resources/schema/RTJP/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/RegisterMedicalSupplyOrderInteraction/RegisterMedicalSupplyOrderInteraction_0.1_RIVTABP21.wsdl</wsdl>
+                                    <wsdl>${basedir}/src/main/resources/schema/RTJP/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/RegisterMedicalSupplyOrderInteraction/RegisterMedicalSupplyOrderInteraction_1.0_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
 
                                 <!-- User profile services -->
@@ -53,6 +53,7 @@
                                     <wsdl>${basedir}/src/main/resources/schema/TD_INBOX_2_0/schemas/interactions/AddMessage/AddMessageInteraction_2.0_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
                             </wsdlOptions>
+                            <encoding>UTF-8</encoding>
                         </configuration>
                         <goals>
                             <goal>wsdl2java</goal>

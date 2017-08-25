@@ -4,24 +4,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.StopWatch;
-import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
-import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
-import riv.crm.selfservice.medicalsupply._0.OrderItemType;
-import riv.crm.selfservice.medicalsupply._0.OrderRowType;
-import riv.crm.selfservice.medicalsupply._0.OrderType;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._0.ResultCodeEnum;
-import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
-import riv.crm.selfservice.medicalsupply._0.StatusEnum;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._0.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsResponseType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._0.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._0.GetMedicalSupplyPrescriptionsResponseType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._0.GetMedicalSupplyPrescriptionsType;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._0.rivtabp21.RegisterMedicalSupplyOrderResponderInterface;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.RegisterMedicalSupplyOrderResponseType;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.RegisterMedicalSupplyOrderType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._1.OrderItemType;
+import riv.crm.selfservice.medicalsupply._1.OrderRowType;
+import riv.crm.selfservice.medicalsupply._1.OrderType;
+import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._1.ResultCodeEnum;
+import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
+import riv.crm.selfservice.medicalsupply._1.StatusEnum;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._1.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._1.GetMedicalSupplyDeliveryPointsResponseType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._1.GetMedicalSupplyDeliveryPointsType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._1.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsResponseType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsType;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._1.rivtabp21.RegisterMedicalSupplyOrderResponderInterface;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.RegisterMedicalSupplyOrderResponseType;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.RegisterMedicalSupplyOrderType;
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 import se._1177.lmn.service.util.Util;
 
@@ -82,7 +82,7 @@ public class LmnServiceImpl implements LmnService {
      * and no longer orderable items. A prescription item is no longer orderable if it either has status other than
      * AKTIV, has number of remaining orders less than or equal to zero, or last valid date is before today. The items
      * are sorted according to how "orderable" they are (see
-     * {@link LmnServiceImpl#getSortNumber(riv.crm.selfservice.medicalsupply._0.PrescriptionItemType)}).
+     * {@link LmnServiceImpl#getSortNumber(riv.crm.selfservice.medicalsupply._1.PrescriptionItemType)}).
      *
      * @param subjectOfCareId the subject of care id of the user or the inhabitant the user is delegate for
      * @return the fetched, sorted and separated {@link PrescriptionItemType}s contained in a
@@ -165,7 +165,9 @@ public class LmnServiceImpl implements LmnService {
         // all at the last order. Then it should be removed. So we first find out the last date for each prescription
         // item.
 
-        for (Map.Entry<String, Map<String, OrderItemType>> entry : latestOrderItemsByArticleNoAndPrescriptionItem.entrySet()) {
+        for (Map.Entry<String, Map<String, OrderItemType>> entry
+                : latestOrderItemsByArticleNoAndPrescriptionItem.entrySet()) {
+
             XMLGregorianCalendar latestOrderDate;
             Optional<XMLGregorianCalendar> max = entry.getValue().values().stream().map(OrderItemType::getOrderDate).max(XMLGregorianCalendar::compare);
 

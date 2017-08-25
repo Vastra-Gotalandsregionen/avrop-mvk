@@ -71,7 +71,7 @@
                                         </thead>
                                         <ui:repeat value="#{item.subArticle}" var="subArticle">
                                             <tr style="#{empty cart.getOrderCountForSubArticle(subArticle.articleNo) ? 'display:none' : ''}">
-                                                <td>#{subArticle.articleName}:</td>
+                                                <td>#{empty subArticle.variety ? subArticle.articleName : subArticle.variety}:</td>
                                                 <td>#{cart.getOrderCountForSubArticle(subArticle.articleNo)}</td>
                                             </tr>
                                         </ui:repeat>
@@ -119,7 +119,7 @@
                                             </thead>
                                             <ui:repeat value="#{item.subArticle}" var="subArticle">
                                                 <tr style="#{empty cart.getOrderCountForSubArticle(subArticle.articleNo) ? 'display:none' : ''}">
-                                                    <td>#{subArticle.articleName}:</td>
+                                                    <td>#{empty subArticle.variety ? subArticle.articleName : subArticle.variety}:</td>
                                                     <td>#{cart.getOrderCountForSubArticle(subArticle.articleNo)}</td>
                                                 </tr>
                                             </ui:repeat>

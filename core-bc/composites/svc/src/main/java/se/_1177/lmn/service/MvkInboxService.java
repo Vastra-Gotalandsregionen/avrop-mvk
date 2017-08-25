@@ -10,11 +10,10 @@ import mvk.crm.casemanagement.inbox.addmessage._2.rivtabp21.AddMessageResponderI
 import mvk.crm.casemanagement.inbox.addmessageresponder._2.AddMessageResponseType;
 import mvk.crm.casemanagement.inbox.addmessageresponder._2.AddMessageType;
 import org.springframework.stereotype.Service;
-import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
-import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
-import riv.crm.selfservice.medicalsupply._0.OrderRowType;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._1.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._1.OrderRowType;
 
 import java.io.IOException;
 import java.io.StringWriter;

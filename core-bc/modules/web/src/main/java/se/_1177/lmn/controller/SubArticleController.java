@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import riv.crm.selfservice.medicalsupply._0.ArticleType;
-import riv.crm.selfservice.medicalsupply._0.OrderItemType;
-import riv.crm.selfservice.medicalsupply._0.OrderRowType;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._1.ArticleType;
+import riv.crm.selfservice.medicalsupply._1.ImageType;
+import riv.crm.selfservice.medicalsupply._1.OrderItemType;
+import riv.crm.selfservice.medicalsupply._1.OrderRowType;
+import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
 import se._1177.lmn.controller.model.ArticleWithSubArticlesModel;
 import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 
 /**
@@ -90,8 +92,11 @@ public class SubArticleController {
             for (ArticleType subArticle : prescriptionItemType.getSubArticle()) {
                 // Update these values for this iteration
 
-                if (latestOrderedForThisPrescriptionItem != null && latestOrderedForThisPrescriptionItem.get(subArticle.getArticleNo()) != null) {
-                    Integer previouslyOrderedPcs = latestOrderedForThisPrescriptionItem.get(subArticle.getArticleNo()).getNoOfPcs();
+                if (latestOrderedForThisPrescriptionItem != null
+                        && latestOrderedForThisPrescriptionItem.get(subArticle.getArticleNo()) != null) {
+
+                    Integer previouslyOrderedPcs = latestOrderedForThisPrescriptionItem
+                            .get(subArticle.getArticleNo()).getNoOfPcs();
 
                     Integer previouslyOrderedPackages = previouslyOrderedPcs / subArticle.getPackageSize();
 
@@ -112,10 +117,19 @@ public class SubArticleController {
                 numbersStillInNeedToDistribute -= nextOrderCountNumberToDistribute;
                 numberSubArticlesLeftToDistributeTo -= 1;
 
+                String variety = subArticle.getVariety();
+
                 SubArticleDto subArticleDto = new SubArticleDto();
-                subArticleDto.setName(subArticle.getArticleName());
+                subArticleDto.setName(!isEmpty(variety) ? variety : subArticle.getArticleName());
                 subArticleDto.setArticleNo(subArticle.getArticleNo());
                 subArticleDto.setOrderCount(nextOrderCountNumberToDistribute);
+
+                ImageType articleImage = subArticle.getArticleImage();
+                if (articleImage != null) {
+                    subArticleDto.setThumbnailUrl(articleImage.getThumbnail());
+                    subArticleDto.setImageUrl(articleImage.getOriginal());
+                }
+
                 model.getSubArticles().add(subArticleDto);
 
                 subArticleIdToArticle.put(subArticle.getArticleNo(), subArticle);

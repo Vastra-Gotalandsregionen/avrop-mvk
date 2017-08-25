@@ -1,7 +1,7 @@
 package se._1177.lmn.service.util;
 
-import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
-import riv.crm.selfservice.medicalsupply._0.ObjectFactory;
+import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
+import riv.crm.selfservice.medicalsupply._1.ObjectFactory;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.DatatypeConfigurationException;

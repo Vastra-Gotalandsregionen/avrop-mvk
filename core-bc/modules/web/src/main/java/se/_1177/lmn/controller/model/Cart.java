@@ -3,7 +3,7 @@ package se._1177.lmn.controller.model;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import riv.crm.selfservice.medicalsupply._0.OrderRowType;
+import riv.crm.selfservice.medicalsupply._1.OrderRowType;
 
 import java.util.ArrayList;
 import java.util.List;
