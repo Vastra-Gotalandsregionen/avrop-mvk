@@ -111,7 +111,8 @@ hr {
 }
 
 .checkbox input[type="checkbox"] {
-    display:none;
+    position: absolute;
+    z-index: -1;
 }
 
 .checkbox input[type="checkbox"] + label {
@@ -768,10 +769,6 @@ select::-moz-focus-inner { /*Remove button padding in FF*/
 }
 
 @media (max-width: 767px) {
-    body {
-        font-size: 12px;
-    }
-
     .my-products-table .column-1 {
         width: 80px;
         word-wrap: break-word;
@@ -824,7 +821,7 @@ table.sub-articles-list td {
 
 @media (max-width: 960px) {
 
-    .avrop-table td, .embedded-table td {
+    .avrop-table td, .embedded-table td, table.sub-articles-table td {
         padding: 3px;
     }
 
