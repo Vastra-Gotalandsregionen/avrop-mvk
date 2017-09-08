@@ -8,6 +8,7 @@ public class ArticleWithSubArticlesModel {
     private String prescriptionItemId;
     private int totalOrderSize;
     private List<SubArticleDto> subArticles = new ArrayList<>();
+    private String totalOrderSizeUnit;
 
     public String getParentArticleName() {
         return parentArticleName;
@@ -39,5 +40,13 @@ public class ArticleWithSubArticlesModel {
 
     public void setSubArticles(List<SubArticleDto> subArticles) {
         this.subArticles = subArticles;
+    }
+
+    public void setTotalOrderSizeUnit(String totalOrderSizeUnit) {
+        this.totalOrderSizeUnit = totalOrderSizeUnit;
+    }
+
+    public String getTotalOrderSizeUnit() {
+        return totalOrderSizeUnit;
     }
 }

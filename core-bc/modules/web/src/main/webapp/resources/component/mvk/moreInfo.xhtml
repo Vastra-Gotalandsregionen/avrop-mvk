@@ -25,19 +25,19 @@
             <table class="embedded-table">
                 <thead>
                 <tr>
-                    <td>Förpackning / uttag</td>
-                    <td>Totalt antal / uttag</td>
+                    <td style="display: #{item.noOfPackagesPerOrder == 0 ? 'none' : 'table-cell'}">Förpackning / uttag</td>
+                    <td>Totalt antal styck / uttag</td>
                     <td>Förskrivare</td>
-                    <td class="${empty item.prescribingOrganization ? 'hidden' : ''}">Förskrivande enhet</td>
+                    <td class="#{empty item.prescribingOrganization ? 'hidden' : ''}">Förskrivande enhet</td>
                     <td>Giltigt t.o.m.</td>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td>#{item.noOfPackagesPerOrder}</td>
+                    <td style="display: #{item.noOfPackagesPerOrder == 0 ? 'none' : 'table-cell'}">#{item.noOfPackagesPerOrder}</td>
                     <td>#{item.noOfArticlesPerOrder}</td>
                     <td>#{item.prescriber.prescriberName}</td>
-                    <td class="${empty item.prescribingOrganization ? 'hidden' : ''}">#{item.prescribingOrganization.prescribingOrganizationName}</td>
+                    <td class="#{empty item.prescribingOrganization ? 'hidden' : ''}">#{item.prescribingOrganization.prescribingOrganizationName}</td>
                     <td>
                         <h:outputText value="#{utilController.toDate(item.lastValidDate)}">
                             <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm"/>
@@ -48,12 +48,12 @@
             </table>
 
             <table class="embedded-table small-screen">
-                <tr>
+                <tr style="display: #{item.noOfPackagesPerOrder == 0 ? 'none' : 'table-row'}">
                     <td class="column-0">Förpackning/uttag</td>
                     <td>#{item.noOfPackagesPerOrder}</td>
                 </tr>
                 <tr>
-                    <td class="column-0">Totalt antal/uttag</td>
+                    <td class="column-0">Totalt antal styck/uttag</td>
                     <td>#{item.noOfArticlesPerOrder}</td>
                 </tr>
                 <tr>

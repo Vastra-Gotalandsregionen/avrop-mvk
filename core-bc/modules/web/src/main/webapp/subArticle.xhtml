@@ -32,7 +32,7 @@
                     <ui:repeat value="#{subArticleController.articleWithSubArticlesModels}" var="articleWithSubArticlesModel"
                                varStatus="parentArticleStatus">
                         <h2>#{articleWithSubArticlesModel.parentArticleName}</h2>
-                        <h3>Totalt antal förpackningar: {{jsonData[#{parentArticleStatus.index}].totalOrderSize}} st</h3>
+                        <h3>Totalt antal {{jsonData[#{parentArticleStatus.index}].totalOrderSizeUnit}}: {{jsonData[#{parentArticleStatus.index}].totalOrderSize}} st</h3>
                             <div class="sub-articles-table">
 
                                 <ui:repeat value="#{articleWithSubArticlesModel.subArticles}" var="subArticle"
