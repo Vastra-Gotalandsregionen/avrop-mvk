@@ -67,12 +67,15 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         SubjectOfCareType subjectOfCare = new SubjectOfCareType();
         subjectOfCare.setSubjectOfCareId(random.nextInt(1000) + "");
 
-        for (int i = 0; i <= 300; i++) {
+        for (int i = 0; i <= 30; i++) {
             addPrescriptionItem(random, subjectOfCare, random.nextBoolean());
         }
 
         // Add determined item
-        addSpecificPrescriptionItem(random, subjectOfCare);
+        addSpecificPrescriptionItemSärnärWithSubArticles(random, subjectOfCare);
+        addSpecificPrescriptionItemSärnärWithSubArticlesAndHomeDeliveryWithNotification(random, subjectOfCare);
+        addSpecificPrescriptionItemZeroPackages(random, subjectOfCare);
+        addSpecificPrescriptionItemWithTwoHomeDeliveryOptions(random, subjectOfCare);
 
         response.setSubjectOfCareType(subjectOfCare);
 
@@ -82,7 +85,6 @@ public class MockGetMedicalSupplyPrescriptionsResponder
     }
 
     private void addPrescriptionItem(Random random, SubjectOfCareType subjectOfCare, boolean nextPossibleOrderDateInFuture) {
-        OrderItemType orderItem = new OrderItemType();
 
         String articleNo = "100" + random.nextInt(20);
 
@@ -93,16 +95,6 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         article.setPackageSize(random.nextInt(100));
         article.setPackageSizeUnit("Enhet" + random.nextInt(100));
         article.setProductArea(ProductAreaEnum.values()[random.nextInt(ProductAreaEnum.values().length)]);
-
-        orderItem.setArticle(article);
-
-        orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
-        orderItem.setOrderDate(getRandomCalendar(random, 0));
-        DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
-        deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
-        orderItem.setDeliveryChoice(deliveryChoice);
-
-        subjectOfCare.getOrderItem().add(orderItem);
 
         PrescriptionItemType prescriptionItem = new PrescriptionItemType();
 
@@ -159,9 +151,25 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.setStatus(StatusEnum.values()[random.nextInt(StatusEnum.values().length)]);
 
         subjectOfCare.getPrescriptionItem().add(prescriptionItem);
+
+        OrderItemType orderItem = new OrderItemType();
+
+        orderItem.setArticle(article);
+
+        orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
+        orderItem.setOrderDate(getRandomCalendar(random, 0));
+        DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
+        deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        orderItem.setDeliveryChoice(deliveryChoice);
+        orderItem.setPrescriptionItemId(prescriptionItem.getPrescriptionItemId());
+        orderItem.setOrderDate(getRandomCalendar(random, -365)); // Todo To make more realistic take from a set of order dates so some items were ordered at the same time.
+
+        subjectOfCare.getOrderItem().add(orderItem);
     }
 
-    private void addSpecificPrescriptionItem(Random random, SubjectOfCareType subjectOfCare) {
+    private void addSpecificPrescriptionItemSärnärWithSubArticles(Random random, SubjectOfCareType subjectOfCare) {
+
+        String prescriptionItemId = random.nextInt(100000) + "";
 
         List<ArticleType> subArticles = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
@@ -172,6 +180,9 @@ public class MockGetMedicalSupplyPrescriptionsResponder
             subArticle.setPackageSize(4);
             subArticle.setPackageSizeUnit("st");
             subArticle.setProductArea(ProductAreaEnum.SÄRNÄR);
+            if (random.nextBoolean()) {
+                subArticle.setVariety("Smak " + i);
+            }
 
             subArticles.add(subArticle);
 
@@ -183,6 +194,8 @@ public class MockGetMedicalSupplyPrescriptionsResponder
             orderItem.setDeliveryChoice(deliveryChoice);
             orderItem.setArticle(subArticle);
             orderItem.setNoOfPcs(random.nextInt(8) * subArticle.getPackageSize());
+            orderItem.setPrescriptionItemId(prescriptionItemId);
+            orderItem.setOrderDate(getRandomCalendar(random, -365)); // Todo To make more realistic take from a set of order dates so some items were ordered at the same time.
 
             subjectOfCare.getOrderItem().add(orderItem);
         }
@@ -213,7 +226,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random, -365));
 
         prescriptionItem.setPrescriptionId(random.nextInt(100000) + "");
-        prescriptionItem.setPrescriptionItemId(random.nextInt(100000) + "");
+        prescriptionItem.setPrescriptionItemId(prescriptionItemId);
         PrescriberType prescriber = new PrescriberType();
         prescriber.setPrescriberName("Kalle Karlsson");
         prescriber.setPrescriberCode(random.nextInt(1000) + "");
@@ -234,8 +247,335 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         orderItem.setDeliveryChoice(deliveryChoice);
         orderItem.setArticle(article2);
         orderItem.setNoOfPcs(article2.getPackageSize() * prescriptionItem.getNoOfPackagesPerOrder());
+        orderItem.setPrescriptionItemId(prescriptionItem.getPrescriptionItemId());
+        orderItem.setOrderDate(getRandomCalendar(random, -365)); // Todo To make more realistic take from a set of order dates so some items were ordered at the same time.
 
         subjectOfCare.getOrderItem().add(orderItem);
+    }
+
+    private void addSpecificPrescriptionItemSärnärWithSubArticlesAndHomeDeliveryWithNotification(Random random, SubjectOfCareType subjectOfCare) {
+
+        String prescriptionItemId = random.nextInt(100000) + "";
+
+        List<ArticleType> subArticles = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            ArticleType subArticle = new ArticleType();
+            subArticle.setArticleName("Artikelnamn" + " - Särskild näring - Smak " + i);
+            subArticle.setArticleNo(random.nextInt(100000) + "");
+            subArticle.setIsOrderable(true);
+            subArticle.setPackageSize(4);
+            subArticle.setPackageSizeUnit("st");
+            subArticle.setProductArea(ProductAreaEnum.SÄRNÄR);
+            if (random.nextBoolean()) {
+                subArticle.setVariety("Smak " + i);
+            }
+
+            subArticles.add(subArticle);
+
+            OrderItemType orderItem = new OrderItemType();
+            orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
+            orderItem.setOrderDate(getRandomCalendar(random, 0));
+            DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
+            deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+            orderItem.setDeliveryChoice(deliveryChoice);
+            orderItem.setArticle(subArticle);
+            orderItem.setNoOfPcs(random.nextInt(8) * subArticle.getPackageSize());
+            orderItem.setPrescriptionItemId(prescriptionItemId);
+            orderItem.setOrderDate(getRandomCalendar(random, -365)); // Todo To make more realistic take from a set of order dates so some items were ordered at the same time.
+
+            subjectOfCare.getOrderItem().add(orderItem);
+        }
+
+        PrescriptionItemType prescriptionItem = new PrescriptionItemType();
+
+        ArticleType article2 = new ArticleType();
+        article2.setArticleName("Artikelnamn" + " - Särskild näring med hemleverans och notifiering");
+        article2.setArticleNo(random.nextInt(100000) + "");
+        article2.setIsOrderable(true);
+        article2.setPackageSize(2);
+        article2.setPackageSizeUnit("st");
+        article2.setProductArea(ProductAreaEnum.SÄRNÄR);
+
+        prescriptionItem.getSubArticle().addAll(subArticles);
+
+        prescriptionItem.setArticle(article2);
+
+        prescriptionItem.setNoOfOrders(4);
+        prescriptionItem.setNoOfRemainingOrders(3);
+
+        DeliveryAlternativeType deliveryAlternativeType1 = new DeliveryAlternativeType();
+        deliveryAlternativeType1.setServicePointProvider(ServicePointProviderEnum.INGEN);
+        deliveryAlternativeType1.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        deliveryAlternativeType1.setDeliveryMethodId("1234");
+        deliveryAlternativeType1.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.TELEFON);
+        deliveryAlternativeType1.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.BREV);
+
+        prescriptionItem.getDeliveryAlternative().add(deliveryAlternativeType1);
+
+        DeliveryAlternativeType deliveryAlternative = getRandomDeliveryAlternativeType(random);
+        prescriptionItem.getDeliveryAlternative().add(deliveryAlternative);
+
+        DeliveryAlternativeType deliveryAlternative2 = getRandomDeliveryAlternativeType(random);
+        prescriptionItem.getDeliveryAlternative().add(deliveryAlternative2);
+
+        prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random, -365));
+
+        prescriptionItem.setPrescriptionId(random.nextInt(100000) + "");
+        prescriptionItem.setPrescriptionItemId(prescriptionItemId);
+        PrescriberType prescriber = new PrescriberType();
+        prescriber.setPrescriberName("Kalle Karlsson");
+        prescriber.setPrescriberCode(random.nextInt(1000) + "");
+        prescriber.setPrescriberId(random.nextInt(1000) + "");
+        prescriber.setPrescriberTitle("Läkare");
+        prescriptionItem.setPrescriber(prescriber);
+        prescriptionItem.setLastValidDate(getRandomCalendar(random, 665L));
+        prescriptionItem.setNoOfArticlesPerOrder(32);
+        prescriptionItem.setNoOfPackagesPerOrder(16);
+        prescriptionItem.setStatus(StatusEnum.AKTIV);
+
+        subjectOfCare.getPrescriptionItem().add(prescriptionItem);
+
+        OrderItemType orderItem = new OrderItemType();
+        orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
+        DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
+        deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        orderItem.setDeliveryChoice(deliveryChoice);
+        orderItem.setArticle(article2);
+        orderItem.setNoOfPcs(article2.getPackageSize() * prescriptionItem.getNoOfPackagesPerOrder());
+        orderItem.setPrescriptionItemId(prescriptionItem.getPrescriptionItemId());
+        orderItem.setOrderDate(getRandomCalendar(random, -365)); // Todo To make more realistic take from a set of order dates so some items were ordered at the same time.
+
+        subjectOfCare.getOrderItem().add(orderItem);
+    }
+
+    private void addSpecificPrescriptionItemZeroPackages(Random random, SubjectOfCareType subjectOfCare) {
+
+        String prescriptionItemId = random.nextInt(100000) + "";
+        random.nextInt(1234);
+        XMLGregorianCalendar randomCalendar1 = getRandomCalendar(random, -365);
+        XMLGregorianCalendar randomCalendar2 = getRandomCalendar(random, -365);
+        XMLGregorianCalendar randomCalendar3 = getRandomCalendar(random, -365);
+
+        List<ArticleType> subArticles = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            ArticleType subArticle = new ArticleType();
+            subArticle.setArticleName("Artikelnamn" + " - Särskild näring - Smak " + i);
+            subArticle.setArticleNo(random.nextInt(100000) + "");
+            subArticle.setIsOrderable(true);
+            subArticle.setPackageSize(1); // Important
+            subArticle.setPackageSizeUnit("st");
+            subArticle.setProductArea(ProductAreaEnum.DIABETES);
+            if (random.nextBoolean()) {
+                subArticle.setVariety("Smak " + i);
+            }
+
+            subArticles.add(subArticle);
+
+            XMLGregorianCalendar calendarForThisOrderItem;
+            switch (random.nextInt(2)) {
+                case 0:
+                    calendarForThisOrderItem = randomCalendar1;
+                    break;
+                case 1:
+                    calendarForThisOrderItem = randomCalendar2;
+                    break;
+                case 2:
+                    calendarForThisOrderItem = randomCalendar3;
+                    break;
+                default:
+                    throw new RuntimeException();
+            }
+
+            OrderItemType orderItem = new OrderItemType();
+            orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
+            orderItem.setOrderDate(getRandomCalendar(random, 0));
+            DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
+            deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+            orderItem.setDeliveryChoice(deliveryChoice);
+            orderItem.setArticle(subArticle);
+            orderItem.setNoOfPcs(random.nextInt(8) * subArticle.getPackageSize());
+            orderItem.setPrescriptionItemId(prescriptionItemId);
+            orderItem.setOrderDate(calendarForThisOrderItem); // Todo To make more realistic take from a set of order dates so some items were ordered at the same time.
+
+            subjectOfCare.getOrderItem().add(orderItem);
+        }
+
+        PrescriptionItemType prescriptionItem = new PrescriptionItemType();
+
+        ImageType articleImage = new ImageType();
+        articleImage.setOriginal("http://www.sll.se/Global/Verksamhet/Pressbilder%20Sommarkampanj%202017/1177_1280x720_cykel.png");
+        articleImage.setThumbnail("http://www.sll.se/Global/Verksamhet/Pressbilder%20Sommarkampanj%202017/1177_1280x720_cykel.png");
+
+        ArticleType article2 = new ArticleType();
+        article2.setArticleName("Artikelnamn" + " - Diabetes med 0 förpackningar och förpackningsstorlek 1");
+        article2.setArticleNo(random.nextInt(100000) + "");
+        article2.setIsOrderable(true);
+        article2.setPackageSize(1); // Important
+        article2.setPackageSizeUnit("st");
+        article2.setProductArea(ProductAreaEnum.SÄRNÄR);
+        article2.setGrossPrice("1 200 kr");
+        article2.setArticleImage(articleImage);
+
+        prescriptionItem.getSubArticle().addAll(subArticles);
+
+        prescriptionItem.setArticle(article2);
+
+        prescriptionItem.setNoOfOrders(4);
+        prescriptionItem.setNoOfRemainingOrders(3);
+
+        DeliveryAlternativeType deliveryAlternative = getRandomDeliveryAlternativeType(random);
+        prescriptionItem.getDeliveryAlternative().add(deliveryAlternative);
+
+        DeliveryAlternativeType deliveryAlternative2 = getRandomDeliveryAlternativeType(random);
+        prescriptionItem.getDeliveryAlternative().add(deliveryAlternative2);
+
+        prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random, -365));
+
+        PrescribingOrganizationType prescribingOrganization = new PrescribingOrganizationType();
+        prescribingOrganization.setPrescribingOrganizationName("Vårdenhet XXX");
+        prescribingOrganization.setPrescribingOrganizationId("asdf");
+
+        prescriptionItem.setPrescriptionId(random.nextInt(100000) + "");
+        prescriptionItem.setPrescriptionItemId(prescriptionItemId);
+        PrescriberType prescriber = new PrescriberType();
+        prescriber.setPrescriberName("Kalle Karlsson");
+        prescriber.setPrescriberCode(random.nextInt(1000) + "");
+        prescriber.setPrescriberId(random.nextInt(1000) + "");
+        prescriber.setPrescriberTitle("Läkare");
+        prescriptionItem.setPrescriber(prescriber);
+        prescriptionItem.setLastValidDate(getRandomCalendar(random, 665L));
+        prescriptionItem.setNoOfArticlesPerOrder(32);
+        prescriptionItem.setNoOfPackagesPerOrder(0);
+        prescriptionItem.setStatus(StatusEnum.AKTIV);
+        prescriptionItem.setPrescribingOrganization(prescribingOrganization);
+
+        subjectOfCare.getPrescriptionItem().add(prescriptionItem);
+
+        /*OrderItemType orderItem = new OrderItemType();
+        orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
+        DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
+        deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        orderItem.setDeliveryChoice(deliveryChoice);
+        orderItem.setArticle(article2);
+        orderItem.setNoOfPcs(article2.getPackageSize() * prescriptionItem.getNoOfPackagesPerOrder());
+        orderItem.setPrescriptionItemId(prescriptionItem.getPrescriptionItemId());
+        orderItem.setOrderDate(getRandomCalendar(random, -365)); // Todo To make more realistic take from a set of order dates so some items were ordered at the same time.
+
+        subjectOfCare.getOrderItem().add(orderItem);*/
+    }
+
+    private void addSpecificPrescriptionItemWithTwoHomeDeliveryOptions(Random random, SubjectOfCareType subjectOfCare) {
+
+        String prescriptionItemId = random.nextInt(100000) + "";
+        random.nextInt(1234);
+        XMLGregorianCalendar randomCalendar1 = getRandomCalendar(random, -365);
+        XMLGregorianCalendar randomCalendar2 = getRandomCalendar(random, -365);
+        XMLGregorianCalendar randomCalendar3 = getRandomCalendar(random, -365);
+
+        /*List<ArticleType> subArticles = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            ArticleType subArticle = new ArticleType();
+            subArticle.setArticleName("Artikelnamn" + " - Särskild näring - Smak " + i);
+            subArticle.setArticleNo(random.nextInt(100000) + "");
+            subArticle.setIsOrderable(true);
+            subArticle.setPackageSize(1); // Important
+            subArticle.setPackageSizeUnit("st");
+            subArticle.setProductArea(ProductAreaEnum.DIABETES);
+            if (random.nextBoolean()) {
+                subArticle.setVariety("Smak " + i);
+            }
+
+            subArticles.add(subArticle);
+
+            XMLGregorianCalendar calendarForThisOrderItem;
+            switch (random.nextInt(2)) {
+                case 0:
+                    calendarForThisOrderItem = randomCalendar1;
+                    break;
+                case 1:
+                    calendarForThisOrderItem = randomCalendar2;
+                    break;
+                case 2:
+                    calendarForThisOrderItem = randomCalendar3;
+                    break;
+                default:
+                    throw new RuntimeException();
+            }
+
+            OrderItemType orderItem = new OrderItemType();
+            orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
+            orderItem.setOrderDate(getRandomCalendar(random, 0));
+            DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
+            deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+            orderItem.setDeliveryChoice(deliveryChoice);
+            orderItem.setArticle(subArticle);
+            orderItem.setNoOfPcs(random.nextInt(8) * subArticle.getPackageSize());
+            orderItem.setPrescriptionItemId(prescriptionItemId);
+            orderItem.setOrderDate(calendarForThisOrderItem); // Todo To make more realistic take from a set of order dates so some items were ordered at the same time.
+
+            subjectOfCare.getOrderItem().add(orderItem);
+        }*/
+
+        PrescriptionItemType prescriptionItem = new PrescriptionItemType();
+
+        ArticleType article2 = new ArticleType();
+        article2.setArticleName("Artikelnamn" + " - Diabetes med två hemleveransalternativ");
+        article2.setArticleNo(random.nextInt(100000) + "");
+        article2.setIsOrderable(true);
+        article2.setPackageSize(1); // Important
+        article2.setPackageSizeUnit("st");
+        article2.setProductArea(ProductAreaEnum.DIABETES);
+
+//        prescriptionItem.getSubArticle().addAll(subArticles);
+
+        prescriptionItem.setArticle(article2);
+
+        prescriptionItem.setNoOfOrders(4);
+        prescriptionItem.setNoOfRemainingOrders(3);
+
+        DeliveryAlternativeType deliveryAlternativeType1 = new DeliveryAlternativeType();
+        deliveryAlternativeType1.setServicePointProvider(ServicePointProviderEnum.INGEN);
+        deliveryAlternativeType1.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        deliveryAlternativeType1.setDeliveryMethodId("1234");
+        deliveryAlternativeType1.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.TELEFON);
+
+        prescriptionItem.getDeliveryAlternative().add(deliveryAlternativeType1);
+
+        DeliveryAlternativeType deliveryAlternativetype2 = new DeliveryAlternativeType();
+        deliveryAlternativetype2.setServicePointProvider(ServicePointProviderEnum.INGEN);
+        deliveryAlternativetype2.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        deliveryAlternativetype2.setDeliveryMethodId("1234");
+
+        prescriptionItem.getDeliveryAlternative().add(deliveryAlternativetype2);
+
+        prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random, -365));
+
+        prescriptionItem.setPrescriptionId(random.nextInt(100000) + "");
+        prescriptionItem.setPrescriptionItemId(prescriptionItemId);
+        PrescriberType prescriber = new PrescriberType();
+        prescriber.setPrescriberName("Kalle Karlsson");
+        prescriber.setPrescriberCode(random.nextInt(1000) + "");
+        prescriber.setPrescriberId(random.nextInt(1000) + "");
+        prescriber.setPrescriberTitle("Läkare");
+        prescriptionItem.setPrescriber(prescriber);
+        prescriptionItem.setLastValidDate(getRandomCalendar(random, 665L));
+        prescriptionItem.setNoOfArticlesPerOrder(32);
+        prescriptionItem.setNoOfPackagesPerOrder(0);
+        prescriptionItem.setStatus(StatusEnum.AKTIV);
+
+        subjectOfCare.getPrescriptionItem().add(prescriptionItem);
+
+        /*OrderItemType orderItem = new OrderItemType();
+        orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
+        DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
+        deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        orderItem.setDeliveryChoice(deliveryChoice);
+        orderItem.setArticle(article2);
+        orderItem.setNoOfPcs(article2.getPackageSize() * prescriptionItem.getNoOfPackagesPerOrder());
+        orderItem.setPrescriptionItemId(prescriptionItem.getPrescriptionItemId());
+        orderItem.setOrderDate(getRandomCalendar(random, -365)); // Todo To make more realistic take from a set of order dates so some items were ordered at the same time.
+
+        subjectOfCare.getOrderItem().add(orderItem);*/
     }
 
     private JAXBElement<XMLGregorianCalendar> wrapInJaxBElement(XMLGregorianCalendar calendar) {

@@ -62,7 +62,8 @@ public class PrescriptionItemInfo {
         return latestOrderItemsByArticleNoAndPrescriptionItem;
     }
 
-    public void setLatestOrderItemsByArticleNo(Map<String, Map<String, OrderItemType>> latestOrderItemsByArticleNoAndPrescriptionItem) {
-        this.latestOrderItemsByArticleNoAndPrescriptionItem = latestOrderItemsByArticleNoAndPrescriptionItem;
+    public void setLatestOrderItemsByArticleNo(
+            Map<String, Map<String, OrderItemType>> latestOrderItemsByArticleNoAndPrescriptionItem) {
+         this.latestOrderItemsByArticleNoAndPrescriptionItem = latestOrderItemsByArticleNoAndPrescriptionItem;
     }
 }
