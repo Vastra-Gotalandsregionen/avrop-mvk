@@ -103,8 +103,34 @@
                     <h:inputText id="phoneField" value="#{homeDeliveryController.phoneNumber}"/>
                 </div>
 
+                <h:panelGroup rendered="#{homeDeliveryController.withOrWithoutNotificationChoiceRequired}">
+                    <hr/>
+
+                    Välj notifiering eller leverans utanför dörren.
+
+                    <style>
+                        .notification-or-door-delivery td {
+                            padding-right: 24px;
+                        }
+                        .notification-or-door-delivery label {
+                            margin-left: 4px;
+                        }
+                    </style>
+
+                    <h:selectOneRadio styleClass="notification-or-door-delivery" style="margin-top: 12px" id="notificationOrDoorDelivery" value="#{homeDeliveryController.notificationOrDoorDelivery}">
+                        <f:ajax event="change" execute="notificationOrDoorDelivery" listener="#{homeDeliveryController.updateNotificationOrDoorDelivery}" render="@form"/>
+                        <f:selectItem itemValue="NOTIFICATION" itemLabel="Notifiering" />
+                        <f:selectItem itemValue="DOOR" itemLabel="Leverans utanför dörren"/>
+                    </h:selectOneRadio>
+                </h:panelGroup>
+
+                <!--<h:panelGroup rendered="#{homeDeliveryController.notificationOrDoorDelivery eq 'NOTIFICATION'}">
+                    adsf
+                </h:panelGroup>-->
+
                 <h:panelGroup
-                        rendered="#{homeDeliveryController.deliveryNotificationMethodsPerItem.keySet().size() gt 0}">
+                        rendered="#{homeDeliveryController.mustChooseNotificationForAnyItem}">
+                        <!--rendered="#{not homeDeliveryController.withOrWithoutNotificationChoiceRequired and homeDeliveryController.deliveryNotificationMethodsPerItem.keySet().size() gt 0}">-->
                     <hr/>
 
                     <h3>Avisering</h3>

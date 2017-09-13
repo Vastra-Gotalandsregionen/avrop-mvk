@@ -10,10 +10,12 @@ import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._1.AddressType;
 import riv.crm.selfservice.medicalsupply._1.ArticleType;
 import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._1.OrderRowType;
 import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.ObjectFactory;
 import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
 import se._1177.lmn.service.util.Util;
@@ -21,6 +23,7 @@ import se._1177.lmn.service.util.Util;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.xml.bind.JAXBElement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,6 +33,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
+
+// TODO May need to refactor quite a bit. Make a method which determines which situation we're in: No notification
+// choice, notification choice due to at least one item needs a notification choice (with grouping of items which have
+// overlapping notification choices), or notification-door choice which occurs when there are only items with both
+// notification and without notifications (and potentially others without notification).
 
 /**
  * @author Patrik Björk
@@ -69,6 +77,8 @@ public class HomeDeliveryController {
     private String smsNumber;
     private String email;
     private String phoneNumber;
+
+    private String notificationOrDoorDelivery;
 
     @PostConstruct
     public void init() {
@@ -124,8 +134,9 @@ public class HomeDeliveryController {
             // Take the first deliveryAlternative with matching deliveryMethod and service point provider. This
             // assumes no two deliveryAlternatives share the same deliveryMethod and service point provider. That
             // would lead to arbitrary result.
+            DeliveryChoiceType deliveryChoice = orderRowType.getDeliveryChoice();
             for (DeliveryAlternativeType deliveryAlternative : prescriptionItem.getDeliveryAlternative()) {
-                if (deliveryAlternative.getDeliveryMethod().equals(orderRowType.getDeliveryChoice().getDeliveryMethod())) {
+                if (deliveryAlternative.getDeliveryMethod().equals(deliveryChoice.getDeliveryMethod())) {
                     deliveryMethodId = deliveryAlternative.getDeliveryMethodId();
                     break;
                 }
@@ -140,8 +151,45 @@ public class HomeDeliveryController {
             address.setReceiver(getFullName());
             address.setStreet(getAddress());
 
-            orderRowType.getDeliveryChoice().setHomeDeliveryAddress(address);
-            orderRowType.getDeliveryChoice().setDeliveryMethodId(deliveryMethodId);
+            deliveryChoice.setHomeDeliveryAddress(address);
+            deliveryChoice.setDeliveryMethodId(deliveryMethodId);
+
+            if (getEntriesForOverlappingDeliveryNotificationMethods().size() > 0) {
+//                if (getChosenDeliveryNotificationMethod().size() != 1) {
+//                    throw new RuntimeException("If there are overlapping delivery notification methods only one chosen is expected");
+//                }
+
+//                for (Map.Entry<PrescriptionItemType, String> entry : getEntriesForOverlappingDeliveryNotificationMethods()) {
+//                    if (entry.getKey().equals(prescriptionItem)) {
+                        String name = getChosenDeliveryNotificationMethod().values().iterator().next();
+                        DeliveryNotificationMethodEnum notificationMethod = DeliveryNotificationMethodEnum.fromValue(name);
+                        JAXBElement<DeliveryNotificationMethodEnum> value = Util.wrapInJAXBElement(notificationMethod);
+                        deliveryChoice.setDeliveryNotificationMethod(value);
+
+                        switch (notificationMethod) {
+                            case BREV:
+                                deliveryChoice.setDeliveryNotificationReceiver(null);
+                                break;
+                            case SMS:
+                                deliveryChoice.setDeliveryNotificationReceiver(smsNumber);
+                                break;
+                            case E_POST:
+                                deliveryChoice.setDeliveryNotificationReceiver(email);
+                                break;
+                            case TELEFON:
+                                deliveryChoice.setDeliveryNotificationReceiver(phoneNumber);
+                                break;
+                            default:
+                                throw new IllegalStateException("Illegal notificationMethod: " + notificationMethod);
+                        }
+//                    }
+//                }
+            }
+            /*String name = getChosenDeliveryNotificationMethod().get(prescriptionItem);
+            DeliveryNotificationMethodEnum notificationMethod = DeliveryNotificationMethodEnum.fromValue(name);
+            JAXBElement<DeliveryNotificationMethodEnum> value = Util.wrapInJAXBElement(notificationMethod);
+
+            deliveryChoice.setDeliveryNotificationMethod(value);*/
         });
 
 
@@ -172,51 +220,72 @@ public class HomeDeliveryController {
             List<DeliveryNotificationMethodEnum> overlapping = findOverlappingDeliveryNotificationMethods();
 
             if (overlapping.size() > 0) {
-                // We make a fictional item with null as name.
-                ArticleType fictionalArticle = new ArticleType();
-                fictionalArticle.setArticleName(null);
+                if (!"DOOR".equals(notificationOrDoorDelivery)) {
+                    // We make a fictional item with null as name. This is to present only one notification choice.
+                    // If we put all items mapped to commonDeliveryNotificationMethods the user would need to choose
+                    // for each item.
+                    ArticleType fictionalArticle = new ArticleType();
+                    fictionalArticle.setArticleName(null);
 
-                PrescriptionItemType fictionalItem = new PrescriptionItemType();
-                fictionalItem.setArticle(fictionalArticle);
+                    PrescriptionItemType fictionalItem = new PrescriptionItemType();
+                    fictionalItem.setArticle(fictionalArticle);
 
-                List<String> commonDeliveryNotificationMethods = overlapping
-                        .stream()
-                        .map(Enum::name)
-                        .collect(Collectors.toList());
+                    List<String> commonDeliveryNotificationMethods = overlapping
+                            .stream()
+                            .map(Enum::name)
+                            .collect(Collectors.toList());
 
-                deliveryNotificationMethodsPerItem = new HashMap<>();
-                deliveryNotificationMethodsPerItem.put(fictionalItem, commonDeliveryNotificationMethods);
+                    deliveryNotificationMethodsPerItem = new HashMap<>();
+
+                    /*for (Map.Entry<PrescriptionItemType, String> entry : getEntriesForOverlappingDeliveryNotificationMethods()) {
+                        deliveryNotificationMethodsPerItem.put(entry.getKey(), commonDeliveryNotificationMethods);
+                    }*/
+                    deliveryNotificationMethodsPerItem.put(fictionalItem, commonDeliveryNotificationMethods);
+                } else {
+                    deliveryNotificationMethodsPerItem = new HashMap<>();
+                }
 
             } else {
 
                 deliveryNotificationMethodsPerItem = new HashMap<>();
 
-                Map<PrescriptionItemType, String> deliveryMethodForEachItem = deliveryController
-                        .getDeliveryMethodForEachItem();
+                if (!"DOOR".equals(notificationOrDoorDelivery)) {
+                    // "DOOR" takes precedence, so no notificationMethods if "DOOR" is chosen.
+                    Map<PrescriptionItemType, String> deliveryMethodForEachItem = deliveryController
+                            .getDeliveryMethodForEachItem();
 
-                // We want to present all items which have HEMLEVERANS as delivery method.
-                for (Map.Entry<PrescriptionItemType, String> entry : deliveryMethodForEachItem.entrySet()) {
+                    // We want to present all items which have HEMLEVERANS as delivery method.
+                    for (Map.Entry<PrescriptionItemType, String> entry : deliveryMethodForEachItem.entrySet()) {
 
-                    if (entry.getValue().equals(DeliveryMethodEnum.HEMLEVERANS.name())) {
+                        if (entry.getValue().equals(DeliveryMethodEnum.HEMLEVERANS.name())) {
 
-                        // We found the HEMLEVERANS delivery alternative (we assume there's only one).
-                        // We filter out delivery alternatives where delivery method is HEMLEVERANS and also have at
-                        // least one delivery notification method.
-                        entry.getKey().getDeliveryAlternative()
-                                .stream()
-                                .filter(alternative ->
-                                        alternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS)
-                                                && alternative.getDeliveryNotificationMethod() != null
-                                                && alternative.getDeliveryNotificationMethod().size() > 0)
-                                .forEach(alternative -> {
+                            // We found the HEMLEVERANS delivery alternative (we assume there's only one).
+                            // We filter out delivery alternatives where delivery method is HEMLEVERANS and also have at
+                            // least one delivery notification method.
 
-                                    // We found the HEMLEVERANS delivery alternative (we assume there's only one).
-                                    deliveryNotificationMethodsPerItem.put(entry.getKey(),
-                                            alternative.getDeliveryNotificationMethod()
-                                                    .stream()
-                                                    .map(Enum::name)
-                                                    .collect(Collectors.toCollection(ArrayList<String>::new)));
-                                });
+//                            long count = entry.getKey().getDeliveryAlternative().stream().map(alt -> alt.getDeliveryMethod())
+//                                    .filter(deliveryMethodEnum -> deliveryMethodEnum.equals(DeliveryMethodEnum.HEMLEVERANS))
+//                                    .count();
+
+                            // We only regard those with only "notification home delivery option".
+                            if (hasHomeDeliveryOnlyWithNotifications(entry.getKey())) {
+                                entry.getKey().getDeliveryAlternative()
+                                        .stream()
+                                        .filter(alternative ->
+                                                alternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS)
+                                                        && alternative.getDeliveryNotificationMethod() != null
+                                                        && alternative.getDeliveryNotificationMethod().size() > 0)
+                                        .forEach(alternative -> {
+
+                                            // We found the HEMLEVERANS delivery alternative (we assume there's only one).
+                                            deliveryNotificationMethodsPerItem.put(entry.getKey(),
+                                                    alternative.getDeliveryNotificationMethod()
+                                                            .stream()
+                                                            .map(Enum::name)
+                                                            .collect(Collectors.toCollection(ArrayList<String>::new)));
+                                        });
+                            }
+                        }
                     }
                 }
             }
@@ -230,14 +299,8 @@ public class HomeDeliveryController {
         List<DeliveryNotificationMethodEnum> remaining = new ArrayList<>(
                 Arrays.asList(DeliveryNotificationMethodEnum.values()));
 
-        Map<PrescriptionItemType, String> deliveryMethodForEachItem = deliveryController
-                .getDeliveryMethodForEachItem();
-
-        Set<Map.Entry<PrescriptionItemType, String>> entries = deliveryMethodForEachItem.entrySet()
-                .stream()
-                .filter(entry -> entry.getValue().equals(DeliveryMethodEnum.HEMLEVERANS.name())
-                        && atLeastOneHomeDeliveryMethodWithNotification(entry.getKey()))
-                .collect(Collectors.toSet());
+        Set<Map.Entry<PrescriptionItemType, String>> entries =
+                getEntriesForOverlappingDeliveryNotificationMethods();
 
         if (entries.size() == 0) {
             remaining.clear();
@@ -247,6 +310,10 @@ public class HomeDeliveryController {
         // We want to present all items which have HEMLEVERANS as chosen delivery method.
         for (Map.Entry<PrescriptionItemType, String> entry : entries) {
 
+            if (!hasHomeDeliveryOnlyWithNotifications(entry.getKey())) { // todo or has made "NOTIFICATION" choice???
+                // We don't care about those where we don't need to choose notification
+                continue;
+            }
             // Now we want to find the delivery alternative with the delivery method we are looking for (HEMLEVERANS)
             // and also only alternatives which have at least one notification method.
             // When found the intersection is retained.
@@ -265,17 +332,32 @@ public class HomeDeliveryController {
         return remaining;
     }
 
-    private boolean atLeastOneHomeDeliveryMethodWithNotification(PrescriptionItemType item) {
+    private Set<Map.Entry<PrescriptionItemType, String>> getEntriesForOverlappingDeliveryNotificationMethods() {
+        Map<PrescriptionItemType, String> deliveryMethodForEachItem = deliveryController
+                .getDeliveryMethodForEachItem();
 
+        return deliveryMethodForEachItem.entrySet()
+                    .stream()
+                    .filter(entry -> entry.getValue().equals(DeliveryMethodEnum.HEMLEVERANS.name())
+                            && (hasHomeDeliveryOnlyWithNotifications(entry.getKey()) || getMustChooseNotificationForAnyItem()))
+                    .collect(Collectors.toSet());
+    }
+
+    private boolean hasHomeDeliveryOnlyWithNotifications(PrescriptionItemType item) {
+
+        boolean onlyWithNotifications = true;
         for (DeliveryAlternativeType deliveryAlternative : item.getDeliveryAlternative()) {
             if (deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS)) {
                 if (deliveryAlternative.getDeliveryNotificationMethod().size() > 0) {
-                    return true;
+//                    return true;
+                } else {
+                    onlyWithNotifications = false;
                 }
             }
         }
 
-        return false;
+        return onlyWithNotifications;
+//        return false;
     }
 
     public Map<PrescriptionItemType, String> getChosenDeliveryNotificationMethod() {
@@ -362,6 +444,7 @@ public class HomeDeliveryController {
     void resetChoices() {
         deliveryNotificationMethodsPerItem = null;
         chosenDeliveryNotificationMethod = null;
+//        notificationOrDoorDelivery = null;
     }
 
     public void setDoorCode(String doorCode) {
@@ -483,5 +566,99 @@ public class HomeDeliveryController {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Boolean getWithOrWithoutNotificationChoiceRequired() {
+        Map<PrescriptionItemType, String> deliveryMethodForEachItem = deliveryController
+                .getDeliveryMethodForEachItem();
+
+        Set<Map.Entry<PrescriptionItemType, String>> entriesWithHomeDelivery = deliveryMethodForEachItem.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().equals(DeliveryMethodEnum.HEMLEVERANS.name()))
+                .collect(Collectors.toSet());
+
+        boolean allItemsHasBothWithAndWithoutNotification = true;
+
+        for (PrescriptionItemType prescriptionItemType : deliveryMethodForEachItem.keySet()) {
+            Set<DeliveryAlternativeType> homeDeliveryAlternatives = prescriptionItemType.getDeliveryAlternative()
+                    .stream()
+                    .filter(alternative -> alternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS))
+                    .collect(Collectors.toSet());
+
+            if (homeDeliveryAlternatives.size() < 2) {
+                allItemsHasBothWithAndWithoutNotification = false;
+                break;
+            }
+
+            boolean anyDeliveryMethodWithNotification = false;
+            boolean anyDeliveryMethodWithoutNotification = false;
+
+            for (DeliveryAlternativeType homeDeliveryAlternative : homeDeliveryAlternatives) {
+                if (homeDeliveryAlternative.getDeliveryNotificationMethod().size() > 0) {
+                    anyDeliveryMethodWithNotification = true;
+                } else {
+                    anyDeliveryMethodWithoutNotification = true;
+                }
+            }
+
+            if (!anyDeliveryMethodWithNotification || !anyDeliveryMethodWithoutNotification) {
+                allItemsHasBothWithAndWithoutNotification = false;
+            }
+
+        }
+
+        if (!allItemsHasBothWithAndWithoutNotification) {
+            notificationOrDoorDelivery = null;
+        }
+
+        return allItemsHasBothWithAndWithoutNotification;
+    }
+
+    public String getNotificationOrDoorDelivery() {
+        return notificationOrDoorDelivery;
+    }
+
+    public void setNotificationOrDoorDelivery(String notificationOrDoorDelivery) {
+        this.notificationOrDoorDelivery = notificationOrDoorDelivery;
+    }
+
+    public Boolean getMustChooseNotificationForAnyItem() {
+        if ("NOTIFICATION".equals(notificationOrDoorDelivery)) {
+            return true;
+        }
+
+        boolean anyItemWithOnlyNotificationOption = false;
+
+        Map<PrescriptionItemType, String> deliveryMethodForEachItem = deliveryController
+                .getDeliveryMethodForEachItem();
+
+        for (PrescriptionItemType prescriptionItemType : deliveryMethodForEachItem.keySet()) {
+            boolean hasOptionWithoutNotification = false;
+
+            Set<DeliveryAlternativeType> homeDeliveryAlternatives = prescriptionItemType.getDeliveryAlternative()
+                    .stream()
+                    .filter(alternative -> alternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS))
+                    .collect(Collectors.toSet());
+
+            for (DeliveryAlternativeType homeDeliveryAlternative : homeDeliveryAlternatives) {
+                if (homeDeliveryAlternative.getDeliveryNotificationMethod().size() == 0) {
+                    hasOptionWithoutNotification = true;
+                }
+            }
+
+            if (!hasOptionWithoutNotification) {
+                // So all options are WITH notification
+                anyItemWithOnlyNotificationOption = true;
+            }
+
+        }
+
+        return anyItemWithOnlyNotificationOption;
+    }
+
+    public void updateNotificationOrDoorDelivery() {
+        // Resetting this will force a new calculation of which deliveryNotificationMethodsPerItem are possible.
+        deliveryNotificationMethodsPerItem = null;
+        chosenDeliveryNotificationMethod = null;
     }
 }
