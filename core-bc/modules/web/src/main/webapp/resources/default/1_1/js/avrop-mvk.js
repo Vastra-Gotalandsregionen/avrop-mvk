@@ -118,6 +118,37 @@ function initHomeDeliveryPage() {
     });
 }
 
+function initImagePreview() {
+    var imageDialog = jq("#imageDialog").dialog({
+        autoOpen: false,
+        dialogClass: 'image-preview',
+        modal: true,
+        height: 'auto',
+        width: 'auto'
+    });
+
+    jq('.image-preview-link').click(function (e) {
+        e.preventDefault();
+        console.log('click');
+        var url = e.target.getAttribute('data-image-url');
+
+        var img = jq('<img src="' + url + '" style="max-width: 500px; max-height: 400px;"/>');
+        img.load(function(){
+            console.log('loaded...');
+            imageDialog.dialog('open');
+            jq('.ui-widget-overlay.ui-front').bind('click', function(){
+                imageDialog.dialog('close');
+            });
+        });
+
+        jq('#imageDialog').html(img);
+
+        jq('.ui-widget-overlay.ui-front').bind('click', function(){
+            imageDialog.dialog('close');
+        });
+    });
+}
+
 function handleProgressWithSpinner(data, successCallback) {
     var ajaxStatus = data.status; // Can be "begin", "success" and "complete"
 

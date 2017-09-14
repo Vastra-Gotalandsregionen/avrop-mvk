@@ -5,6 +5,7 @@ import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
+import riv.crm.selfservice.medicalsupply._1.ImageType;
 import riv.crm.selfservice.medicalsupply._1.OrderItemType;
 import riv.crm.selfservice.medicalsupply._1.PrescriberType;
 import riv.crm.selfservice.medicalsupply._1.PrescribingOrganizationType;
@@ -305,6 +306,10 @@ public class MockGetMedicalSupplyPrescriptionsResponder
 
         PrescriptionItemType prescriptionItem = new PrescriptionItemType();
 
+        ImageType articleImage = new ImageType();
+        articleImage.setOriginal("http://www.sll.se/Global/Verksamhet/Pressbilder%20Sommarkampanj%202017/1177_1280x720_cykel.png");
+        articleImage.setThumbnail("http://www.sll.se/Global/Verksamhet/Pressbilder%20Sommarkampanj%202017/1177_1280x720_cykel.png");
+
         ArticleType article2 = new ArticleType();
         article2.setArticleName("Artikelnamn" + " - Diabetes med 0 förpackningar och förpackningsstorlek 1");
         article2.setArticleNo(random.nextInt(100000) + "");
@@ -312,6 +317,8 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         article2.setPackageSize(1); // Important
         article2.setPackageSizeUnit("st");
         article2.setProductArea(ProductAreaEnum.SÄRNÄR);
+        article2.setGrossPrice("1 200 kr");
+        article2.setArticleImage(articleImage);
 
         prescriptionItem.getSubArticle().addAll(subArticles);
 
@@ -328,6 +335,10 @@ public class MockGetMedicalSupplyPrescriptionsResponder
 
         prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random, -365));
 
+        PrescribingOrganizationType prescribingOrganization = new PrescribingOrganizationType();
+        prescribingOrganization.setPrescribingOrganizationName("Vårdenhet XXX");
+        prescribingOrganization.setPrescribingOrganizationId("asdf");
+
         prescriptionItem.setPrescriptionId(random.nextInt(100000) + "");
         prescriptionItem.setPrescriptionItemId(prescriptionItemId);
         PrescriberType prescriber = new PrescriberType();
@@ -340,6 +351,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.setNoOfArticlesPerOrder(32);
         prescriptionItem.setNoOfPackagesPerOrder(0);
         prescriptionItem.setStatus(StatusEnum.AKTIV);
+        prescriptionItem.setPrescribingOrganization(prescribingOrganization);
 
         subjectOfCare.getPrescriptionItem().add(prescriptionItem);
 

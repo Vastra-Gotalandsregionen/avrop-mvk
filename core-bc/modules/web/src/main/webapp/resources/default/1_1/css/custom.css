@@ -912,4 +912,8 @@ span.circle-icon.minus {
     display: none;
 }
 
+.link-row a {
+    margin-right: 8px;
+}
+
 /**************************/
