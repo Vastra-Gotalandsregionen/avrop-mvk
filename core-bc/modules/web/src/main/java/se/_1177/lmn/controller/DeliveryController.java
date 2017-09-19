@@ -143,7 +143,7 @@ public class DeliveryController {
      */
     public String toDeliveryMethod() {
 
-        homeDeliveryController.resetChoices();
+        homeDeliveryController.initNotificationGroups();
         collectDeliveryController.resetChoices();
 
         if (anyDeliveryMethodFitsAll()) {

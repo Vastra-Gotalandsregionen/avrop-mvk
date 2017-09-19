@@ -41,6 +41,9 @@ public class VerifyDeliveryController {
     private OrderController orderController;
 
     @Autowired
+    private HomeDeliveryController homeDeliveryController;
+
+    @Autowired
     private UserProfileController userProfileController;
 
     @Autowired
@@ -152,6 +155,7 @@ public class VerifyDeliveryController {
         cart.emptyCart();
         prescriptionItemInfo.emptyChosenPrescriptionItems();
         orderController.reset();
+        homeDeliveryController.resetChoices();
     }
 
     public Boolean getOrderSuccess() {
