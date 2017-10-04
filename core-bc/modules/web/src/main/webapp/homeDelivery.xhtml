@@ -107,7 +107,7 @@
                 <h:panelGroup rendered="#{homeDeliveryController.notificationOptional.size() gt 0}">
                     <hr/>
 
-                    Välj notifiering eller leverans utanför dörren.
+                    Välj avisering eller leverans utanför dörren.
 
                     <style>
                         .notification-or-door-delivery td {
@@ -120,7 +120,7 @@
 
                     <h:selectOneRadio styleClass="notification-or-door-delivery" style="margin-top: 12px" id="notificationOrDoorDelivery" value="#{homeDeliveryController.notificationOrDoorDelivery}">
                         <f:ajax event="change" execute="notificationOrDoorDelivery" render="@form"/>
-                        <f:selectItem itemValue="NOTIFICATION" itemLabel="Notifiering" />
+                        <f:selectItem itemValue="NOTIFICATION" itemLabel="Avisering" />
                         <f:selectItem itemValue="DOOR" itemLabel="Leverans utanför dörren"/>
                     </h:selectOneRadio>
 
