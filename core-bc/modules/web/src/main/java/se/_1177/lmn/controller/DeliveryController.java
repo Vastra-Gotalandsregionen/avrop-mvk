@@ -143,9 +143,6 @@ public class DeliveryController {
      */
     public String toDeliveryMethod() {
 
-        homeDeliveryController.initNotificationGroups();
-        collectDeliveryController.resetChoices();
-
         if (anyDeliveryMethodFitsAll()) {
 
             if (deliveryMethod == null) {
@@ -155,6 +152,9 @@ public class DeliveryController {
 
                 return "delivery";
             }
+
+            homeDeliveryController.initNotificationGroups();
+            collectDeliveryController.resetChoices();
 
             setDeliveryMethodForAllItems(deliveryMethod);
 
@@ -183,6 +183,9 @@ public class DeliveryController {
                     return "delivery";
                 }
             }
+
+            homeDeliveryController.initNotificationGroups();
+            collectDeliveryController.resetChoices();
 
             // Validation passed. Set what we know for each order row, i.e. delivery method for the delivery choice of
             // the order row.

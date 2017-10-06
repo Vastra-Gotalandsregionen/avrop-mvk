@@ -155,8 +155,8 @@ public class UserProfileController {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
                 .getRequest();
 
-        return "199001262394";
-//        return request.getHeader(AJP_SUBJECT_SERIAL_NUMBER);
+//        return "199001262394";
+        return request.getHeader(AJP_SUBJECT_SERIAL_NUMBER);
     }
 
     public SubjectOfCareType getLoggedInUser() {

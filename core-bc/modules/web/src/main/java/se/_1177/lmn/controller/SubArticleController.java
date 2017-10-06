@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._0.ArticleType;
+//import riv.crm.selfservice.medicalsupply._0.ImageType;
 import riv.crm.selfservice.medicalsupply._0.OrderItemType;
 import riv.crm.selfservice.medicalsupply._0.OrderRowType;
 import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 
 /**
@@ -72,10 +74,15 @@ public class SubArticleController {
 
             model.setPrescriptionItemId(prescriptionItemType.getPrescriptionItemId());
 
-            int numbersStillInNeedToDistribute = prescriptionItemType.getNoOfPackagesPerOrder();
+            int numbersStillInNeedToDistribute = prescriptionItemType.getNoOfArticlesPerOrder()
+                    / prescriptionItemType.getArticle().getPackageSize();
+
             float numberSubArticlesLeftToDistributeTo = prescriptionItemType.getSubArticle().size();
 
             model.setTotalOrderSize(numbersStillInNeedToDistribute);
+
+            model.setTotalOrderSizeUnit(prescriptionItemType.getNoOfPackagesPerOrder() == 0
+                    ? "artiklar" : "förpackningar");
 
             int nextOrderCountNumberToDistribute;
 
@@ -90,8 +97,11 @@ public class SubArticleController {
             for (ArticleType subArticle : prescriptionItemType.getSubArticle()) {
                 // Update these values for this iteration
 
-                if (latestOrderedForThisPrescriptionItem != null && latestOrderedForThisPrescriptionItem.get(subArticle.getArticleNo()) != null) {
-                    Integer previouslyOrderedPcs = latestOrderedForThisPrescriptionItem.get(subArticle.getArticleNo()).getNoOfPcs();
+                if (latestOrderedForThisPrescriptionItem != null
+                        && latestOrderedForThisPrescriptionItem.get(subArticle.getArticleNo()) != null) {
+
+                    Integer previouslyOrderedPcs = latestOrderedForThisPrescriptionItem
+                            .get(subArticle.getArticleNo()).getNoOfPcs();
 
                     Integer previouslyOrderedPackages = previouslyOrderedPcs / subArticle.getPackageSize();
 
@@ -112,13 +122,59 @@ public class SubArticleController {
                 numbersStillInNeedToDistribute -= nextOrderCountNumberToDistribute;
                 numberSubArticlesLeftToDistributeTo -= 1;
 
+//                String variety = subArticle.getVariety();
+                String variety = null;
+
                 SubArticleDto subArticleDto = new SubArticleDto();
-                subArticleDto.setName(subArticle.getArticleName());
+                subArticleDto.setName(!isEmpty(variety) ? variety : subArticle.getArticleName());
                 subArticleDto.setArticleNo(subArticle.getArticleNo());
                 subArticleDto.setOrderCount(nextOrderCountNumberToDistribute);
+
+                /*ImageType articleImage = subArticle.getArticleImage();
+                if (articleImage != null) {
+                    subArticleDto.setThumbnailUrl(articleImage.getThumbnail());
+                    subArticleDto.setImageUrl(articleImage.getOriginal());
+                }*/
+
                 model.getSubArticles().add(subArticleDto);
 
                 subArticleIdToArticle.put(subArticle.getArticleNo(), subArticle);
+            }
+
+            // Verify the numbers adds up as expected. In abnormal circumstances the numbers may not add up to expected
+            // numbers.
+            int totalOrderSize = model.getTotalOrderSize();
+            int totalIncludedNumber = 0;
+            for (SubArticleDto subArticleDto : model.getSubArticles()) {
+                totalIncludedNumber += subArticleDto.getOrderCount();
+            }
+
+            if (totalIncludedNumber < totalOrderSize) {
+                // We need to add the difference to the order. We make this easy and just add the number to arbitrary
+                // sub-article.
+                SubArticleDto subArticleDto = model.getSubArticles().get(0);
+                subArticleDto.setOrderCount(subArticleDto.getOrderCount() + totalOrderSize - totalIncludedNumber);
+            }
+
+            if (totalIncludedNumber > totalOrderSize) {
+                // We need to remove items until we are down to the expected number. We distribute the decrements
+                // evenly.
+                int index = 0;
+                while (totalIncludedNumber > totalOrderSize) {
+                    SubArticleDto subArticleDto = model.getSubArticles().get(index);
+                    if (subArticleDto.getOrderCount() > 0) {
+                        subArticleDto.setOrderCount(subArticleDto.getOrderCount() - 1);
+                        totalIncludedNumber -= 1;
+                    }
+
+                    // If size is e.g. 5 we should increment if index is 3 but we shouldn't increment from 4 to 5. Then
+                    // we start over.
+                    if (index < model.getSubArticles().size() - 1 - 1) {
+                        index++;
+                    } else {
+                        index = 0;
+                    }
+                }
             }
 
             list.add(model);
@@ -188,4 +244,3 @@ public class SubArticleController {
         }
     }
 }
-

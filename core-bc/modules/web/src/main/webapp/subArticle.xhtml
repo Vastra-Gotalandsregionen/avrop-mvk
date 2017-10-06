@@ -32,41 +32,40 @@
                     <ui:repeat value="#{subArticleController.articleWithSubArticlesModels}" var="articleWithSubArticlesModel"
                                varStatus="parentArticleStatus">
                         <h2>#{articleWithSubArticlesModel.parentArticleName}</h2>
-                        <h3>Totalt antal förpackningar: {{jsonData[#{parentArticleStatus.index}].totalOrderSize}} st</h3>
-                            <div class="sub-articles-table">
+                        <h3>Totalt antal {{jsonData[#{parentArticleStatus.index}].totalOrderSizeUnit}}: {{jsonData[#{parentArticleStatus.index}].totalOrderSize}} st</h3>
+                        <table class="sub-articles-table">
 
-                                <ui:repeat value="#{articleWithSubArticlesModel.subArticles}" var="subArticle"
-                                           varStatus="subArticleStatus">
-                                    <div class="sub-article-row clearfix">
-                                        <span class="sub-article-name">
+                            <ui:repeat value="#{articleWithSubArticlesModel.subArticles}" var="subArticle"
+                                       varStatus="subArticleStatus">
+                                <tr class="sub-article-row clearfix">
+                                        <td class="sub-article-name">
 
                                             <h:inputText style="display: none" id="jsfInputRepeated"
-                                                     styleClass="jsf-input-#{parentArticleStatus.index}-#{subArticleStatus.index}"
-                                                     value="#{subArticle.orderCount}"/>
+                                                         styleClass="jsf-input-#{parentArticleStatus.index}-#{subArticleStatus.index}"
+                                                         value="#{subArticle.orderCount}"/>
 
                                             {{jsonData[#{parentArticleStatus.index}].subArticles[#{subArticleStatus.index}].name}}
-                                        </span>
+                                        </td>
 
-                                        <span class="sub-article-number-wrapper">
+                                    <td class="sub-article-number-wrapper">
                                             <span class="circle-icon minus" data-parent-article-index="#{parentArticleStatus.index}" data-sub-article-index="#{subArticleStatus.index}"><span class="circle-icon-content">&#8211;</span></span>
                                             <input type="text" class="short-number-input"
                                                    v-model="jsonData[#{parentArticleStatus.index}].subArticles[#{subArticleStatus.index}].orderCount" tabindex="1#{parentArticleStatus.index}#{subArticleStatus.index}"/>
                                             <span class="circle-icon plus" data-parent-article-index="#{parentArticleStatus.index}" data-sub-article-index="#{subArticleStatus.index}"><span class="circle-icon-content">+</span></span>
-                                        </span>
-                                    </div>
-                                </ui:repeat>
+                                        </td>
+                                </tr>
+                            </ui:repeat>
 
-                            </div>
+                        </table>
                     </ui:repeat>
 
                     <div class="right-align">
-                        <h:commandButton styleClass="button back-button full-page-submit" value="Bakåt" action="#{subArticleController.toOrder}" />
-                        <h:commandButton styleClass="button full-page-submit" value="Till leverans" action="#{subArticleController.toDelivery}" />
+                        <h:commandButton tabindex="150" styleClass="button back-button full-page-submit" value="Bakåt" action="#{subArticleController.toOrder}" />
+                        <h:commandButton tabindex="151" styleClass="button full-page-submit" value="Till leverans" action="#{subArticleController.toDelivery}" />
                     </div>
                 </div>
 
                 <script>
-
                     var app = new Vue({
                         el: '#app',
                         data: {
@@ -75,7 +74,6 @@
                             jsonData: #{subArticleController.jsonData}
                         }
                     });
-
                 </script>
 
                 <script type="text/javascript" src="javax.faces.resource/js/sub-articles.js.xhtml?ln=default"></script>

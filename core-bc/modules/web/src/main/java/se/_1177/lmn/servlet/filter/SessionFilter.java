@@ -62,7 +62,7 @@ public class SessionFilter implements Filter {
         }
 
         String subjectSerialNumber = request.getHeader(USER_ID_HEADER);
-        subjectSerialNumber = "199001262394";
+//        subjectSerialNumber = "199001262394";
 
         handleSessionInvalidation(request, subjectSerialNumber);
 

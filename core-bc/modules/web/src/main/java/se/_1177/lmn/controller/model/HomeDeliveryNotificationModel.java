@@ -1,9 +1,9 @@
 package se._1177.lmn.controller.model;
 
-import riv.crm.selfservice.medicalsupply._1.ArticleType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._0.ArticleType;
+import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
+import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 import se._1177.lmn.service.util.Util;
 
 import javax.faces.application.FacesMessage;
@@ -20,6 +20,7 @@ public class HomeDeliveryNotificationModel {
     private final List<PrescriptionItemType> prescriptionItemTypes;
     private final List<DeliveryNotificationMethodEnum> overlappingDeliveryNotificationMethods;
     private final DeliveryNotificationMethodEnum preferredDeliveryNotificationMethod;
+    private final String componentIdPrefix;
 
     private Map<PrescriptionItemType, List<String>> deliveryNotificationMethodsPerItem;
     private Map<PrescriptionItemType, String> chosenDeliveryNotificationMethod;
@@ -37,7 +38,10 @@ public class HomeDeliveryNotificationModel {
     }
 
     public HomeDeliveryNotificationModel(List<PrescriptionItemType> prescriptionItemTypes,
-                                         DeliveryNotificationMethodEnum preferredDeliveryNotificationMethod, String smsNumber, String email) {
+                                         DeliveryNotificationMethodEnum preferredDeliveryNotificationMethod,
+                                         String smsNumber,
+                                         String email,
+                                         String componentIdPrefix) {
         this.prescriptionItemTypes = prescriptionItemTypes;
 
         this.overlappingDeliveryNotificationMethods = findOverlappingDeliveryNotificationMethods(prescriptionItemTypes);
@@ -45,6 +49,8 @@ public class HomeDeliveryNotificationModel {
 
         this.smsNumber = smsNumber;
         this.email = email;
+
+        this.componentIdPrefix = componentIdPrefix;
     }
 
     public Map<PrescriptionItemType, List<String>> getAvailableDeliveryNotificationMethodsPerItem() {
@@ -175,40 +181,52 @@ public class HomeDeliveryNotificationModel {
 
         final boolean[] validationSuccess = {true};
 
+        List<DeliveryNotificationMethodEnum> alreadyAddedErrorMessageFor = new ArrayList<>();
+
         prescriptionItemTypes.forEach(entry -> {
             String chosenDeliveryMethod = getChosenDeliveryNotificationMethod(entry);
 
             if (DeliveryNotificationMethodEnum.E_POST.name().equals(chosenDeliveryMethod)) {
                 String email = this.email;
 
-                if (email == null || "".equals(email)) {
-                    addMessage("Epost för avisering saknas", "emailInput", count[0]);
-                    validationSuccess[0] = false;
-                } else if (!Util.isValidEmailAddress(email)) {
-                    addMessage("Epost för avisering är ogiltig.", "emailInput", count[0]);
-                    validationSuccess[0] = false;
+                if (!alreadyAddedErrorMessageFor.contains(DeliveryNotificationMethodEnum.E_POST)) {
+                    if (email == null || "".equals(email)) {
+
+                        addMessage("Epost för avisering saknas", "emailInput", count[0]);
+                        validationSuccess[0] = false;
+                    } else if (!Util.isValidEmailAddress(email)) {
+                        addMessage("Epost för avisering är ogiltig.", "emailInput", count[0]);
+                        validationSuccess[0] = false;
+                    }
+                    alreadyAddedErrorMessageFor.add(DeliveryNotificationMethodEnum.E_POST);
                 }
             } else if (DeliveryNotificationMethodEnum.BREV.name().equals(chosenDeliveryMethod)) {
                 // Do nothing
             } else if (DeliveryNotificationMethodEnum.SMS.name().equals(chosenDeliveryMethod)) {
                 String smsNumber = this.smsNumber;
 
-                if (smsNumber == null || "".equals(smsNumber)) {
-                    addMessage("Mobiltelefon för avisering saknas", "smsInput", count[0]);
-                    validationSuccess[0] = false;
-                } else if (smsNumber.length() < 10) {
-                    addMessage("Mobiltelefon för avisering är ogiltig.", "smsInput", count[0]);
-                    validationSuccess[0] = false;
+                if (!alreadyAddedErrorMessageFor.contains(DeliveryNotificationMethodEnum.SMS)) {
+                    if (smsNumber == null || "".equals(smsNumber)) {
+                        addMessage("Mobiltelefon för avisering saknas", "smsInput", count[0]);
+                        validationSuccess[0] = false;
+                    } else if (smsNumber.length() < 10) {
+                        addMessage("Mobiltelefon för avisering är ogiltig.", "smsInput", count[0]);
+                        validationSuccess[0] = false;
+                    }
+                    alreadyAddedErrorMessageFor.add(DeliveryNotificationMethodEnum.SMS);
                 }
             } else if (DeliveryNotificationMethodEnum.TELEFON.name().equals(chosenDeliveryMethod)) {
                 String phoneNumber = this.phoneNumber;
 
-                if (phoneNumber == null || "".equals(phoneNumber)) {
-                    addMessage("Telefon för avisering saknas", "phoneInput", count[0]);
-                    validationSuccess[0] = false;
-                } else if (phoneNumber.length() < 8) {
-                    addMessage("Telefon för avisering är ogiltig.", "phoneInput", count[0]);
-                    validationSuccess[0] = false;
+                if (!alreadyAddedErrorMessageFor.contains(DeliveryNotificationMethodEnum.TELEFON)) {
+                    if (phoneNumber == null || "".equals(phoneNumber)) {
+                        addMessage("Telefon för avisering saknas", "phoneInput", count[0]);
+                        validationSuccess[0] = false;
+                    } else if (phoneNumber.length() < 8) {
+                        addMessage("Telefon för avisering är ogiltig.", "phoneInput", count[0]);
+                        validationSuccess[0] = false;
+                    }
+                    alreadyAddedErrorMessageFor.add(DeliveryNotificationMethodEnum.TELEFON);
                 }
             } else {
                 throw new IllegalStateException("No match for chosen notification method found.");
@@ -226,7 +244,7 @@ public class HomeDeliveryNotificationModel {
 
         FacesContext fc = FacesContext.getCurrentInstance();
 
-        fc.addMessage("homeDeliveryForm:notificationMethodRepeat:" + count + ":" + componentId, msg);
+        fc.addMessage(componentIdPrefix + count + ":" + componentId, msg);
     }
 
     public List<PrescriptionItemType> getPrescriptionItemTypes() {

@@ -27,7 +27,7 @@
                     <h:selectOneMenu id="chosenDeliveryNotificationMethod"
                                      styleClass="notification-method-select"
                                      value="#{model.chosenDeliveryNotificationMethod[item]}"
-                                     onchange="updateDeliveryNotificationMethod(this.value, #{varStatus.index})">
+                                     onchange="updateDeliveryNotificationMethod#{namespace}(this.value, #{varStatus.index})">
                         <f:selectItems
                                 value="#{model.availableDeliveryNotificationMethodsPerItem[item]}"
                                 var="notificationMethod"
@@ -96,7 +96,7 @@
         </ui:repeat>
 
         <h:outputScript>
-            function updateDeliveryNotificationMethod(value, index) {
+            function updateDeliveryNotificationMethod#{namespace}(value, index) {
             switch (value) {
             case 'E_POST':
             jq('#emailInputWrapper#{namespace}' + index).show();

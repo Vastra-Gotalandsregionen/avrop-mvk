@@ -60,7 +60,7 @@ public class AuthFilter implements Filter {
 
         try {
             String subjectSerialNumber = request.getHeader(USER_ID_HEADER);
-            subjectSerialNumber = "199001262394";
+//            subjectSerialNumber = "199001262394";
 
             String securityLevelDescription = request.getHeader(SECURITY_LEVEL_DESCRIPTION);
 

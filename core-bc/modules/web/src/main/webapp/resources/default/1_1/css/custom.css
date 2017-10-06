@@ -867,12 +867,10 @@ table.sub-articles-list td {
 
 .sub-article-name {
     display: inline-block;
-    width: 400px;
 }
 
 @media (max-width: 767px) {
     .sub-article-name {
-        width: 320px;
     }
 }
 

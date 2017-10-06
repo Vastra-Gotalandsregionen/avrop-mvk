@@ -167,6 +167,10 @@ public class SubArticleControllerTest {
         parentArticle2.setArticleName("a2");
         parentArticle3.setArticleName("a3");
 
+        parentArticle1.setPackageSize(1);
+        parentArticle2.setPackageSize(2);
+        parentArticle3.setPackageSize(3);
+
         prescriptionItemType1.setArticle(parentArticle1);
         prescriptionItemType2.setArticle(parentArticle2);
         prescriptionItemType3.setArticle(parentArticle3);
@@ -184,6 +188,10 @@ public class SubArticleControllerTest {
         prescriptionItemType3.getSubArticle().add(article22);
         prescriptionItemType3.getSubArticle().add(article23);
 
+        prescriptionItemType1.setNoOfArticlesPerOrder(5);
+        prescriptionItemType2.setNoOfArticlesPerOrder(14);
+        prescriptionItemType3.setNoOfArticlesPerOrder(33);
+
         prescriptionItemType1.setNoOfPackagesPerOrder(5);
         prescriptionItemType2.setNoOfPackagesPerOrder(7);
         prescriptionItemType3.setNoOfPackagesPerOrder(11);
@@ -198,27 +206,27 @@ public class SubArticleControllerTest {
         List<ArticleWithSubArticlesModel> result = subArticleController.makeDtoModel(prescriptionItems);
 
         // Then
-        assertTrue(result.get(0).getTotalOrderSize() == 5);
-        assertTrue(result.get(0).getSubArticles().size() == 3);
-        assertTrue(result.get(0).getSubArticles().get(0).getArticleNo().equals("11"));
-        assertTrue(result.get(0).getSubArticles().get(0).getOrderCount() == 2); // Two package as in setup.
-        assertTrue(result.get(0).getSubArticles().get(1).getOrderCount() == 3); // Three packages as in setup.
-        assertTrue(result.get(0).getSubArticles().get(2).getOrderCount() == 0); // Wasn't included in last order so zero.
+        assertEquals(5,result.get(0).getTotalOrderSize());
+        assertEquals(3, result.get(0).getSubArticles().size());
+        assertEquals("11", result.get(0).getSubArticles().get(0).getArticleNo());
+        assertEquals(2, result.get(0).getSubArticles().get(0).getOrderCount()); // Two package as in setup.
+        assertEquals(3, result.get(0).getSubArticles().get(1).getOrderCount()); // Three packages as in setup.
+        assertEquals(0, result.get(0).getSubArticles().get(2).getOrderCount()); // Wasn't included in last order so zero.
 
-        assertTrue(result.get(1).getTotalOrderSize() == 7);
-        assertTrue(result.get(1).getSubArticles().size() == 3);
-        assertTrue(result.get(1).getSubArticles().get(0).getArticleNo().equals("21"));
-        assertTrue(result.get(1).getSubArticles().get(0).getOrderCount() == 2); // Two package as in setup.
-        assertTrue(result.get(1).getSubArticles().get(1).getOrderCount() == 0); // Wasn't included in last order so zero.
-        assertTrue(result.get(1).getSubArticles().get(2).getOrderCount() == 5); // Five packages as in setup.
+        assertEquals(7, result.get(1).getTotalOrderSize());
+        assertEquals(3, result.get(1).getSubArticles().size());
+        assertEquals("21", result.get(1).getSubArticles().get(0).getArticleNo());
+        assertEquals(2, result.get(1).getSubArticles().get(0).getOrderCount()); // Two package as in setup.
+        assertEquals(0, result.get(1).getSubArticles().get(1).getOrderCount()); // Wasn't included in last order so zero.
+        assertEquals(5, result.get(1).getSubArticles().get(2).getOrderCount()); // Five packages as in setup.
 
         // The last one should be distributed evenly. Eleven packages means 4+4+3.
-        assertTrue(result.get(2).getTotalOrderSize() == 11);
-        assertTrue(result.get(2).getSubArticles().size() == 3);
-        assertTrue(result.get(2).getSubArticles().get(0).getArticleNo().equals("21"));
-        assertTrue(result.get(2).getSubArticles().get(0).getOrderCount() == 4); // Two package as in setup.
-        assertTrue(result.get(2).getSubArticles().get(1).getOrderCount() == 4); // Wasn't included in last order so zero.
-        assertTrue(result.get(2).getSubArticles().get(2).getOrderCount() == 3); // Five packages as in setup.
+        assertEquals(11, result.get(2).getTotalOrderSize());
+        assertEquals(3, result.get(2).getSubArticles().size());
+        assertEquals("21", result.get(2).getSubArticles().get(0).getArticleNo());
+        assertEquals(4, result.get(2).getSubArticles().get(0).getOrderCount()); // Two package as in setup.
+        assertEquals(4, result.get(2).getSubArticles().get(1).getOrderCount()); // Wasn't included in last order so zero.
+        assertEquals(3, result.get(2).getSubArticles().get(2).getOrderCount()); // Five packages as in setup.
     }
 
     @Test
@@ -243,12 +251,12 @@ public class SubArticleControllerTest {
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
         engine.eval("" +
                 "var lengthOfObject = function(json) {" +
-                    "print('JSON input: ' + json);" +
-                    "return JSON.parse(json).length;" +
+                "print('JSON input: ' + json);" +
+                "return JSON.parse(json).length;" +
                 "};" +
                 "" +
                 "var nameOfSubArticleInSecondModel = function(json) {" +
-                    "return JSON.parse(json)[1].subArticles[0].name;" +
+                "return JSON.parse(json)[1].subArticles[0].name;" +
                 "};");
 
         Invocable invocable = (Invocable) engine;
@@ -278,6 +286,10 @@ public class SubArticleControllerTest {
         a1.setArticleName("a1");
         a2.setArticleName("a2");
         a3.setArticleName("a3");
+
+        a1.setPackageSize(1);
+        a2.setPackageSize(2);
+        a3.setPackageSize(3);
 
         p1.setArticle(a1);
         p2.setArticle(a2);
