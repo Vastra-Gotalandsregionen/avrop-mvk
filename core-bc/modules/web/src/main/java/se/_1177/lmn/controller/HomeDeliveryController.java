@@ -124,7 +124,7 @@ public class HomeDeliveryController {
                 .filter(entry -> entry.getValue().equals(DeliveryMethodEnum.HEMLEVERANS.name()))
                 .map(Map.Entry::getKey)
                 .forEach(prescriptionItemType -> {
-                    switch (hasWithAndWithoutNotification(prescriptionItemType)) {
+                    switch (hasWithAndWithoutNotificationForHomeDelivery(prescriptionItemType)) {
                         case BOTH_WITH_AND_WITHOUT_NOTIFICATION:
                             notificationOptional.add(prescriptionItemType);
                             break;
@@ -143,32 +143,42 @@ public class HomeDeliveryController {
 
         notificationOptionalModel =
                 new HomeDeliveryNotificationModel(notificationOptional, preferredDeliveryNotificationMethod, smsNumber,
-                        email);
+                        email, "homeDeliveryForm:optional:notificationMethodRepeat:");
 
         notificationMandatoryModel =
                 new HomeDeliveryNotificationModel(notificationMandatory, preferredDeliveryNotificationMethod, smsNumber,
-                        email);
+                        email, "homeDeliveryForm:mandatory:notificationMethodRepeat:");
     }
 
 
-    private void addMessage(String summary, String componentId, int count) {
+    private void addMessage(String summary, String componentId) {
         FacesMessage msg = new FacesMessage(summary);
         msg.setSeverity(FacesMessage.SEVERITY_ERROR);
 
         FacesContext fc = FacesContext.getCurrentInstance();
 
-        fc.addMessage("homeDeliveryForm:notificationMethodRepeat:" + count + ":" + componentId, msg);
+        fc.addMessage("homeDeliveryForm:" + componentId, msg);
     }
 
     public String toVerifyDelivery() {
-        boolean doorOrValidated = DOOR.equals(notificationOrDoorDelivery)
-                || notificationOptionalModel.validateNotificationInput();
 
-        boolean success = doorOrValidated
-                && notificationMandatoryModel.validateNotificationInput();
+        if (getNotificationOptional().size() > 0) {
+            if (notificationOrDoorDelivery == null) {
+                addMessage("Val av Avisering eller Leverans utanför dörren saknas", "notificationOrDoorDelivery");
+                return "homeDelivery";
+            }
 
-        if (!success) {
-            return "homeDelivery";
+            boolean doorOrValidated = DOOR.equals(notificationOrDoorDelivery)
+                    || notificationOptionalModel.validateNotificationInput();
+
+            boolean validateMandatoryModel = notificationMandatoryModel.validateNotificationInput();
+
+            boolean success = doorOrValidated
+                    && validateMandatoryModel;
+
+            if (!success) {
+                return "homeDelivery";
+            }
         }
 
         List<OrderRowType> orderRowsWithHomeDelivery = cart.getOrderRows().stream()
@@ -182,7 +192,7 @@ public class HomeDeliveryController {
             // Take the first deliveryAlternative with matching deliveryMethod and service point provider. This
             // assumes no two deliveryAlternatives share the same deliveryMethod and service point provider. That
             // would lead to arbitrary result.
-            NotificationVariant notificationVariant = hasWithAndWithoutNotification(item);
+            NotificationVariant notificationVariant = hasWithAndWithoutNotificationForHomeDelivery(item);
             DeliveryChoiceType deliveryChoice = orderRowType.getDeliveryChoice();
 
             String deliveryMethodId = findTheDeliveryMethodId(item, notificationVariant, deliveryChoice);
@@ -235,7 +245,7 @@ public class HomeDeliveryController {
             }
 
             if (notificationMethod != null) {
-                DeliveryNotificationMethodEnum method = DeliveryNotificationMethodEnum.fromValue(notificationMethod);
+                DeliveryNotificationMethodEnum method = DeliveryNotificationMethodEnum.valueOf(notificationMethod);
                 JAXBElement<DeliveryNotificationMethodEnum> value = Util.wrapInJAXBElement(method);
                 deliveryChoice.setDeliveryNotificationMethod(value);
 
@@ -467,7 +477,7 @@ public class HomeDeliveryController {
         this.notificationOrDoorDelivery = notificationOrDoorDelivery;
     }
 
-    public NotificationVariant hasWithAndWithoutNotification(PrescriptionItemType prescriptionItemType) {
+    public NotificationVariant hasWithAndWithoutNotificationForHomeDelivery(PrescriptionItemType prescriptionItemType) {
         if (prescriptionItemType == null || prescriptionItemType.getDeliveryAlternative() == null
                 || prescriptionItemType.getDeliveryAlternative().size() == 0) {
 
@@ -477,7 +487,10 @@ public class HomeDeliveryController {
         final boolean[] hasWithNotification = {false};
         final boolean[] hasWithoutNotification = {false};
 
-        prescriptionItemType.getDeliveryAlternative().forEach(deliveryAlternativeType -> {
+        prescriptionItemType.getDeliveryAlternative().stream()
+                .filter(da -> da.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS))
+                .forEach(deliveryAlternativeType -> {
+
             if (deliveryAlternativeType.getDeliveryNotificationMethod() == null
                     || deliveryAlternativeType.getDeliveryNotificationMethod().size() == 0) {
 
@@ -525,6 +538,15 @@ public class HomeDeliveryController {
 
     public void setNotificationMandatoryModel(HomeDeliveryNotificationModel notificationMandatoryModel) {
         this.notificationMandatoryModel = notificationMandatoryModel;
+    }
+
+    public Boolean isMultipleGroups() {
+        int numberGroups = 0;
+        numberGroups += getNotificationOptional() != null && getNotificationOptional().size() > 0 ? 1 : 0;
+        numberGroups += getNotificationMandatory() != null && getNotificationMandatory().size() > 0 ? 1 : 0;
+        numberGroups += getNotificationUnavailable() != null && getNotificationUnavailable().size() > 0 ? 1 : 0;
+
+        return numberGroups > 1;
     }
 
     static enum NotificationVariant {

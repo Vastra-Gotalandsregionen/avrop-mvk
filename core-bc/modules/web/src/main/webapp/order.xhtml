@@ -95,8 +95,21 @@
                                         #{item.article.articleName}
                                     </div>
                                     <mvk:moreInfo item="#{item}"/>
-                                    <!--<div class="dev-temp" style="font-size: .7em;">
-                                        <ul>
+                                    <div class="dev-temp" style="font-size: .7em;">
+                                        <em>DEBUG INFO</em>
+                                        <table>
+                                            <ui:repeat value="#{item.deliveryAlternative}" var="alternative">
+                                                <tr>
+                                                    <td>#{alternative.deliveryMethod} - #{alternative.servicePointProvider}</td>
+                                                    <ui:repeat value="#{alternative.deliveryNotificationMethod}" var="method">
+                                                        <td>
+                                                            #{method}
+                                                        </td>
+                                                    </ui:repeat>
+                                                </tr>
+                                            </ui:repeat>
+                                        </table>
+                                        <!--<ul>
                                             <ui:repeat value="#{item.deliveryAlternative}" var="alternative">
                                                 <li>
                                                     #{alternative.deliveryMethod} - #{alternative.servicePointProvider}
@@ -109,9 +122,9 @@
                                                     </ol>
                                                 </li>
                                             </ui:repeat>
-                                        </ul>
+                                        </ul>-->
                                         #{not empty item.subArticle ? 'Underartiklar!!!!' : null}
-                                    </div>-->
+                                    </div>
                                 </td>
                                 <td>
                                     #{item.noOfRemainingOrders}/#{item.noOfOrders}

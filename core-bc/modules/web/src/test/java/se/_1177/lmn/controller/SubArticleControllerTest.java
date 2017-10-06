@@ -251,12 +251,12 @@ public class SubArticleControllerTest {
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
         engine.eval("" +
                 "var lengthOfObject = function(json) {" +
-                    "print('JSON input: ' + json);" +
-                    "return JSON.parse(json).length;" +
+                "print('JSON input: ' + json);" +
+                "return JSON.parse(json).length;" +
                 "};" +
                 "" +
                 "var nameOfSubArticleInSecondModel = function(json) {" +
-                    "return JSON.parse(json)[1].subArticles[0].name;" +
+                "return JSON.parse(json)[1].subArticles[0].name;" +
                 "};");
 
         Invocable invocable = (Invocable) engine;
