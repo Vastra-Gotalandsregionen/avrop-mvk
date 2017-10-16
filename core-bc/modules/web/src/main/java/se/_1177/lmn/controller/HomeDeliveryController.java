@@ -162,6 +162,7 @@ public class HomeDeliveryController {
 
     public String toVerifyDelivery() {
 
+        boolean validateOptionalModel;
         if (getNotificationOptional().size() > 0) {
             if (notificationOrDoorDelivery == null) {
                 addMessage("Val av Avisering eller Leverans utanför dörren saknas", "notificationOrDoorDelivery");
@@ -171,14 +172,18 @@ public class HomeDeliveryController {
             boolean doorOrValidated = DOOR.equals(notificationOrDoorDelivery)
                     || notificationOptionalModel.validateNotificationInput();
 
-            boolean validateMandatoryModel = notificationMandatoryModel.validateNotificationInput();
+            validateOptionalModel = doorOrValidated;
+        } else {
+            validateOptionalModel = true;
+        }
 
-            boolean success = doorOrValidated
-                    && validateMandatoryModel;
+        boolean validateMandatoryModel = notificationMandatoryModel.validateNotificationInput();
 
-            if (!success) {
-                return "homeDelivery";
-            }
+        boolean success = validateOptionalModel
+                && validateMandatoryModel;
+
+        if (!success) {
+            return "homeDelivery";
         }
 
         List<OrderRowType> orderRowsWithHomeDelivery = cart.getOrderRows().stream()
