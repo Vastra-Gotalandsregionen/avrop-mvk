@@ -34,6 +34,7 @@ public class HomeDeliveryNotificationModel {
     {
         ArticleType fictionalArticle = new ArticleType();
         fictionalArticle.setArticleName(null);
+        fictionalArticle.setArticleNo("fictionalArticleNo");
         fictionalItem.setArticle(fictionalArticle);
     }
 

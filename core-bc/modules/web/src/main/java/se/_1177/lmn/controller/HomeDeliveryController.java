@@ -217,7 +217,7 @@ public class HomeDeliveryController {
             switch (notificationVariant) {
                 case BOTH_WITH_AND_WITHOUT_NOTIFICATION:
                     if (notificationOrDoorDelivery.equals(NOTIFICATION)) {
-                        notificationMethod = notificationOptionalModel.getChosenDeliveryNotificationMethod().get(item);
+                        notificationMethod = notificationOptionalModel.getChosenDeliveryNotificationMethod(item);
                         smsNumber = notificationOptionalModel.getSmsNumber();
                         email = notificationOptionalModel.getEmail();
                         phoneNumber = notificationOptionalModel.getPhoneNumber();
@@ -229,10 +229,10 @@ public class HomeDeliveryController {
                     }
                     break;
                 case WITH_NOTIFICATION:
-                    notificationMethod = notificationMandatoryModel.getChosenDeliveryNotificationMethod().get(item);
-                    smsNumber = notificationOptionalModel.getSmsNumber();
-                    email = notificationOptionalModel.getEmail();
-                    phoneNumber = notificationOptionalModel.getPhoneNumber();
+                    notificationMethod = notificationMandatoryModel.getChosenDeliveryNotificationMethod(item);
+                    smsNumber = notificationMandatoryModel.getSmsNumber();
+                    email = notificationMandatoryModel.getEmail();
+                    phoneNumber = notificationMandatoryModel.getPhoneNumber();
                     break;
                 case WITHOUT_NOTIFICATION:
                     notificationMethod = null;
