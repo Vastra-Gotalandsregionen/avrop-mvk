@@ -419,8 +419,6 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         article2.setGrossPrice("1 200 kr");
         article2.setArticleImage(articleImage);
 
-        prescriptionItem.getSubArticle().addAll(subArticles);
-
         prescriptionItem.setArticle(article2);
 
         prescriptionItem.getSubArticle().addAll(subArticles);
