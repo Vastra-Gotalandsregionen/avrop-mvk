@@ -17,6 +17,7 @@ import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
 import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.controller.model.HomeDeliveryNotificationModel;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
+import se._1177.lmn.controller.model.AddressModel;
 import se._1177.lmn.service.util.Util;
 
 import javax.annotation.PostConstruct;
@@ -58,20 +59,14 @@ public class HomeDeliveryController {
     @Autowired
     private PrescriptionItemInfo prescriptionItemInfo;
 
-    private String doorCode;
-    private boolean nextViewIsCollectDelivery;
+    private AddressModel addressModel;
 
-    private String fullName;
-    private String coAddress;
-    private String address;
-    private String zip;
-    private String city;
+    private boolean nextViewIsCollectDelivery;
 
     private DeliveryNotificationMethodEnum preferredDeliveryNotificationMethod;
 
     private String smsNumber;
     private String email;
-    private String phoneNumber;
 
     private NotificationOrDoorDelivery notificationOrDoorDelivery;
 
@@ -84,11 +79,12 @@ public class HomeDeliveryController {
 
     @PostConstruct
     public void init() {
-        // Default zip is from user profile. It may be overridden if user chooses so.
+        addressModel = new AddressModel(userProfileController);
+        addressModel.init();
+
         UserProfileType userProfile = userProfileController.getUserProfile();
 
         if (userProfile != null) {
-            zip = userProfile.getZip();
 
             if (userProfile.isHasSmsNotification() != null && userProfile.isHasSmsNotification()) {
                 preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.SMS;
@@ -203,13 +199,13 @@ public class HomeDeliveryController {
             String deliveryMethodId = findTheDeliveryMethodId(item, notificationVariant, deliveryChoice);
 
             AddressType address = new AddressType();
-            address.setCareOfAddress(getCoAddress());
-            address.setCity(getCity());
-            address.setDoorCode(getDoorCode());
-            address.setPhone(getPhoneNumber());
-            address.setPostalCode(getZip());
-            address.setReceiver(getFullName());
-            address.setStreet(getAddress());
+            address.setCareOfAddress(addressModel.getCoAddress());
+            address.setCity(addressModel.getCity());
+            address.setDoorCode(addressModel.getDoorCode());
+            address.setPhone(addressModel.getPhoneNumber());
+            address.setPostalCode(addressModel.getZip());
+            address.setReceiver(addressModel.getFullName());
+            address.setStreet(addressModel.getAddress());
 
             deliveryChoice.setHomeDeliveryAddress(address);
             deliveryChoice.setDeliveryMethodId(deliveryMethodId);
@@ -353,89 +349,16 @@ public class HomeDeliveryController {
         notificationOrDoorDelivery = null;
     }
 
-    public void setDoorCode(String doorCode) {
-        this.doorCode = doorCode;
-    }
-
-    public String getDoorCode() {
-        return doorCode;
-    }
-
     void setNextViewIsCollectDelivery(boolean nextViewIsCollectDelivery) {
         this.nextViewIsCollectDelivery = nextViewIsCollectDelivery;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public AddressModel getAddressModel() {
+        return addressModel;
     }
 
-    public String getFullName() {
-
-        if (fullName == null) {
-            UserProfileType userProfile = userProfileController.getUserProfile();
-
-            if (userProfile != null) {
-                fullName = userProfile.getFirstName() + " " + userProfile.getLastName();
-            }
-        }
-
-        return fullName;
-    }
-
-    public String getCoAddress() {
-        return coAddress;
-    }
-
-    public void setCoAddress(String coAddress) {
-        this.coAddress = coAddress;
-    }
-
-    public String getAddress() {
-        if (address == null) {
-            UserProfileType userProfile = userProfileController.getUserProfile();
-
-            if (userProfile != null) {
-                address = userProfile.getStreetAddress();
-            }
-        }
-
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getZip() {
-        if (zip == null) {
-            UserProfileType userProfile = userProfileController.getUserProfile();
-
-            if (userProfile != null) {
-                zip = userProfile.getZip();
-            }
-        }
-
-        return zip;
-    }
-
-    public void setZip(String zip) {
-        this.zip = zip;
-    }
-
-    public String getCity() {
-        if (city == null) {
-            UserProfileType userProfile = userProfileController.getUserProfile();
-
-            if (userProfile != null) {
-                city = userProfile.getCity();
-            }
-        }
-
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
+    public void setAddressModel(AddressModel addressModel) {
+        this.addressModel = addressModel;
     }
 
     public String getSmsNumber() {
@@ -452,26 +375,6 @@ public class HomeDeliveryController {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        if (phoneNumber == null) {
-            UserProfileType userProfile = userProfileController.getUserProfile();
-
-            if (userProfile != null) {
-                phoneNumber = userProfile.getPhoneNumber();
-
-                if (phoneNumber == null || "".equals(phoneNumber)) {
-                    phoneNumber = userProfile.getMobilePhoneNumber();
-                }
-            }
-        }
-
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     public NotificationOrDoorDelivery getNotificationOrDoorDelivery() {

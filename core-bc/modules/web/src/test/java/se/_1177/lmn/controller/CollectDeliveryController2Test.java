@@ -4,8 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import riv.crm.selfservice.medicalsupply._1.ArticleType;
 import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
+import riv.crm.selfservice.medicalsupply._1.OrderRowType;
 import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
 import se._1177.lmn.controller.model.Cart;
@@ -88,6 +90,9 @@ public class CollectDeliveryController2Test {
         alternative5.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.E_POST);
         alternative5.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.BREV);
 
+        alternative1.setAllowChioceOfDeliveryPoints(true);
+        alternative2.setAllowChioceOfDeliveryPoints(true);
+
         item1 = new PrescriptionItemType();
         item2 = new PrescriptionItemType();
         item3 = new PrescriptionItemType();
@@ -108,10 +113,10 @@ public class CollectDeliveryController2Test {
         item1.getDeliveryAlternative().add(alternative6); // HEMLEVERANS
 
         item2.getDeliveryAlternative().add(alternative1); // UTLÄMNINGSSTÄLLE, SCHENKER
-        item2.getDeliveryAlternative().add(alternative2); // UTLÄMNINGSSTÄLLE, SCHENKER
-        item2.getDeliveryAlternative().add(alternative3); // UTLÄMNINGSSTÄLLE, POSTNORD
-        item2.getDeliveryAlternative().add(alternative4); // UTLÄMNINGSSTÄLLE, POSTNORD
-        item2.getDeliveryAlternative().add(alternative5); // UTLÄMNINGSSTÄLLE, DHL
+//        item2.getDeliveryAlternative().add(alternative2); // UTLÄMNINGSSTÄLLE, SCHENKER
+//        item2.getDeliveryAlternative().add(alternative3); // UTLÄMNINGSSTÄLLE, POSTNORD
+//        item2.getDeliveryAlternative().add(alternative4); // UTLÄMNINGSSTÄLLE, POSTNORD
+//        item2.getDeliveryAlternative().add(alternative5); // UTLÄMNINGSSTÄLLE, DHL
 
         item3.getDeliveryAlternative().add(alternative6); // HEMLEVERANS
 
@@ -121,6 +126,17 @@ public class CollectDeliveryController2Test {
         cart.getOrderRows().add(createOrderRow(item1).get());
         cart.getOrderRows().add(createOrderRow(item2).get());
         cart.getOrderRows().add(createOrderRow(item3).get());
+
+//        for (OrderRowType orderRowType : cart.getOrderRows()) {
+        DeliveryChoiceType deliveryChoice1 = new DeliveryChoiceType();
+        DeliveryChoiceType deliveryChoice2 = new DeliveryChoiceType();
+        deliveryChoice1.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
+        deliveryChoice2.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+
+        cart.getOrderRows().get(0).setDeliveryChoice(deliveryChoice1);
+        cart.getOrderRows().get(1).setDeliveryChoice(deliveryChoice1);
+        cart.getOrderRows().get(2).setDeliveryChoice(deliveryChoice2);
+//        }
 
         prescriptionItemInfo.getChosenPrescriptionItemInfo().put(item1.getPrescriptionItemId(), item1);
         prescriptionItemInfo.getChosenPrescriptionItemInfo().put(item2.getPrescriptionItemId(), item2);
@@ -179,7 +195,7 @@ public class CollectDeliveryController2Test {
         List<String> dhl = deliveryNotificationMethodsPerProvider.get(ServicePointProviderEnum.DHL);
 
         // Only POSTNORD is available for all items so only POSTNORD will have any notification methods.
-        assertEquals(Arrays.asList("BREV"), schenker);
+        assertEquals(Arrays.asList("E_POST", "BREV", "SMS"), schenker);
         assertEquals(null, postnord);
         assertEquals(null, dhl);
     }
@@ -196,9 +212,9 @@ public class CollectDeliveryController2Test {
         String schenker = chosenDeliveryNotificationMethod.get(ServicePointProviderEnum.SCHENKER);
         String dhl = chosenDeliveryNotificationMethod.get(ServicePointProviderEnum.DHL);
 
-        // Only POSTNORD is available for all items and SMS is the preferred method according to setup().
+        // Only POSTNORD is available for all items and SMS is the preferred method according to setup(). todo CHANGE TEXT
         assertEquals(null, postnord);
-        assertEquals("BREV", schenker);
+        assertEquals("SMS", schenker);
         assertEquals(null, dhl);
     }
 
@@ -206,7 +222,7 @@ public class CollectDeliveryController2Test {
     public void getRelevantServicePointProviders() {
 
         List<ServicePointProviderEnum> relevantServicePointProviders = new ArrayList<>(collectDeliveryController
-                .getRelevantServicePointProviders().keySet());
+                .getServicePointProvidersForDeliveryPointChoice().keySet());
 
         assertEquals(Arrays.asList(ServicePointProviderEnum.SCHENKER), relevantServicePointProviders);
     }

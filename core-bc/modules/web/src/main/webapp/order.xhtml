@@ -101,6 +101,7 @@
                                             <ui:repeat value="#{item.deliveryAlternative}" var="alternative">
                                                 <tr>
                                                     <td>#{alternative.deliveryMethod} - #{alternative.servicePointProvider}</td>
+                                                    <td>Val utlämningsställe: #{alternative.allowChioceOfDeliveryPoints}</td>
                                                     <ui:repeat value="#{alternative.deliveryNotificationMethod}" var="method">
                                                         <td>
                                                             #{method}

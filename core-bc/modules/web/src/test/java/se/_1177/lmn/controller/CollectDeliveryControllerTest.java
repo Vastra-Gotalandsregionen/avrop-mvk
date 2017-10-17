@@ -4,8 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import riv.crm.selfservice.medicalsupply._1.ArticleType;
 import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
+import riv.crm.selfservice.medicalsupply._1.OrderRowType;
 import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
 import se._1177.lmn.controller.model.Cart;
@@ -69,6 +71,13 @@ public class CollectDeliveryControllerTest {
         alternative5.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
         alternative6.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
 
+        alternative1.setAllowChioceOfDeliveryPoints(true);
+        alternative2.setAllowChioceOfDeliveryPoints(true);
+        alternative3.setAllowChioceOfDeliveryPoints(true);
+        alternative4.setAllowChioceOfDeliveryPoints(true);
+        alternative5.setAllowChioceOfDeliveryPoints(true);
+        alternative6.setAllowChioceOfDeliveryPoints(true);
+
         alternative1.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.E_POST);
         alternative1.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.BREV);
         alternative1.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.SMS);
@@ -102,22 +111,28 @@ public class CollectDeliveryControllerTest {
         // Which delivery alternatives that are added to each item doesn't matter as long as all delivery alternatives
         // are added to any item.
         item1.getDeliveryAlternative().add(alternative1);
-        item1.getDeliveryAlternative().add(alternative3);
+//        item1.getDeliveryAlternative().add(alternative3);
 
         item2.getDeliveryAlternative().add(alternative1);
-        item2.getDeliveryAlternative().add(alternative2);
-        item2.getDeliveryAlternative().add(alternative3);
-        item2.getDeliveryAlternative().add(alternative4);
-        item2.getDeliveryAlternative().add(alternative5);
+//        item2.getDeliveryAlternative().add(alternative2);
+//        item2.getDeliveryAlternative().add(alternative3);
+//        item2.getDeliveryAlternative().add(alternative4);
+//        item2.getDeliveryAlternative().add(alternative5);
         item2.getDeliveryAlternative().add(alternative6);
 
         item3.getDeliveryAlternative().add(alternative4);
 
-        // Now the only provider available for all items is POSTNORD, so POSTNORD will be the only choice for the user.
+        // Now the only provider available for all items is POSTNORD, so POSTNORD will be the only choice for the user. TODO Change this text
 
         cart.getOrderRows().add(createOrderRow(item1).get());
         cart.getOrderRows().add(createOrderRow(item2).get());
         cart.getOrderRows().add(createOrderRow(item3).get());
+
+        for (OrderRowType orderRowType : cart.getOrderRows()) {
+            DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
+            deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
+            orderRowType.setDeliveryChoice(deliveryChoice);
+        }
 
         prescriptionItemInfo.getChosenPrescriptionItemInfo().put(item1.getPrescriptionItemId(), item1);
         prescriptionItemInfo.getChosenPrescriptionItemInfo().put(item2.getPrescriptionItemId(), item2);
@@ -176,7 +191,7 @@ public class CollectDeliveryControllerTest {
         List<String> dhl = deliveryNotificationMethodsPerProvider.get(ServicePointProviderEnum.DHL);
 
         // Only POSTNORD is available for all items so only POSTNORD will have any notification methods.
-        assertEquals(null, schenker);
+        assertEquals(Arrays.asList("E_POST", "BREV", "SMS"), schenker);
         assertEquals(Arrays.asList("BREV", "SMS"), postnord);
         assertEquals(null, dhl);
     }
@@ -195,7 +210,7 @@ public class CollectDeliveryControllerTest {
 
         // Only POSTNORD is available for all items and SMS is the preferred method according to setup().
         assertEquals("SMS", postnord);
-        assertEquals(null, schenker);
+        assertEquals("SMS", schenker);
         assertEquals(null, dhl);
     }
 

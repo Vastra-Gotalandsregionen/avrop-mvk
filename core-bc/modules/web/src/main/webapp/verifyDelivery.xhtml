@@ -153,22 +153,33 @@
                                                              deliveryPoint="#{collectDeliveryController.getDeliveryPointById(collectDeliveryController.deliveryPointIdsMap[providerPointKey])}" />
 
                                 </ui:repeat>
+
+                                <h:panelGroup rendered="#{collectDeliveryController.anyItemWhereAllowChoiceOfDeliveryPointIsFalse}">
+                                    Adress för leverans till närmaste utlämningsställe:
+                                    <div class="bold">
+                                        <div>#{collectDeliveryController.addressModel.fullName}</div>
+                                        <h:panelGroup rendered="#{not empty collectDeliveryController.addressModel.coAddress}">c/o #{collectDeliveryController.addressModel.coAddress}</h:panelGroup>
+                                        <div>#{collectDeliveryController.addressModel.address}</div>
+                                        <div>#{collectDeliveryController.addressModel.zip} #{collectDeliveryController.addressModel.city}</div>
+                                        <div>Tel. #{collectDeliveryController.addressModel.phoneNumber}</div>
+                                    </div>
+                                </h:panelGroup>
                             </h:panelGroup>
 
                             <h:panelGroup id="homeDeliveryAddressWrapper" rendered="#{deliveryController.deliveryMethodUsedForAnyItem(deliveryController.hemleveransEnum)}">
                                 <label for="homeDeliveryAddress">Hemleverans:</label>
                                 <div id="homeDeliveryAddress" class="bold">
                                     <div>
-                                        <h:outputText value="#{homeDeliveryController.fullName}"/>
+                                        <h:outputText value="#{homeDeliveryController.addressModel.fullName}"/>
                                     </div>
-                                    <h:panelGroup rendered="#{not empty homeDeliveryController.coAddress}">
-                                        <h:outputText value="#{homeDeliveryController.coAddress}"/>
+                                    <h:panelGroup rendered="#{not empty homeDeliveryController.addressModel.coAddress}">
+                                        <h:outputText value="#{homeDeliveryController.addressModel.coAddress}"/>
                                     </h:panelGroup>
                                     <div>
-                                        <h:outputText value="#{homeDeliveryController.address}"/>
+                                        <h:outputText value="#{homeDeliveryController.addressModel.address}"/>
                                     </div>
                                     <div>
-                                        <h:outputText value="#{homeDeliveryController.zip} #{homeDeliveryController.city}"/>
+                                        <h:outputText value="#{homeDeliveryController.addressModel.zip} #{homeDeliveryController.addressModel.city}"/>
                                     </div>
                                 </div>
                             </h:panelGroup>

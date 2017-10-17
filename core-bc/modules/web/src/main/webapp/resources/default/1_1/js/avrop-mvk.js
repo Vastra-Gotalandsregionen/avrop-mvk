@@ -103,9 +103,9 @@ function initHomeDeliveryPage() {
     });
 
     jq('.to-be-confirmed-submit-button').on('click', function (e) {
-        var doorCodeInput = jq('#homeDeliveryForm\\:doorCodeField');
+        var doorCodeInput = jq('#homeDeliveryForm\\:homeAddress\\:doorCodeField');
 
-        if (doorCodeInput.val().length == 0) {
+        if (doorCodeInput.val().length === 0) {
             e.preventDefault();
             confirmDialog.dialog('open');
         }
@@ -114,7 +114,7 @@ function initHomeDeliveryPage() {
     jq('.cancel-button').on('click', function (e) {
         e.preventDefault();
         confirmDialog.dialog('close');
-        jq('#homeDeliveryForm\\:doorCodeField').focus();
+        jq('#homeDeliveryForm\\:homeAddress\\:doorCodeField').focus();
     });
 }
 

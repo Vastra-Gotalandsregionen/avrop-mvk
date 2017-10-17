@@ -79,6 +79,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         addSpecificPrescriptionItemWithTwoHomeDeliveryOptions(random, subjectOfCare);
         addSpecificPrescriptionItemWithTwoHomeDeliveryOptionsWithOtherNotifications(random, subjectOfCare);
         addSpecificPrescriptionItemWithTwoHomeDeliveryOptionsWithOverlappingNotifications(random, subjectOfCare);
+        addSpecificPrescriptionItemWithCollectDeliveryWithIngenProvider(random, subjectOfCare);
 
         response.setSubjectOfCareType(subjectOfCare);
 
@@ -118,7 +119,12 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.getDeliveryAlternative().add(deliveryAlternative);
 
         DeliveryAlternativeType deliveryAlternative2 = getRandomDeliveryAlternativeType(random);
-        prescriptionItem.getDeliveryAlternative().add(deliveryAlternative2);
+
+        if (!(deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)
+                && deliveryAlternative2.getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE))) {
+            // We don't want multiple alternatives all having UTLÄMNINGSSTÄLLE as method.
+            prescriptionItem.getDeliveryAlternative().add(deliveryAlternative2);
+        }
 
         if (!nextPossibleOrderDateInFuture) {
             prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random, -365));
@@ -224,7 +230,12 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.getDeliveryAlternative().add(deliveryAlternative);
 
         DeliveryAlternativeType deliveryAlternative2 = getRandomDeliveryAlternativeType(random);
-        prescriptionItem.getDeliveryAlternative().add(deliveryAlternative2);
+
+        if (!(deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)
+                && deliveryAlternative2.getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE))) {
+            // We don't want multiple alternatives all having UTLÄMNINGSSTÄLLE as method.
+            prescriptionItem.getDeliveryAlternative().add(deliveryAlternative2);
+        }
 
         prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random, -365));
 
@@ -319,7 +330,12 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.getDeliveryAlternative().add(deliveryAlternative);
 
         DeliveryAlternativeType deliveryAlternative2 = getRandomDeliveryAlternativeType(random);
-        prescriptionItem.getDeliveryAlternative().add(deliveryAlternative2);
+
+        if (!(deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)
+                && deliveryAlternative2.getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE))) {
+            // We don't want multiple alternatives all having UTLÄMNINGSSTÄLLE as method.
+            prescriptionItem.getDeliveryAlternative().add(deliveryAlternative2);
+        }
 
         prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random, -365));
 
@@ -430,7 +446,12 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.getDeliveryAlternative().add(deliveryAlternative);
 
         DeliveryAlternativeType deliveryAlternative2 = getRandomDeliveryAlternativeType(random);
-        prescriptionItem.getDeliveryAlternative().add(deliveryAlternative2);
+
+        if (!(deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)
+                && deliveryAlternative2.getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE))) {
+            // We don't want multiple alternatives all having UTLÄMNINGSSTÄLLE as method.
+            prescriptionItem.getDeliveryAlternative().add(deliveryAlternative2);
+        }
 
         prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random, -365));
 
@@ -632,6 +653,51 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         subjectOfCare.getPrescriptionItem().add(prescriptionItem);
     }
 
+    private void addSpecificPrescriptionItemWithCollectDeliveryWithIngenProvider(Random random, SubjectOfCareType subjectOfCare) {
+
+        String prescriptionItemId = random.nextInt(100000) + "";
+        random.nextInt(1234);
+
+        PrescriptionItemType prescriptionItem = new PrescriptionItemType();
+
+        ArticleType article2 = new ArticleType();
+        article2.setArticleName("Diabetes med utlämningsställe, INGEN leverantör");
+        article2.setArticleNo(random.nextInt(100000) + "");
+        article2.setIsOrderable(true);
+        article2.setPackageSize(1); // Important
+        article2.setPackageSizeUnit("st");
+        article2.setProductArea(ProductAreaEnum.DIABETES);
+
+        prescriptionItem.setArticle(article2);
+
+        prescriptionItem.setNoOfOrders(4);
+        prescriptionItem.setNoOfRemainingOrders(3);
+
+        DeliveryAlternativeType deliveryAlternativeType1 = new DeliveryAlternativeType();
+        deliveryAlternativeType1.setServicePointProvider(ServicePointProviderEnum.INGEN);
+        deliveryAlternativeType1.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
+        deliveryAlternativeType1.setDeliveryMethodId("1234");
+
+        prescriptionItem.getDeliveryAlternative().add(deliveryAlternativeType1);
+
+        prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random, -365));
+
+        prescriptionItem.setPrescriptionId(random.nextInt(100000) + "");
+        prescriptionItem.setPrescriptionItemId(prescriptionItemId);
+        PrescriberType prescriber = new PrescriberType();
+        prescriber.setPrescriberName("Kalle Karlsson");
+        prescriber.setPrescriberCode(random.nextInt(1000) + "");
+        prescriber.setPrescriberId(random.nextInt(1000) + "");
+        prescriber.setPrescriberTitle("Läkare");
+        prescriptionItem.setPrescriber(prescriber);
+        prescriptionItem.setLastValidDate(getRandomCalendar(random, 730L));
+        prescriptionItem.setNoOfArticlesPerOrder(32);
+        prescriptionItem.setNoOfPackagesPerOrder(0);
+        prescriptionItem.setStatus(StatusEnum.AKTIV);
+
+        subjectOfCare.getPrescriptionItem().add(prescriptionItem);
+    }
+
     private JAXBElement<XMLGregorianCalendar> wrapInJaxBElement(XMLGregorianCalendar calendar) {
         return new riv.crm.selfservice.medicalsupply._1.ObjectFactory().createOrderItemTypeDeliveredDate(calendar);
     }
@@ -677,6 +743,16 @@ public class MockGetMedicalSupplyPrescriptionsResponder
             }
 
             deliveryAlternative.getDeliveryNotificationMethod().add(second);
+
+            DeliveryNotificationMethodEnum third = DeliveryNotificationMethodEnum.values()
+                    [random.nextInt(DeliveryNotificationMethodEnum.values().length)];
+
+            while (third == first || third == second) {
+                third = DeliveryNotificationMethodEnum.values()
+                        [random.nextInt(DeliveryNotificationMethodEnum.values().length)];
+            }
+
+            deliveryAlternative.getDeliveryNotificationMethod().add(third);
 
         }
         return deliveryAlternative;
