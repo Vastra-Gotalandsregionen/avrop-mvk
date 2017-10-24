@@ -44,7 +44,7 @@
                                 <div class="row ">
 
                                     <h:panelGroup rendered="#{deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.hemleveransEnum)}">
-                                        <input type="radio" jsf:id="hemleveransOption" p:name="#{hiddenItem.clientId}"
+                                        <input type="radio" jsf:id="hemleveransOption" p:name="#{hiddenItem.clientId}" tabindex="100"
                                                value="#{deliveryController.hemleveransValue}" p:checked="#{deliveryController.deliveryMethod eq deliveryController.hemleveransEnum ? 'checked' : null}" />
                                         <h:outputLabel for="hemleveransOption" value="Hemleverans"/>
                                     </h:panelGroup>
@@ -65,7 +65,7 @@
                                 <div class="row clearfix">
 
                                     <h:panelGroup rendered="#{deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.utlamningsstalleEnum)}">
-                                        <input type="radio" jsf:id="utlamningsstalleOption" p:name="#{hiddenItem.clientId}"
+                                        <input type="radio" jsf:id="utlamningsstalleOption" p:name="#{hiddenItem.clientId}" tabindex="100"
                                                value="#{deliveryController.utlamningsstalleValue}" p:checked="#{deliveryController.deliveryMethod eq deliveryController.utlamningsstalleEnum ? 'checked' : null}" />
                                         <h:outputLabel for="utlamningsstalleOption" value="Utlämningsställe"/>
                                     </h:panelGroup>
@@ -102,7 +102,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <ui:repeat value="#{deliveryController.sortByNumberDeliveryMethodChoices(cart.itemsInCart)}" var="item" varStatus="varStatus">
+                            <ui:repeat value="#{deliveryController.sortByNumberDeliveryMethodChoices(prescriptionItemInfo.chosenPrescriptionItemInfoList)}" var="item" varStatus="varStatus">
                                 <tr>
                                     <td>
                                         #{utilController.capitalizeFully(item.article.productArea.name())}<br/>#{item.article.articleNo}
@@ -112,7 +112,7 @@
                                     </td>
                                     <td>
 
-                                        <h:selectOneRadio value="#{deliveryController.deliveryMethodForEachItem[item]}" styleClass="single-item-delivery-choice">
+                                        <h:selectOneRadio value="#{deliveryController.deliveryMethodForEachItem[item]}" styleClass="single-item-delivery-choice" tabindex="#{varStatus.index + 1}">
 
                                             <f:selectItem itemValue="#{deliveryController.hemleveransEnum}"
                                                           itemLabel="#{utilController.capitalizeFully(deliveryController.hemleveransValue)}"
@@ -134,8 +134,8 @@
                 </div>
 
                 <div class="right-align">
-                    <h:commandButton styleClass="button back-button full-page-submit" value="Bakåt" action="#{deliveryController.toOrder}" />
-                    <h:commandButton styleClass="button full-page-submit" value="Till adressinformation" action="#{deliveryController.toDeliveryMethod}" />
+                    <h:commandButton styleClass="button back-button full-page-submit" value="Bakåt" action="#{deliveryController.toOrder}" tabindex="150"/>
+                    <h:commandButton styleClass="button full-page-submit" value="Till adressinformation" action="#{deliveryController.toDeliveryMethod}" tabindex="151"/>
                 </div>
             </h:form>
         </div>

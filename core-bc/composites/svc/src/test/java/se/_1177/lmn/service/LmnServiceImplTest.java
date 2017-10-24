@@ -2,34 +2,33 @@ package se._1177.lmn.service;
 
 import org.junit.Before;
 import org.junit.Test;
-import riv.crm.selfservice.medicalsupply._0.ArticleType;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._0.ResultCodeEnum;
-import riv.crm.selfservice.medicalsupply._0.StatusEnum;
-import riv.crm.selfservice.medicalsupply._0.SubjectOfCareType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._0.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._0.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._0.GetMedicalSupplyPrescriptionsResponseType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._0.GetMedicalSupplyPrescriptionsType;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._0.rivtabp21.RegisterMedicalSupplyOrderResponderInterface;
+import riv.crm.selfservice.medicalsupply._1.ArticleType;
+import riv.crm.selfservice.medicalsupply._1.OrderItemType;
+import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._1.ResultCodeEnum;
+import riv.crm.selfservice.medicalsupply._1.StatusEnum;
+import riv.crm.selfservice.medicalsupply._1.SubjectOfCareType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._1.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._1.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsResponseType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsType;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._1.rivtabp21.RegisterMedicalSupplyOrderResponderInterface;
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 import se._1177.lmn.service.util.Util;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static se._1177.lmn.service.util.TestUtil.getTodayPlusDays;
 
 /**
  * @author Patrik Björk
@@ -51,6 +50,7 @@ public class LmnServiceImplTest {
 
         ArticleType article = new ArticleType();
         article.setIsOrderable(true);
+        article.setArticleName("articleName");
 
         // Orderable
         PrescriptionItemType item1 = new PrescriptionItemType();
@@ -140,6 +140,8 @@ public class LmnServiceImplTest {
                 medicalSupplyDeliveryPoints,
                 medicalSupplyPrescriptions,
                 registerMedicalSupplyOrder,
+                "",
+                "",
                 "");
 
         MedicalSupplyPrescriptionsHolder holder = service.getMedicalSupplyPrescriptionsHolder("aslkjsdfljk");
@@ -149,13 +151,27 @@ public class LmnServiceImplTest {
     }
 
     @Test
-    public void sortByOrderableToday() throws Exception {
+    public void sortByOrderableTodayAndArticleName() throws Exception {
 
         ArticleType article1 = new ArticleType();
+        article1.setArticleName("ccc");
         article1.setIsOrderable(true);
 
         ArticleType article2 = new ArticleType();
+        article2.setArticleName("bbb");
         article2.setIsOrderable(false);
+
+        ArticleType article3 = new ArticleType();
+        article3.setArticleName("aaa");
+        article3.setIsOrderable(true);
+
+        ArticleType article4 = new ArticleType();
+        article4.setArticleName("fff");
+        article4.setIsOrderable(true);
+
+        ArticleType article5 = new ArticleType();
+        article5.setArticleName("eee");
+        article5.setIsOrderable(true);
 
         PrescriptionItemType p1, p2, p3, p4, p5;
 
@@ -173,14 +189,15 @@ public class LmnServiceImplTest {
 
         List<PrescriptionItemType> list = new ArrayList<>(Arrays.asList(p1, p2, p3, p4, p5));
 
-        for (PrescriptionItemType itemType : list) {
-            itemType.setArticle(article1);
-        }
+        p1.setArticle(article1); // "ccc"
+        p3.setArticle(article3); // "aaa"
+        p4.setArticle(article4); // "fff"
+        p5.setArticle(article5); // "eee"
 
         // We make an exception for p2. Set the non-orderable article
         p2.setArticle(article2);
 
-        LmnServiceImpl.sortByOrderableToday(list);
+        LmnServiceImpl.sortByOrderableTodayAndArticleName(list);
 
         // p1, p4 and p5 should be among the three first and p3 the fourth in the list
         List<PrescriptionItemType> firstThree = list.subList(0, 3);
@@ -189,33 +206,73 @@ public class LmnServiceImplTest {
         assertTrue(firstThree.contains(p4));
         assertTrue(firstThree.contains(p5));
 
-        assertEquals(p3, list.get(3));
+        assertEquals(p3, list.get(3)); // Is orderable but not today
         assertEquals(p2, list.get(4)); // Should come last since the article isn't orderable.
+
+        // Verify the order of the first three which should be ordered alphabetically by article name.
+        assertEquals(p1, list.get(0));
+        assertEquals(p4, list.get(2));
+        assertEquals(p5, list.get(1));
+
     }
 
-    private XMLGregorianCalendar getTodayPlusDays(int daysToAdd) {
-        GregorianCalendar calendar = new GregorianCalendar();
+    @Test
+    public void orderLatestOrderItemsByArticleNo() throws Exception {
 
-        calendar.add(Calendar.DATE, daysToAdd);
+        GetMedicalSupplyPrescriptionsResponseType response = new GetMedicalSupplyPrescriptionsResponseType();
 
-        return toXmlGregorianCalendar(calendar);
-    }
+        SubjectOfCareType subjectOfCare = new SubjectOfCareType();
 
-    public XMLGregorianCalendar toXmlGregorianCalendar(GregorianCalendar calendar) {
+        OrderItemType item1 = new OrderItemType();
+        OrderItemType item2 = new OrderItemType();
+        OrderItemType item3 = new OrderItemType();
+        OrderItemType item4 = new OrderItemType();
 
-        XMLGregorianCalendar xmlGregorianCalendar = null;
-        DatatypeFactory datatypeFactory;
-        try {
-            datatypeFactory = DatatypeFactory.newInstance();
-        } catch (DatatypeConfigurationException e) {
-            throw new RuntimeException(e);
-        }
+        final String prescriptionItemId = "1234";
 
-        /*// Test today
-        GregorianCalendar calendar = new GregorianCalendar();*/
+        item1.setPrescriptionItemId(prescriptionItemId);
+        item2.setPrescriptionItemId(prescriptionItemId);
+        item3.setPrescriptionItemId(prescriptionItemId);
+        item4.setPrescriptionItemId(prescriptionItemId);
 
-        xmlGregorianCalendar = datatypeFactory.newXMLGregorianCalendar(calendar);
+        item1.setNoOfPcs(1);
+        item2.setNoOfPcs(2);
+        item3.setNoOfPcs(3);
+        item4.setNoOfPcs(4);
 
-        return xmlGregorianCalendar;
+        ArticleType article1 = new ArticleType();
+        ArticleType article2 = new ArticleType();
+        ArticleType article3 = new ArticleType();
+        ArticleType article4 = new ArticleType();
+
+        article1.setArticleNo("1");
+        article2.setArticleNo("1"); // Same as article 1
+        article3.setArticleNo("1");
+        article4.setArticleNo("2");
+
+        item1.setOrderDate(getTodayPlusDays(1)); // Second newest
+        item2.setOrderDate(getTodayPlusDays(2)); // Newest
+        item3.setOrderDate(getTodayPlusDays(0)); // Third newest (oldest)
+        item4.setOrderDate(getTodayPlusDays(0)); // Even though it's another article it shouldn't be included in the result since it wasn't ordered the last time.
+
+        item1.setArticle(article1);
+        item2.setArticle(article2);
+        item3.setArticle(article3);
+        item4.setArticle(article4);
+
+        subjectOfCare.getOrderItem().add(item1);
+        subjectOfCare.getOrderItem().add(item2);
+        subjectOfCare.getOrderItem().add(item3);
+        subjectOfCare.getOrderItem().add(item4);
+
+        response.setSubjectOfCareType(subjectOfCare);
+
+        Map<String, Map<String, OrderItemType>> stringOrderItemTypeMap =
+                LmnServiceImpl.latestOrderItemsByArticleNoAndPrescriptionItem(response);
+
+        assertTrue(stringOrderItemTypeMap.get(prescriptionItemId).containsKey(article2.getArticleNo()));
+        assertEquals(stringOrderItemTypeMap.get(prescriptionItemId).get(article2.getArticleNo()).getNoOfPcs(), 2); // Of those with the same articleNo this number was ordered last
+        assertFalse(stringOrderItemTypeMap.get(prescriptionItemId).containsKey(article4.getArticleNo()));
+        assertEquals(1, stringOrderItemTypeMap.get(prescriptionItemId).size());
     }
 }

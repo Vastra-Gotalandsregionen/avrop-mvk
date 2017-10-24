@@ -1,0 +1,133 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:f="http://xmlns.jcp.org/jsf/core"
+              xmlns:h="http://xmlns.jcp.org/jsf/html"
+              xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+              xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+              xmlns:composite="http://java.sun.com/jsf/composite"
+              xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<composite:interface>
+    <composite:attribute name="model" required="true"/>
+    <composite:attribute name="namespace" required="true"/>
+</composite:interface>
+
+<composite:implementation>
+
+    <c:set var="model" value="#{cc.attrs.model}"/>
+    <c:set var="namespace" value="#{cc.attrs.namespace}"/>
+
+    <h:panelGroup id="notificationMethodRepeatWrapper">
+        <ui:repeat id="notificationMethodRepeat"
+                   value="#{utilController.toList(model.availableDeliveryNotificationMethodsPerItem.keySet())}"
+                   var="item" varStatus="varStatus">
+            <div class="input-group row clearfix">
+                <div class="notification-method-input-wrapper input-group">
+                    <label for="chosenDeliveryNotificationMethod" class="empty-label">&#160;</label>
+                    <span class="before-select">Avi:n skickas som #{not empty item.article.articleName ? '('.concat(item.article.articleName).concat(')') : ''}</span>
+                    <h:selectOneMenu id="chosenDeliveryNotificationMethod"
+                                     styleClass="notification-method-select"
+                                     value="#{model.chosenDeliveryNotificationMethod[item]}"
+                                     onchange="updateDeliveryNotificationMethod#{namespace}(this.value, #{varStatus.index})">
+                        <f:selectItems
+                                value="#{model.availableDeliveryNotificationMethodsPerItem[item]}"
+                                var="notificationMethod"
+                                itemLabel="#{utilController.toNotificationMethodName(notificationMethod)}"
+                                itemValue="#{notificationMethod}"/>
+                    </h:selectOneMenu>
+                </div>
+
+                <div id="smsInputWrapper#{namespace}#{varStatus.index}" class="input-group"
+                     style="display: #{model.chosenDeliveryNotificationMethod[item] eq 'SMS' ? 'block' : 'none'};">
+
+                    <div class="clearfix">
+                        <h:outputLabel for="smsInput" value="Mobiltelefon"/>
+                        <h:message for="smsInput"
+                                   styleClass="small-screen alert alert-danger field-error"/>
+                    </div>
+
+                    <h:inputText id="smsInput" value="#{model.smsNumber}">
+                        <f:ajax event="change"
+                                execute="smsInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:0:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:1:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:2:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:3:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:4:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:5:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:6:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:7:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:8:chosenDeliveryNotificationMethod"
+                                render="homeDeliveryForm:#{namespace}:notificationMethodRepeat:0:smsInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:1:smsInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:2:smsInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:3:smsInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:4:smsInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:5:smsInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:6:smsInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:7:smsInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:8:smsInput"/>
+                    </h:inputText>
+                    <h:message for="smsInput" styleClass="alert alert-danger field-error"/>
+                </div>
+
+                <div id="phoneInputWrapper#{namespace}#{varStatus.index}" class="input-group"
+                     style="display: #{model.getChosenDeliveryNotificationMethod(item) eq 'TELEFON' ? 'block' : 'none'};">
+                    <div class="clearfix">
+                        <h:outputLabel for="phoneInput" value="Telefon"/>
+                        <h:message for="phoneInput"
+                                   styleClass="small-screen alert alert-danger field-error"/>
+                    </div>
+                    <h:inputText id="phoneInput" value="#{model.phoneNumber}">
+                        <f:ajax event="change"
+                                execute="phoneInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:0:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:1:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:2:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:3:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:4:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:5:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:6:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:7:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:8:chosenDeliveryNotificationMethod"
+                                render="homeDeliveryForm:#{namespace}:notificationMethodRepeat:0:phoneInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:1:phoneInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:2:phoneInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:3:phoneInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:4:phoneInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:5:phoneInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:6:phoneInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:7:phoneInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:8:phoneInput"/>
+                    </h:inputText>
+                    <h:message for="phoneInput" styleClass="alert alert-danger field-error"/>
+                </div>
+
+                <div id="emailInputWrapper#{namespace}#{varStatus.index}" class="input-group"
+                     style="display: #{model.chosenDeliveryNotificationMethod[item] eq 'E_POST' ? 'block' : 'none'};">
+                    <div class="clearfix">
+                        <h:outputLabel for="emailInput" value="Epost"/>
+                        <h:message for="emailInput"
+                                   styleClass="small-screen alert alert-danger field-error"/>
+                    </div>
+                    <h:inputText id="emailInput" value="#{model.email}">
+                        <f:ajax event="change"
+                                execute="emailInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:0:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:1:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:2:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:3:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:4:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:5:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:6:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:7:chosenDeliveryNotificationMethod homeDeliveryForm:#{namespace}:notificationMethodRepeat:8:chosenDeliveryNotificationMethod"
+                                render="homeDeliveryForm:#{namespace}:notificationMethodRepeat:0:emailInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:1:emailInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:2:emailInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:3:emailInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:4:emailInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:5:emailInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:6:emailInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:7:emailInput homeDeliveryForm:#{namespace}:notificationMethodRepeat:8:emailInput"/>
+                    </h:inputText>
+                    <h:message for="emailInput" styleClass="alert alert-danger field-error"/>
+                </div>
+
+                <div id="letterWrapper#{namespace}#{varStatus.index}" class="input-group"
+                     style="display: #{model.chosenDeliveryNotificationMethod[item] eq 'BREV' ? 'block' : 'none'};">
+                    <div>Folkbokföringsadress:</div>
+                    <div class="bold address-rows">
+                        <div>#{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}</div>
+                        <div>#{userProfileController.userProfile.streetAddress}</div>
+                        <div>#{userProfileController.userProfile.zip} #{userProfileController.userProfile.city}</div>
+                    </div>
+                </div>
+            </div>
+        </ui:repeat>
+
+        <h:outputScript>
+            function updateDeliveryNotificationMethod#{namespace}(value, index) {
+            switch (value) {
+            case 'E_POST':
+            jq('#emailInputWrapper#{namespace}' + index).show();
+            jq('#smsInputWrapper#{namespace}' + index).hide();
+            jq('#phoneInputWrapper#{namespace}' + index).hide();
+            jq('#letterWrapper#{namespace}' + index).hide();
+            break;
+            case 'SMS':
+            jq('#emailInputWrapper#{namespace}' + index).hide();
+            jq('#smsInputWrapper#{namespace}' + index).show();
+            jq('#phoneInputWrapper#{namespace}' + index).hide();
+            jq('#letterWrapper#{namespace}' + index).hide();
+            break;
+            case 'TELEFON':
+            jq('#emailInputWrapper#{namespace}' + index).hide();
+            jq('#smsInputWrapper#{namespace}' + index).hide();
+            jq('#phoneInputWrapper#{namespace}' + index).show();
+            jq('#letterWrapper#{namespace}' + index).hide();
+            break;
+            case 'BREV':
+            jq('#emailInputWrapper#{namespace}' + index).hide();
+            jq('#smsInputWrapper#{namespace}' + index).hide();
+            jq('#phoneInputWrapper#{namespace}' + index).hide();
+            jq('#letterWrapper#{namespace}' + index).show();
+            break;
+            default:
+            break;
+            }
+            }
+        </h:outputScript>
+    </h:panelGroup>
+</composite:implementation>
+
+</ui:component>

@@ -3,8 +3,8 @@ package se._1177.lmn.servlet.filter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
-import se._1177.lmn.controller.model.Cart;
+import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import se._1177.lmn.controller.model.PrescriptionItemInfo;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 
 /**
  * This filter is responsible for invalidating the session if the user changes. There is no way the user can log out of
@@ -62,6 +62,7 @@ public class SessionFilter implements Filter {
         }
 
         String subjectSerialNumber = request.getHeader(USER_ID_HEADER);
+//        subjectSerialNumber = "199001262394";
 
         handleSessionInvalidation(request, subjectSerialNumber);
 
@@ -85,9 +86,10 @@ public class SessionFilter implements Filter {
         HttpSession session = request.getSession(false);
 
         if (session != null) {
-            Object cart = session.getAttribute("scopedTarget.cart");
-            if (cart != null) {
-                List<PrescriptionItemType> itemsInCart = ((Cart) cart).getItemsInCart();
+            Object prescriptionItemInfo = session.getAttribute("scopedTarget.prescriptionItemInfo");
+            if (prescriptionItemInfo != null) {
+                Map<String, PrescriptionItemType> itemsInCart = ((PrescriptionItemInfo) prescriptionItemInfo)
+                        .getChosenPrescriptionItemInfo();
 
                 if (itemsInCart == null || itemsInCart.size() == 0) {
                     redirectToOrderPage(request, response);

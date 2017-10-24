@@ -5,6 +5,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:o="http://omnifaces.org/ui"
+      xmlns:mvk="http://java.sun.com/jsf/composite/component/mvk"
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 
 <ui:composition template="WEB-INF/xhtml/template/wideContent.xhtml">
@@ -23,172 +24,174 @@
             </h:panelGroup>
         </h:panelGroup>
 
-        <div>
-            <h3>Hämta på utlämningsställe</h3>
-            <div class="page-introduction">
-                <div>
+        <h:form id="collectDeliveryForm">
+            <div>
+                <h3>Utlämningsställe</h3>
+                <h:panelGroup rendered="#{collectDeliveryController.anyItemWhereAllowChoiceOfDeliveryPointIsTrue}">
                     <p>
-                        Här väljer du utlämningsställe.
+                        Ditt närmsta utlämningsställe baserat på ditt postnummer. <a class="toggle-trigger"
+                                                                                     data-toggle-for="zipInputWrapper">Ändra postnummer</a>
                     </p>
-                </div>
-            </div>
 
-            <h:form id="collectDeliveryForm">
+                    <div id="zipInputWrapper"
+                         style="#{empty collectDeliveryController.zip or not collectDeliveryController.successfulSelectItems ? '' : 'display: none'};">
+                        <div class="input-group">
+                            <div class="clearfix">
+                                <label for="zipInput">Postnummer</label>
+                            </div>
 
-                <h4>Utlämningsställe</h4>
+                            <h:inputText styleClass="postal-number" value="#{collectDeliveryController.zip}" id="zipInput"/>
 
-                <p>
-                    Ditt närmsta utlämningsställe baserat på ditt postnummer. <a class="toggle-trigger"
-                                                                                 data-toggle-for="zipInputWrapper">Ändra postnummer</a>
-                </p>
+                            <h:commandButton styleClass="button" value="Sök" id="updateDeliverySelectItemsButton">
+                                <f:ajax onevent="function(data) {handleProgressWithSpinner(data, initCommon);}"
+                                        listener="#{collectDeliveryController.updateDeliverySelectItems}" execute="zipInput"
+                                        render="deliveryPointMenuWrapper messagesWrapper"/>
+                            </h:commandButton>
 
-                <div id="zipInputWrapper"
-                     style="#{empty collectDeliveryController.zip or not collectDeliveryController.successfulSelectItems ? '' : 'display: none'};">
-                    <div class="input-group">
-                        <div class="clearfix">
-                            <label for="zipInput">Postnummer</label>
+                            <h:graphicImage styleClass="spinner" library="default" name="img/preloader.gif" height="30px"
+                                            style="display: none;"/>
+
                         </div>
-
-                        <h:inputText styleClass="postal-number" value="#{collectDeliveryController.zip}" id="zipInput"/>
-
-                        <h:commandButton styleClass="button" value="Sök" id="updateDeliverySelectItemsButton">
-                            <f:ajax onevent="function(data) {handleProgressWithSpinner(data, initCommon);}"
-                                    listener="#{collectDeliveryController.updateDeliverySelectItems}" execute="zipInput"
-                                    render="deliveryPointMenuWrapper messagesWrapper"/>
-                        </h:commandButton>
-
-                        <h:graphicImage styleClass="spinner" library="default" name="img/preloader.gif" height="30px"
-                                        style="display: none;"/>
 
                     </div>
 
-                </div>
-
-                <h:panelGroup id="deliveryPointMenuWrapper">
-                    <h:panelGroup layout="block"
-                                  rendered="#{collectDeliveryController.deliverySelectItems.size() gt 1}">
-                        <p>
-                            <b>Obs.</b> Valda artiklar kan inte levereras av en enskild transportör. Du behöver därför välja flera utlämningsställen.
-                        </p>
-                    </h:panelGroup>
-                    <ui:repeat value="#{utilController.toList(collectDeliveryController.deliverySelectItems.keySet())}"
-                               var="selectOneMenuItemsKey" varStatus="status">
-                        <div class="service-point-row row clearfix">
-                            <div>
-                            <span class="">
-                                Valt utlämningsställe (#{utilController.toProviderName(selectOneMenuItemsKey)})
-                                <span class="toggle-trigger info-icon expand"
-                                      data-toggle-for="articlesInfo#{status.index}" title="Visa artiklar"/>
-                            </span>
-                                <div id="articlesInfo#{status.index}" class="expanded-content" style="display: none;">
-                                    <b>Gäller följande produkter:</b>
-                                    <ul class="articles-info">
-                                        <ui:repeat
-                                                value="#{collectDeliveryController.relevantServicePointProviders[selectOneMenuItemsKey]}"
-                                                var="item">
-                                            <li>#{item.article.articleNo} - #{item.article.articleName}</li>
-                                        </ui:repeat>
-                                    </ul>
+                    <h:panelGroup id="deliveryPointMenuWrapper">
+                        <h:panelGroup layout="block"
+                                      rendered="#{collectDeliveryController.deliverySelectItems.size() gt 1}">
+                            <p>
+                                <b>Obs.</b> Valda artiklar kan inte levereras av en enskild transportör. Du behöver därför välja flera utlämningsställen.
+                            </p>
+                        </h:panelGroup>
+                        <ui:repeat value="#{utilController.toList(collectDeliveryController.deliverySelectItems.keySet())}"
+                                   var="selectOneMenuItemsKey" varStatus="status">
+                            <div class="service-point-row row clearfix">
+                                <div>
+                                    <span class="">
+                                        Valt utlämningsställe (#{utilController.toProviderName(selectOneMenuItemsKey)})
+                                        <span class="toggle-trigger info-icon expand"
+                                              data-toggle-for="articlesInfo#{status.index}" title="Visa artiklar"/>
+                                    </span>
                                 </div>
-                            </div>
-                            <h:selectOneMenu id="deliveryPointMenu"
-                                             value="#{collectDeliveryController.deliveryPointIdsMap[selectOneMenuItemsKey]}">
-                                <f:selectItems
-                                        value="#{collectDeliveryController.deliverySelectItems[selectOneMenuItemsKey]}"/>
-                            </h:selectOneMenu>
+                                <h:selectOneMenu id="deliveryPointMenu"
+                                                 value="#{collectDeliveryController.deliveryPointIdsMap[selectOneMenuItemsKey]}">
+                                    <f:selectItems
+                                            value="#{collectDeliveryController.deliverySelectItems[selectOneMenuItemsKey]}"/>
+                                </h:selectOneMenu>
 
-                        </div>
-                    </ui:repeat>
+                            </div>
+                            <div id="articlesInfo#{status.index}" class="expanded-content" style="display: none;">
+                                <b>Gäller följande produkter:</b>
+                                <ul class="articles-info">
+                                    <ui:repeat
+                                            value="#{collectDeliveryController.servicePointProvidersForDeliveryPointChoice[selectOneMenuItemsKey]}"
+                                            var="item">
+                                        <li>#{item.article.articleNo} - #{item.article.articleName}</li>
+                                    </ui:repeat>
+                                </ul>
+                            </div>
+                        </ui:repeat>
+                    </h:panelGroup>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{collectDeliveryController.anyItemWhereAllowChoiceOfDeliveryPointIsTrue and collectDeliveryController.anyItemWhereAllowChoiceOfDeliveryPointIsFalse}">
+                    <hr/>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{collectDeliveryController.anyItemWhereAllowChoiceOfDeliveryPointIsFalse}">
+                    <p>Ange din adressinformation för att speditören ska kunna lämna till närmaste utlämningsställe.</p>
+                    <mvk:homeAddress model="#{collectDeliveryController.addressModel}" renderDoorCode="false" />
                 </h:panelGroup>
 
                 <hr/>
 
-                <h3>Avisering</h3>
+                <h:panelGroup rendered="#{not empty collectDeliveryController.deliveryNotificationMethodsPerProvider}">
+                    <h3>Avisering</h3>
 
-                <div class="page-introduction">
-                    <div>
-                        <p>
-                            Avisering skickas per sms, e-post eller brev. Väljs sms måste mobilnummer anges, väljs epost måste e-postadress
-                            anges, väljs brev så skickas det till din folkbokföringsadress, detta går inte att ändra.
-                        </p>
-                    </div>
-                </div>
-
-                <h:panelGroup id="notificationMethodRepeatWrapper">
-                    <ui:repeat id="notificationMethodRepeat"
-                               value="#{utilController.toList(collectDeliveryController.deliveryNotificationMethodsPerProvider.keySet())}"
-                               var="provider" varStatus="varStatus">
-                        <div class="input-group row clearfix">
-                            <div class="notification-method-input-wrapper">
-                                <label for="chosenDeliveryNotificationMethod">&#160;</label>
-                                <span class="before-select">Avi:n skickas som (#{utilController.toProviderName(provider)})</span>
-                                <h:selectOneMenu id="chosenDeliveryNotificationMethod"
-                                                 styleClass="notification-method-select"
-                                                 value="#{collectDeliveryController.chosenDeliveryNotificationMethod[provider]}"
-                                                 onchange="updateDeliveryNotificationMethod(this.value, #{varStatus.index})">
-                                    <f:selectItems
-                                            value="#{collectDeliveryController.deliveryNotificationMethodsPerProvider[provider]}"
-                                            var="notificationMethod"
-                                            itemLabel="#{utilController.toNotificationMethodName(notificationMethod)}"
-                                            itemValue="#{notificationMethod}"/>
-                                </h:selectOneMenu>
-                            </div>
-
-                            <div id="smsInputWrapper#{varStatus.index}"
-                                 style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'SMS' ? 'block' : 'none'};">
-                                <div class="clearfix">
-                                    <h:outputLabel for="smsInput" value="Mobiltelefon"/>
-                                    <h:message for="smsInput" styleClass="small-screen alert alert-danger field-error"/>
-                                </div>
-                                <h:inputText id="smsInput" value="#{collectDeliveryController.smsNumber}">
-                                    <f:ajax event="change"
-                                            execute="smsInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
-                                            render="collectDeliveryForm:notificationMethodRepeat:0:smsInput collectDeliveryForm:notificationMethodRepeat:1:smsInput collectDeliveryForm:notificationMethodRepeat:2:smsInput collectDeliveryForm:notificationMethodRepeat:3:smsInput collectDeliveryForm:notificationMethodRepeat:4:smsInput collectDeliveryForm:notificationMethodRepeat:5:smsInput"/>
-                                </h:inputText>
-                                <h:message for="smsInput" styleClass="alert alert-danger field-error"/>
-                            </div>
-
-                            <div id="phoneInputWrapper#{varStatus.index}"
-                                 style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'TELEFON' ? 'block' : 'none'};">
-
-                                <div class="clearfix">
-                                    <h:outputLabel for="phoneInput" value="Telefon"/>
-                                    <h:message for="phoneInput" styleClass="small-screen alert alert-danger field-error"/>
-                                </div>
-
-                                <h:inputText id="phoneInput" value="#{collectDeliveryController.phoneNumber}">
-                                    <f:ajax event="change"
-                                            execute="phoneInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
-                                            render="collectDeliveryForm:notificationMethodRepeat:0:phoneInput collectDeliveryForm:notificationMethodRepeat:1:phoneInput collectDeliveryForm:notificationMethodRepeat:2:phoneInput collectDeliveryForm:notificationMethodRepeat:3:phoneInput collectDeliveryForm:notificationMethodRepeat:4:phoneInput collectDeliveryForm:notificationMethodRepeat:5:phoneInput"/>
-                                </h:inputText>
-                                <h:message for="phoneInput" styleClass="alert alert-danger field-error"/>
-                            </div>
-
-                            <div id="emailInputWrapper#{varStatus.index}"
-                                 style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'E_POST' ? 'block' : 'none'};">
-                                <div class="clearfix">
-                                    <h:outputLabel for="emailInput" value="Epost"/>
-                                    <h:message for="emailInput" styleClass="small-screen alert alert-danger field-error"/>
-                                </div>
-                                <h:inputText id="emailInput" value="#{collectDeliveryController.email}">
-                                    <f:ajax event="change"
-                                            execute="emailInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
-                                            render="collectDeliveryForm:notificationMethodRepeat:0:emailInput collectDeliveryForm:notificationMethodRepeat:1:emailInput collectDeliveryForm:notificationMethodRepeat:2:emailInput collectDeliveryForm:notificationMethodRepeat:3:emailInput collectDeliveryForm:notificationMethodRepeat:4:emailInput collectDeliveryForm:notificationMethodRepeat:5:emailInput"/>
-                                </h:inputText>
-                                <h:message for="emailInput" styleClass="alert alert-danger field-error"/>
-                            </div>
-
-                            <div id="letterWrapper#{varStatus.index}"
-                                 style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'BREV' ? 'block' : 'none'};">
-                                <div>Folkbokföringsadress:</div>
-                                <div class="bold address-rows">
-                                    <div>#{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}</div>
-                                    <div>#{userProfileController.userProfile.streetAddress}</div>
-                                    <div>#{userProfileController.userProfile.zip} #{userProfileController.userProfile.city}</div>
-                                </div>
-                            </div>
+                    <div class="page-introduction">
+                        <div>
+                            <p>
+                                Avisering skickas per sms, e-post eller brev. Väljs sms måste mobilnummer anges, väljs epost måste e-postadress
+                                anges, väljs brev så skickas det till din folkbokföringsadress, detta går inte att ändra.
+                            </p>
                         </div>
-                    </ui:repeat>
+                    </div>
+
+                    <h:panelGroup id="notificationMethodRepeatWrapper">
+                        <ui:repeat id="notificationMethodRepeat"
+                                   value="#{utilController.toList(collectDeliveryController.deliveryNotificationMethodsPerProvider.keySet())}"
+                                   var="provider" varStatus="varStatus">
+                            <div class="input-group row clearfix">
+                                <div class="notification-method-input-wrapper">
+                                    <label for="chosenDeliveryNotificationMethod">&#160;</label>
+                                    <span class="before-select">Avi:n skickas som (#{utilController.toProviderName(provider)})</span>
+                                    <h:selectOneMenu id="chosenDeliveryNotificationMethod"
+                                                     styleClass="notification-method-select"
+                                                     value="#{collectDeliveryController.chosenDeliveryNotificationMethod[provider]}"
+                                                     onchange="updateDeliveryNotificationMethod(this.value, #{varStatus.index})">
+                                        <f:selectItems
+                                                value="#{collectDeliveryController.deliveryNotificationMethodsPerProvider[provider]}"
+                                                var="notificationMethod"
+                                                itemLabel="#{utilController.toNotificationMethodName(notificationMethod)}"
+                                                itemValue="#{notificationMethod}"/>
+                                    </h:selectOneMenu>
+                                </div>
+
+                                <div id="smsInputWrapper#{varStatus.index}"
+                                     style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'SMS' ? 'block' : 'none'};">
+                                    <div class="clearfix">
+                                        <h:outputLabel for="smsInput" value="Mobiltelefon"/>
+                                        <h:message for="smsInput" styleClass="small-screen alert alert-danger field-error"/>
+                                    </div>
+                                    <h:inputText id="smsInput" value="#{collectDeliveryController.smsNumber}">
+                                        <f:ajax event="change"
+                                                execute="smsInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
+                                                render="collectDeliveryForm:notificationMethodRepeat:0:smsInput collectDeliveryForm:notificationMethodRepeat:1:smsInput collectDeliveryForm:notificationMethodRepeat:2:smsInput collectDeliveryForm:notificationMethodRepeat:3:smsInput collectDeliveryForm:notificationMethodRepeat:4:smsInput collectDeliveryForm:notificationMethodRepeat:5:smsInput"/>
+                                    </h:inputText>
+                                    <h:message for="smsInput" styleClass="alert alert-danger field-error"/>
+                                </div>
+
+                                <div id="phoneInputWrapper#{varStatus.index}"
+                                     style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'TELEFON' ? 'block' : 'none'};">
+
+                                    <div class="clearfix">
+                                        <h:outputLabel for="phoneInput" value="Telefon"/>
+                                        <h:message for="phoneInput" styleClass="small-screen alert alert-danger field-error"/>
+                                    </div>
+
+                                    <h:inputText id="phoneInput" value="#{collectDeliveryController.phoneNumber}">
+                                        <f:ajax event="change"
+                                                execute="phoneInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
+                                                render="collectDeliveryForm:notificationMethodRepeat:0:phoneInput collectDeliveryForm:notificationMethodRepeat:1:phoneInput collectDeliveryForm:notificationMethodRepeat:2:phoneInput collectDeliveryForm:notificationMethodRepeat:3:phoneInput collectDeliveryForm:notificationMethodRepeat:4:phoneInput collectDeliveryForm:notificationMethodRepeat:5:phoneInput"/>
+                                    </h:inputText>
+                                    <h:message for="phoneInput" styleClass="alert alert-danger field-error"/>
+                                </div>
+
+                                <div id="emailInputWrapper#{varStatus.index}"
+                                     style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'E_POST' ? 'block' : 'none'};">
+                                    <div class="clearfix">
+                                        <h:outputLabel for="emailInput" value="Epost"/>
+                                        <h:message for="emailInput" styleClass="small-screen alert alert-danger field-error"/>
+                                    </div>
+                                    <h:inputText id="emailInput" value="#{collectDeliveryController.email}">
+                                        <f:ajax event="change"
+                                                execute="emailInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
+                                                render="collectDeliveryForm:notificationMethodRepeat:0:emailInput collectDeliveryForm:notificationMethodRepeat:1:emailInput collectDeliveryForm:notificationMethodRepeat:2:emailInput collectDeliveryForm:notificationMethodRepeat:3:emailInput collectDeliveryForm:notificationMethodRepeat:4:emailInput collectDeliveryForm:notificationMethodRepeat:5:emailInput"/>
+                                    </h:inputText>
+                                    <h:message for="emailInput" styleClass="alert alert-danger field-error"/>
+                                </div>
+
+                                <div id="letterWrapper#{varStatus.index}"
+                                     style="display: #{collectDeliveryController.chosenDeliveryNotificationMethod[provider] eq 'BREV' ? 'block' : 'none'};">
+                                    <div>Folkbokföringsadress:</div>
+                                    <div class="bold address-rows">
+                                        <div>#{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}</div>
+                                        <div>#{userProfileController.userProfile.streetAddress}</div>
+                                        <div>#{userProfileController.userProfile.zip} #{userProfileController.userProfile.city}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ui:repeat>
+                    </h:panelGroup>
                 </h:panelGroup>
 
                 <div class="right-align">
@@ -196,41 +199,42 @@
                     <h:commandButton styleClass="button full-page-submit" value="Kontrollera beställning"
                                      action="#{collectDeliveryController.toVerifyDelivery}"/>
                 </div>
-            </h:form>
 
-            <h:outputScript>
-                function updateDeliveryNotificationMethod(value, index) {
-                    switch (value) {
-                        case 'E_POST':
-                            jq('#emailInputWrapper' + index).show();
-                            jq('#smsInputWrapper' + index).hide();
-                            jq('#phoneInputWrapper' + index).hide();
-                            jq('#letterWrapper' + index).hide();
-                            break;
-                        case 'SMS':
-                            jq('#emailInputWrapper' + index).hide();
-                            jq('#smsInputWrapper' + index).show();
-                            jq('#phoneInputWrapper' + index).hide();
-                            jq('#letterWrapper' + index).hide();
-                            break;
-                        case 'TELEFON':
-                            jq('#emailInputWrapper' + index).hide();
-                            jq('#smsInputWrapper' + index).hide();
-                            jq('#phoneInputWrapper' + index).show();
-                            jq('#letterWrapper' + index).hide();
-                            break;
-                        case 'BREV':
-                            jq('#emailInputWrapper' + index).hide();
-                            jq('#smsInputWrapper' + index).hide();
-                            jq('#phoneInputWrapper' + index).hide();
-                            jq('#letterWrapper' + index).show();
-                            break;
-                        default:
-                            break;
+                <h:outputScript>
+                    function updateDeliveryNotificationMethod(value, index) {
+                        switch (value) {
+                            case 'E_POST':
+                                jq('#emailInputWrapper' + index).show();
+                                jq('#smsInputWrapper' + index).hide();
+                                jq('#phoneInputWrapper' + index).hide();
+                                jq('#letterWrapper' + index).hide();
+                                break;
+                            case 'SMS':
+                                jq('#emailInputWrapper' + index).hide();
+                                jq('#smsInputWrapper' + index).show();
+                                jq('#phoneInputWrapper' + index).hide();
+                                jq('#letterWrapper' + index).hide();
+                                break;
+                            case 'TELEFON':
+                                jq('#emailInputWrapper' + index).hide();
+                                jq('#smsInputWrapper' + index).hide();
+                                jq('#phoneInputWrapper' + index).show();
+                                jq('#letterWrapper' + index).hide();
+                                break;
+                            case 'BREV':
+                                jq('#emailInputWrapper' + index).hide();
+                                jq('#smsInputWrapper' + index).hide();
+                                jq('#phoneInputWrapper' + index).hide();
+                                jq('#letterWrapper' + index).show();
+                                break;
+                            default:
+                                break;
+                        }
                     }
-                }
-            </h:outputScript>
-        </div>
+                </h:outputScript>
+            </div>
+        </h:form>
+
     </ui:define>
 </ui:composition>
 </html>

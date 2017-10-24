@@ -3,7 +3,7 @@
 
     <section>
         <title>Beställda produkter</title>
-    <#list prescriptionItems as item>
+    <#list orderRows as item>
         <variablelist>
             <varlistentry>
                 <term>&nbsp;</term>

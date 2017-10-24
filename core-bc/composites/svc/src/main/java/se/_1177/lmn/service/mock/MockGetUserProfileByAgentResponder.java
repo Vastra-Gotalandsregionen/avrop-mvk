@@ -44,6 +44,7 @@ public class MockGetUserProfileByAgentResponder implements GetUserProfileByAgent
         userProfile.setZip("42137");
         userProfile.setRelatives(relatives);
         userProfile.setSubjectOfCareId("201010101010");
+        userProfile.setCountyCode("14");
 
         userProfile.setHasSmsNotification(true);
 

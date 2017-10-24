@@ -103,9 +103,9 @@ function initHomeDeliveryPage() {
     });
 
     jq('.to-be-confirmed-submit-button').on('click', function (e) {
-        var doorCodeInput = jq('#homeDeliveryForm\\:doorCodeField');
+        var doorCodeInput = jq('#homeDeliveryForm\\:homeAddress\\:doorCodeField');
 
-        if (doorCodeInput.val().length == 0) {
+        if (doorCodeInput.val().length === 0) {
             e.preventDefault();
             confirmDialog.dialog('open');
         }
@@ -114,7 +114,38 @@ function initHomeDeliveryPage() {
     jq('.cancel-button').on('click', function (e) {
         e.preventDefault();
         confirmDialog.dialog('close');
-        jq('#homeDeliveryForm\\:doorCodeField').focus();
+        jq('#homeDeliveryForm\\:homeAddress\\:doorCodeField').focus();
+    });
+}
+
+function initImagePreview() {
+    var imageDialog = jq("#imageDialog").dialog({
+        autoOpen: false,
+        dialogClass: 'image-preview',
+        modal: true,
+        height: 'auto',
+        width: 'auto'
+    });
+
+    jq('.image-preview-link').click(function (e) {
+        e.preventDefault();
+        console.log('click');
+        var url = e.target.getAttribute('data-image-url');
+
+        var img = jq('<img src="' + url + '" style="max-width: 500px; max-height: 400px;"/>');
+        img.load(function(){
+            console.log('loaded...');
+            imageDialog.dialog('open');
+            jq('.ui-widget-overlay.ui-front').bind('click', function(){
+                imageDialog.dialog('close');
+            });
+        });
+
+        jq('#imageDialog').html(img);
+
+        jq('.ui-widget-overlay.ui-front').bind('click', function(){
+            imageDialog.dialog('close');
+        });
     });
 }
 

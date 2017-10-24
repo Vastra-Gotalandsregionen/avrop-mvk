@@ -1,0 +1,100 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:f="http://xmlns.jcp.org/jsf/core"
+              xmlns:h="http://xmlns.jcp.org/jsf/html"
+              xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+              xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+              xmlns:composite="http://java.sun.com/jsf/composite"
+              xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<composite:interface>
+    <composite:attribute name="model"/>
+    <composite:attribute name="renderDoorCode"/>
+</composite:interface>
+
+<composite:implementation>
+
+    <c:set var="model" value="#{cc.attrs.model}"/>
+    <c:set var="renderDoorCode" value="#{cc.attrs.renderDoorCode}"/>
+
+    <div class="input-group">
+        <div class="clearfix">
+            <h:outputLabel for="nameField" value="Namn"/>
+            <h:message for="nameField" styleClass="small-screen alert alert-danger field-error"/>
+        </div>
+        <h:inputText id="nameField" value="#{model.fullName}"
+                     validatorMessage="Ogiltigt namn" required="true" requiredMessage="Namn saknas">
+            <f:validateLength minimum="3" maximum="256"/>
+        </h:inputText>
+        <h:message for="nameField" styleClass="alert alert-danger field-error"/>
+    </div>
+
+    <div class="input-group">
+        <div class="clearfix">
+            <h:outputLabel for="coField" value="C/O-adress (valfri)"/>
+        </div>
+        <h:inputText id="coField" value="#{model.coAddress}"/>
+    </div>
+
+    <div class="input-group">
+        <div class="clearfix">
+            <h:outputLabel for="addressField" value="Adress"/>
+            <h:message for="addressField" styleClass="small-screen alert alert-danger field-error"/>
+        </div>
+        <h:inputText id="addressField" value="#{model.address}" required="true"
+                     requiredMessage="Adress saknas" validatorMessage="Ogiltig adress">
+            <f:validateLength minimum="3" maximum="256"/>
+        </h:inputText>
+        <h:message for="addressField" styleClass="alert alert-danger field-error"/>
+    </div>
+
+    <div class="input-group">
+        <div class="clearfix">
+            <h:outputLabel for="postalNumberField" value="Postnummer"/>
+            <h:message for="postalNumberField" styleClass="small-screen alert alert-danger field-error"/>
+        </div>
+        <h:inputText styleClass="postal-number" id="postalNumberField" value="#{model.zip}"
+                     required="true" requiredMessage="Postnummer saknas"
+                     validatorMessage="Ogiltigt postnummer">
+            <f:validateRegex pattern="\d\d\d\s?\d\d"/>
+        </h:inputText>
+        <h:message for="postalNumberField" styleClass="alert alert-danger field-error"/>
+    </div>
+
+    <div class="input-group">
+        <div class="clearfix">
+            <h:outputLabel for="cityField" value="Postort"/>
+            <h:message for="cityField" styleClass="small-screen alert alert-danger field-error"/>
+        </div>
+        <h:inputText id="cityField" value="#{model.city}" required="true"
+                     requiredMessage="Postort saknas" validatorMessage="Ogiltig postort">
+            <f:validateLength minimum="2" maximum="256"/>
+        </h:inputText>
+        <h:message for="cityField" styleClass="alert alert-danger field-error"/>
+    </div>
+
+    <h:panelGroup layout="block" class="input-group clearfix door-code-group" rendered="#{cc.attrs.renderDoorCode}">
+        <div>
+            <span>
+                <h:outputLabel for="doorCodeField" style="float:none;"
+                               value="Portkod (om portkod inte finns, lämna fältet blankt)"/>
+                <h:inputText id="doorCodeField" value="#{model.doorCode}"/>
+            </span>
+            <span id="doorCodeReminderText"
+                  class="arrow-box">Glöm inte att fylla i portkoden för att ditt paket ska kunna levereras. Portkoden är till för leverantören och delas inte med någon annan.</span>
+        </div>
+    </h:panelGroup>
+
+    <div class="input-group">
+        <div class="clearfix">
+            <h:outputLabel for="phoneField" value="Telefon"/>
+            <h:message for="phoneField" styleClass="small-screen alert alert-danger field-error"/>
+        </div>
+        <h:inputText id="phoneField" value="#{model.phoneNumber}" required="true"
+                     requiredMessage="Telefon saknas" validatorMessage="Ogiltig telefon">
+            <f:validateLength minimum="3" maximum="20"/>
+        </h:inputText>
+        <h:message for="phoneField" styleClass="alert alert-danger field-error"/>
+    </div>
+</composite:implementation>
+
+</ui:component>

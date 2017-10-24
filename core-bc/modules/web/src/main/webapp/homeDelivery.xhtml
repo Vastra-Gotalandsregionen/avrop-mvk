@@ -5,6 +5,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:o="http://omnifaces.org/ui"
+      xmlns:mvk="http://java.sun.com/jsf/composite/component/mvk"
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
 
@@ -28,83 +29,124 @@
 
             <h:form id="homeDeliveryForm">
 
-                <div class="input-group">
-                    <div class="clearfix">
-                        <h:outputLabel for="nameField" value="Namn"/>
-                        <h:message for="nameField" styleClass="small-screen alert alert-danger field-error"/>
-                    </div>
-                    <h:inputText id="nameField" value="#{homeDeliveryController.fullName}"
-                                 validatorMessage="Ogiltigt namn" required="true" requiredMessage="Namn saknas">
-                        <f:validateLength minimum="3" maximum="256"/>
-                    </h:inputText>
-                    <h:message for="nameField" styleClass="alert alert-danger field-error"/>
-                </div>
+                <mvk:homeAddress id="homeAddress" model="#{homeDeliveryController.addressModel}" renderDoorCode="true"/>
 
-                <div class="input-group">
-                    <div class="clearfix">
-                        <h:outputLabel for="coField" value="C/O-adress (valfri)"/>
-                    </div>
-                    <h:inputText id="coField" value="#{homeDeliveryController.coAddress}"/>
-                </div>
+                <h:panelGroup style="display: block; margin: 1em 0" rendered="#{homeDeliveryController.isMultipleGroups()}">
+                    <hr/>
+                    <p>Observera att dina produkter har delats in i grupper med olika alternativ.</p>
+                    <h:panelGroup layout="block" styleClass="" rendered="#{homeDeliveryController.notificationOptional.size() gt 0}">
+                        <b>Produkter med val mellan avisering eller leverans utanför dörr:</b>
+                        <ul class="articles-info">
+                            <ui:repeat
+                                    value="#{homeDeliveryController.notificationOptional}"
+                                    var="item">
+                                <li>#{item.article.articleNo} - #{item.article.articleName}</li>
+                            </ui:repeat>
+                        </ul>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="" rendered="#{homeDeliveryController.notificationMandatory.size() gt 0}">
+                        <b>Produkter med val av aviseringssätt:</b>
+                        <ul class="articles-info">
+                            <ui:repeat
+                                    value="#{homeDeliveryController.notificationMandatory}"
+                                    var="item">
+                                <li>#{item.article.articleNo} - #{item.article.articleName}</li>
+                            </ui:repeat>
+                        </ul>
+                    </h:panelGroup>
+                    <h:panelGroup layout="block" styleClass="" rendered="#{homeDeliveryController.notificationUnavailable.size() gt 0}">
+                        <b>Produkter utan val av avisering:</b>
+                        <ul class="articles-info">
+                            <ui:repeat
+                                    value="#{homeDeliveryController.notificationUnavailable}"
+                                    var="item">
+                                <li>#{item.article.articleNo} - #{item.article.articleName}</li>
+                            </ui:repeat>
+                        </ul>
+                    </h:panelGroup>
+                </h:panelGroup>
 
-                <div class="input-group">
-                    <div class="clearfix">
-                        <h:outputLabel for="addressField" value="Adress"/>
-                        <h:message for="addressField" styleClass="small-screen alert alert-danger field-error"/>
-                    </div>
-                    <h:inputText id="addressField" value="#{homeDeliveryController.address}" required="true"
-                                 requiredMessage="Adress saknas" validatorMessage="Ogiltig adress">
-                        <f:validateLength minimum="3" maximum="256"/>
-                    </h:inputText>
-                    <h:message for="addressField" styleClass="alert alert-danger field-error"/>
-                </div>
+                <h:panelGroup styleClass="" id="optionalSection" rendered="#{homeDeliveryController.notificationOptional.size() gt 0}">
+                    <hr/>
 
-                <div class="input-group">
-                    <div class="clearfix">
-                        <h:outputLabel for="postalNumberField" value="Postnummer"/>
-                        <h:message for="postalNumberField" styleClass="small-screen alert alert-danger field-error"/>
-                    </div>
-                    <h:inputText styleClass="postal-number" id="postalNumberField" value="#{homeDeliveryController.zip}"
-                                 required="true" requiredMessage="Postnummer saknas"
-                                 validatorMessage="Ogiltigt postnummer">
-                        <f:validateRegex pattern="\d\d\d\s?\d\d"/>
-                    </h:inputText>
-                    <h:message for="postalNumberField" styleClass="alert alert-danger field-error"/>
-                </div>
+                    <div class="radio-group">
+                        <div class="clearfix">
+                            <h:outputLabel for="notificationOrDoorDelivery">Välj avisering eller leverans utanför dörren.</h:outputLabel>
+                        </div>
+                        <style>
+                            .notification-or-door-delivery {
+                                display: inline-block;
+                            }
+                            .notification-or-door-delivery td {
+                                padding-right: 24px;
+                            }
+                            .notification-or-door-delivery label {
+                                margin-left: 4px;
+                                position: relative;
+                                bottom: 6px;
+                            }
+                            .radio-group .alert {
+                                position: relative;
+                                bottom: 10px;
+                            }
 
-                <div class="input-group">
-                    <div class="clearfix">
-                        <h:outputLabel for="cityField" value="Postort"/>
-                        <h:message for="cityField" styleClass="small-screen alert alert-danger field-error"/>
-                    </div>
-                    <h:inputText id="cityField" value="#{homeDeliveryController.city}" required="true"
-                                 requiredMessage="Postort saknas" validatorMessage="Ogiltig postort">
-                        <f:validateLength minimum="2" maximum="256"/>
-                    </h:inputText>
-                    <h:message for="cityField" styleClass="alert alert-danger field-error"/>
-                </div>
+                            @media (max-width: 767px) {
+                                .radio-group .alert.small-screen {
+                                    display: block;
+                                    bottom: 0;
+                                    width: 258px;
+                                    margin: 0;
+                                }
 
-                <div class="input-group clearfix door-code-group">
-                    <div>
-                        <span>
-                            <h:outputLabel for="doorCodeField" style="float:none;"
-                                           value="Portkod (om portkod inte finns, lämna fältet blankt)"/>
-                            <h:inputText id="doorCodeField" value="#{homeDeliveryController.doorCode}"/>
-                        </span>
-                        <span id="doorCodeReminderText"
-                              class="arrow-box">Glöm inte att fylla i portkoden för att ditt paket ska kunna levereras. Portkoden är till för leverantören och delas inte med någon annan.</span>
-                    </div>
-                </div>
+                                .radio-group .alert.field-error:after {
+                                    bottom: 100%;
+                                    left: 50%;
+                                    right: inherit;
+                                    top: inherit;
+                                    border: solid transparent;
+                                    content: " ";
+                                    height: 0;
+                                    width: 0;
+                                    position: absolute;
+                                    pointer-events: none;
+                                    border-color: rgba(242, 222, 222, 0);
+                                    border-bottom-color: #f2dede;
+                                    border-width: 8px;
+                                    margin-top: -8px;
+                                }
+                            }
 
-                <div class="input-group">
-                    <div class="clearfix">
-                        <h:outputLabel for="phoneField" value="Telefon (valfri)"/>
+                        </style>
+
+                        <h:selectOneRadio styleClass="notification-or-door-delivery" style="margin-top: 12px" id="notificationOrDoorDelivery" value="#{homeDeliveryController.notificationOrDoorDelivery}" required="true" requiredMessage="Val av Avisering eller Leverans utanför dörren saknas">
+                            <f:ajax event="change" execute="notificationOrDoorDelivery" render="homeDeliveryForm:optionalSection"/>
+                            <f:selectItem itemValue="NOTIFICATION" itemLabel="Avisering" />
+                            <f:selectItem itemValue="DOOR" itemLabel="Leverans utanför dörren"/>
+                        </h:selectOneRadio>
+
+                        <h:message for="notificationOrDoorDelivery" styleClass="alert alert-danger field-error"/>
+                        <h:message for="notificationOrDoorDelivery" styleClass="small-screen alert alert-danger field-error"/>
                     </div>
-                    <h:inputText id="phoneField" value="#{homeDeliveryController.phoneNumber}"/>
-                </div>
+
+                    <mvk:homeDeliveryNotifications id="optional" model="#{homeDeliveryController.notificationOptionalModel}" namespace="optional" rendered="#{homeDeliveryController.notificationOrDoorDelivery eq 'NOTIFICATION'}" />
+
+                    <!--<span class="toggle-trigger info-icon expand"
+                          data-toggle-for="notificationOptionalArticles" title="Visa artiklar"/>-->
+
+                    <h:panelGroup id="notificationOptionalArticles" class="expanded-content" style="display: block; margin: 1em 0" rendered="#{homeDeliveryController.isMultipleGroups()}">
+                        <b>Gäller följande produkter:</b>
+                        <ul class="articles-info">
+                            <ui:repeat
+                                    value="#{homeDeliveryController.notificationOptional}"
+                                    var="item">
+                                <li>#{item.article.articleNo} - #{item.article.articleName}</li>
+                            </ui:repeat>
+                        </ul>
+                    </h:panelGroup>
+                </h:panelGroup>
 
                 <h:panelGroup
-                        rendered="#{homeDeliveryController.deliveryNotificationMethodsPerItem.keySet().size() gt 0}">
+                        rendered="#{homeDeliveryController.notificationMandatory.size() gt 0}">
                     <hr/>
 
                     <h3>Avisering</h3>
@@ -118,84 +160,17 @@
                         </div>
                     </div>
 
-                    <h:panelGroup id="notificationMethodRepeatWrapper">
-                        <ui:repeat id="notificationMethodRepeat"
-                                   value="#{utilController.toList(homeDeliveryController.deliveryNotificationMethodsPerItem.keySet())}"
-                                   var="item" varStatus="varStatus">
-                            <div class="input-group row clearfix">
-                                <div class="notification-method-input-wrapper input-group">
-                                    <label for="chosenDeliveryNotificationMethod" class="empty-label">&#160;</label>
-                                    <span class="before-select">Avi:n skickas som #{not empty item.article.articleName ? '('.concat(item.article.articleName).concat(')') : ''}</span>
-                                    <h:selectOneMenu id="chosenDeliveryNotificationMethod"
-                                                     styleClass="notification-method-select"
-                                                     value="#{homeDeliveryController.chosenDeliveryNotificationMethod[item]}"
-                                                     onchange="updateDeliveryNotificationMethod(this.value, #{varStatus.index})">
-                                        <f:selectItems
-                                                value="#{homeDeliveryController.deliveryNotificationMethodsPerItem[item]}"
-                                                var="notificationMethod"
-                                                itemLabel="#{utilController.toNotificationMethodName(notificationMethod)}"
-                                                itemValue="#{notificationMethod}"/>
-                                    </h:selectOneMenu>
-                                </div>
+                    <mvk:homeDeliveryNotifications id="mandatory" model="#{homeDeliveryController.notificationMandatoryModel}" namespace="mandatory" />
 
-                                <div id="smsInputWrapper#{varStatus.index}" class="input-group"
-                                     style="display: #{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'SMS' ? 'block' : 'none'};">
-
-                                    <div class="clearfix">
-                                        <h:outputLabel for="smsInput" value="Mobiltelefon"/>
-                                        <h:message for="smsInput"
-                                                   styleClass="small-screen alert alert-danger field-error"/>
-                                    </div>
-
-                                    <h:inputText id="smsInput" value="#{homeDeliveryController.smsNumber}">
-                                        <f:ajax event="change"
-                                                execute="smsInput homeDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:6:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:7:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:8:chosenDeliveryNotificationMethod"
-                                                render="homeDeliveryForm:notificationMethodRepeat:0:smsInput homeDeliveryForm:notificationMethodRepeat:1:smsInput homeDeliveryForm:notificationMethodRepeat:2:smsInput homeDeliveryForm:notificationMethodRepeat:3:smsInput homeDeliveryForm:notificationMethodRepeat:4:smsInput homeDeliveryForm:notificationMethodRepeat:5:smsInput homeDeliveryForm:notificationMethodRepeat:6:smsInput homeDeliveryForm:notificationMethodRepeat:7:smsInput homeDeliveryForm:notificationMethodRepeat:8:smsInput"/>
-                                    </h:inputText>
-                                    <h:message for="smsInput" styleClass="alert alert-danger field-error"/>
-                                </div>
-
-                                <div id="phoneInputWrapper#{varStatus.index}" class="input-group"
-                                     style="display: #{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'TELEFON' ? 'block' : 'none'};">
-                                    <div class="clearfix">
-                                        <h:outputLabel for="phoneInput" value="Telefon"/>
-                                        <h:message for="phoneInput"
-                                                   styleClass="small-screen alert alert-danger field-error"/>
-                                    </div>
-                                    <h:inputText id="phoneInput" value="#{homeDeliveryController.phoneNumber}">
-                                        <f:ajax event="change"
-                                                execute="phoneInput homeDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:6:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:7:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:8:chosenDeliveryNotificationMethod"
-                                                render="homeDeliveryForm:notificationMethodRepeat:0:phoneInput homeDeliveryForm:notificationMethodRepeat:1:phoneInput homeDeliveryForm:notificationMethodRepeat:2:phoneInput homeDeliveryForm:notificationMethodRepeat:3:phoneInput homeDeliveryForm:notificationMethodRepeat:4:phoneInput homeDeliveryForm:notificationMethodRepeat:5:phoneInput homeDeliveryForm:notificationMethodRepeat:6:phoneInput homeDeliveryForm:notificationMethodRepeat:7:phoneInput homeDeliveryForm:notificationMethodRepeat:8:phoneInput"/>
-                                    </h:inputText>
-                                    <h:message for="phoneInput" styleClass="alert alert-danger field-error"/>
-                                </div>
-
-                                <div id="emailInputWrapper#{varStatus.index}" class="input-group"
-                                     style="display: #{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'E_POST' ? 'block' : 'none'};">
-                                    <div class="clearfix">
-                                        <h:outputLabel for="emailInput" value="Epost"/>
-                                        <h:message for="emailInput"
-                                                   styleClass="small-screen alert alert-danger field-error"/>
-                                    </div>
-                                    <h:inputText id="emailInput" value="#{homeDeliveryController.email}">
-                                        <f:ajax event="change"
-                                                execute="emailInput homeDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:6:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:7:chosenDeliveryNotificationMethod homeDeliveryForm:notificationMethodRepeat:8:chosenDeliveryNotificationMethod"
-                                                render="homeDeliveryForm:notificationMethodRepeat:0:emailInput homeDeliveryForm:notificationMethodRepeat:1:emailInput homeDeliveryForm:notificationMethodRepeat:2:emailInput homeDeliveryForm:notificationMethodRepeat:3:emailInput homeDeliveryForm:notificationMethodRepeat:4:emailInput homeDeliveryForm:notificationMethodRepeat:5:emailInput homeDeliveryForm:notificationMethodRepeat:6:emailInput homeDeliveryForm:notificationMethodRepeat:7:emailInput homeDeliveryForm:notificationMethodRepeat:8:emailInput"/>
-                                    </h:inputText>
-                                    <h:message for="emailInput" styleClass="alert alert-danger field-error"/>
-                                </div>
-
-                                <div id="letterWrapper#{varStatus.index}" class="input-group"
-                                     style="display: #{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'BREV' ? 'block' : 'none'};">
-                                    <div>Folkbokföringsadress:</div>
-                                    <div class="bold address-rows">
-                                        <div>#{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}</div>
-                                        <div>#{userProfileController.userProfile.streetAddress}</div>
-                                        <div>#{userProfileController.userProfile.zip} #{userProfileController.userProfile.city}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </ui:repeat>
+                    <h:panelGroup id="notificationMandatoryArticles" class="expanded-content" style="display: block; margin: 1em 0" rendered="#{homeDeliveryController.isMultipleGroups()}">
+                        <b>Gäller följande produkter:</b>
+                        <ul class="articles-info">
+                            <ui:repeat
+                                    value="#{homeDeliveryController.notificationMandatory}"
+                                    var="item">
+                                <li>#{item.article.articleNo} - #{item.article.articleName}</li>
+                            </ui:repeat>
+                        </ul>
                     </h:panelGroup>
 
                 </h:panelGroup>
@@ -232,39 +207,6 @@
                 </script>
 
             </h:form>
-
-            <h:outputScript>
-                function updateDeliveryNotificationMethod(value, index) {
-                    switch (value) {
-                        case 'E_POST':
-                            jq('#emailInputWrapper' + index).show();
-                            jq('#smsInputWrapper' + index).hide();
-                            jq('#phoneInputWrapper' + index).hide();
-                            jq('#letterWrapper' + index).hide();
-                            break;
-                        case 'SMS':
-                            jq('#emailInputWrapper' + index).hide();
-                            jq('#smsInputWrapper' + index).show();
-                            jq('#phoneInputWrapper' + index).hide();
-                            jq('#letterWrapper' + index).hide();
-                            break;
-                        case 'TELEFON':
-                            jq('#emailInputWrapper' + index).hide();
-                            jq('#smsInputWrapper' + index).hide();
-                            jq('#phoneInputWrapper' + index).show();
-                            jq('#letterWrapper' + index).hide();
-                            break;
-                        case 'BREV':
-                            jq('#emailInputWrapper' + index).hide();
-                            jq('#smsInputWrapper' + index).hide();
-                            jq('#phoneInputWrapper' + index).hide();
-                            jq('#letterWrapper' + index).show();
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            </h:outputScript>
         </div>
     </ui:define>
 </ui:composition>

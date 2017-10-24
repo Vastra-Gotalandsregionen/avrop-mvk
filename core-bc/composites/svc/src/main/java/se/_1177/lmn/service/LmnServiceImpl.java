@@ -4,31 +4,39 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.StopWatch;
-import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
-import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
-import riv.crm.selfservice.medicalsupply._0.OrderRowType;
-import riv.crm.selfservice.medicalsupply._0.OrderType;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._0.ResultCodeEnum;
-import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
-import riv.crm.selfservice.medicalsupply._0.StatusEnum;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._0.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsResponseType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._0.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._0.GetMedicalSupplyPrescriptionsResponseType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._0.GetMedicalSupplyPrescriptionsType;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._0.rivtabp21.RegisterMedicalSupplyOrderResponderInterface;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.RegisterMedicalSupplyOrderResponseType;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.RegisterMedicalSupplyOrderType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._1.OrderItemType;
+import riv.crm.selfservice.medicalsupply._1.OrderRowType;
+import riv.crm.selfservice.medicalsupply._1.OrderType;
+import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._1.ResultCodeEnum;
+import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
+import riv.crm.selfservice.medicalsupply._1.StatusEnum;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._1.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._1.GetMedicalSupplyDeliveryPointsResponseType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._1.GetMedicalSupplyDeliveryPointsType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._1.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsResponseType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsType;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._1.rivtabp21.RegisterMedicalSupplyOrderResponderInterface;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.RegisterMedicalSupplyOrderResponseType;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.RegisterMedicalSupplyOrderType;
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 import se._1177.lmn.service.util.Util;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * This implementation handles all communication with the source system which is responsible for prescriptions,
@@ -51,15 +59,22 @@ public class LmnServiceImpl implements LmnService {
 
     private String logicalAddress;
 
+    private String customerServicePhoneNumber;
+    private String customerServiceInfo;
+
     public LmnServiceImpl(
             GetMedicalSupplyDeliveryPointsResponderInterface medicalSupplyDeliveryPoint,
             GetMedicalSupplyPrescriptionsResponderInterface medicalSupplyPrescriptions,
             RegisterMedicalSupplyOrderResponderInterface registerMedicalSupplyOrder,
-            String logicalAddress) {
+            String logicalAddress,
+            String customerServicePhoneNumber,
+            String customerServiceInfo) {
         this.medicalSupplyDeliveryPoint = medicalSupplyDeliveryPoint;
         this.medicalSupplyPrescriptions = medicalSupplyPrescriptions;
         this.registerMedicalSupplyOrder = registerMedicalSupplyOrder;
         this.logicalAddress = logicalAddress;
+        this.customerServicePhoneNumber = customerServicePhoneNumber;
+        this.customerServiceInfo = customerServiceInfo;
     }
 
     /**
@@ -67,7 +82,7 @@ public class LmnServiceImpl implements LmnService {
      * and no longer orderable items. A prescription item is no longer orderable if it either has status other than
      * AKTIV, has number of remaining orders less than or equal to zero, or last valid date is before today. The items
      * are sorted according to how "orderable" they are (see
-     * {@link LmnServiceImpl#getSortNumber(riv.crm.selfservice.medicalsupply._0.PrescriptionItemType)}).
+     * {@link LmnServiceImpl#getSortNumber(riv.crm.selfservice.medicalsupply._1.PrescriptionItemType)}).
      *
      * @param subjectOfCareId the subject of care id of the user or the inhabitant the user is delegate for
      * @return the fetched, sorted and separated {@link PrescriptionItemType}s contained in a
@@ -88,7 +103,9 @@ public class LmnServiceImpl implements LmnService {
         List<PrescriptionItemType> noLongerOrderable = new ArrayList<>();
 
         if (response.getResultCode().equals(ResultCodeEnum.OK)) {
-            for (PrescriptionItemType item : response.getSubjectOfCareType().getPrescriptionItem()) {
+            List<PrescriptionItemType> prescriptions = response.getSubjectOfCareType().getPrescriptionItem();
+
+            for (PrescriptionItemType item : prescriptions) {
 
                 if (item.getNoOfRemainingOrders() <= 0 || !item.getStatus().equals(StatusEnum.AKTIV)) {
                     noLongerOrderable.add(item);
@@ -105,23 +122,74 @@ public class LmnServiceImpl implements LmnService {
                 }
             }
 
-            sortByOrderableToday(orderableItems);
+            sortByOrderableTodayAndArticleName(orderableItems);
+
+            Map<String, Map<String, OrderItemType>> latestOrderItemsByArticleNoAndPrescriptionItem =
+                    latestOrderItemsByArticleNoAndPrescriptionItem(response);
 
             holder.orderable = orderableItems;
             holder.noLongerOrderable = noLongerOrderable;
+            holder.latestOrderItemsByArticleNoAndPrescriptionItem = latestOrderItemsByArticleNoAndPrescriptionItem;
         }
 
         return holder;
     }
 
-    static void sortByOrderableToday(List<PrescriptionItemType> orderableItems) {
+    static Map<String, Map<String, OrderItemType>> latestOrderItemsByArticleNoAndPrescriptionItem(
+            GetMedicalSupplyPrescriptionsResponseType prescriptionsResponseType) {
 
-        orderableItems.sort((o1, o2) -> {
-            Integer sortNumber1 = getSortNumber(o1);
-            Integer sortNumber2 = getSortNumber(o2);
+        Map<String, OrderItemType> latestOrderItemsByArticleNo = new HashMap<>();
 
-            return sortNumber1.compareTo(sortNumber2);
-        });
+        for (OrderItemType item : prescriptionsResponseType.getSubjectOfCareType().getOrderItem()) {
+            String articleNo = item.getArticle().getArticleNo();
+            if (!latestOrderItemsByArticleNo.containsKey(articleNo)) {
+                latestOrderItemsByArticleNo.put(articleNo, item);
+                continue;
+            }
+
+            OrderItemType storedInMap = latestOrderItemsByArticleNo.get(articleNo);
+            if (storedInMap.getOrderDate().compare(item.getOrderDate()) < 0) {
+                // The storedInMap is older (less) -> replace with the newer
+                latestOrderItemsByArticleNo.put(articleNo, item);
+            }
+        }
+
+        Map<String, Map<String, OrderItemType>> latestOrderItemsByArticleNoAndPrescriptionItem =
+                latestOrderItemsByArticleNo.entrySet().stream()
+                .collect(Collectors.groupingBy(
+                        entry -> entry.getValue().getPrescriptionItemId(),
+                        Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+
+        // Go through each prescriptionItem and remove those articles which weren't ordered last (there may be articles
+        // ordered last out the the order items of exactly that article, but the article may not have been ordered at
+        // all at the last order. Then it should be removed. So we first find out the last date for each prescription
+        // item.
+
+        for (Map.Entry<String, Map<String, OrderItemType>> entry
+                : latestOrderItemsByArticleNoAndPrescriptionItem.entrySet()) {
+
+            XMLGregorianCalendar latestOrderDate;
+            Optional<XMLGregorianCalendar> max = entry.getValue().values().stream().map(OrderItemType::getOrderDate).max(XMLGregorianCalendar::compare);
+
+            if (max.isPresent()) {
+                latestOrderDate = max.get();
+            } else {
+                throw new RuntimeException("Order dates are expected.");
+            }
+
+            // Remove all which are not ordered at the last order date.
+            entry.getValue().entrySet().removeIf(e -> !e.getValue().getOrderDate().equals(latestOrderDate));
+        }
+
+        return latestOrderItemsByArticleNoAndPrescriptionItem;
+    }
+
+    static void sortByOrderableTodayAndArticleName(List<PrescriptionItemType> orderableItems) {
+
+        Comparator<PrescriptionItemType> comparator = Comparator.comparing(o -> getSortNumber(o));
+        comparator = comparator.thenComparing(o -> o.getArticle().getArticleName());
+
+        orderableItems.sort(comparator);
     }
 
     private static Integer getSortNumber(PrescriptionItemType item) {
@@ -203,7 +271,7 @@ public class LmnServiceImpl implements LmnService {
      * @param subjectOfCareId the subject of care id of the user or the inhabitant the user is delegate for
      * @param orderByDelegate whether the order is made by a delegate
      * @param orderer the name of the person who makes the order
-     * @param prescriptionItems the {@link PrescriptionItemType}s which are ordered
+     * @param orderRows the {@link OrderRowType}s which are ordered
      * @param deliveryChoicePerItem the {@link DeliveryChoiceType} for each {@link PrescriptionItemType}
      * @return the {@link RegisterMedicalSupplyOrderResponseType}
      */
@@ -212,7 +280,7 @@ public class LmnServiceImpl implements LmnService {
             String subjectOfCareId,
             boolean orderByDelegate,
             String orderer, // May be delegate
-            List<PrescriptionItemType> prescriptionItems,
+            List<OrderRowType> orderRows,
             Map<PrescriptionItemType, DeliveryChoiceType> deliveryChoicePerItem) {
         RegisterMedicalSupplyOrderType parameters = new RegisterMedicalSupplyOrderType();
 
@@ -222,7 +290,7 @@ public class LmnServiceImpl implements LmnService {
         order.setOrderByDelegate(orderByDelegate);
         order.setOrderer(orderer);
 
-        addOrderRows(prescriptionItems, order, deliveryChoicePerItem);
+        order.getOrderRow().addAll(orderRows);
 
         parameters.setOrder(order);
 
@@ -245,28 +313,22 @@ public class LmnServiceImpl implements LmnService {
         return deliveryPointIdToDeliveryPoint.get(deliveryPointId);
     }
 
-    void addOrderRows(List<PrescriptionItemType> articleNumbers, OrderType order, Map<PrescriptionItemType, DeliveryChoiceType> deliveryChoicePerItem) {
-        for (PrescriptionItemType item : articleNumbers) {
-            OrderRowType orderRow = new OrderRowType();
+    @Override
+    public String getCustomerServicePhoneNumber() {
+        return customerServicePhoneNumber;
+    }
 
-            DeliveryChoiceType deliveryChoice = deliveryChoicePerItem.get(item);
+    public void setCustomerServicePhoneNumber(String customerServicePhoneNumber) {
+        this.customerServicePhoneNumber = customerServicePhoneNumber;
+    }
 
-            orderRow.setDeliveryChoice(deliveryChoice);
+    @Override
+    public String getCustomerServiceInfo() {
+        return customerServiceInfo;
+    }
 
-            orderRow.setArticle(item.getArticle());
-
-            orderRow.setNoOfPackages(item.getNoOfPackagesPerOrder());
-
-            orderRow.setNoOfPcs(item.getNoOfArticlesPerOrder());
-
-            orderRow.setPrescriptionId(item.getPrescriptionId());
-
-            orderRow.setPrescriptionItemId(item.getPrescriptionItemId());
-
-            orderRow.setSource(item.getSource());
-
-            order.getOrderRow().add(orderRow);
-        }
+    public void setCustomerServiceInfo(String customerServiceInfo) {
+        this.customerServiceInfo = customerServiceInfo;
     }
 
     public static boolean isAfterToday(XMLGregorianCalendar date) {

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="WEB-INF/xhtml/template/wideContent.xhtml">
+
+    <ui:define name="currentPage">Underartiklar</ui:define>
+
+    <ui:define name="boxContent">
+        <h:outputScript library="thirdparty" name="vue.min.js"/>
+
+        <o:messages showSummary="true" styleClass="alert alert-danger" escape="false"/>
+
+        <div>
+            <h3>Fördela underartiklar</h3>
+            <div class="page-introduction">
+                <div>
+                    <p>
+                        Du har valt produkter där du behöver göra ytterligare val. Ange antal för att ändra fördelningen.
+                    </p>
+                </div>
+            </div>
+
+            <h:form>
+                <div id="app" v-cloak="">
+                    <ui:repeat value="#{subArticleController.articleWithSubArticlesModels}" var="articleWithSubArticlesModel"
+                               varStatus="parentArticleStatus">
+                        <h2>#{articleWithSubArticlesModel.parentArticleName}</h2>
+                        <h3>Totalt antal {{jsonData[#{parentArticleStatus.index}].totalOrderSizeUnit}}: {{jsonData[#{parentArticleStatus.index}].totalOrderSize}} st</h3>
+                        <table class="sub-articles-table">
+
+                            <ui:repeat value="#{articleWithSubArticlesModel.subArticles}" var="subArticle"
+                                       varStatus="subArticleStatus">
+                                <tr class="sub-article-row clearfix">
+                                        <td class="sub-article-name">
+
+                                            <h:inputText style="display: none" id="jsfInputRepeated"
+                                                         styleClass="jsf-input-#{parentArticleStatus.index}-#{subArticleStatus.index}"
+                                                         value="#{subArticle.orderCount}"/>
+
+                                            {{jsonData[#{parentArticleStatus.index}].subArticles[#{subArticleStatus.index}].name}}
+                                        </td>
+
+                                    <td class="sub-article-number-wrapper">
+                                            <span class="circle-icon minus" data-parent-article-index="#{parentArticleStatus.index}" data-sub-article-index="#{subArticleStatus.index}"><span class="circle-icon-content">&#8211;</span></span>
+                                            <input type="text" class="short-number-input"
+                                                   v-model="jsonData[#{parentArticleStatus.index}].subArticles[#{subArticleStatus.index}].orderCount" tabindex="1#{parentArticleStatus.index}#{subArticleStatus.index}"/>
+                                            <span class="circle-icon plus" data-parent-article-index="#{parentArticleStatus.index}" data-sub-article-index="#{subArticleStatus.index}"><span class="circle-icon-content">+</span></span>
+                                        </td>
+                                </tr>
+                            </ui:repeat>
+
+                        </table>
+                    </ui:repeat>
+
+                    <div class="right-align">
+                        <h:commandButton tabindex="150" styleClass="button back-button full-page-submit" value="Bakåt" action="#{subArticleController.toOrder}" />
+                        <h:commandButton tabindex="151" styleClass="button full-page-submit" value="Till leverans" action="#{subArticleController.toDelivery}" />
+                    </div>
+                </div>
+
+                <script>
+                    var app = new Vue({
+                        el: '#app',
+                        data: {
+                            myData: 'Hello Vue!',
+                            seen: true,
+                            jsonData: #{subArticleController.jsonData}
+                        }
+                    });
+                </script>
+
+                <script type="text/javascript" src="javax.faces.resource/js/sub-articles.js.xhtml?ln=default"></script>
+
+            </h:form>
+        </div>
+    </ui:define>
+
+</ui:composition>
+</html>

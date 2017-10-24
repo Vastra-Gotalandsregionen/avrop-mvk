@@ -15,27 +15,38 @@
     <c:set var="item" value="#{cc.attrs.item}"/>
 
     <div>
-        <a href="#" class="show-more-link">
-            Mer info
-        </a>
-        <a href="#" class="show-less-link" style="display: none;">
-            Mindre info
-        </a>
+        <div class="link-row">
+            <a href="#" class="show-more-link">
+                Mer info
+            </a>
+            <a href="#" class="show-less-link" style="display: none;">
+                Mindre info
+            </a>
+            <h:panelGroup rendered="#{not empty item.article.articleImage}">
+                <a href="#" class="image-preview-link" data-image-url="#{item.article.articleImage.original}">
+                    Visa bild
+                </a>
+            </h:panelGroup>
+        </div>
         <div class="more-info" style="display: none;">
             <table class="embedded-table">
                 <thead>
                 <tr>
-                    <td>Förpackning / uttag</td>
-                    <td>Totalt antal / uttag</td>
+                    <td style="display: #{item.noOfPackagesPerOrder == 0 ? 'none' : 'table-cell'}">Förpackning / uttag</td>
+                    <td>Totalt antal styck / uttag</td>
+                    <td style="display: #{empty item.article.grossPrice ? 'none' : 'table-cell'}">Pris per uttag</td>
                     <td>Förskrivare</td>
+                    <td class="#{empty item.prescribingOrganization ? 'hidden' : ''}">Förskrivande enhet</td>
                     <td>Giltigt t.o.m.</td>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td>#{item.noOfPackagesPerOrder}</td>
+                    <td style="display: #{item.noOfPackagesPerOrder == 0 ? 'none' : 'table-cell'}">#{item.noOfPackagesPerOrder}</td>
                     <td>#{item.noOfArticlesPerOrder}</td>
+                    <td style="display: #{empty item.article.grossPrice ? 'none' : 'table-cell'}">#{item.article.grossPrice}</td>
                     <td>#{item.prescriber.prescriberName}</td>
+                    <td class="#{empty item.prescribingOrganization ? 'hidden' : ''}">#{item.prescribingOrganization.prescribingOrganizationName}</td>
                     <td>
                         <h:outputText value="#{utilController.toDate(item.lastValidDate)}">
                             <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm"/>
@@ -46,17 +57,21 @@
             </table>
 
             <table class="embedded-table small-screen">
-                <tr>
+                <tr style="display: #{item.noOfPackagesPerOrder == 0 ? 'none' : 'table-row'}">
                     <td class="column-0">Förpackning/uttag</td>
                     <td>#{item.noOfPackagesPerOrder}</td>
                 </tr>
                 <tr>
-                    <td class="column-0">Totalt antal/uttag</td>
+                    <td class="column-0">Totalt antal styck/uttag</td>
                     <td>#{item.noOfArticlesPerOrder}</td>
                 </tr>
                 <tr>
                     <td class="column-0">Förskrivare</td>
                     <td>#{item.prescriber.prescriberName}</td>
+                </tr>
+                <tr class="${empty item.prescribingOrganization ? 'hidden' : ''}">
+                    <td class="column-0">Förskrivande organisation</td>
+                    <td>#{item.prescribingOrganization.prescribingOrganizationName}</td>
                 </tr>
                 <tr>
                     <td class="column-0">Giltigt t.o.m.</td>

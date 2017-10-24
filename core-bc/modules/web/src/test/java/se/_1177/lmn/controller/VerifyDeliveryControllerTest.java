@@ -4,10 +4,10 @@ import mvk.itintegration.userprofile._2.UserProfileType;
 import mvk.itintegration.userprofile.getuserprofileresponder._2.GetUserProfileResponseType;
 import org.junit.Before;
 import org.junit.Test;
-import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
-import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
+import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
 import se._1177.lmn.controller.model.Cart;
 
 import java.lang.reflect.Field;
@@ -15,6 +15,7 @@ import java.util.HashMap;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static se._1177.lmn.service.util.CartUtil.createOrderRow;
 
 /**
  * @author Patrik Björk
@@ -90,9 +91,9 @@ public class VerifyDeliveryControllerTest {
 
         // The cart
         Cart cart = new Cart();
-        cart.getItemsInCart().add(item1);
-        cart.getItemsInCart().add(item2);
-        cart.getItemsInCart().add(item3);
+        cart.getOrderRows().add(createOrderRow(item1).get());
+        cart.getOrderRows().add(createOrderRow(item2).get());
+        cart.getOrderRows().add(createOrderRow(item3).get());
 
         // Inject
         verifyDeliveryController = new VerifyDeliveryController();
@@ -101,11 +102,6 @@ public class VerifyDeliveryControllerTest {
         Field userProfileControllerField = clazz.getDeclaredField("userProfileController");
         userProfileControllerField.setAccessible(true);
         userProfileControllerField.set(verifyDeliveryController, userProfileController);
-
-        Field deliveryControllerField = clazz.getDeclaredField("deliveryController");
-        deliveryControllerField.setAccessible(true);
-        deliveryControllerField.set(verifyDeliveryController, deliveryController);
-
     }
 
     @Test

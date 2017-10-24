@@ -30,13 +30,7 @@
 
     <context:component-scan base-package="se._1177.lmn.service.concurrent"/>
     <context:component-scan base-package="se._1177.lmn.controller"/>
-
-    <bean class="se._1177.lmn.service.LmnServiceImpl">
-        <constructor-arg index="0" ref="getMedicalSupplyDeliveryPoints"/>
-        <constructor-arg index="1" ref="getMedicalSupplyPrescriptions"/>
-        <constructor-arg index="2" ref="registerMedicalSupplyOrder"/>
-        <constructor-arg index="3" value="${rtjp.logicalAddress}"/>
-    </bean>
+    <context:component-scan base-package="se._1177.lmn.configuration.spring"/>
 
     <bean class="se._1177.lmn.service.MvkUserProfileService">
         <constructor-arg ref="getUserProfileResponderInterface"/>
@@ -46,18 +40,6 @@
     <bean class="se._1177.lmn.service.MvkInboxService">
         <constructor-arg ref="addMessageResponderInterface"/>
     </bean>
-
-    <jaxws:client id="getMedicalSupplyDeliveryPoints"
-                  serviceClass="riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._0.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface"
-                  address="${GetMedicalSupplyDeliveryPointsResponderInterface.address}"/>
-
-    <jaxws:client id="getMedicalSupplyPrescriptions"
-                  serviceClass="riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._0.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface"
-                  address="${GetMedicalSupplyPrescriptionsResponderInterface.address}"/>
-
-    <jaxws:client id="registerMedicalSupplyOrder"
-                  serviceClass="riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._0.rivtabp21.RegisterMedicalSupplyOrderResponderInterface"
-                  address="${RegisterMedicalSupplyOrderResponderInterface.address}"/>
 
     <jaxws:client id="getUserProfileResponderInterface"
                   serviceClass="mvk.itintegration.userprofile.getuserprofile._2.rivtabp21.GetUserProfileResponderInterface"
@@ -70,22 +52,6 @@
     <jaxws:client id="addMessageResponderInterface"
                   serviceClass="mvk.crm.casemanagement.inbox.addmessage._2.rivtabp21.AddMessageResponderInterface"
                   address="${AddMessageResponderInterface.address}"/>
-
-    <cxf:bus>
-        <cxf:outInterceptors>
-            <ref bean="loggingOutInterceptor"/>
-        </cxf:outInterceptors>
-        <cxf:inInterceptors>
-            <ref bean="loggingInInterceptor"/>
-        </cxf:inInterceptors>
-    </cxf:bus>
-
-    <bean id="loggingInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor">
-        <property name="prettyLogging" value="true"/>
-    </bean>
-    <bean id="loggingOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor">
-        <property name="prettyLogging" value="true"/>
-    </bean>
 
     <http:conduit name="https://.*">
         <http:tlsClientParameters disableCNCheck="true">

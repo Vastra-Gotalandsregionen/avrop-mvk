@@ -95,8 +95,22 @@
                                         #{item.article.articleName}
                                     </div>
                                     <mvk:moreInfo item="#{item}"/>
-                                    <!--<div class="dev-temp" style="font-size: .7em;">
-                                        <ul>
+                                    <div class="dev-temp" style="font-size: .7em;">
+                                        <em>DEBUG INFO</em>
+                                        <table>
+                                            <ui:repeat value="#{item.deliveryAlternative}" var="alternative">
+                                                <tr>
+                                                    <td>#{alternative.deliveryMethod} - #{alternative.servicePointProvider}</td>
+                                                    <td>Val utlämningsställe: #{alternative.allowChioceOfDeliveryPoints}</td>
+                                                    <ui:repeat value="#{alternative.deliveryNotificationMethod}" var="method">
+                                                        <td>
+                                                            #{method}
+                                                        </td>
+                                                    </ui:repeat>
+                                                </tr>
+                                            </ui:repeat>
+                                        </table>
+                                        <!--<ul>
                                             <ui:repeat value="#{item.deliveryAlternative}" var="alternative">
                                                 <li>
                                                     #{alternative.deliveryMethod} - #{alternative.servicePointProvider}
@@ -109,8 +123,9 @@
                                                     </ol>
                                                 </li>
                                             </ui:repeat>
-                                        </ul>
-                                    </div>-->
+                                        </ul>-->
+                                        #{not empty item.subArticle ? 'Underartiklar!!!!' : null}
+                                    </div>
                                 </td>
                                 <td>
                                     #{item.noOfRemainingOrders}/#{item.noOfOrders}
@@ -174,6 +189,35 @@
             jq(document).ready(function () {
                 initOrderPage();
             });
+        </script>
+
+        <style>
+            #imageDialog {
+                background: #555;
+                border-radius: 4px;
+                padding: 4px 4px 0 4px;
+            }
+
+            .ui-dialog:focus {
+                outline: none;
+            }
+
+            .ui-dialog .ui-dialog-titlebar {
+                display: none;
+            }
+
+            .image-preview {
+                float: left;
+                /* max-width: 600px; */
+                z-index: 100;
+            }
+        </style>
+        <div id="imageDialog" style="display: none;"></div>
+
+        <script>
+            jq(document).ready(function () {
+                initImagePreview();
+            })
         </script>
 
     </ui:define>

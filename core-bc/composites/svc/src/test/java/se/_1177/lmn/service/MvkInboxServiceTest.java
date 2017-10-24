@@ -1,20 +1,19 @@
 package se._1177.lmn.service;
 
 import freemarker.core.InvalidReferenceException;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import riv.crm.selfservice.medicalsupply._0.AddressType;
-import riv.crm.selfservice.medicalsupply._0.ArticleType;
-import riv.crm.selfservice.medicalsupply._0.CountryCodeEnum;
-import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
-import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
-import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
-import riv.crm.selfservice.medicalsupply._0.ObjectFactory;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._0.ProductAreaEnum;
+import riv.crm.selfservice.medicalsupply._1.AddressType;
+import riv.crm.selfservice.medicalsupply._1.ArticleType;
+import riv.crm.selfservice.medicalsupply._1.CountryCodeEnum;
+import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
+import riv.crm.selfservice.medicalsupply._1.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._1.ObjectFactory;
+import riv.crm.selfservice.medicalsupply._1.OrderRowType;
+import riv.crm.selfservice.medicalsupply._1.ProductAreaEnum;
 
 import javax.xml.bind.JAXBElement;
 import java.util.ArrayList;
@@ -34,14 +33,14 @@ public class MvkInboxServiceTest {
     public void composeMsg() throws Exception {
         MvkInboxService mvkInboxService = new MvkInboxService(null);
 
-        List<PrescriptionItemType> prescriptionItems = new ArrayList<>();
+        List<OrderRowType> orderRows = new ArrayList<>();
         List<DeliveryChoiceType> deliveryChoices = new ArrayList<>();
 
         ArticleType article1 = new ArticleType();
         ArticleType article2 = new ArticleType();
 
-        PrescriptionItemType item1 = new PrescriptionItemType();
-        PrescriptionItemType item2 = new PrescriptionItemType();
+        OrderRowType item1 = new OrderRowType();
+        OrderRowType item2 = new OrderRowType();
 
         article1.setArticleNo("1234");
         article2.setArticleNo("4321");
@@ -55,8 +54,8 @@ public class MvkInboxServiceTest {
         item1.setArticle(article1);
         item2.setArticle(article2);
 
-        prescriptionItems.add(item1);
-        prescriptionItems.add(item2);
+        orderRows.add(item1);
+        orderRows.add(item2);
 
         DeliveryChoiceType choice1 = new DeliveryChoiceType();
         DeliveryChoiceType choice2 = new DeliveryChoiceType();
@@ -89,7 +88,7 @@ public class MvkInboxServiceTest {
         deliveryChoices.add(choice1);
         deliveryChoices.add(choice2);
 
-        String result = mvkInboxService.composeMsg(prescriptionItems, deliveryChoices);
+        String result = mvkInboxService.composeMsg(orderRows, deliveryChoices);
 
         assertEquals(expectedMessage, result);
     }
@@ -102,14 +101,14 @@ public class MvkInboxServiceTest {
     public void testNoHomeAddress() throws Exception {
         MvkInboxService mvkInboxService = new MvkInboxService(null);
 
-        List<PrescriptionItemType> prescriptionItems = new ArrayList<>();
+        List<OrderRowType> orderRows = new ArrayList<>();
         List<DeliveryChoiceType> deliveryChoices = new ArrayList<>();
 
         ArticleType article1 = new ArticleType();
         ArticleType article2 = new ArticleType();
 
-        PrescriptionItemType item1 = new PrescriptionItemType();
-        PrescriptionItemType item2 = new PrescriptionItemType();
+        OrderRowType item1 = new OrderRowType();
+        OrderRowType item2 = new OrderRowType();
 
         article1.setArticleNo("1234");
         article2.setArticleNo("4321");
@@ -123,8 +122,8 @@ public class MvkInboxServiceTest {
         item1.setArticle(article1);
         item2.setArticle(article2);
 
-        prescriptionItems.add(item1);
-        prescriptionItems.add(item2);
+        orderRows.add(item1);
+        orderRows.add(item2);
 
         DeliveryChoiceType choice1 = new DeliveryChoiceType();
         DeliveryChoiceType choice2 = new DeliveryChoiceType();
@@ -151,7 +150,7 @@ public class MvkInboxServiceTest {
         deliveryChoices.add(choice2);
 
         try {
-            String result = mvkInboxService.composeMsg(prescriptionItems, deliveryChoices);
+            String result = mvkInboxService.composeMsg(orderRows, deliveryChoices);
             fail();
         } catch (InvalidReferenceException e) {
             // choice2 has BREV as delivery notification method and therefore must have a home address.

@@ -1,12 +1,13 @@
 package se._1177.lmn.service;
 
-import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
-import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsResponseType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._0.GetMedicalSupplyPrescriptionsResponseType;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.RegisterMedicalSupplyOrderResponseType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._1.OrderRowType;
+import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._1.GetMedicalSupplyDeliveryPointsResponseType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsResponseType;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.RegisterMedicalSupplyOrderResponseType;
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 
 import java.util.List;
@@ -29,9 +30,13 @@ public interface LmnService {
             String subjectOfCareId,
             boolean orderByDelegate,
             String orderer, // May be delegate
-            List<PrescriptionItemType> prescriptionItems,
+            List<OrderRowType> orderRows,
             Map<PrescriptionItemType, DeliveryChoiceType> deliveryChoicePerItem);
 
     DeliveryPointType getDeliveryPointById(String deliveryPointId);
+
+    String getCustomerServicePhoneNumber();
+
+    String getCustomerServiceInfo();
 
 }

@@ -33,6 +33,10 @@ html, body {
     font-weight: bold;
 }
 
+.hidden {
+    display: none;
+}
+
 .avrop-table, .embedded-table {
     border-collapse: collapse;
     table-layout: fixed;
@@ -51,6 +55,7 @@ html, body {
     border: 1px solid #000000;
     padding: 8px;
     box-sizing: border-box;
+    word-wrap: break-word;
 }
 
 .my-products-table .column-0 {
@@ -106,7 +111,8 @@ hr {
 }
 
 .checkbox input[type="checkbox"] {
-    display:none;
+    position: absolute;
+    z-index: -1;
 }
 
 .checkbox input[type="checkbox"] + label {
@@ -569,6 +575,12 @@ ul.delivery-options li input[disabled="disabled"]+label {
         width: 100%;
     }
 
+    .sub-article-row input[type=text] {
+        box-sizing: content-box;
+        display: inline;
+        width: 24px;
+    }
+
     .input-group input[type="submit"] {
         margin: 10px 0;
     }
@@ -757,12 +769,8 @@ select::-moz-focus-inner { /*Remove button padding in FF*/
 }
 
 @media (max-width: 767px) {
-    body {
-        font-size: 12px;
-    }
-
     .my-products-table .column-1 {
-        width: 79px;
+        width: 80px;
         word-wrap: break-word;
     }
 
@@ -774,6 +782,10 @@ select::-moz-focus-inner { /*Remove button padding in FF*/
         width: 67px;
 
     }
+}
+
+.verify-delivery .column-4 {
+    width: 200px;
 }
 
 .small-screen {
@@ -789,18 +801,35 @@ select::-moz-focus-inner { /*Remove button padding in FF*/
     width: auto;
 }
 
-@media (max-width: 767px) {
+.short-number-input {
+    padding: 6px;
+    width: 24px;
+}
 
-    .avrop-table td, .embedded-table td {
+table.sub-articles-table {
+    table-layout: auto;
+}
+
+table.sub-articles-list td {
+    border: none;
+    padding: 3px 8px 2px 0;
+}
+
+.paragraph {
+    margin-top: 12px;
+}
+
+@media (max-width: 960px) {
+
+    .avrop-table td, .embedded-table td, table.sub-articles-table td {
         padding: 3px;
-        word-wrap: break-word;
     }
 
     .embedded-table {
         display: none;
     }
 
-    .embedded-table.small-screen {
+    .embedded-table.small-screen, .embedded-table.always-show {
         display: table;
         width: 100%;
     }
@@ -815,3 +844,76 @@ select::-moz-focus-inner { /*Remove button padding in FF*/
         padding: 8px;
     }
 }
+
+/* Sub-articles */
+.sub-articles-table {
+    margin-bottom: 24px;
+}
+
+.sub-articles-table td {
+    padding: 4px 8px;
+}
+
+.sub-articles-table input[type="text"] {
+    text-align: center;
+}
+
+.sub-articles-table h3 {
+    margin-top: 18px;
+}
+
+.sub-article-name {
+    width: 192px;
+}
+
+.sub-article-row {
+    margin-bottom: 8px;
+}
+
+.circle-icon {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background: #008391;
+    border-radius: 50%;
+    border: 1px solid #008391;
+    text-align: center;
+    color: #fff;
+    font-size: 2em;
+    line-height: 26px;
+    margin: 0 8px;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+.circle-icon .circle-icon-content {
+    position: relative;
+    top: 1px;
+}
+
+.circle-icon:hover {
+    cursor: pointer;
+    background: #ffffff;
+    color: #008391;
+}
+
+span.circle-icon.minus {
+    margin-left: 24px;
+}
+
+.sub-article-row > span  {
+    float: left;
+    height: 52px;
+    align-items: center;
+    display: flex;
+}
+
+[v-cloak] {
+    display: none;
+}
+
+.link-row a {
+    margin-right: 8px;
+}
+
+/**************************/

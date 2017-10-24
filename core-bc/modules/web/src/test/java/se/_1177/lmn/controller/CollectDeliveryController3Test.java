@@ -2,11 +2,15 @@ package se._1177.lmn.controller;
 
 import org.junit.Before;
 import org.junit.Test;
-import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
-import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
+import riv.crm.selfservice.medicalsupply._1.ArticleType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._1.OrderRowType;
+import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
 import se._1177.lmn.controller.model.Cart;
+import se._1177.lmn.controller.model.PrescriptionItemInfo;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -16,17 +20,18 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum.BREV;
-import static riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum.E_POST;
-import static riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum.SMS;
+import static riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum.BREV;
+import static riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum.E_POST;
+import static riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum.SMS;
+import static se._1177.lmn.service.util.CartUtil.createOrderRow;
 
 /**
  * @author Patrik Björk
  */
 public class CollectDeliveryController3Test {
 
-    private DeliveryController deliveryController;
     private CollectDeliveryController collectDeliveryController;
+    private PrescriptionItemInfo prescriptionItemInfo;
 
     private PrescriptionItemType item1, item2, item3;
 
@@ -34,11 +39,17 @@ public class CollectDeliveryController3Test {
     public void setup() throws Exception {
 
         collectDeliveryController = new CollectDeliveryController();
+        prescriptionItemInfo = new PrescriptionItemInfo();
 
         Field preferredDeliveryNotificationMethod = collectDeliveryController.getClass()
                 .getDeclaredField("preferredDeliveryNotificationMethod");
         preferredDeliveryNotificationMethod.setAccessible(true);
         preferredDeliveryNotificationMethod.set(collectDeliveryController, SMS);
+
+        Field prescriptionItemInfoField = collectDeliveryController.getClass()
+                .getDeclaredField("prescriptionItemInfo");
+        prescriptionItemInfoField.setAccessible(true);
+        prescriptionItemInfoField.set(collectDeliveryController, prescriptionItemInfo);
 
         Cart cart = new Cart();
 
@@ -79,9 +90,25 @@ public class CollectDeliveryController3Test {
         alternative5.getDeliveryNotificationMethod().add(E_POST);
         alternative5.getDeliveryNotificationMethod().add(BREV);
 
+        alternative1.setAllowChioceOfDeliveryPoints(true);
+        alternative3.setAllowChioceOfDeliveryPoints(true);
+        alternative4.setAllowChioceOfDeliveryPoints(true);
+        alternative5.setAllowChioceOfDeliveryPoints(true);
+        alternative6.setAllowChioceOfDeliveryPoints(true);
+
         item1 = new PrescriptionItemType();
         item2 = new PrescriptionItemType();
         item3 = new PrescriptionItemType();
+
+        item1.setPrescriptionItemId("1");
+        item2.setPrescriptionItemId("2");
+        item3.setPrescriptionItemId("3");
+
+        ArticleType article = new ArticleType();
+        article.setArticleName("doesn't matter here");
+        item1.setArticle(article);
+        item2.setArticle(article);
+        item3.setArticle(article);
 
         // Which delivery alternatives that are added to each item doesn't matter as long as all delivery alternatives
         // are added to any item.
@@ -91,7 +118,7 @@ public class CollectDeliveryController3Test {
 //        item2.getDeliveryAlternative().add(alternative1); // UTLÄMNINGSSTÄLLE, SCHENKER
 //        item2.getDeliveryAlternative().add(alternative2); // UTLÄMNINGSSTÄLLE, SCHENKER
         item2.getDeliveryAlternative().add(alternative3); // UTLÄMNINGSSTÄLLE, POSTNORD
-        item2.getDeliveryAlternative().add(alternative4); // UTLÄMNINGSSTÄLLE, POSTNORD
+//        item2.getDeliveryAlternative().add(alternative4); // UTLÄMNINGSSTÄLLE, POSTNORD
 //        item2.getDeliveryAlternative().add(alternative5); // UTLÄMNINGSSTÄLLE, DHL
 
         item3.getDeliveryAlternative().add(alternative6); // HEMLEVERANS
@@ -99,9 +126,22 @@ public class CollectDeliveryController3Test {
         // Now no delivery method is common to all items, and of those with UTLÄMNINGSSTÄLLE, SCHENKER is the common
         // denominator.
 
-        cart.getItemsInCart().add(item1);
-        cart.getItemsInCart().add(item2);
-        cart.getItemsInCart().add(item3);
+        cart.getOrderRows().add(createOrderRow(item1).get());
+        cart.getOrderRows().add(createOrderRow(item2).get());
+        cart.getOrderRows().add(createOrderRow(item3).get());
+
+        DeliveryChoiceType deliveryChoice1 = new DeliveryChoiceType();
+        DeliveryChoiceType deliveryChoice2 = new DeliveryChoiceType();
+        deliveryChoice1.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
+        deliveryChoice2.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+
+        cart.getOrderRows().get(0).setDeliveryChoice(deliveryChoice1);
+        cart.getOrderRows().get(1).setDeliveryChoice(deliveryChoice1);
+        cart.getOrderRows().get(2).setDeliveryChoice(deliveryChoice2);
+
+        prescriptionItemInfo.getChosenPrescriptionItemInfo().put(item1.getPrescriptionItemId(), item1);
+        prescriptionItemInfo.getChosenPrescriptionItemInfo().put(item2.getPrescriptionItemId(), item2);
+        prescriptionItemInfo.getChosenPrescriptionItemInfo().put(item3.getPrescriptionItemId(), item3);
 
         Field cartField = collectDeliveryController.getClass().getDeclaredField("cart");
 
@@ -123,6 +163,10 @@ public class CollectDeliveryController3Test {
         cartFieldOnDeliveryController.setAccessible(true);
         cartFieldOnDeliveryController.set(deliveryController, cart);
 
+        Field prescriptionItemInfoFieldOnDeliveryController = deliveryController.getClass().getDeclaredField("prescriptionItemInfo");
+        prescriptionItemInfoFieldOnDeliveryController.setAccessible(true);
+        prescriptionItemInfoFieldOnDeliveryController.set(deliveryController, prescriptionItemInfo);
+
         OrderController orderController = new OrderController();
 
         Field deliveryControllerField = orderController.getClass().getDeclaredField("deliveryController");
@@ -139,8 +183,7 @@ public class CollectDeliveryController3Test {
         deliveryController2.set(collectDeliveryController, deliveryController);
 
         // This is an important preparatory step.
-        orderController.prepareDeliveryOptions(cart.getItemsInCart());
-
+        orderController.prepareDeliveryOptions(prescriptionItemInfo.getPrescriptionItems(cart.getOrderRows()));
     }
 
     @Test
@@ -155,7 +198,7 @@ public class CollectDeliveryController3Test {
 
         // Only POSTNORD is available for all items so only POSTNORD will have any notification methods.
         assertEquals(Arrays.asList("E_POST", "BREV", "SMS"), schenker);
-        assertEquals(Arrays.asList("SMS"), postnord);
+        assertEquals(Arrays.asList("BREV", "SMS"), postnord);
         assertEquals(null, dhl); // No one has DHL
     }
 
@@ -181,7 +224,7 @@ public class CollectDeliveryController3Test {
     public void getRelevantServicePointProviders() {
 
         List<ServicePointProviderEnum> relevantServicePointProviders = new ArrayList<>(collectDeliveryController
-                .getRelevantServicePointProviders().keySet());
+                .getServicePointProvidersForDeliveryPointChoice().keySet());
 
         assertEquals(Arrays.asList(ServicePointProviderEnum.POSTNORD, ServicePointProviderEnum.SCHENKER),
                 relevantServicePointProviders); // No single provider is common to all.

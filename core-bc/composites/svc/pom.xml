@@ -5,13 +5,13 @@
     <parent>
         <groupId>se.1177.lmn</groupId>
         <artifactId>core-bc</artifactId>
-        <version>1.0.RC1</version>
+        <version>1.1-SNAPSHOT</version>
         <relativePath>../..</relativePath>
     </parent>
 
     <groupId>se.1177.lmn</groupId>
     <artifactId>svc</artifactId>
-    <version>1.0.RC1</version>
+    <version>1.1-SNAPSHOT</version>
 
 
     <dependencies>
@@ -106,6 +106,12 @@
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
             <version>2.3.16</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.17</version>
         </dependency>
 
     </dependencies>

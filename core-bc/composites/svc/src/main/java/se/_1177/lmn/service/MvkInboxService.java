@@ -10,10 +10,10 @@ import mvk.crm.casemanagement.inbox.addmessage._2.rivtabp21.AddMessageResponderI
 import mvk.crm.casemanagement.inbox.addmessageresponder._2.AddMessageResponseType;
 import mvk.crm.casemanagement.inbox.addmessageresponder._2.AddMessageType;
 import org.springframework.stereotype.Service;
-import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
-import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._1.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._1.OrderRowType;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Class for sending messages to a user's inbox in 1177 Vårdguiden e-tjänster.
@@ -42,14 +43,12 @@ public class MvkInboxService {
      * Send a message to the user's inbox. The message is composed by a freemarker template.
      *
      * @param pid
-     * @param prescriptionItems
-     * @param deliveryChoices
+     * @param orderRows
      * @return
      * @throws MvkInboxServiceException
      */
     public AddMessageResponseType sendInboxMessage(String pid,
-                                                   List<PrescriptionItemType> prescriptionItems,
-                                                   Collection<DeliveryChoiceType> deliveryChoices)
+                                                   List<OrderRowType> orderRows)
             throws MvkInboxServiceException {
 
         AddMessageType request = new AddMessageType();
@@ -58,8 +57,8 @@ public class MvkInboxService {
         caseType.setCaseTypeDescription("Beställning läkemedelsnära produkter");
 
         HealthCareFacilityType healthCareFacility = new HealthCareFacilityType();
-        healthCareFacility.setHealthCareFacilityName("Centrum Läkemedelsnära Produkter");
-        healthCareFacility.setHsaId("SE2321000131-S000000016964"); // SE2321000131-S000000016964 = Mottagningen "Läkemedelsnära produkter"
+        healthCareFacility.setHealthCareFacilityName("Centrum Läkemedelsnära Produkter");// TODO Should depend on patient?
+        healthCareFacility.setHsaId("SE2321000131-S000000016964"); // SE2321000131-S000000016964 = Mottagningen "Läkemedelsnära produkter" // TODO Should depend on patient
 
         MessageCaseType messageCase = new MessageCaseType();
         messageCase.setCaseType(caseType);
@@ -67,7 +66,11 @@ public class MvkInboxService {
         messageCase.setHealthCareFacility(healthCareFacility);
 
         try {
-            messageCase.setMsg(composeMsg(prescriptionItems, deliveryChoices));
+            Collection<DeliveryChoiceType> deliveryChoices = orderRows.stream()
+                    .map(OrderRowType::getDeliveryChoice)
+                    .collect(Collectors.toList());
+
+            messageCase.setMsg(composeMsg(orderRows, deliveryChoices));
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
         } catch (TemplateException e) {
@@ -77,7 +80,7 @@ public class MvkInboxService {
         request.setMessage(messageCase);
         request.setSubjectOfCareId(pid);
         request.setNotify(false);
-        request.setSourceSystem("SE2321000131-S000000016964"); // SE2321000131-S000000016964 = Mottagningen "Läkemedelsnära produkter"
+        request.setSourceSystem("SE2321000131-S000000016964"); // SE2321000131-S000000016964 = Mottagningen "Läkemedelsnära produkter" // TODO Should depend on patient
 
         AddMessageResponseType response = null;
         try {
@@ -89,7 +92,7 @@ public class MvkInboxService {
         return response;
     }
 
-    String composeMsg(List<PrescriptionItemType> prescriptionItems,
+    String composeMsg(List<OrderRowType> orderRows,
                       Collection<DeliveryChoiceType> deliveryChoices) throws IOException, TemplateException {
 
         if (allAreSame(deliveryChoices)) {
@@ -111,7 +114,7 @@ public class MvkInboxService {
         }
 
         Map<String, Object> root = new HashMap<>();
-        root.put("prescriptionItems", prescriptionItems);
+        root.put("orderRows", orderRows);
         root.put("deliveryChoices", deliveryChoices);
 
         StringWriter out = new StringWriter();

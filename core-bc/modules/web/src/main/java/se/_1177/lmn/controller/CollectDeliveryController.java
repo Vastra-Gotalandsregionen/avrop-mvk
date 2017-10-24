@@ -8,15 +8,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import riv.crm.selfservice.medicalsupply._0.DeliveryAlternativeType;
-import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._0.DeliveryNotificationMethodEnum;
-import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._0.ServicePointProviderEnum;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._0.GetMedicalSupplyDeliveryPointsResponseType;
+import riv.crm.selfservice.medicalsupply._1.AddressType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
+import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
+import riv.crm.selfservice.medicalsupply._1.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._1.OrderRowType;
+import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._1.GetMedicalSupplyDeliveryPointsResponseType;
+import se._1177.lmn.controller.model.AddressModel;
 import se._1177.lmn.controller.model.Cart;
+import se._1177.lmn.controller.model.PrescriptionItemInfo;
 import se._1177.lmn.service.LmnService;
+import se._1177.lmn.service.ThreadLocalStore;
 import se._1177.lmn.service.concurrent.BackgroundExecutor;
 import se._1177.lmn.service.util.Util;
 
@@ -69,7 +75,12 @@ public class CollectDeliveryController {
     private Cart cart;
 
     @Autowired
+    private PrescriptionItemInfo prescriptionItemInfo;
+
+    @Autowired
     private BackgroundExecutor backgroundExecutor;
+
+    private AddressModel addressModel;
 
     private String zip;
     private Map<ServicePointProviderEnum, String> deliveryPointIdsMap = new HashMap<>();
@@ -87,14 +98,15 @@ public class CollectDeliveryController {
         deliveryPointsPerProvider = null;
 
         Set<ServicePointProviderEnum> allRelevantProvider = new HashSet<>();
-        for (PrescriptionItemType prescriptionItem : cart.getItemsInCart()) {
+        for (OrderRowType orderRow : cart.getOrderRows()) {
+            PrescriptionItemType prescriptionItem = prescriptionItemInfo.getPrescriptionItem(orderRow);
+
             prescriptionItem.getDeliveryAlternative().forEach(alternative -> {
                 allRelevantProvider.add(alternative.getServicePointProvider());
             });
         }
 
         loadDeliveryPointsForRelevantSuppliers(zip, allRelevantProvider);
-
     }
 
     /**
@@ -103,6 +115,9 @@ public class CollectDeliveryController {
      */
     @PostConstruct
     public void init() {
+        addressModel = new AddressModel(userProfileController);
+        addressModel.init();
+
         // Default zip is from user profile. It may be overridden if user chooses so.
         UserProfileType userProfile = userProfileController.getUserProfile();
 
@@ -139,12 +154,12 @@ public class CollectDeliveryController {
 
         Map<ServicePointProviderEnum, List<String>> result = new TreeMap<>();
 
-        if (getPossibleCollectCombinationsFittingAllWithNotificationMethods().size() > 0) {
+        /*if (getPossibleCollectCombinationsFittingAllWithNotificationMethods().size() > 0) {
 
             result.putAll(transform(possibleCollectCombinationsFittingAllWithNotificationMethods));
 
-            result.keySet().retainAll(getRelevantServicePointProviders().keySet());
-        } else {
+//            result.keySet().retainAll(getServicePointProvidersForDeliveryPointChoice().keySet());
+        } else {*/
 
             List<PrescriptionItemType> collectPrescriptionItems = getCollectPrescriptionItems();
 
@@ -165,6 +180,10 @@ public class CollectDeliveryController {
                 // with the same provider. Very unlikely but we support it.
                 for (List<String> listWithNotificationMethodName : listOfListsWithNotificationMethodNames) {
 
+                    if (listWithNotificationMethodName.size() == 0) {
+                        continue;
+                    }
+
                     if (!result.containsKey(servicePointProviderForItem)) {
                         result.put(servicePointProviderForItem, listWithNotificationMethodName);
                     } else {
@@ -173,12 +192,16 @@ public class CollectDeliveryController {
 
                 }
             }
-        }
+//        }
 
-        result.keySet().retainAll(getRelevantServicePointProviders().keySet());
+//        result.keySet().retainAll(getServicePointProvidersForDeliveryPointChoice().keySet());
 
         return result;
     }
+
+    /*public List<ServicePointProviderEnum> getAllServicePointProviders() {
+        return new ArrayList<>(getDeliveryNotificationMethodsPerProvider().keySet());
+    }*/
 
     private Map<ServicePointProviderEnum, List<String>> transform(Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> possibleCollectCombinationsFittingAllWithNotificationMethods) {
         // Populate result map. Transform a Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> to
@@ -196,7 +219,11 @@ public class CollectDeliveryController {
     // methods on an individual basis if no single delivery method suits all items.
     private List<PrescriptionItemType> getCollectPrescriptionItems() {
 
-        return cart.getItemsInCart()
+        List<OrderRowType> orderRows = cart.getOrderRows();
+
+        List<PrescriptionItemType> prescriptionItems = prescriptionItemInfo.getPrescriptionItems(orderRows);
+
+        return prescriptionItems
                 .stream()
                 .filter(item -> deliveryController.getDeliveryMethodForEachItem().get(item)
                         .equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE.name()))
@@ -212,7 +239,7 @@ public class CollectDeliveryController {
         Map<ServicePointProviderEnum, List<SelectItemGroup>> selectOneMenuLists = new HashMap<>();
 
         Map<ServicePointProviderEnum, List<PrescriptionItemType>> servicePointProvidersForItems =
-                getRelevantServicePointProviders();
+                getServicePointProvidersForDeliveryPointChoice();
 
         for (ServicePointProviderEnum servicePointProviderForItem : servicePointProvidersForItems.keySet()) {
             List<SelectItemGroup> singleSelectMenuItems = getSingleSelectMenuItems(servicePointProviderForItem);
@@ -223,6 +250,49 @@ public class CollectDeliveryController {
         return selectOneMenuLists;
     }
 
+    public boolean isAnyItemWhereAllowChoiceOfDeliveryPointIsFalse() {
+        return isAnyItemWhereAllowCollectIs(false);
+    }
+
+    public boolean isAnyItemWhereAllowChoiceOfDeliveryPointIsTrue() {
+        return isAnyItemWhereAllowCollectIs(true);
+    }
+
+    private boolean isAnyItemWhereAllowCollectIs(boolean findWherePropertyIs) {
+        List<OrderRowType> filteredOrderRows = cart.getOrderRows().stream()
+                .filter(orderRowType -> orderRowType.getDeliveryChoice().getDeliveryMethod().equals(
+                        DeliveryMethodEnum.UTLÄMNINGSSTÄLLE))
+                .collect(Collectors.toList());
+
+        // At this point the order rows have their delivery method set, and we only allow one collect delivery
+        // alternative. Otherwise we would have to choose somehow. So we make it simple and disallow that.
+
+        List<PrescriptionItemType> prescriptionItemsInCart = prescriptionItemInfo
+                .getPrescriptionItems(filteredOrderRows);
+
+        for (PrescriptionItemType item : prescriptionItemsInCart) {
+
+            List<DeliveryAlternativeType> deliveryAlternatives = deliveryController
+                    .getPossibleDeliveryAlternatives(item)
+                    .stream()
+                    .filter(alternative -> alternative.getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE))
+                    .collect(Collectors.toList());
+
+            if (deliveryAlternatives.size() > 1) {
+                throw new IllegalStateException("Multiple deliveryAlternativeTypes with UTLÄMNINGSSTÄLLE is not" +
+                        " allowed.");
+            }
+
+             if (deliveryAlternatives.stream()
+                    .filter(alternative -> alternative.isAllowChioceOfDeliveryPoints() == findWherePropertyIs)
+                    .collect(Collectors.toList()).size() > 0) {
+                return true;
+             }
+        }
+
+        return false;
+    }
+
     /**
      * This method's job is to either find one common denominator for which {@link ServicePointProviderEnum} is
      * available for all {@link PrescriptionItemType}s. If no such {@link ServicePointProviderEnum} exists, make a map
@@ -231,42 +301,33 @@ public class CollectDeliveryController {
      *
      * @return
      */
-    public Map<ServicePointProviderEnum, List<PrescriptionItemType>> getRelevantServicePointProviders() {
+    public Map<ServicePointProviderEnum, List<PrescriptionItemType>> getServicePointProvidersForDeliveryPointChoice() {
         Map<ServicePointProviderEnum, List<PrescriptionItemType>> servicePointProvidersForItems = new TreeMap<>();
 
-        if (this.possibleCollectCombinationsFittingAllWithNotificationMethods == null) {
+        /*if (this.possibleCollectCombinationsFittingAllWithNotificationMethods == null) {
             initPossibleCollectCombinationsFittingAllWithNotificationMethods();
-        }
+        }*/
 
-        if (this.possibleCollectCombinationsFittingAllWithNotificationMethods.size() > 0) {
-            // We have at least one which may satisfy all prescription items. Take the first (probably there will never
-            // be more than one in the collection)...
+        List<OrderRowType> orderRows = cart.getOrderRows()
+                .stream()
+                .filter(row -> row.getDeliveryChoice().getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE))
+                .collect(Collectors.toList());
 
-            ServicePointProviderEnum provider = this.possibleCollectCombinationsFittingAllWithNotificationMethods
-                    .keySet().iterator().next();
+        orderRows.forEach(row -> {
+            PrescriptionItemType item = prescriptionItemInfo.getPrescriptionItem(row);
 
-            servicePointProvidersForItems.clear();
-            servicePointProvidersForItems.put(provider, cart.getItemsInCart()
+            List<DeliveryAlternativeType> deliveryAlternatives = item.getDeliveryAlternative()
                     .stream()
-                    .filter(item -> deliveryController.getDeliveryMethodForEachItem().get(item)
-                            .equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE.name())).collect(Collectors.toList()));
-        } else {
-            // We don't have any single provider satisfying all items. The user needs to choose service point for the
-            // provider of each item.
-            for (PrescriptionItemType item : cart.getItemsInCart()) {
+                    .filter(alternative -> alternative.getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE))
+                    .collect(Collectors.toList());
 
-                if (!deliveryController.getDeliveryMethodForEachItem().get(item)
-                        .equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE.name())) {
+            if (deliveryAlternatives.size() > 1) {
+                throw new IllegalStateException("Only one delivery alternative with UTLÄMNINGSSTÄLLE is expected.");
+            }
 
-                    continue;
-                }
+            if (deliveryAlternatives.get(0).isAllowChioceOfDeliveryPoints()) {
 
                 ServicePointProviderEnum servicePointProviderForItem = getServicePointProviderForItem(item);
-
-                if (servicePointProviderForItem == null) {
-                    // If this happens the item cannot be collected so we skip this.
-                    continue;
-                }
 
                 if (servicePointProvidersForItems.containsKey(servicePointProviderForItem)) {
                     servicePointProvidersForItems.get(servicePointProviderForItem).add(item);
@@ -276,7 +337,7 @@ public class CollectDeliveryController {
                     servicePointProvidersForItems.put(servicePointProviderForItem, list);
                 }
             }
-        }
+        });
 
         return servicePointProvidersForItems;
     }
@@ -292,24 +353,24 @@ public class CollectDeliveryController {
      */
     public ServicePointProviderEnum getServicePointProviderForItem(PrescriptionItemType item) {
         ServicePointProviderEnum servicePointProviderForItem = null;
-        Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> commonDenominator =
+        /*Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> commonDenominator =
                 getPossibleCollectCombinationsFittingAllWithNotificationMethods();
 
         if (commonDenominator.size() > 0) {
             // We take a service provider which is available for all items.
             servicePointProviderForItem = commonDenominator.keySet().iterator().next();
-        } else {
+        } else {*/
 
-            for (DeliveryAlternativeType deliveryAlternative : item.getDeliveryAlternative()) {
-                if (deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)) {
+        for (DeliveryAlternativeType deliveryAlternative : item.getDeliveryAlternative()) {
+            if (deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)) {
 
-                    // If no have no common denominator we just take one.
-                    servicePointProviderForItem = deliveryAlternative.getServicePointProvider();
+                // If no have no common denominator we just take one. TODO update with the fact that we only allow one...
+                servicePointProviderForItem = deliveryAlternative.getServicePointProvider();
 
-                    break;
-                }
+                break;
             }
         }
+//        }
 
         return servicePointProviderForItem;
     }
@@ -359,7 +420,7 @@ public class CollectDeliveryController {
         }
 
         // If there are remaining entries from when the user had chosen more items to order.
-        chosenDeliveryNotificationMethod.keySet().retainAll(getRelevantServicePointProviders().keySet());
+//        chosenDeliveryNotificationMethod.keySet().retainAll(getServicePointProvidersForDeliveryPointChoice().keySet());
 
         return chosenDeliveryNotificationMethod;
     }
@@ -384,20 +445,140 @@ public class CollectDeliveryController {
     }
 
     public Map<ServicePointProviderEnum, String> getDeliveryPointIdsMap() {
-        deliveryPointIdsMap.keySet().retainAll(getRelevantServicePointProviders().keySet());
+        deliveryPointIdsMap.keySet().retainAll(getServicePointProvidersForDeliveryPointChoice().keySet());
 
         return deliveryPointIdsMap;
     }
 
     public String toVerifyDelivery() {
-        boolean success = validateCollectDeliveryPoint();
-        success = success && validateNotificationInput();
+        final boolean[] success = {validateCollectDeliveryPoint()};
+        success[0] = success[0] && validateNotificationInput();
 
-        if (!success) {
+        if (!success[0]) {
             return "collectDelivery";
         }
 
+        // Add info from this step
+        List<OrderRowType> orderRowsWithCollectDelivery = cart.getOrderRows().stream()
+                .filter(orderRowType -> collectDeliveryChosen(orderRowType)).collect(Collectors.toList());
+
+        orderRowsWithCollectDelivery.forEach(orderRowType -> {
+            DeliveryChoiceType deliveryChoice = orderRowType.getDeliveryChoice();
+
+            DeliveryMethodEnum deliveryMethod = orderRowType.getDeliveryChoice().getDeliveryMethod();
+
+            if (deliveryMethod.equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)) {
+
+                String deliveryMethodId = null;
+                Boolean allowChoiceOfDeliveryPoints = null;
+
+                // Take the first deliveryAlternative with matching deliveryMethod and service point provider. This
+                // assumes no two deliveryAlternatives share the same deliveryMethod and service point provider. That
+                // would lead to arbitrary result.
+                PrescriptionItemType prescriptionItem = prescriptionItemInfo.getPrescriptionItem(orderRowType);
+                for (DeliveryAlternativeType deliveryAlternative : prescriptionItem.getDeliveryAlternative()) {
+
+                    if (deliveryAlternative.getDeliveryMethod().equals(deliveryMethod)
+                            && getServicePointProviderForItem(prescriptionItem)
+                                    .equals(deliveryAlternative.getServicePointProvider())) {
+
+                        deliveryMethodId = deliveryAlternative.getDeliveryMethodId();
+                        allowChoiceOfDeliveryPoints = deliveryAlternative.isAllowChioceOfDeliveryPoints();
+                        break;
+                    }
+                }
+
+                if (deliveryMethodId == null) {
+                    String msg = "Kunde inte genomföra beställning. Försök senare.";
+                    utilController.addErrorMessageWithCustomerServiceInfo(msg);
+
+                    success[0] = false;
+                }
+
+                deliveryChoice.setDeliveryMethodId(deliveryMethodId);
+
+                ServicePointProviderEnum provider = getServicePointProviderForItem(prescriptionItem);
+
+                if (allowChoiceOfDeliveryPoints) {
+                    String deliveryPointId = getDeliveryPointIdsMap().get(provider);
+                    deliveryChoice.setDeliveryPoint(lmnService.getDeliveryPointById(deliveryPointId));
+                } else {
+                    AddressType value = new AddressType();
+                    value.setCity(addressModel.getCity());
+                    value.setPostalCode(addressModel.getZip());
+                    value.setReceiver(addressModel.getFullName());
+                    value.setStreet(addressModel.getAddress());
+                    value.setCareOfAddress(addressModel.getCoAddress());
+                    value.setPhone(addressModel.getPhoneNumber());
+
+                    deliveryChoice.setHomeDeliveryAddress(value);
+                }
+
+                String notificationMethodString = getChosenDeliveryNotificationMethod().get(provider);
+
+                if (notificationMethodString != null) {
+                    DeliveryNotificationMethodEnum notificationMethod = DeliveryNotificationMethodEnum
+                            .valueOf(notificationMethodString);
+
+                    // Assert the notification method is available for the prescription item.
+                    boolean found = false;
+                    for (DeliveryAlternativeType deliveryAlternative : prescriptionItem.getDeliveryAlternative()) {
+                        if (deliveryAlternative.getDeliveryNotificationMethod().contains(notificationMethod)) {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        throw new IllegalStateException("A notification method not available for the given prescription " +
+                                "item has been chosen. That shouldn't be possible so it's a bug.");
+                    }
+
+                    deliveryChoice.setDeliveryNotificationMethod(Util.wrapInJAXBElement(notificationMethod));
+
+                    String notificationReceiver;
+
+                    switch (notificationMethod) {
+                        case BREV:
+                            notificationReceiver = null;
+
+                            /* This is only relevant for the inbox message. Home address is not relevant for collect
+                            delivery but it does no harm if it's included in the web service message. */
+                            UserProfileType userProfile = userProfileController.getUserProfile();
+                            if (userProfile != null) {
+
+                                AddressType address = new AddressType();
+                                address.setCity(userProfile.getCity());
+                                address.setPostalCode(userProfile.getZip());
+                                address.setReceiver(userProfile.getFirstName() + " " + userProfile.getLastName());
+                                address.setStreet(userProfile.getStreetAddress());
+
+                                deliveryChoice.setHomeDeliveryAddress(address);
+                            }
+                            break;
+                        case E_POST:
+                            notificationReceiver = getEmail();
+                            break;
+                        case SMS:
+                            notificationReceiver = getSmsNumber();
+                            break;
+                        case TELEFON:
+                            notificationReceiver = getPhoneNumber();
+                            break;
+                        default:
+                            throw new RuntimeException("Unexpected notificationMethod: " + notificationMethod);
+                    }
+
+                    deliveryChoice.setDeliveryNotificationReceiver(notificationReceiver);
+                }
+            }
+        });
+
         return "verifyDelivery" + ACTION_SUFFIX;
+    }
+
+    private boolean collectDeliveryChosen(OrderRowType orderRowType) {
+        return orderRowType.getDeliveryChoice().getDeliveryMethod().equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
     }
 
     public String getZip() {
@@ -465,7 +646,16 @@ public class CollectDeliveryController {
             List<ServicePointProviderEnum> remainingAvailableProvidersCommonForAllWithCollectDelivery = new ArrayList<>(
                     Arrays.asList(ServicePointProviderEnum.values()));
 
-            for (PrescriptionItemType item : cart.getItemsInCart()) {
+            // todo Shouldn't we filter out prescription items so only those where collect delivery is chosen???
+            List<OrderRowType> filteredOrderRows = cart.getOrderRows().stream()
+                    .filter(orderRowType -> orderRowType.getDeliveryChoice().getDeliveryMethod().equals(
+                            DeliveryMethodEnum.UTLÄMNINGSSTÄLLE))
+                    .collect(Collectors.toList());
+
+            List<PrescriptionItemType> prescriptionItemsInCart = prescriptionItemInfo
+                    .getPrescriptionItems(filteredOrderRows);
+
+            for (PrescriptionItemType item : prescriptionItemsInCart) {
 
                 List<DeliveryAlternativeType> deliveryAlternatives = deliveryController
                         .getPossibleDeliveryAlternatives(item);
@@ -511,9 +701,13 @@ public class CollectDeliveryController {
         this.possibleCollectCombinationsFittingAllWithNotificationMethods = possibleDeliveryNotificationMethods;
     }
 
-    public void loadDeliveryPointsForRelevantSuppliersInBackground(final String zip, final Set<ServicePointProviderEnum> allRelevantProvider) {
+    public void loadDeliveryPointsForRelevantSuppliersInBackground(final String zip,
+                                                                   final Set<ServicePointProviderEnum> allRelevantProvider,
+                                                                   final String countyCode) {
         backgroundExecutor.submit(() -> {
+            ThreadLocalStore.setCountyCode(countyCode);
             loadDeliveryPointsForRelevantSuppliers(zip, allRelevantProvider);
+            ThreadLocalStore.setCountyCode(null);
         });
     }
 
@@ -671,7 +865,8 @@ public class CollectDeliveryController {
                     validationSuccess[0] = false;
                 }
             } else {
-                throw new IllegalStateException("No match for chosen notification method found.");
+                addErrorMessage("Avisering är inte korrekt angivet.", "");
+                validationSuccess[0] = false;
             }
 
             count[0]++;
@@ -751,5 +946,13 @@ public class CollectDeliveryController {
         }
 
         return false;
+    }
+
+    public AddressModel getAddressModel() {
+        return addressModel;
+    }
+
+    public void setAddressModel(AddressModel addressModel) {
+        this.addressModel = addressModel;
     }
 }

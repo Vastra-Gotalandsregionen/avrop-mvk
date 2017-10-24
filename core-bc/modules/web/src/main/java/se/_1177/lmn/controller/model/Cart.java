@@ -3,12 +3,10 @@ package se._1177.lmn.controller.model;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._1.OrderRowType;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Patrik Björk
@@ -17,33 +15,32 @@ import java.util.Map;
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Cart {
 
-    private List<PrescriptionItemType> itemsInCart = new ArrayList<>();
-    private Map<String, PrescriptionItemType> prescriptionItemInfo = new HashMap<>();
+    private List<OrderRowType> orderRows = new ArrayList<>();
 
-    public List<PrescriptionItemType> getItemsInCart() {
-        return itemsInCart;
+    public List<OrderRowType> getOrderRows() {
+        return orderRows;
     }
 
-    public void setItemsInCart(List<PrescriptionItemType> itemsInCart) {
-        this.itemsInCart = itemsInCart;
-    }
-
-    /**
-     * Use this method to store the prescription item to fetch the info later.
-     *
-     * @param prescriptionItemId
-     * @param prescriptionItem
-     */
-    public void addPrescriptionItemForInfo(String prescriptionItemId, PrescriptionItemType prescriptionItem) {
-        this.prescriptionItemInfo.put(prescriptionItemId, prescriptionItem);
-    }
-
-    public Map<String, PrescriptionItemType> getPrescriptionItemInfo() {
-        return prescriptionItemInfo;
+    public void setOrderRows(List<OrderRowType> itemsInCart) {
+        this.orderRows = itemsInCart;
     }
 
     public void emptyCart() {
-        itemsInCart = new ArrayList<>();
-        prescriptionItemInfo = new HashMap<>();
+        orderRows = new ArrayList<>();
+    }
+
+    public Integer getOrderCountForSubArticle(String articleNo) {
+        for (OrderRowType orderRowType : orderRows) {
+
+            if (orderRowType.getArticle() == null || orderRowType.getArticle().getArticleNo() == null) {
+                throw new IllegalStateException("An order row should have an article set.");
+            }
+
+            if (orderRowType.getArticle().getArticleNo().equals(articleNo)) {
+                return orderRowType.getNoOfPackages();
+            }
+        }
+
+        return null;
     }
 }
