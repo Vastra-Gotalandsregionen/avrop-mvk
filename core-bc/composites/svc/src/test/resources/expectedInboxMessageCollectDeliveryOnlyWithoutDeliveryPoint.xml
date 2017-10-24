@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<article>
+
+    <section>
+        <title>Beställda produkter</title>
+        <variablelist>
+            <varlistentry>
+                <term>&nbsp;</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Produktgrupp:</term>
+                <listitem>Diabetes</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term></term>
+                <listitem>Artikalnamn1</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Artikelnr.:</term>
+                <listitem>1234</listitem>
+            </varlistentry>
+        </variablelist>
+        <variablelist>
+            <varlistentry>
+                <term>&nbsp;</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Produktgrupp:</term>
+                <listitem>Inkontinens</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term></term>
+                <listitem>Artikelnamn2</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Artikelnr.:</term>
+                <listitem>4321</listitem>
+            </varlistentry>
+        </variablelist>
+    </section>
+
+    <section>
+        <title>Leveransinformation</title>
+        <variablelist>
+            <varlistentry>
+                <term>&nbsp;</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term></term>
+                <listitem>Utlämningsställe:</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Kalle Karlsson</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Gatan 37</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>43213 Bullerbyn</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+        </variablelist>
+
+        <variablelist>
+            <varlistentry>
+                <term>&nbsp;</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+        </variablelist>
+
+        <variablelist>
+            <varlistentry>
+                <term></term>
+                <listitem>Sms-avisering:</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>070-2345678</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+        </variablelist>
+        <variablelist>
+            <varlistentry>
+                <term>&nbsp;</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+        </variablelist>
+    </section>
+
+</article>
