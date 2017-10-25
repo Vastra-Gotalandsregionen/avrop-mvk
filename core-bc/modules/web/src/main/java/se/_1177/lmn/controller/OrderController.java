@@ -112,7 +112,8 @@ public class OrderController {
                     chosenItemMap.put(prescriptionItemId, true);
 
                     prescriptionItem.getDeliveryAlternative().forEach(alternative -> {
-                        if (!alternative.getServicePointProvider().equals(ServicePointProviderEnum.INGEN)) {
+                        if (!alternative.getServicePointProvider().equals(ServicePointProviderEnum.INGEN)
+                                && alternative.isAllowChioceOfDeliveryPoints()) {
                             allRelevantProviders.add(alternative.getServicePointProvider());
                         }
                     });
