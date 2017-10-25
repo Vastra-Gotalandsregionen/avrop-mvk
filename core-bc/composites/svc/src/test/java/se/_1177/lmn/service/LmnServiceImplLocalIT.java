@@ -18,6 +18,9 @@ import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.
 import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._0.RegisterMedicalSupplyOrderType;
 import se._1177.lmn.service.mock.MockWebServiceServer;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -28,6 +31,7 @@ public class LmnServiceImplLocalIT {
     private GetMedicalSupplyDeliveryPointsResponderInterface medicalSupplyDeliveryPoints;
     private GetMedicalSupplyPrescriptionsResponderInterface medicalSupplyPrescriptions;
     private RegisterMedicalSupplyOrderResponderInterface registerMedicalSupplyOrder;
+    private LmnServiceImpl lmnService;
 
     @BeforeClass
     public static void setupMockServer() {
@@ -47,6 +51,8 @@ public class LmnServiceImplLocalIT {
         medicalSupplyPrescriptions = ctx.getBean(GetMedicalSupplyPrescriptionsResponderInterface.class);
         registerMedicalSupplyOrder = ctx.getBean(RegisterMedicalSupplyOrderResponderInterface.class);
 
+        lmnService = new LmnServiceImpl(medicalSupplyDeliveryPoints, medicalSupplyPrescriptions,
+                registerMedicalSupplyOrder, "asdfasdf", "031-234343", "some info");
     }
 
     @Test
@@ -55,20 +61,17 @@ public class LmnServiceImplLocalIT {
     }
 
     @Test
-    public void smokmeTest() throws Exception {
-        GetMedicalSupplyDeliveryPointsType parameters = new GetMedicalSupplyDeliveryPointsType();
+    public void smokeTest() throws Exception {
 
-        parameters.setPostalCode("12345");
-        parameters.setServicePointProvider(ServicePointProviderEnum.POSTNORD);
-
-        GetMedicalSupplyDeliveryPointsResponseType response = medicalSupplyDeliveryPoints
-                .getMedicalSupplyDeliveryPoints("?", parameters);
+        GetMedicalSupplyDeliveryPointsResponseType deliveryPoints =
+                lmnService.getMedicalSupplyDeliveryPoints(ServicePointProviderEnum.POSTNORD, "12345");
 
         GetMedicalSupplyPrescriptionsResponseType prescriptions =
-                medicalSupplyPrescriptions.getMedicalSupplyPrescriptions("", new GetMedicalSupplyPrescriptionsType());
+                lmnService.getMedicalSupplyPrescriptions("19121212-1212");
 
         RegisterMedicalSupplyOrderResponseType registerMedicalSupplyOrder =
-                this.registerMedicalSupplyOrder.registerMedicalSupplyOrder("", new RegisterMedicalSupplyOrderType());
+                lmnService.registerMedicalSupplyOrder("19121212-1212", false, "name", new ArrayList<>(),
+                        new HashMap<>());
     }
 
 }
