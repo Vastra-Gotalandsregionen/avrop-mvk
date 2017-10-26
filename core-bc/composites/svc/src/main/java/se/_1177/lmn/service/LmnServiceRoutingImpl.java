@@ -68,6 +68,16 @@ public class LmnServiceRoutingImpl implements LmnService {
         return getContextLmnService().getCustomerServiceInfo();
     }
 
+    @Override
+    public String getReceptionHsaId() {
+        return getContextLmnService().getReceptionHsaId();
+    }
+
+    @Override
+    public String getConfirmationMessage() {
+        return getContextLmnService().getConfirmationMessage();
+    }
+
     /**
      * This method's only purpose is to delay the external web service from going into "sleep mode" where it becomes
      * slower than preferred. We allow it to go into sleep mode when time is 3.XX in the night only. This method is
@@ -105,7 +115,7 @@ public class LmnServiceRoutingImpl implements LmnService {
             // Last resort. We don't want exceptions when the customer service properties are called from the views.
             // That would cause a blank page.
             if (lmnService == null) {
-                lmnService = new LmnServiceImpl(null, null, null, null, "Tekniskt fel.", "Tekniskt fel.");
+                lmnService = new LmnServiceImpl(null, null, null, null, "Tekniskt fel.", "Tekniskt fel.", "", "");
             }
         }
 

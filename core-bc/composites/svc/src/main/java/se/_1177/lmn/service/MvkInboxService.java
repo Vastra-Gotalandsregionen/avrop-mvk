@@ -49,7 +49,8 @@ public class MvkInboxService {
      * @throws MvkInboxServiceException
      */
     public AddMessageResponseType sendInboxMessage(String pid,
-                                                   List<OrderRowType> orderRows)
+                                                   List<OrderRowType> orderRows,
+                                                   String receptionHsaId)
             throws MvkInboxServiceException {
 
         AddMessageType request = new AddMessageType();
@@ -59,7 +60,7 @@ public class MvkInboxService {
 
         HealthCareFacilityType healthCareFacility = new HealthCareFacilityType();
         healthCareFacility.setHealthCareFacilityName("Centrum Läkemedelsnära Produkter");// TODO Should depend on patient?
-        healthCareFacility.setHsaId("SE2321000131-S000000016964"); // SE2321000131-S000000016964 = Mottagningen "Läkemedelsnära produkter" // TODO Should depend on patient
+        healthCareFacility.setHsaId(receptionHsaId);
 
         MessageCaseType messageCase = new MessageCaseType();
         messageCase.setCaseType(caseType);
@@ -81,7 +82,7 @@ public class MvkInboxService {
         request.setMessage(messageCase);
         request.setSubjectOfCareId(pid);
         request.setNotify(false);
-        request.setSourceSystem("SE2321000131-S000000016964"); // SE2321000131-S000000016964 = Mottagningen "Läkemedelsnära produkter" // TODO Should depend on patient
+        request.setSourceSystem(receptionHsaId);
 
         AddMessageResponseType response = null;
         try {

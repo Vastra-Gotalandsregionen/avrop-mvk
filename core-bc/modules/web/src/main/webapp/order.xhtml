@@ -95,7 +95,7 @@
                                         #{item.article.articleName}
                                     </div>
                                     <mvk:moreInfo item="#{item}"/>
-                                    <div class="dev-temp" style="font-size: .7em;">
+                                    <!--<div class="dev-temp" style="font-size: .7em;">
                                         <em>DEBUG INFO</em>
                                         <table>
                                             <ui:repeat value="#{item.deliveryAlternative}" var="alternative">
@@ -109,7 +109,7 @@
                                                 </tr>
                                             </ui:repeat>
                                         </table>
-                                        <!--<ul>
+                                        &lt;!&ndash;<ul>
                                             <ui:repeat value="#{item.deliveryAlternative}" var="alternative">
                                                 <li>
                                                     #{alternative.deliveryMethod} - #{alternative.servicePointProvider}
@@ -122,9 +122,9 @@
                                                     </ol>
                                                 </li>
                                             </ui:repeat>
-                                        </ul>-->
+                                        </ul>&ndash;&gt;
                                         #{not empty item.subArticle ? 'Underartiklar!!!!' : null}
-                                    </div>
+                                    </div>-->
                                 </td>
                                 <td>
                                     #{item.noOfRemainingOrders}/#{item.noOfOrders}

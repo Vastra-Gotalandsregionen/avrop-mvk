@@ -39,4 +39,7 @@ public interface LmnService {
 
     String getCustomerServiceInfo();
 
+    String getReceptionHsaId();
+
+    String getConfirmationMessage();
 }

@@ -52,7 +52,7 @@ public class LmnServiceImplLocalIT {
         registerMedicalSupplyOrder = ctx.getBean(RegisterMedicalSupplyOrderResponderInterface.class);
 
         lmnService = new LmnServiceImpl(medicalSupplyDeliveryPoints, medicalSupplyPrescriptions,
-                registerMedicalSupplyOrder, "asdfasdf", "031-234343", "some info");
+                registerMedicalSupplyOrder, "asdfasdf", "031-234343", "some info", "SE000111-234", "Congrats!");
     }
 
     @Test
