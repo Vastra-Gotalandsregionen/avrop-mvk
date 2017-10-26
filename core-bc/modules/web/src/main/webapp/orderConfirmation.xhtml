@@ -20,7 +20,7 @@
             <h:form>
                 <div class="section">
                     <h:panelGroup rendered="#{verifyDeliveryController.orderSuccess}">
-                        <h3>Tack för din beställning, produkterna levereras inom 5 arbetsdagar</h3>
+                        <h3><h:outputText escape="false">#{utilController.confirmationMessage}</h:outputText></h3>
 
                         <p>Beställningen har sparats i din inkorg i mina vårdkontakter. Observera att viss fördröjning kan förekomma innan meddelandet syns i din inkorg.</p>
 

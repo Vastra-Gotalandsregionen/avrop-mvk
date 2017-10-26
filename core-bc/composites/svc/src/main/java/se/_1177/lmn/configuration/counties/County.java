@@ -9,6 +9,7 @@ public class County {
     private String customerServiceInfo;
     private String rtjpLogicalAddress;
     private String receptionHsaId;
+    private String confirmationMessage;
 
     public String getCountyCode() {
         return countyCode;
@@ -72,5 +73,13 @@ public class County {
 
     public void setReceptionHsaId(String receptionHsaId) {
         this.receptionHsaId = receptionHsaId;
+    }
+
+    public String getConfirmationMessage() {
+        return confirmationMessage;
+    }
+
+    public void setConfirmationMessage(String confirmationMessage) {
+        this.confirmationMessage = confirmationMessage;
     }
 }

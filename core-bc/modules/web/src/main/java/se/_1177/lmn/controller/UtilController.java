@@ -169,6 +169,10 @@ public class UtilController {
         return lmnService.getCustomerServiceInfo();
     }
 
+    public String getConfirmationMessage() {
+        return lmnService.getConfirmationMessage();
+    }
+
     public String getBackToOwnProfileLink() {
         return backToOwnProfileLink;
     }

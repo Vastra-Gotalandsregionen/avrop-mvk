@@ -111,7 +111,7 @@ public class VerifyDeliveryController {
 
                 try {
                     AddMessageResponseType addMessageResponse = mvkInboxService.sendInboxMessage(
-                            userProfile.getSubjectOfCareId(), cart.getOrderRows());
+                            userProfile.getSubjectOfCareId(), cart.getOrderRows(), lmnService.getReceptionHsaId());
 
                     if (!addMessageResponse.getResultCode().equals(mvk.crm.casemanagement.inbox._2.ResultCodeEnum.OK)) {
                         String msg = addMessageResponse.getResultText();

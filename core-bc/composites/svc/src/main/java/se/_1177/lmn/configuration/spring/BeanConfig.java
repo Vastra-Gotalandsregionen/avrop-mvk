@@ -68,6 +68,8 @@ public class BeanConfig {
             String rtjpLogicalAddress = county.getRtjpLogicalAddress();
             String customerServicePhoneNumber = county.getCustomerServicePhoneNumber();
             String customerServiceInfo = county.getCustomerServiceInfo();
+            String receptionHsaId = county.getReceptionHsaId();
+            String confirmationMessage = county.getConfirmationMessage();
 
             LmnService vgrLmnService = new LmnServiceImpl(
                     getMedicalSupplyDeliveryPointsResponderInterface(getMedicalSupplyDeliveryPointsAddress),
@@ -75,7 +77,9 @@ public class BeanConfig {
                     getRegisterMedicalSupplyOrderResponderInterface(registerMedicalSupplyOrderAddress),
                     rtjpLogicalAddress,
                     customerServicePhoneNumber,
-                    customerServiceInfo
+                    customerServiceInfo,
+                    receptionHsaId,
+                    confirmationMessage
             );
 
             countyCodeToLmnService.put(countyCodeToCountEntry.getKey(), vgrLmnService);
