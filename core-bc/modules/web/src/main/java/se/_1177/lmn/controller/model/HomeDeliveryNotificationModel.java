@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -42,6 +43,7 @@ public class HomeDeliveryNotificationModel {
                                          DeliveryNotificationMethodEnum preferredDeliveryNotificationMethod,
                                          String smsNumber,
                                          String email,
+                                         String phoneNumber,
                                          String componentIdPrefix) {
         this.prescriptionItemTypes = prescriptionItemTypes;
 
@@ -50,6 +52,7 @@ public class HomeDeliveryNotificationModel {
 
         this.smsNumber = smsNumber;
         this.email = email;
+        this.phoneNumber = phoneNumber;
 
         this.componentIdPrefix = componentIdPrefix;
     }
@@ -70,7 +73,9 @@ public class HomeDeliveryNotificationModel {
                 deliveryNotificationMethodsPerItem.put(this.fictionalItem, commonDeliveryNotificationMethods);
             } else {
 
-                deliveryNotificationMethodsPerItem = new HashMap<>();
+                // It's important to preserve order as validation uses a count variable which is dependent on the order
+                // being the same.
+                deliveryNotificationMethodsPerItem = new LinkedHashMap<>();
 
                 // We want to present all items which have HEMLEVERANS as delivery method.
                 this.prescriptionItemTypes
