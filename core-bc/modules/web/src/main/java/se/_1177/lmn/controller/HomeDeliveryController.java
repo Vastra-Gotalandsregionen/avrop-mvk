@@ -141,13 +141,19 @@ public class HomeDeliveryController {
         this.notificationMandatory = notificationMandatory;
         this.notificationUnavailable = notificationUnavailable;
 
+        String previousPhoneNumber = notificationOptionalModel != null ? notificationOptionalModel.getPhoneNumber()
+                : null;
+
         notificationOptionalModel =
                 new HomeDeliveryNotificationModel(notificationOptional, preferredDeliveryNotificationMethod, smsNumber,
-                        email, "homeDeliveryForm:optional:notificationMethodRepeat:");
+                        email, previousPhoneNumber, "homeDeliveryForm:optional:notificationMethodRepeat:");
+
+        previousPhoneNumber = notificationMandatoryModel != null ? notificationMandatoryModel.getPhoneNumber()
+                : null;
 
         notificationMandatoryModel =
                 new HomeDeliveryNotificationModel(notificationMandatory, preferredDeliveryNotificationMethod, smsNumber,
-                        email, "homeDeliveryForm:mandatory:notificationMethodRepeat:");
+                        email, previousPhoneNumber, "homeDeliveryForm:mandatory:notificationMethodRepeat:");
     }
 
 
