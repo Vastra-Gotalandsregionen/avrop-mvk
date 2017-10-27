@@ -20,6 +20,10 @@
                 <term>Artikelnr.:</term>
                 <listitem>1234</listitem>
             </varlistentry>
+            <varlistentry>
+                <term>Antal förpackningar:</term>
+                <listitem>3</listitem>
+            </varlistentry>
         </variablelist>
         <variablelist>
             <varlistentry>
@@ -37,6 +41,10 @@
             <varlistentry>
                 <term>Artikelnr.:</term>
                 <listitem>4321</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Antal förpackningar:</term>
+                <listitem>4</listitem>
             </varlistentry>
         </variablelist>
     </section>

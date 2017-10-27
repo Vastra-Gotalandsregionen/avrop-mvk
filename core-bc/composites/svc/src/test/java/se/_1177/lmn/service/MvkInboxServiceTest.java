@@ -87,6 +87,9 @@ public class MvkInboxServiceTest {
         item1.setArticle(article1);
         item2.setArticle(article2);
 
+        item1.setNoOfPackages(3);
+        item2.setNoOfPackages(4);
+
         orderRows.add(item1);
         orderRows.add(item2);
 
@@ -155,6 +158,9 @@ public class MvkInboxServiceTest {
         item1.setArticle(article1);
         item2.setArticle(article2);
 
+        item1.setNoOfPackages(3);
+        item2.setNoOfPackages(4);
+
         orderRows.add(item1);
         orderRows.add(item2);
 
@@ -216,6 +222,9 @@ public class MvkInboxServiceTest {
 
         item1.setArticle(article1);
         item2.setArticle(article2);
+
+        item1.setNoOfPackages(3);
+        item2.setNoOfPackages(4);
 
         orderRows.add(item1);
         orderRows.add(item2);
@@ -282,6 +291,9 @@ public class MvkInboxServiceTest {
 
         item1.setArticle(article1);
         item2.setArticle(article2);
+
+        item1.setNoOfPackages(3);
+        item2.setNoOfPackages(4);
 
         orderRows.add(item1);
         orderRows.add(item2);
