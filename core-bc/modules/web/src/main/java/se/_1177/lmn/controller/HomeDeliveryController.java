@@ -355,21 +355,21 @@ public class HomeDeliveryController {
     }
 
     public String getNotifacationReceiver(PrescriptionItemType item) {
-        String method = notificationMandatoryModel.getChosenDeliveryNotificationMethod(item);
-        if (method != null) {
-            // The item is on the mandatory model
-            switch (method) {
-                case "TELEFON":
-                    return notificationMandatoryModel.getPhoneNumber();
-                case "SMS":
-                    return notificationMandatoryModel.getSmsNumber();
-                case "E_POST":
-                    return notificationMandatoryModel.getEmail();
-                default:
-                    throw new IllegalArgumentException("This method is not expected to be called when other notification methods are chosen.");
-            }
+        String receiver = findReceiver(item, this.notificationMandatoryModel);
+        if (receiver != null) {
+            return receiver;
         }
 
+        receiver = findReceiver(item, this.notificationOptionalModel);
+        if (receiver != null) {
+            return receiver;
+        }
+
+        throw new IllegalArgumentException("Couldn't find a notification receiver.");
+    }
+
+    private String findReceiver(PrescriptionItemType item, HomeDeliveryNotificationModel notificationOptionalModel) {
+        String method;
         method = notificationOptionalModel.getChosenDeliveryNotificationMethod(item);
         if (method != null) {
             // The item is on the mandatory model
@@ -381,11 +381,11 @@ public class HomeDeliveryController {
                 case "E_POST":
                     return notificationOptionalModel.getEmail();
                 default:
-                    throw new IllegalArgumentException("This method is not expected to be called when other notification methods are chosen.");
+                    throw new IllegalArgumentException("This method is not expected to be called when other " +
+                            "notification methods are chosen.");
             }
         }
-
-        throw new IllegalArgumentException("Couldn't find a notification receiver.");
+        return null;
     }
 
     void resetChoices() {
