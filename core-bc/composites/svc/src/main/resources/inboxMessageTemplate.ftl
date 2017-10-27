@@ -21,6 +21,15 @@
                 <term>Artikelnr.:</term>
                 <listitem>${item.article.articleNo}</listitem>
             </varlistentry>
+            <varlistentry>
+<#if item.article.packageSize == 1>
+                <term>Antal artiklar:</term>
+                <listitem>${item.noOfPcs}</listitem>
+<#else>
+                <term>Antal förpackningar:</term>
+                <listitem>${item.noOfPackages}</listitem>
+</#if>
+            </varlistentry>
         </variablelist>
 </#list>
     </section>

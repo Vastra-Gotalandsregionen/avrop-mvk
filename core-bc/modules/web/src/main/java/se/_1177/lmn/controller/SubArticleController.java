@@ -81,6 +81,7 @@ public class SubArticleController {
 
             model.setTotalOrderSize(numbersStillInNeedToDistribute);
 
+            // Zero packages per order means we're dealing with articles and not packages
             model.setTotalOrderSizeUnit(prescriptionItemType.getNoOfPackagesPerOrder() == 0
                     ? "artiklar" : "förpackningar");
 
