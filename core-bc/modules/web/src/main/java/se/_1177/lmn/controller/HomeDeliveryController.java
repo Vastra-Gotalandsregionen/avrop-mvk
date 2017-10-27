@@ -350,6 +350,40 @@ public class HomeDeliveryController {
         return aggregated;
     }
 
+    public String getNotifacationReceiver(PrescriptionItemType item) {
+        String method = notificationMandatoryModel.getChosenDeliveryNotificationMethod(item);
+        if (method != null) {
+            // The item is on the mandatory model
+            switch (method) {
+                case "TELEFON":
+                    return notificationMandatoryModel.getPhoneNumber();
+                case "SMS":
+                    return notificationMandatoryModel.getSmsNumber();
+                case "E_POST":
+                    return notificationMandatoryModel.getEmail();
+                default:
+                    throw new IllegalArgumentException("This method is not expected to be called when other notification methods are chosen.");
+            }
+        }
+
+        method = notificationOptionalModel.getChosenDeliveryNotificationMethod(item);
+        if (method != null) {
+            // The item is on the mandatory model
+            switch (method) {
+                case "TELEFON":
+                    return notificationOptionalModel.getPhoneNumber();
+                case "SMS":
+                    return notificationOptionalModel.getSmsNumber();
+                case "E_POST":
+                    return notificationOptionalModel.getEmail();
+                default:
+                    throw new IllegalArgumentException("This method is not expected to be called when other notification methods are chosen.");
+            }
+        }
+
+        throw new IllegalArgumentException("Couldn't find a notification receiver.");
+    }
+
     void resetChoices() {
         initNotificationGroups();
         notificationOrDoorDelivery = null;
