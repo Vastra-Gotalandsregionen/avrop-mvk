@@ -56,15 +56,15 @@ public class MvkInboxService {
         AddMessageType request = new AddMessageType();
 
         CaseTypeType caseType = new CaseTypeType();
-        caseType.setCaseTypeDescription("Beställning läkemedelsnära produkter");
+        caseType.setCaseTypeDescription("Beställning förskrivna förbrukningsprodukter");
 
         HealthCareFacilityType healthCareFacility = new HealthCareFacilityType();
-        healthCareFacility.setHealthCareFacilityName("Centrum Läkemedelsnära Produkter");// TODO Should depend on patient?
+        healthCareFacility.setHealthCareFacilityName("Förskrivna förbrukningsprodukter");
         healthCareFacility.setHsaId(receptionHsaId);
 
         MessageCaseType messageCase = new MessageCaseType();
         messageCase.setCaseType(caseType);
-        messageCase.setHeaderText("Beställning läkemedelsnära produkter");
+        messageCase.setHeaderText("Beställning förskrivna förbrukningsprodukter");
         messageCase.setHealthCareFacility(healthCareFacility);
 
         try {
