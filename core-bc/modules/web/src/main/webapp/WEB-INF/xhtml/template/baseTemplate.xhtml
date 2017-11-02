@@ -15,14 +15,14 @@
     <h:outputScript library="thirdparty" name="jquery-ui-dialog.min.js"/>
     <!--<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>-->
-    <meta title="Avrop läkemedelsnära produkter" />
+    <meta title="Avrop förskrivna förbrukningsprodukter" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
 
     <link href="javax.faces.resource/img/favicon.ico.xhtml?ln=default" rel="Shortcut Icon"/>
 </h:head>
 
 <h:body>
-    <title>Avrop läkemedelsnära produkter</title>
+    <title>Avrop förskrivna förbrukningsprodukter</title>
     <script>
         var jq = $.noConflict();
     </script>
@@ -88,7 +88,7 @@
             <div class="breadcrumbs-container">
                 <div class="breadcrumbs">
                     <o:form>
-                        <a class="link" href="#{utilController.mvkStartPageLink}">Start</a>&#160;»&#160;<a class="link" href="#{utilController.mvkOtherServicesLink}">Övriga tjänster</a>&#160;»&#160;<a href="#{request.contextPath}/order.xhtml#{userProfileController.delegateUrlParameters}">Läkemedelsnära produkter</a>&#160;»&#160;<ui:insert name="currentPage"/>
+                        <a class="link" href="#{utilController.mvkStartPageLink}">Start</a>&#160;»&#160;<a class="link" href="#{utilController.mvkOtherServicesLink}">Övriga tjänster</a>&#160;»&#160;<a href="#{request.contextPath}/order.xhtml#{userProfileController.delegateUrlParameters}">Förskrivna förbrukningsprodukter</a>&#160;»&#160;<ui:insert name="currentPage"/>
                     </o:form>
                 </div><!--breadcrumbs-->
             </div><!--breadcrumbs-container-->

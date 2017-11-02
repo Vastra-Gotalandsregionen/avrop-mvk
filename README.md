@@ -1,4 +1,4 @@
-# Avrop läkemedelsnära produkter för patient
+# Avrop förskrivna förbrukningsprodukter för patient
 
 This is a web application developed by the Region of Västra Götaland, Sweden. The target users are patients who have any prescription of products available in the application. The application is a part of [1177 Vårdguiden E-tjänster](https://minavardkontakter.se).
 
@@ -68,7 +68,7 @@ A typical flow is as follows:
 
 ![](https://raw.githubusercontent.com/Vastra-Gotalandsregionen/avrop-lakemedelsnara-produkter/release/1.0/core-bc/modules/web/doc/flow1.png)
 
-* The user clicks on "Läkemedelsnära produkter".
+* The user clicks on "förskrivna förbrukningsprodukter".
 
 ![](https://raw.githubusercontent.com/Vastra-Gotalandsregionen/avrop-lakemedelsnara-produkter/release/1.0/core-bc/modules/web/doc/flow2.png)
 
