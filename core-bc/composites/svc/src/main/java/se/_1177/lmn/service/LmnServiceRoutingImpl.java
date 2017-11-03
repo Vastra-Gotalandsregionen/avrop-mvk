@@ -84,7 +84,8 @@ public class LmnServiceRoutingImpl implements LmnService {
      * executed by schedule.
      */
     // Every fifteen minutes all the time except when time is 3-something in the night.
-    @Scheduled(cron = "0 0/15 0-2,4-23 * * ?")
+    // Commented out in this branch.
+    /*@Scheduled(cron = "0 0/15 0-2,4-23 * * ?")
     public void keepWebServiceAwake() {
         // This delays the external web service going into "sleep mode" where it becomes slower than preferred. We allow
         // it to go into sleep mode when time is 3.XX in the night only.
@@ -97,7 +98,7 @@ public class LmnServiceRoutingImpl implements LmnService {
         } finally {
             ThreadLocalStore.setCountyCode(null);
         }
-    }
+    }*/
 
     private LmnService getContextLmnService() {
         String countyCode = ThreadLocalStore.getCountyCode();
