@@ -131,7 +131,8 @@
                                 </td>
                                 <td>
                                     #{utilController.capitalizeFully(deliveryController.deliveryMethodForEachItem[item])}
-                                    <h:panelGroup rendered="#{deliveryController.deliveryMethodForEachItem[item] eq 'UTLÄMNINGSSTÄLLE'}"> /
+                                    <h:panelGroup rendered="#{deliveryController.deliveryMethodForEachItem[item] eq 'UTLÄMNINGSSTÄLLE'
+                                     and not 'INGEN' eq utilController.toProviderName(collectDeliveryController.getServicePointProviderForItem(item))}"> /
                                         #{utilController.toProviderName(collectDeliveryController.getServicePointProviderForItem(item))}
                                     </h:panelGroup>
                                 </td>
