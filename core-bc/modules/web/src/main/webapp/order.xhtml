@@ -191,28 +191,9 @@
             });
         </script>
 
-        <style>
-            #imageDialog {
-                background: #555;
-                border-radius: 4px;
-                padding: 4px 4px 0 4px;
-            }
-
-            .ui-dialog:focus {
-                outline: none;
-            }
-
-            .ui-dialog .ui-dialog-titlebar {
-                display: none;
-            }
-
-            .image-preview {
-                float: left;
-                /* max-width: 600px; */
-                z-index: 100;
-            }
-        </style>
-        <div id="imageDialog" style="display: none;"></div>
+        <div id="imageDialog" style="display: none;">
+            <h:graphicImage id="spinner" library="default" name="img/spinner.svg" alt="spinner" />
+        </div>
 
         <script>
             jq(document).ready(function () {

@@ -129,7 +129,7 @@
                                 <td>
                                     #{item.noOfRemainingOrders}/#{item.noOfOrders}
                                 </td>
-                                <td>
+                                <td class="column-4">
                                     #{utilController.capitalizeFully(deliveryController.deliveryMethodForEachItem[item])}
                                     <h:panelGroup rendered="#{deliveryController.deliveryMethodForEachItem[item] eq 'UTLÄMNINGSSTÄLLE'
                                      and not 'INGEN' eq utilController.toProviderName(collectDeliveryController.getServicePointProviderForItem(item))}"> /
@@ -258,6 +258,16 @@
             jq(document).ready(function () {
                 initOrderPage();
             });
+        </script>
+
+        <div id="imageDialog" style="display: none;">
+            <h:graphicImage id="spinner" library="default" name="img/spinner.svg" alt="spinner" />
+        </div>
+
+        <script>
+            jq(document).ready(function () {
+                initImagePreview();
+            })
         </script>
 
     </ui:define>

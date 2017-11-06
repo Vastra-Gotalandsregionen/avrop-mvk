@@ -498,6 +498,10 @@ public class MockGetMedicalSupplyPrescriptionsResponder
 
         PrescriptionItemType prescriptionItem = new PrescriptionItemType();
 
+        ImageType articleImage = new ImageType();
+        articleImage.setOriginal("https://www.w3schools.com/css/trolltunga.jpg");
+        articleImage.setThumbnail("https://www.w3schools.com/css/trolltunga.jpg");
+
         ArticleType article2 = new ArticleType();
         article2.setArticleName("Diabetes med två hemleveransalternativ");
         article2.setArticleNo(random.nextInt(100000) + "");
@@ -505,6 +509,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         article2.setPackageSize(1); // Important
         article2.setPackageSizeUnit("st");
         article2.setProductArea(ProductAreaEnum.DIABETES);
+        article2.setArticleImage(articleImage);
 
         prescriptionItem.setArticle(article2);
 

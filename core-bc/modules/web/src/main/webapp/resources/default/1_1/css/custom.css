@@ -788,6 +788,18 @@ select::-moz-focus-inner { /*Remove button padding in FF*/
     width: 200px;
 }
 
+@media (max-width: 767px) {
+    .verify-delivery .column-4 {
+        width: 140px;
+    }
+}
+
+@media (max-width: 479px) {
+    .verify-delivery .column-4 {
+        display: none;
+    }
+}
+
 .small-screen {
     display: none;
 }
@@ -813,6 +825,13 @@ table.sub-articles-table {
 table.sub-articles-list td {
     border: none;
     padding: 3px 8px 2px 0;
+}
+
+@media (max-width: 767px) {
+    table.sub-articles-table:not(.embedded-table) tbody td {
+        display: table-row;
+        line-height: 36px;
+    }
 }
 
 .paragraph {
@@ -843,6 +862,60 @@ table.sub-articles-list td {
     ul.delivery-options li {
         padding: 8px;
     }
+}
+
+/* Image preview */
+
+#imageDialog {
+    background: #555;
+    border-radius: 4px;
+    padding: 4px 4px 0 4px;
+}
+
+.ui-dialog:focus {
+    outline: none;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+    display: none;
+}
+
+.image-preview {
+    display: block;
+    z-index: 100;
+}
+
+#imageDialog {
+    position: fixed !important;
+    top: 50% !important;
+    transform: translateY(-50%);
+    left: 50% !important;
+    transform: translateX(-50%) translateY(-50%);
+    transition: all 0.25s ease;
+}
+
+#previewImage {
+    max-width: 500px !important;
+    max-height: 400px !important;
+}
+
+@media (max-width: 767px) {
+    #previewImage {
+        max-width: 480px !important;
+    }
+}
+
+@media (max-width: 479px) {
+    #previewImage {
+        max-width: 300px !important;
+    }
+}
+
+#spinner {
+    width: 50%;
+    top: 22px;
+    position: relative;
+    left: 22%;
 }
 
 /* Sub-articles */

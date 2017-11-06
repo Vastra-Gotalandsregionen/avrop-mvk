@@ -123,30 +123,48 @@ function initImagePreview() {
         autoOpen: false,
         dialogClass: 'image-preview',
         modal: true,
-        height: 'auto',
-        width: 'auto'
+        height: '100',
+        width: '100'
     });
 
     jq('.image-preview-link').click(function (e) {
         e.preventDefault();
-        console.log('click');
         var url = e.target.getAttribute('data-image-url');
 
-        var img = jq('<img src="' + url + '" style="max-width: 500px; max-height: 400px;"/>');
+        jq('#previewImage').remove();
+        jq('#spinner').show();
+
+        var img = jq('<img id="previewImage" src="' + url + '" style="display: none"/>');
         img.load(function(){
-            console.log('loaded...');
-            imageDialog.dialog('open');
-            jq('.ui-widget-overlay.ui-front').bind('click', function(){
+            jq('#spinner').hide();
+
+            updatePositionAndSize(imageDialog, img)
+            document.body.onresize = function() {updatePositionAndSize(imageDialog, img);};
+
+            setTimeout(function () {
+                img.css('display', 'block');
+            }, 250);
+
+            jq('#imageDialog').bind('click', function(){
                 imageDialog.dialog('close');
             });
         });
 
-        jq('#imageDialog').html(img);
+        jq('#imageDialog').append(img);
+        imageDialog.dialog('open');
+        imageDialog.height(100);
+        imageDialog.width(100);
 
         jq('.ui-widget-overlay.ui-front').bind('click', function(){
             imageDialog.dialog('close');
         });
     });
+}
+
+function updatePositionAndSize(imageDialog, img) {
+    imageDialog.height(img.height() + 4);
+    imageDialog.width(img.width());
+    imageDialog.position({my: 'center', at: 'center', of: window});
 }
 
 function handleProgressWithSpinner(data, successCallback) {
