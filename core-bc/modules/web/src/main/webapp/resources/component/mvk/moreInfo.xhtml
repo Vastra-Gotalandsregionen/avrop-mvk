@@ -65,6 +65,10 @@
                     <td class="column-0">Totalt antal styck/uttag</td>
                     <td>#{item.noOfArticlesPerOrder}</td>
                 </tr>
+                <tr style="display: #{empty item.article.grossPrice ? 'none' : 'table-row'}">
+                    <td class="column-0">Pris per uttag</td>
+                    <td>#{item.article.grossPrice}</td>
+                </tr>
                 <tr>
                     <td class="column-0">Förskrivare</td>
                     <td>#{item.prescriber.prescriberName}</td>
