@@ -32,6 +32,9 @@ public class SessionFilter implements Filter {
 
     private static final String USER_ID_HEADER = "AJP_Subject_SerialNumber";
     private static final String SHIB_SESSION_ID_HEADER = "AJP_Shib-Session-ID";
+
+    // The object id is passed as a request parameter to the application and stored in the session. This filter detects
+    // when a changed object id is passed and uses that to invalidate the session.
     private static final String OBJECTID_PARAMETER = "objectId";
 
     private static final String START_PAGE_SUFFIX = "/order.xhtml";
@@ -62,7 +65,6 @@ public class SessionFilter implements Filter {
         }
 
         String subjectSerialNumber = request.getHeader(USER_ID_HEADER);
-//        subjectSerialNumber = "199001262394";
 
         handleSessionInvalidation(request, subjectSerialNumber);
 
@@ -83,6 +85,8 @@ public class SessionFilter implements Filter {
             return false;
         }
 
+        // As the code is written there will always be a session at this point but we don't want to rely on that - this
+        // method should be failsafe independently of what's been done before.
         HttpSession session = request.getSession(false);
 
         if (session != null) {
@@ -132,10 +136,10 @@ public class SessionFilter implements Filter {
             request.getSession().invalidate();
         }
 
-        String objectId = request.getParameter(OBJECTID_PARAMETER);
+        String objectIdFromRequestParam = request.getParameter(OBJECTID_PARAMETER);
 
-        if ("".equals(objectId)) {
-            objectId = null;
+        if ("".equals(objectIdFromRequestParam)) {
+            objectIdFromRequestParam = null;
         }
 
         String sessionObjectId = (String) request.getSession().getAttribute(OBJECTID_PARAMETER);
@@ -147,13 +151,15 @@ public class SessionFilter implements Filter {
             request.getSession().invalidate();
         }
 
-        if (objectId != null && !objectId.equals(sessionObjectId)) {
+        if (objectIdFromRequestParam != null && !objectIdFromRequestParam.equals(sessionObjectId)) {
             request.getSession().invalidate();
-            request.getSession().setAttribute(OBJECTID_PARAMETER, objectId);
+            request.getSession().setAttribute(OBJECTID_PARAMETER, objectIdFromRequestParam);
         } else if (request.getRequestURI().endsWith(START_PAGE_SUFFIX)) {
-            if (!EqualsBuilder.reflectionEquals(objectId, sessionObjectId)) {
+            // It is normal that objectIdFromRequestParam is null when page isn't the start page but on the start page
+            // the object id should always be passed if it exists.
+            if (!EqualsBuilder.reflectionEquals(objectIdFromRequestParam, sessionObjectId)) {
                 request.getSession().invalidate();
-                request.getSession().setAttribute(OBJECTID_PARAMETER, objectId);
+                request.getSession().setAttribute(OBJECTID_PARAMETER, objectIdFromRequestParam);
             }
         }
 
