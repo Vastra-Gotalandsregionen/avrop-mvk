@@ -49,4 +49,28 @@ public class ArticleWithSubArticlesModel {
     public String getTotalOrderSizeUnit() {
         return totalOrderSizeUnit;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ArticleWithSubArticlesModel that = (ArticleWithSubArticlesModel) o;
+
+        if (totalOrderSize != that.totalOrderSize) return false;
+        if (parentArticleName != null ? !parentArticleName.equals(that.parentArticleName) : that.parentArticleName != null)
+            return false;
+        if (prescriptionItemId != null ? !prescriptionItemId.equals(that.prescriptionItemId) : that.prescriptionItemId != null)
+            return false;
+        return totalOrderSizeUnit != null ? totalOrderSizeUnit.equals(that.totalOrderSizeUnit) : that.totalOrderSizeUnit == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = parentArticleName != null ? parentArticleName.hashCode() : 0;
+        result = 31 * result + (prescriptionItemId != null ? prescriptionItemId.hashCode() : 0);
+        result = 31 * result + totalOrderSize;
+        result = 31 * result + (totalOrderSizeUnit != null ? totalOrderSizeUnit.hashCode() : 0);
+        return result;
+    }
 }

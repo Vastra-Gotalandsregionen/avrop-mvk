@@ -4,7 +4,7 @@ var subArticlesPriority = {};
 
 app.$watch('jsonData', function (newVal, oldVal) {
     if (JSON.stringify(newVal) === JSON.stringify(realOldVal)) {
-        console.log("Nothing's changed...");
+        // Nothing's changed...
         return;
     }
     for (var outerIndex in newVal) {
@@ -97,4 +97,21 @@ jq('.circle-icon').click(function (e) {
     } else if (relevantElement.classList.contains('minus') && currentCount > 0) {
         app.jsonData[parentArticleIndex].subArticles[subArticleIndex].orderCount = Number(currentCount) - 1;
     }
+
+    makeUnselectable(e.target);
 });
+
+jq('.circle-icon-content').click(function (e) {
+    makeUnselectable(e.target);
+});
+
+function makeUnselectable(elem) {
+    if (typeof(elem) == 'string')
+        elem = document.getElementById(elem);
+    if (elem) {
+        elem.onselectstart = function() { return false; };
+        elem.style.MozUserSelect = "none";
+        elem.style.KhtmlUserSelect = "none";
+        elem.unselectable = "on";
+    }
+}

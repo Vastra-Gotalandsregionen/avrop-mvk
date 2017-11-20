@@ -85,6 +85,13 @@ public class SubArticleController {
             model.setTotalOrderSizeUnit(prescriptionItemType.getNoOfPackagesPerOrder() == 0
                     ? "artiklar" : "förpackningar");
 
+            if (articleWithSubArticlesModels != null && articleWithSubArticlesModels.contains(model)) {
+                // The model is present from previous user interactions. We then want to keep the distribution.
+                model = articleWithSubArticlesModels.get(articleWithSubArticlesModels.indexOf(model));
+                list.add(model);
+                continue;
+            }
+
             int nextOrderCountNumberToDistribute;
 
             Map<String, Map<String, OrderItemType>> latestOrderItemsByArticleNoAndPrescriptionItem = prescriptionItemInfo

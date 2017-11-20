@@ -815,7 +815,7 @@ select::-moz-focus-inner { /*Remove button padding in FF*/
 
 .short-number-input {
     padding: 6px;
-    width: 24px;
+    width: 28px;
 }
 
 table.sub-articles-table {
