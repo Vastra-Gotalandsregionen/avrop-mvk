@@ -54,4 +54,60 @@ public class UtilTest {
         XMLGregorianCalendar today = Util.toXmlGregorianCalendar((GregorianCalendar) calendar);
         assertFalse(Util.isBeforeToday(today));
     }
+
+    @Test
+    public void isOlderThanAYear() throws Exception {
+
+        // Today
+        GregorianCalendar gregorianCalendar = new GregorianCalendar();
+        assertFalse(Util.isOlderThanAYear(Util.toXmlGregorianCalendar(gregorianCalendar)));
+
+        // Exactly a year ago
+        gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.add(Calendar.YEAR, -1);
+        assertFalse(Util.isOlderThanAYear(Util.toXmlGregorianCalendar(gregorianCalendar)));
+
+        // A year ago minus one millisecond. The millisecond shouldn't matter since it's still the same day (except if
+        // this test is run the first millisecond of the day)
+        gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.add(Calendar.YEAR, -1);
+        gregorianCalendar.add(Calendar.MILLISECOND, -1);
+        assertFalse(Util.isOlderThanAYear(Util.toXmlGregorianCalendar(gregorianCalendar)));
+
+        // A year ago
+        gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.add(Calendar.YEAR, -1);
+        gregorianCalendar.add(Calendar.DATE, -1);
+        assertTrue(Util.isOlderThanAYear(Util.toXmlGregorianCalendar(gregorianCalendar)));
+    }
+
+    @Test
+    public void isAfterToday() throws Exception {
+
+        // Today
+        GregorianCalendar gregorianCalendar = new GregorianCalendar();
+        assertFalse(Util.isAfterToday(Util.toXmlGregorianCalendar(gregorianCalendar)));
+
+        // Tomorrow
+        gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.add(Calendar.DATE, 1);
+        assertTrue(Util.isAfterToday(Util.toXmlGregorianCalendar(gregorianCalendar)));
+
+        // The last millisecond of today, but still today.
+        gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.set(Calendar.HOUR_OF_DAY, 23);
+        gregorianCalendar.set(Calendar.MINUTE, 59);
+        gregorianCalendar.set(Calendar.SECOND, 59);
+        gregorianCalendar.set(Calendar.MILLISECOND, 999);
+        assertFalse(Util.isAfterToday(Util.toXmlGregorianCalendar(gregorianCalendar)));
+
+        // Add just one millisecond to previous section, making it tomorrow.
+        gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.set(Calendar.HOUR_OF_DAY, 23);
+        gregorianCalendar.set(Calendar.MINUTE, 59);
+        gregorianCalendar.set(Calendar.SECOND, 59);
+        gregorianCalendar.set(Calendar.MILLISECOND, 999);
+        gregorianCalendar.add(Calendar.MILLISECOND, 1); // The important detail.
+        assertTrue(Util.isAfterToday(Util.toXmlGregorianCalendar(gregorianCalendar)));
+    }
 }

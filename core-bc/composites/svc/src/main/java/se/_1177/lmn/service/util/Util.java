@@ -20,8 +20,14 @@ import java.util.regex.Pattern;
  */
 public class Util {
 
-    public static boolean isOlderThanAYear(XMLGregorianCalendar lastValidDate1) {
-        GregorianCalendar lastValidDateGregorian = lastValidDate1.toGregorianCalendar();
+    /**
+     * Checks whether the date (not timestamp) is before a year ago.
+     *
+     * @param xmlGregorianCalendar
+     * @return
+     */
+    public static boolean isOlderThanAYear(XMLGregorianCalendar xmlGregorianCalendar) {
+        GregorianCalendar lastValidDateGregorian = xmlGregorianCalendar.toGregorianCalendar();
 
         ZonedDateTime lastValidDateTime = lastValidDateGregorian.toZonedDateTime();
 

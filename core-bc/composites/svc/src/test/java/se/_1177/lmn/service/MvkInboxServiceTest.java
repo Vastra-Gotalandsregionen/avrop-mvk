@@ -1,6 +1,8 @@
 package se._1177.lmn.service;
 
 import freemarker.core.InvalidReferenceException;
+import mvk.crm.casemanagement.inbox.addmessage._2.rivtabp21.AddMessageResponderInterface;
+import mvk.crm.casemanagement.inbox.addmessageresponder._2.AddMessageType;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -25,6 +27,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author Patrik Björk
@@ -60,6 +66,82 @@ public class MvkInboxServiceTest {
         resourceAsStream.close();
 
         return baos.toString("UTF-8");
+    }
+
+    @Test
+    public void sendInboxMessage() throws Exception {
+
+        // Given
+        AddMessageResponderInterface mock = mock(AddMessageResponderInterface.class);
+
+        MvkInboxService mvkInboxService = new MvkInboxService(mock);
+
+        List<OrderRowType> orderRows = new ArrayList<>();
+        List<DeliveryChoiceType> deliveryChoices = new ArrayList<>();
+
+        ArticleType article1 = new ArticleType();
+        ArticleType article2 = new ArticleType();
+
+        OrderRowType item1 = new OrderRowType();
+        OrderRowType item2 = new OrderRowType();
+
+        article1.setArticleNo("1234");
+        article2.setArticleNo("4321");
+
+        article1.setArticleName("Artikalnamn1");
+        article2.setArticleName("Artikelnamn2");
+
+        article1.setProductArea(ProductAreaEnum.DIABETES);
+        article2.setProductArea(ProductAreaEnum.INKONTINENS);
+
+        item1.setArticle(article1);
+        item2.setArticle(article2);
+
+        item1.setNoOfPackages(3);
+        item2.setNoOfPackages(4);
+
+        orderRows.add(item1);
+        orderRows.add(item2);
+
+        DeliveryChoiceType choice1 = new DeliveryChoiceType();
+        DeliveryChoiceType choice2 = new DeliveryChoiceType();
+
+        choice1.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
+        choice2.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+
+        DeliveryPointType deliveryPoint = new DeliveryPointType();
+        deliveryPoint.setDeliveryPointAddress("Gatan 1");
+        deliveryPoint.setDeliveryPointName("Matnära");
+        deliveryPoint.setDeliveryPointPostalCode("12345");
+        deliveryPoint.setDeliveryPointCity("Ankeborg");
+        deliveryPoint.setCountryCode(CountryCodeEnum.SE);
+
+        choice1.setDeliveryPoint(deliveryPoint);
+
+        choice1.setDeliveryNotificationReceiver("070-2345678");
+        choice1.setDeliveryNotificationMethod(wrapInJAXBElement(DeliveryNotificationMethodEnum.SMS));
+
+        AddressType homeAddress = new AddressType();
+        homeAddress.setStreet("Gatan 37");
+        homeAddress.setPostalCode("43213");
+        homeAddress.setReceiver("Kalle Karlsson");
+        homeAddress.setDoorCode("4321");
+        homeAddress.setCity("Bullerbyn");
+        homeAddress.setPhone("031-123456");
+
+        choice2.setHomeDeliveryAddress(homeAddress);
+
+        deliveryChoices.add(choice1);
+        deliveryChoices.add(choice2);
+
+        item1.setDeliveryChoice(choice1);
+        item2.setDeliveryChoice(choice2);
+
+        // When
+        mvkInboxService.sendInboxMessage("191212121212", orderRows, "SE00000000000-0001");
+
+        // Then
+        verify(mock, times(1)).addMessage(any(AddMessageType.class));
     }
 
     @Test
