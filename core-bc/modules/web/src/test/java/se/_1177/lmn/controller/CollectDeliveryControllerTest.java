@@ -244,4 +244,14 @@ public class CollectDeliveryControllerTest {
         assertFalse(success);
     }
 
+    @Test
+    public void isAnyItemWhereAllowCollectIsTrue() {
+        assertTrue(collectDeliveryController.isAnyItemWhereAllowChoiceOfDeliveryPointIsTrue());
+    }
+
+    @Test
+    public void isAnyItemWhereAllowCollectIsFalse() {
+        assertFalse(collectDeliveryController.isAnyItemWhereAllowChoiceOfDeliveryPointIsFalse());
+    }
+
 }

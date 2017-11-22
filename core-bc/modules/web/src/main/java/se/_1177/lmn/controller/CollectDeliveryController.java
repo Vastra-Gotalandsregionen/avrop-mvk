@@ -248,38 +248,14 @@ public class CollectDeliveryController {
         return isAnyItemWhereAllowCollectIs(true);
     }
 
-    private boolean isAnyItemWhereAllowCollectIs(boolean findWherePropertyIs) {
-        List<OrderRowType> filteredOrderRows = cart.getOrderRows().stream()
+    boolean isAnyItemWhereAllowCollectIs(boolean findWherePropertyIs) {
+        return cart.getOrderRows().stream()
                 .filter(row -> row.getDeliveryChoice().getDeliveryMethod().equals(UTLÄMNINGSSTÄLLE))
-                .collect(Collectors.toList());
-
-        // At this point the order rows have their delivery method set, and we only allow one collect delivery
-        // alternative. Otherwise we would have to choose somehow. So we make it simple and disallow that.
-
-        List<PrescriptionItemType> prescriptionItemsInCart = prescriptionItemInfo
-                .getPrescriptionItems(filteredOrderRows);
-
-        for (PrescriptionItemType item : prescriptionItemsInCart) {
-
-            List<DeliveryAlternativeType> deliveryAlternatives = deliveryController
-                    .getPossibleDeliveryAlternatives(item)
-                    .stream()
-                    .filter(alternative -> alternative.getDeliveryMethod().equals(UTLÄMNINGSSTÄLLE))
-                    .collect(Collectors.toList());
-
-            if (deliveryAlternatives.size() > 1) {
-                throw new IllegalStateException("Multiple deliveryAlternativeTypes with UTLÄMNINGSSTÄLLE is not" +
-                        " allowed.");
-            }
-
-            if (deliveryAlternatives.stream()
-                    .filter(alternative -> alternative.isAllowChioceOfDeliveryPoints() == findWherePropertyIs)
-                    .collect(Collectors.toList()).size() > 0) {
-                return true;
-            }
-        }
-
-        return false;
+                .map(row -> prescriptionItemInfo.getPrescriptionItem(row))
+                .distinct()
+                .flatMap(item -> deliveryController.getPossibleDeliveryAlternatives(item).stream())
+                .filter(alternative -> alternative.getDeliveryMethod().equals(UTLÄMNINGSSTÄLLE))
+                .anyMatch(alternative -> alternative.isAllowChioceOfDeliveryPoints() == findWherePropertyIs);
     }
 
     /**
