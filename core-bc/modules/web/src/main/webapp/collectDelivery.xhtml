@@ -27,6 +27,10 @@
         <h:form id="collectDeliveryForm">
             <div>
                 <h3>Utlämningsställe</h3>
+                <h:panelGroup rendered="#{collectDeliveryController.anyItemWhereAllowChoiceOfDeliveryPointIsTrue and collectDeliveryController.anyItemWhereAllowChoiceOfDeliveryPointIsTrue}">
+                    <p>Observera att vissa produkter levereras till ett utlämningsställe som du själv väljer, medan andra produkter levereras till närmaste utlämningsställe baserat på din adress. Därför behöver du både välja utlämningsställe samt ange din adress.</p>
+                </h:panelGroup>
+
                 <h:panelGroup rendered="#{collectDeliveryController.anyItemWhereAllowChoiceOfDeliveryPointIsTrue}">
                     <p>
                         Ditt närmsta utlämningsställe baserat på ditt postnummer. <a class="toggle-trigger"

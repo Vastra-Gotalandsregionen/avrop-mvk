@@ -45,7 +45,7 @@
                         </ul>
                     </h:panelGroup>
                     <h:panelGroup layout="block" styleClass="" rendered="#{homeDeliveryController.notificationMandatory.size() gt 0}">
-                        <b>Produkter med val av aviseringssätt:</b>
+                        <b>Produkter med obligatoriskt val av aviseringssätt:</b>
                         <ul class="articles-info">
                             <ui:repeat
                                     value="#{homeDeliveryController.notificationMandatory}"
@@ -55,7 +55,7 @@
                         </ul>
                     </h:panelGroup>
                     <h:panelGroup layout="block" styleClass="" rendered="#{homeDeliveryController.notificationUnavailable.size() gt 0}">
-                        <b>Produkter utan val av avisering:</b>
+                        <b>Produkter utan val av avisering (syns därför inte på denna sida):</b>
                         <ul class="articles-info">
                             <ui:repeat
                                     value="#{homeDeliveryController.notificationUnavailable}"
@@ -73,50 +73,6 @@
                         <div class="clearfix">
                             <h:outputLabel for="notificationOrDoorDelivery">Välj avisering eller leverans utanför dörren.</h:outputLabel>
                         </div>
-                        <style>
-                            .notification-or-door-delivery {
-                                display: inline-block;
-                            }
-                            .notification-or-door-delivery td {
-                                padding-right: 24px;
-                            }
-                            .notification-or-door-delivery label {
-                                margin-left: 4px;
-                                position: relative;
-                                bottom: 6px;
-                            }
-                            .radio-group .alert {
-                                position: relative;
-                                bottom: 10px;
-                            }
-
-                            @media (max-width: 767px) {
-                                .radio-group .alert.small-screen {
-                                    display: block;
-                                    bottom: 0;
-                                    width: 258px;
-                                    margin: 0;
-                                }
-
-                                .radio-group .alert.field-error:after {
-                                    bottom: 100%;
-                                    left: 50%;
-                                    right: inherit;
-                                    top: inherit;
-                                    border: solid transparent;
-                                    content: " ";
-                                    height: 0;
-                                    width: 0;
-                                    position: absolute;
-                                    pointer-events: none;
-                                    border-color: rgba(242, 222, 222, 0);
-                                    border-bottom-color: #f2dede;
-                                    border-width: 8px;
-                                    margin-top: -8px;
-                                }
-                            }
-
-                        </style>
 
                         <h:selectOneRadio styleClass="notification-or-door-delivery" style="margin-top: 12px" id="notificationOrDoorDelivery" value="#{homeDeliveryController.notificationOrDoorDelivery}" required="true" requiredMessage="Val av Avisering eller Leverans utanför dörren saknas">
                             <f:ajax event="change" execute="notificationOrDoorDelivery" render="homeDeliveryForm:optionalSection"/>
@@ -130,19 +86,6 @@
 
                     <mvk:homeDeliveryNotifications id="optional" model="#{homeDeliveryController.notificationOptionalModel}" namespace="optional" rendered="#{homeDeliveryController.notificationOrDoorDelivery eq 'NOTIFICATION'}" />
 
-                    <!--<span class="toggle-trigger info-icon expand"
-                          data-toggle-for="notificationOptionalArticles" title="Visa artiklar"/>-->
-
-                    <h:panelGroup id="notificationOptionalArticles" class="expanded-content" style="display: block; margin: 1em 0" rendered="#{homeDeliveryController.isMultipleGroups()}">
-                        <b>Gäller följande produkter:</b>
-                        <ul class="articles-info">
-                            <ui:repeat
-                                    value="#{homeDeliveryController.notificationOptional}"
-                                    var="item">
-                                <li>#{item.article.articleNo} - #{item.article.articleName}</li>
-                            </ui:repeat>
-                        </ul>
-                    </h:panelGroup>
                 </h:panelGroup>
 
                 <h:panelGroup
@@ -161,17 +104,6 @@
                     </div>
 
                     <mvk:homeDeliveryNotifications id="mandatory" model="#{homeDeliveryController.notificationMandatoryModel}" namespace="mandatory" />
-
-                    <h:panelGroup id="notificationMandatoryArticles" class="expanded-content" style="display: block; margin: 1em 0" rendered="#{homeDeliveryController.isMultipleGroups()}">
-                        <b>Gäller följande produkter:</b>
-                        <ul class="articles-info">
-                            <ui:repeat
-                                    value="#{homeDeliveryController.notificationMandatory}"
-                                    var="item">
-                                <li>#{item.article.articleNo} - #{item.article.articleName}</li>
-                            </ui:repeat>
-                        </ul>
-                    </h:panelGroup>
 
                 </h:panelGroup>
 

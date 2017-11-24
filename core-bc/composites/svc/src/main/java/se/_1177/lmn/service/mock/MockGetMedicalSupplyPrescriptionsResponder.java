@@ -68,7 +68,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         SubjectOfCareType subjectOfCare = new SubjectOfCareType();
         subjectOfCare.setSubjectOfCareId(random.nextInt(1000) + "");
 
-        for (int i = 0; i <= 40; i++) {
+        for (int i = 0; i <= 80; i++) {
             addPrescriptionItem(random, subjectOfCare, random.nextBoolean());
         }
 

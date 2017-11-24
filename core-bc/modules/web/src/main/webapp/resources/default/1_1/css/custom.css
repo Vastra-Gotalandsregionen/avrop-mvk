@@ -352,6 +352,52 @@ ul.articles-info {
     width: 82px;
 }
 
+.notification-or-door-delivery {
+     display: inline-block;
+}
+
+.notification-or-door-delivery td {
+    padding-right: 24px;
+}
+
+.notification-or-door-delivery label {
+    margin-left: 4px;
+    position: relative;
+    bottom: 6px;
+}
+
+.radio-group .alert {
+    position: relative;
+    bottom: 10px;
+}
+
+@media (max-width: 767px) {
+    .radio-group .alert.small-screen {
+        display: block;
+        bottom: 0;
+        width: 258px;
+        margin: 0;
+    }
+
+    .radio-group .alert.field-error:after {
+        bottom: 100%;
+        left: 50%;
+        right: inherit;
+        top: inherit;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-color: rgba(242, 222, 222, 0);
+        border-bottom-color: #f2dede;
+        border-width: 8px;
+        margin-top: -8px;
+    }
+}
+
+
 .section {
     margin-bottom: 36px;
     position: relative;
