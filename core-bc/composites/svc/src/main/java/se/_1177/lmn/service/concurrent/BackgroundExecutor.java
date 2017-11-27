@@ -19,7 +19,7 @@ public class BackgroundExecutor {
 
     private static ExecutorService executorService;
 
-    private final int nThreads = 100;
+    private static final int N_THREADS = 100;
 
     @PreDestroy
     public void shutdown() {
@@ -36,7 +36,7 @@ public class BackgroundExecutor {
         threadFactory.setThreadGroupName("backgroundTasksGroup");
         threadFactory.setThreadNamePrefix("backgroundTask");
 
-        executorService = Executors.newFixedThreadPool(nThreads, threadFactory);
+        executorService = Executors.newFixedThreadPool(N_THREADS, threadFactory);
 
         return executorService;
     }
