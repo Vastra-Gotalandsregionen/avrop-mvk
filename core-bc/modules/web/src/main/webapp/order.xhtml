@@ -45,7 +45,7 @@
             <o:form includeRequestParams="true">
 
                 <h:panelGroup layout="block" rendered="#{empty orderController.medicalSupplyPrescriptions}" styleClass="alert alert-warning">
-                    Inga aktuella produkter hittades. Om du förväntat dig beställningsbara produkter, kontakta kundtjänst på #{utilController.customerServicePhoneNumber}.
+                    Inga förskrivna produkter hittades. Om du förväntat dig beställningsbara produkter, kontakta kundtjänst på #{utilController.customerServicePhoneNumber}.
                     <div><h:commandButton styleClass="button" action="#{orderController.reinit()}" value="Uppdatera"/> </div>
                 </h:panelGroup>
 
