@@ -131,7 +131,7 @@ public class OrderController {
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
 
-            String msg = "Dina förskrivna produkter kunde inte hämtas. Försök senare eller kontakta kundtjänst.";
+            String msg = "Dina förskrivna produkter kunde inte visas. Försök senare eller kontakta kundtjänst.";
 
             utilController.addErrorMessageWithCustomerServiceInfo(msg);
         }
