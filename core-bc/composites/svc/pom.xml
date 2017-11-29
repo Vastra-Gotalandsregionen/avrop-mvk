@@ -5,13 +5,13 @@
     <parent>
         <groupId>se.1177.lmn</groupId>
         <artifactId>core-bc</artifactId>
-        <version>3.0</version>
+        <version>3.0.1</version>
         <relativePath>../..</relativePath>
     </parent>
 
     <groupId>se.1177.lmn</groupId>
     <artifactId>svc</artifactId>
-    <version>3.0</version>
+    <version>3.0.1</version>
 
 
     <dependencies>
