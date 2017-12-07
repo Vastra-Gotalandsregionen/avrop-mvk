@@ -44,7 +44,7 @@
                                 <label for="zipInput">Postnummer</label>
                             </div>
 
-                            <h:inputText styleClass="postal-number" value="#{collectDeliveryController.zip}" id="zipInput"/>
+                            <h:inputText styleClass="postal-number" value="#{collectDeliveryController.zip}" id="zipInput" maxlength="6"/>
 
                             <h:commandButton styleClass="button" value="Sök" id="updateDeliverySelectItemsButton">
                                 <f:ajax onevent="function(data) {handleProgressWithSpinner(data, initCommon);}"
@@ -146,7 +146,7 @@
                                         <h:outputLabel for="smsInput" value="Mobiltelefon"/>
                                         <h:message for="smsInput" styleClass="small-screen alert alert-danger field-error"/>
                                     </div>
-                                    <h:inputText id="smsInput" value="#{collectDeliveryController.smsNumber}">
+                                    <h:inputText id="smsInput" value="#{collectDeliveryController.smsNumber}" maxlength="20">
                                         <f:ajax event="change"
                                                 execute="smsInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
                                                 render="collectDeliveryForm:notificationMethodRepeat:0:smsInput collectDeliveryForm:notificationMethodRepeat:1:smsInput collectDeliveryForm:notificationMethodRepeat:2:smsInput collectDeliveryForm:notificationMethodRepeat:3:smsInput collectDeliveryForm:notificationMethodRepeat:4:smsInput collectDeliveryForm:notificationMethodRepeat:5:smsInput"/>
@@ -162,7 +162,7 @@
                                         <h:message for="phoneInput" styleClass="small-screen alert alert-danger field-error"/>
                                     </div>
 
-                                    <h:inputText id="phoneInput" value="#{collectDeliveryController.phoneNumber}">
+                                    <h:inputText id="phoneInput" value="#{collectDeliveryController.phoneNumber}" maxlength="20">
                                         <f:ajax event="change"
                                                 execute="phoneInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
                                                 render="collectDeliveryForm:notificationMethodRepeat:0:phoneInput collectDeliveryForm:notificationMethodRepeat:1:phoneInput collectDeliveryForm:notificationMethodRepeat:2:phoneInput collectDeliveryForm:notificationMethodRepeat:3:phoneInput collectDeliveryForm:notificationMethodRepeat:4:phoneInput collectDeliveryForm:notificationMethodRepeat:5:phoneInput"/>
@@ -176,7 +176,7 @@
                                         <h:outputLabel for="emailInput" value="Epost"/>
                                         <h:message for="emailInput" styleClass="small-screen alert alert-danger field-error"/>
                                     </div>
-                                    <h:inputText id="emailInput" value="#{collectDeliveryController.email}">
+                                    <h:inputText id="emailInput" value="#{collectDeliveryController.email}" maxlength="100">
                                         <f:ajax event="change"
                                                 execute="emailInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
                                                 render="collectDeliveryForm:notificationMethodRepeat:0:emailInput collectDeliveryForm:notificationMethodRepeat:1:emailInput collectDeliveryForm:notificationMethodRepeat:2:emailInput collectDeliveryForm:notificationMethodRepeat:3:emailInput collectDeliveryForm:notificationMethodRepeat:4:emailInput collectDeliveryForm:notificationMethodRepeat:5:emailInput"/>
