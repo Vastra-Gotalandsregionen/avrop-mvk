@@ -42,14 +42,14 @@
 
                                             <h:inputText style="display: none" id="jsfInputRepeated"
                                                          styleClass="jsf-input-#{parentArticleStatus.index}-#{subArticleStatus.index}"
-                                                         value="#{subArticle.orderCount}"/>
+                                                         value="#{subArticle.orderCount}" maxlength="5"/>
 
                                             {{jsonData[#{parentArticleStatus.index}].subArticles[#{subArticleStatus.index}].name}}
                                         </td>
 
                                     <td class="sub-article-number-wrapper">
                                         <span class="circle-icon minus" data-parent-article-index="#{parentArticleStatus.index}" data-sub-article-index="#{subArticleStatus.index}"><span class="circle-icon-content">&#8211;</span></span>
-                                        <input autocomplete="off" type="text" onClick="this.select();" onkeypress="return event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57; " class="short-number-input"
+                                        <input autocomplete="off" maxlength="5" type="text" onClick="this.select();" onkeypress="return event.charCode &gt;= 48 &amp;&amp; event.charCode &lt;= 57; " class="short-number-input"
                                                v-model="jsonData[#{parentArticleStatus.index}].subArticles[#{subArticleStatus.index}].orderCount" tabindex="1#{parentArticleStatus.index}#{subArticleStatus.index}"/>
                                         <span class="circle-icon plus" data-parent-article-index="#{parentArticleStatus.index}" data-sub-article-index="#{subArticleStatus.index}"><span class="circle-icon-content">+</span></span>
                                     </td>
