@@ -3,7 +3,7 @@ counties:
     getMedicalSupplyDeliveryPointsAddress: http://localhost:18080/GetMedicalSupplyDeliveryPoints
     getMedicalSupplyPrescriptionsAddress: http://localhost:18080/GetMedicalSupplyPrescriptions
     registerMedicalSupplyOrderAddress: http://localhost:18080/RegisterMedicalSupplyOrder
-    customerServicePhoneNumber: 010-441 30 90
+    customerServicePhoneNumber: 010-441 31 90
     customerServiceInfo: <br/>Kundtjänst Stomi- och diabetesprodukter:<br/>041234234 vardagar 08:00 till 16:30 (onsdag till 10:00)
     rtjpLogicalAddress: SE2222222222-E000000000001
     receptionHsaId: SE2222222222-E000000000001
