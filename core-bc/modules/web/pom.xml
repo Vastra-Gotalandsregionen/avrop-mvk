@@ -5,17 +5,17 @@
     <parent>
         <groupId>se.1177.lmn</groupId>
         <artifactId>core-bc</artifactId>
-        <version>3.0.2</version>
+        <version>3.0.3</version>
         <relativePath>../..</relativePath>
     </parent>
 
     <groupId>se.1177.lmn</groupId>
     <artifactId>web</artifactId>
-    <version>3.0.2</version>
+    <version>3.0.3</version>
     <packaging>war</packaging>
 
     <build>
-        <finalName>bestallning</finalName>
+        <finalName>bestallning10</finalName>
 
         <plugins>
             <plugin>
@@ -50,6 +50,7 @@
             <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>se.1177.lmn</groupId>
             <artifactId>svc</artifactId>
