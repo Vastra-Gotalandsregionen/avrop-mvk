@@ -33,6 +33,8 @@ import java.util.stream.Collectors;
 @Service
 public class MvkInboxService {
 
+    private static final String SOURCE_SYSTEM = "ALAR-123LP10";
+
     private AddMessageResponderInterface addMessageResponderInterface;
 
     public MvkInboxService(AddMessageResponderInterface addMessageResponderInterface) {
@@ -81,7 +83,7 @@ public class MvkInboxService {
         request.setMessage(messageCase);
         request.setSubjectOfCareId(pid);
         request.setNotify(false);
-        request.setSourceSystem(receptionHsaId);
+        request.setSourceSystem(SOURCE_SYSTEM);
 
         AddMessageResponseType response = null;
         try {
