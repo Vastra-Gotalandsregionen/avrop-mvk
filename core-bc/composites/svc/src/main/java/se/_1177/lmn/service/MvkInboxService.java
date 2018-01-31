@@ -14,7 +14,6 @@ import riv.crm.selfservice.medicalsupply._0.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._0.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._0.DeliveryPointType;
 import riv.crm.selfservice.medicalsupply._0.OrderRowType;
-import riv.crm.selfservice.medicalsupply._0.PrescriptionItemType;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -33,6 +32,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class MvkInboxService {
+
+    private static final String SOURCE_SYSTEM = "ALAR-123";
 
     private AddMessageResponderInterface addMessageResponderInterface;
 
@@ -82,7 +83,7 @@ public class MvkInboxService {
         request.setMessage(messageCase);
         request.setSubjectOfCareId(pid);
         request.setNotify(false);
-        request.setSourceSystem(receptionHsaId);
+        request.setSourceSystem(SOURCE_SYSTEM);
 
         AddMessageResponseType response = null;
         try {
