@@ -83,14 +83,10 @@
                                             </div>
                                         </h:panelGroup>
                                         <h:panelGroup layout="block" class="alert-text" rendered="#{item.article.isOrderable and utilController.isAfterToday(item.nextEarliestOrderDate)}">
-                                            Kan beställas
+                                            Nästa uttag kan beställas tidigast
                                             <h:outputText value="#{utilController.toDate(item.nextEarliestOrderDate)}">
                                                 <f:convertDateTime pattern="yyyy-MM-dd" timeZone="Europe/Stockholm"/>
                                             </h:outputText>.
-                                            <span class="toggle-trigger info-icon expand" data-toggle-for="orderTimingInfo#{status.index}"/>
-                                            <div id="orderTimingInfo#{status.index}" class="expanded-content" style="display: none;">
-                                                Nästa möjliga uttag
-                                            </div>
                                         </h:panelGroup>
                                         <div>#{item.article.articleName}</div>
                                     </div>
