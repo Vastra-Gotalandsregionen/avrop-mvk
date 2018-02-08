@@ -23,7 +23,7 @@
             <div class="input-group row clearfix">
                 <div class="notification-method-input-wrapper input-group">
                     <label for="chosenDeliveryNotificationMethod" class="empty-label">&#160;</label>
-                    <span class="before-select">Avi:n skickas som #{not empty item.article.articleName ? '('.concat(item.article.articleName).concat(')') : ''}</span>
+                    <span class="before-select">Aviseringssätt #{not empty item.article.articleName ? '('.concat(item.article.articleName).concat(')') : ''}</span>
                     <h:selectOneMenu id="chosenDeliveryNotificationMethod"
                                      styleClass="notification-method-select"
                                      value="#{model.chosenDeliveryNotificationMethod[item]}"

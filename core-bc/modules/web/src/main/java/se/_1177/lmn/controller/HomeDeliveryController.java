@@ -167,7 +167,7 @@ public class HomeDeliveryController {
         boolean validateOptionalModel;
         if (getNotificationOptional().size() > 0) {
             if (notificationOrDoorDelivery == null) {
-                addMessage("Val av Avisering eller Leverans utanför dörren saknas", "notificationOrDoorDelivery");
+                addMessage("Val av Leverans utanför dörren eller Avisering saknas", "notificationOrDoorDelivery");
                 return "homeDelivery";
             }
 

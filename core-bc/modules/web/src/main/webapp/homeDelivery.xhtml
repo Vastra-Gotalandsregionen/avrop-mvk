@@ -11,7 +11,7 @@
 
 <ui:composition template="WEB-INF/xhtml/template/wideContent.xhtml">
 
-    <ui:define name="currentPage">Hemleverans</ui:define>
+    <ui:define name="currentPage">Hemleverans eller annan leveransadress</ui:define>
 
     <ui:define name="boxContent">
 
@@ -22,7 +22,7 @@
             <div class="page-introduction">
                 <div>
                     <p>
-                        Kontrollera dina adressuppgifter.
+                        Kontrollera dina adressuppgifter, och vid behov ändra till önskad leveransadress.
                     </p>
                 </div>
             </div>
@@ -74,10 +74,10 @@
                             <h:outputLabel for="notificationOrDoorDelivery">Välj avisering eller leverans utanför dörren.</h:outputLabel>
                         </div>
 
-                        <h:selectOneRadio styleClass="notification-or-door-delivery" style="margin-top: 12px" id="notificationOrDoorDelivery" value="#{homeDeliveryController.notificationOrDoorDelivery}" required="true" requiredMessage="Val av Avisering eller Leverans utanför dörren saknas">
+                        <h:selectOneRadio styleClass="notification-or-door-delivery" style="margin-top: 12px" id="notificationOrDoorDelivery" value="#{homeDeliveryController.notificationOrDoorDelivery}" required="true" requiredMessage="Val av Leverans utanför dörren eller Avisering saknas">
                             <f:ajax event="change" execute="notificationOrDoorDelivery" render="homeDeliveryForm:optionalSection"/>
-                            <f:selectItem itemValue="NOTIFICATION" itemLabel="Avisering" />
                             <f:selectItem itemValue="DOOR" itemLabel="Leverans utanför dörren"/>
+                            <f:selectItem itemValue="NOTIFICATION" itemLabel="Avisering" />
                         </h:selectOneRadio>
 
                         <h:message for="notificationOrDoorDelivery" styleClass="alert alert-danger field-error"/>
@@ -119,8 +119,7 @@
                 <div id="dialog" title="Portkod saknas" style="display: none;">
                     <div class="section">
                         <p>Hej!</p>
-                        <p>Det ser ut som du kanske har glömt fylla i din portkod? Om du har portkod till ditt hus måste du fylla i det för att ditt paket ska
-                            kunna levereras.</p>
+                        <p>Det ser ut som du kanske har glömt fylla i din portkod? Om du har portkod till din leveransadress måste du fylla i den för att ditt paket ska kunna levereras.</p>
                         <p>Om du inte har någon portkod så är det bara att trycka på fortsätt.</p>
                     </div>
 
