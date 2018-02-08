@@ -28,13 +28,13 @@
 
             <h:form>
 
-                <div class="delivery-options-wrapper clearfix">
+                <div class="delivery-options-wrapper">
                     <!-- If at least one method fits all. -->
                     <h:panelGroup rendered="#{deliveryController.anyDeliveryMethodFitsAll()}">
 
                         <!-- If any delivery method is disabled, inform the user. -->
                         <h:panelGroup rendered="#{(not deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.hemleveransEnum)) or (not deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.utlamningsstalleEnum))}">
-                            Obs. För de valda produkterna är endast ett leveranssätt möjligt.
+                            Observera att för dina valda produkter är endast ett av leveranssätten möjligt.
                         </h:panelGroup>
 
 
@@ -90,7 +90,7 @@
                     <!-- No single delivery method fits all. -->
                     <h:panelGroup rendered="#{not (deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.hemleveransEnum) or deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.utlamningsstalleEnum))}">
                         <p>
-                            Inget enskilt leveranssätt är tillgängligt för samtliga valda  produkter. Du behöver därför ange leveranssätt för de enskilda produkterna. Endast valbara alternativ är klickbara.
+                            <strong>Inget enskilt leveranssätt är möjligt för dina valda produkter. Kan du inte välja leveranssätt, gäller det som är förvalt. Annars behöver du själv välja ett av alternativen.</strong>
                         </p>
 
                         <table class="avrop-table my-products-table">
@@ -98,7 +98,7 @@
                             <tr>
                                 <td class="column-1">Produktgrupp/Artikel-nr.</td>
                                 <td class="column-2">Benämning</td>
-                                <td>Valt leveranssätt</td>
+                                <td>Leveranssätt</td>
                             </tr>
                             </thead>
                             <tbody>
