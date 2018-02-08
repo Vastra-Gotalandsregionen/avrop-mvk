@@ -90,7 +90,7 @@ public class UtilController {
         }
 
         if (Util.isBeforeToday(expiredItem.getLastValidDate())) {
-            return "För gammal förskrivning";
+            return "Utgången förskrivning";
         }
 
         if (expiredItem.getStatus().equals(StatusEnum.UTGÅTT)) {
