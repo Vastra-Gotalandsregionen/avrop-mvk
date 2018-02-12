@@ -44,8 +44,8 @@
                     <table class="avrop-table my-products-table contentFontSize verify-delivery" style="table-layout: fixed">
                         <thead>
                         <tr>
-                            <td class="column-1">Produktgrupp/Artikel-nr.</td>
-                            <td class="column-2">Benämning</td>
+                            <td class="column-1">Produktgrupp</td>
+                            <td class="column-2">Artikel</td>
                             <td class="column-3">Uttag kvar / antal uttag</td>
                         </tr>
                         </thead>
@@ -53,11 +53,12 @@
                         <ui:repeat value="#{prescriptionItemInfo.getPrescriptionItems(cart.orderRows)}" var="item" varStatus="status">
                             <tr>
                                 <td>
-                                    #{utilController.capitalizeFully(item.article.productArea)}<br/>
-                                    #{item.article.articleNo}
+                                    #{utilController.capitalizeFully(item.article.productArea)}
                                 </td>
                                 <td>
-                                    <span class="bold">#{item.article.articleName}</span>
+                                    <div class="bold">#{item.article.articleName}</div>
+
+                                    <div>Artikel-nr: #{item.article.articleNo}</div>
 
                                     <mvk:moreInfo item="#{item}"/>
 
@@ -92,8 +93,8 @@
                     <table class="avrop-table my-products-table contentFontSize verify-delivery" style="table-layout: fixed">
                         <thead>
                         <tr>
-                            <td class="column-1">Produktgrupp/Artikel-nr.</td>
-                            <td class="column-2">Benämning</td>
+                            <td class="column-1">Produktgrupp</td>
+                            <td class="column-2">Artikel</td>
                             <td class="column-3">Uttag kvar / antal uttag</td>
                             <td class="column-4">Leveransinfo</td>
                         </tr>
@@ -102,11 +103,12 @@
                         <ui:repeat value="#{prescriptionItemInfo.getPrescriptionItems(cart.orderRows)}" var="item" varStatus="status">
                             <tr>
                                 <td>
-                                    #{utilController.capitalizeFully(item.article.productArea)}<br/>
-                                    #{item.article.articleNo}
+                                    #{utilController.capitalizeFully(item.article.productArea)}
                                 </td>
                                 <td>
-                                    <span class="bold">#{item.article.articleName}</span>
+                                    <div class="bold">#{item.article.articleName}</div>
+
+                                    <div>Artikel-nr: #{item.article.articleNo}</div>
                                     <mvk:moreInfo item="#{item}"/>
 
                                     <h:panelGroup class="paragraph" layout="block" rendered="#{not empty item.subArticle}">
