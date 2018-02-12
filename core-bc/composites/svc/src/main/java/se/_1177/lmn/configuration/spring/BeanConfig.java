@@ -36,6 +36,8 @@ import java.util.Map;
 @PropertySource("classpath:lakemedelsnara.properties")
 public class BeanConfig {
 
+    private final String COUNTIES_CONFIGURATION_FILE = "counties-configuration-10.yml";
+
     @Autowired
     private Environment env;
 
@@ -86,7 +88,7 @@ public class BeanConfig {
 
         ClassLoader classLoader = this.getClass().getClassLoader();
 
-        try (InputStream inputStream = classLoader.getResourceAsStream("counties-configuration.yml")) {
+        try (InputStream inputStream = classLoader.getResourceAsStream(COUNTIES_CONFIGURATION_FILE)) {
 
             Yaml yaml = new Yaml();
 

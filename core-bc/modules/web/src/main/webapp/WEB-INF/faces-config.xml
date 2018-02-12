@@ -5,15 +5,19 @@
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
               version="2.0">
 
-  <application>
-      <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
-      <locale-config>
-          <default-locale>sv</default-locale>
-          <supported-locale>sv</supported-locale>
-          <supported-locale>sv_SE_01</supported-locale>
-          <supported-locale>sv_SE_12</supported-locale>
-          <supported-locale>sv_SE_14</supported-locale>
-      </locale-config>
-  </application>
+    <application>
+        <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+        <locale-config>
+            <default-locale>sv</default-locale>
+            <supported-locale>sv</supported-locale>
+            <supported-locale>sv_SE_01</supported-locale>
+            <supported-locale>sv_SE_12</supported-locale>
+            <supported-locale>sv_SE_14</supported-locale>
+        </locale-config>
+    </application>
+
+    <factory>
+        <exception-handler-factory>se._1177.lmn.faces.CustomExceptionHandlerFactory</exception-handler-factory>
+    </factory>
 
 </faces-config>
