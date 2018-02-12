@@ -14,7 +14,7 @@ public class Constants {
     public static final String CUSTOMER_SERVICE_PHONE = "customer.service.phone";
 
     public static final String PRODUCTS_FETCH_DEFAULT_ERROR = "products.fetch.default.error";
-    public static final String PRODUCTS_NONE_FOUND = "products.none.found";
+    public static final String PRODUCTS_FETCH_NONE_FOUND = "products.fetch.none.found";
 
     public static final String ORDER_CONFIRMATION = "order.confirmation";
 }

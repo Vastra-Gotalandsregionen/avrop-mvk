@@ -45,7 +45,7 @@
             <o:form includeRequestParams="true">
 
                 <h:panelGroup layout="block" rendered="#{empty orderController.medicalSupplyPrescriptions}" styleClass="alert alert-warning">
-                    #{msg['products.none.found']}
+                    #{msg['products.fetch.none.found']}
                     <div><h:commandButton styleClass="button" action="#{orderController.reinit()}" value="Uppdatera"/> </div>
                 </h:panelGroup>
 
