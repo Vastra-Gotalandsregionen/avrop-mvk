@@ -235,6 +235,18 @@ ul.caseDetailToolbar .icon.toolbar_pdf,ul.toolbar .icon.toolbar_pdf {
     padding: 15px;
 }
 
+.alert li {
+    margin-bottom: 16px;
+}
+
+.alert li:last-child {
+    margin-bottom: 0;
+}
+
+ul.alert {
+    margin: 0;
+}
+
 .alert.field-error {
     padding: 4px 8px;
     margin-left: 16px;

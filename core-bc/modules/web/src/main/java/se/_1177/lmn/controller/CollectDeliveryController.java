@@ -16,6 +16,7 @@ import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._1.DeliveryPointType;
 import riv.crm.selfservice.medicalsupply._1.OrderRowType;
 import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._1.ResultCodeEnum;
 import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._1.GetMedicalSupplyDeliveryPointsResponseType;
 import se._1177.lmn.controller.model.AddressModel;
@@ -670,7 +671,12 @@ public class CollectDeliveryController {
             GetMedicalSupplyDeliveryPointsResponseType medicalSupplyDeliveryPoints;
             try {
                 medicalSupplyDeliveryPoints = lmnService.getMedicalSupplyDeliveryPoints(provider, zip);
-                deliveryPointsPerProvider.put(provider, medicalSupplyDeliveryPoints.getDeliveryPoint());
+
+                if (medicalSupplyDeliveryPoints.getResultCode().equals(ResultCodeEnum.OK)) {
+                    deliveryPointsPerProvider.put(provider, medicalSupplyDeliveryPoints.getDeliveryPoint());
+                } else {
+                    utilController.addErrorMessageWithCustomerServiceInfo("Ett fel mot underliggande system inträffade. Försök senare eller kontakta kundtjänst.");
+                }
             } catch (SOAPFaultException e) {
                 LOGGER.error(e.getMessage(), e);
 

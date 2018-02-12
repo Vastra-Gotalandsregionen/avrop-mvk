@@ -45,7 +45,7 @@
             <o:form includeRequestParams="true">
 
                 <h:panelGroup layout="block" rendered="#{empty orderController.medicalSupplyPrescriptions}" styleClass="alert alert-warning">
-                    Inga förskrivna produkter hittades. Om du förväntat dig beställningsbara produkter, kontakta kundtjänst på #{utilController.customerServicePhoneNumber}.
+                    #{msg['products.none.found']}
                     <div><h:commandButton styleClass="button" action="#{orderController.reinit()}" value="Uppdatera"/> </div>
                 </h:panelGroup>
 
@@ -79,7 +79,7 @@
                                             Ej beställningsbar
                                             <span class="toggle-trigger info-icon expand" data-toggle-for="notOrderable#{status.index}"/>
                                             <div id="notOrderable#{status.index}" class="expanded-content" style="display: none;">
-                                                Kontakta kundtjänst på telefon #{utilController.customerServicePhoneNumber} vid eventuella frågor.
+                                                Kontakta kundtjänst på telefon #{msg['customer.service.phone']} vid eventuella frågor.
                                             </div>
                                         </h:panelGroup>
                                         <h:panelGroup layout="block" class="alert-text" rendered="#{item.article.isOrderable and utilController.isAfterToday(item.nextEarliestOrderDate)}">
@@ -129,10 +129,8 @@
                                 </td>
                             </tr>
                         </ui:repeat>
-
                         </tbody>
                     </table>
-
                 </h:panelGroup>
 
                 <hr/>

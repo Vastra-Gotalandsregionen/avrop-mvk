@@ -9,10 +9,16 @@
 
     <ui:define name="boxContent">
         <h:form>
-            <div class="alert alert-danger">
-                Ett tekniskt fel har inträffat. Gå tillbaka till <h:commandLink action="order?faces-redirect=true&amp;includeViewParams=true">startsidan</h:commandLink>.
-                <br/>
-                <h:outputText escape="false" value="#{utilController.customerServiceInfo}"/>
+            <div>
+                <ul class="alert alert-danger">
+                    <li>
+                        Ett tekniskt fel har inträffat. Gå tillbaka till <h:commandLink action="order?faces-redirect=true&amp;includeViewParams=true">startsidan</h:commandLink>.
+                    </li>
+                    <li>
+                        <h:outputText escape="false" value="#{messageController.getMessage('customer.service.info')}"/>
+                    </li>
+                </ul>
+
             </div>
         </h:form>
     </ui:define>

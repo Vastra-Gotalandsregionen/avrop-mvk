@@ -42,6 +42,9 @@ public class UserProfileController {
     @Autowired
     private UtilController utilController;
 
+    @Autowired
+    private LocaleController localeController;
+
     private GetUserProfileResponseType userProfileResponse;
     private GetUserProfileResponseType userProfileResponseLoggedInUser;
     private GetUserProfileByAgentResponseType userProfileByAgentResponse;
@@ -128,6 +131,7 @@ public class UserProfileController {
 
             this.userProfile = userProfile;
             ThreadLocalStore.setCountyCode(userProfile.getCountyCode());
+            this.localeController.setLanguageVariant(userProfile.getCountyCode());
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);

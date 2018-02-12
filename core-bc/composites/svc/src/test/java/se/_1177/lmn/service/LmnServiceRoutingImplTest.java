@@ -70,20 +70,14 @@ public class LmnServiceRoutingImplTest {
                 mdp10,
                 rms10,
                 "theLogicalAddress" + key10,
-                "012-123456" + key10,
-                "Kontakta kundtjänst på 012-123456..." + key10,
-                "SE21341234-234234234" + key10,
-                "Tack för din beställning..." + key10));
+                "SE21341234-234234234" + key10));
 
         countyCodeToLmnService.put(key20, new LmnServiceImpl(
                 msdp20,
                 mdp20,
                 rms20,
                 "theLogicalAddress" + key20,
-                "012-123456" + key20,
-                "Kontakta kundtjänst på 012-123456..." + key20,
-                "SE21341234-234234234" + key20,
-                "Tack för din beställning..." + key20));
+                "SE21341234-234234234" + key20));
 
         lmnServiceRouting = new LmnServiceRoutingImpl(countyCodeToLmnService);
     }
@@ -153,28 +147,6 @@ public class LmnServiceRoutingImplTest {
     }
 
     @Test
-    public void getCustomerServicePhoneNumber() throws Exception {
-        // Given
-        ThreadLocalStore.setCountyCode("10");
-
-        // When
-        String customerServicePhoneNumber = lmnServiceRouting.getCustomerServicePhoneNumber();
-
-        assertTrue(customerServicePhoneNumber.endsWith(key10));
-    }
-
-    @Test
-    public void getCustomerServiceInfo() throws Exception {
-        // Given
-        ThreadLocalStore.setCountyCode("20");
-
-        // When
-        String customerServiceInfo = lmnServiceRouting.getCustomerServiceInfo();
-
-        assertTrue(customerServiceInfo.endsWith(key20));
-    }
-
-    @Test
     public void getReceptionHsaId() throws Exception {
         // Given
         ThreadLocalStore.setCountyCode("10");
@@ -183,17 +155,6 @@ public class LmnServiceRoutingImplTest {
         String receptionHsaId = lmnServiceRouting.getReceptionHsaId();
 
         assertTrue(receptionHsaId.endsWith(key10));
-    }
-
-    @Test
-    public void getConfirmationMessage() throws Exception {
-        // Given
-        ThreadLocalStore.setCountyCode("20");
-
-        // When
-        String confirmationMessage = lmnServiceRouting.getConfirmationMessage();
-
-        assertTrue(confirmationMessage.endsWith(key20));
     }
 
 }

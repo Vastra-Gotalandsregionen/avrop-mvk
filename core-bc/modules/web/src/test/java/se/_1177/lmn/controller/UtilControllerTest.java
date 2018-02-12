@@ -1,6 +1,8 @@
 package se._1177.lmn.controller;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -9,8 +11,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Patrik Björk
@@ -18,6 +23,19 @@ import static org.junit.Assert.*;
 public class UtilControllerTest {
 
     private UtilController utilController = new UtilController();
+
+    @Before
+    public void setup() {
+        LocaleController localeController = mock(LocaleController.class);
+        when(localeController.getLocale()).thenReturn(new Locale("sv", "SE", "14"));
+
+        MessageController messageController = new MessageController();
+        ReflectionTestUtils.setField(messageController, "localeController", localeController);
+
+        messageController.init();
+
+        ReflectionTestUtils.setField(utilController, "messageController", messageController);
+    }
 
     @Test
     public void toDate() throws Exception {
@@ -79,6 +97,11 @@ public class UtilControllerTest {
         assertEquals("19121212-1212",   utilController.toSubjectOfCareIdWithHyphen("19121212-1212"));
         assertEquals("asdfjal",         utilController.toSubjectOfCareIdWithHyphen("asdfjal"));
         assertEquals(null,              utilController.toSubjectOfCareIdWithHyphen(null));
+    }
+
+    @Test
+    public void getCustomerServiceInfo() {
+        assertEquals("Info...", utilController.getCustomerServiceInfo());
     }
 
 }

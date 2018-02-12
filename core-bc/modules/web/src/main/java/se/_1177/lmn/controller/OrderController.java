@@ -32,6 +32,7 @@ import java.util.Set;
 
 import static se._1177.lmn.service.util.CartUtil.createOrderRow;
 import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
+import static se._1177.lmn.service.util.Constants.PRODUCTS_FETCH_DEFAULT_ERROR;
 
 /**
  * @author Patrik Björk
@@ -65,6 +66,9 @@ public class OrderController {
 
     @Autowired
     private SubArticleController subArticleController;
+
+    @Autowired
+    private MessageController messageController;
 
     private MedicalSupplyPrescriptionsHolder medicalSupplyPrescriptions;
 
@@ -131,7 +135,7 @@ public class OrderController {
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
 
-            String msg = "Dina förskrivna produkter kunde inte visas.";
+            String msg = messageController.getMessage(PRODUCTS_FETCH_DEFAULT_ERROR);
 
             utilController.addErrorMessageWithCustomerServiceInfo(msg);
         }

@@ -5,11 +5,8 @@ public class County {
     private String getMedicalSupplyDeliveryPointsAddress;
     private String getMedicalSupplyPrescriptionsAddress;
     private String registerMedicalSupplyOrderAddress;
-    private String customerServicePhoneNumber;
-    private String customerServiceInfo;
     private String rtjpLogicalAddress;
     private String receptionHsaId;
-    private String confirmationMessage;
 
     public String getCountyCode() {
         return countyCode;
@@ -43,22 +40,6 @@ public class County {
         this.registerMedicalSupplyOrderAddress = registerMedicalSupplyOrderAddress;
     }
 
-    public String getCustomerServicePhoneNumber() {
-        return customerServicePhoneNumber;
-    }
-
-    public void setCustomerServicePhoneNumber(String customerServicePhoneNumber) {
-        this.customerServicePhoneNumber = customerServicePhoneNumber;
-    }
-
-    public String getCustomerServiceInfo() {
-        return customerServiceInfo;
-    }
-
-    public void setCustomerServiceInfo(String customerServiceInfo) {
-        this.customerServiceInfo = customerServiceInfo;
-    }
-
     public String getRtjpLogicalAddress() {
         return rtjpLogicalAddress;
     }
@@ -73,13 +54,5 @@ public class County {
 
     public void setReceptionHsaId(String receptionHsaId) {
         this.receptionHsaId = receptionHsaId;
-    }
-
-    public String getConfirmationMessage() {
-        return confirmationMessage;
-    }
-
-    public void setConfirmationMessage(String confirmationMessage) {
-        this.confirmationMessage = confirmationMessage;
     }
 }

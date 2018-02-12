@@ -10,7 +10,6 @@ import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply._1.StatusEnum;
-import se._1177.lmn.service.LmnService;
 import se._1177.lmn.service.util.Util;
 
 import javax.faces.application.FacesMessage;
@@ -21,6 +20,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
+import static se._1177.lmn.service.util.Constants.CUSTOMER_SERVICE_INFO;
 
 /**
  * Utility controller mainly called from the views.
@@ -51,7 +52,7 @@ public class UtilController {
     private String mvkOtherServicesLink;
 
     @Autowired
-    private LmnService lmnService;
+    private MessageController messageController;
 
     public Date toDate(XMLGregorianCalendar calendar) {
         if (calendar == null) {
@@ -166,11 +167,7 @@ public class UtilController {
     }
 
     public String getCustomerServiceInfo() {
-        return lmnService.getCustomerServiceInfo();
-    }
-
-    public String getConfirmationMessage() {
-        return lmnService.getConfirmationMessage();
+        return messageController.getMessage(CUSTOMER_SERVICE_INFO);
     }
 
     public String getBackToOwnProfileLink() {
@@ -197,10 +194,6 @@ public class UtilController {
         return mvkOtherServicesLink;
     }
 
-    public String getCustomerServicePhoneNumber() {
-        return lmnService.getCustomerServicePhoneNumber();
-    }
-
     public void addErrorMessageWithCustomerServiceInfo(String text) {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
@@ -210,6 +203,8 @@ public class UtilController {
 
             String customerServiceInfo = getCustomerServiceInfo();
 
+            // Remove the last message if it is equal to the customerServiceInfo message. It will be added last in this
+            // method.
             while (messages.hasNext()) {
                 FacesMessage next = messages.next();
 

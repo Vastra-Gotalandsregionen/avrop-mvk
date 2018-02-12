@@ -35,11 +35,5 @@ public interface LmnService {
 
     DeliveryPointType getDeliveryPointById(String deliveryPointId);
 
-    String getCustomerServicePhoneNumber();
-
-    String getCustomerServiceInfo();
-
     String getReceptionHsaId();
-
-    String getConfirmationMessage();
 }

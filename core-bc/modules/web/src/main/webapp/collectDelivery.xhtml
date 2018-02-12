@@ -20,7 +20,7 @@
             <h:panelGroup layout="block" rendered="#{collectDeliveryController.showStandardErrorMessage}" styleClass="alert alert-danger">
                 Utlämningsställen för postnumret kunde inte hämtas. Försök med ett annat postnummer eller kontakta kundtjänst.
                 <br/>
-                <h:outputText escape="false" value="#{utilController.customerServiceInfo}"/>
+                <h:outputText escape="false" value="#{msg['customer.service.info']}" />
             </h:panelGroup>
         </h:panelGroup>
 

@@ -39,7 +39,6 @@ public class MockGetUserProfileResponder implements GetUserProfileResponderInter
         userProfile.setStreetAddress("Gatan 47");
         userProfile.setZip("42137");
         userProfile.setSubjectOfCareId(ssn);
-//        userProfile.setCountyCode("1234");
         userProfile.setCountyCode("14");
 
         response.setUserProfile(userProfile);
