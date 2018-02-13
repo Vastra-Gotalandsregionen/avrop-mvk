@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
@@ -103,6 +104,19 @@ public class UtilController {
 
     public static String capitalizeFully(String string) {
         return WordUtils.capitalizeFully(string);
+    }
+
+    public static String mapToText(String deliveryMethod) {
+        DeliveryMethodEnum methodEnum = DeliveryMethodEnum.fromValue(deliveryMethod);
+
+        switch (methodEnum) {
+            case UTLÄMNINGSSTÄLLE:
+                return "Utlämningsställe";
+            case HEMLEVERANS:
+                return "Leveransadress";
+            default:
+                throw new IllegalArgumentException("Unknown delivery method: " + deliveryMethod);
+        }
     }
 
     public static <T> List<T> toList(Collection<T> collection) {

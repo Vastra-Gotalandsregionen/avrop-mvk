@@ -3,6 +3,7 @@ package se._1177.lmn.controller;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;
+import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -104,4 +105,31 @@ public class UtilControllerTest {
         assertEquals("Info...", utilController.getCustomerServiceInfo());
     }
 
+    @Test
+    public void mapToTextCollectDelivery() {
+        String value = DeliveryMethodEnum.UTLÄMNINGSSTÄLLE.value();
+        String capitalized = UtilController.capitalizeFully(value);
+        String result = UtilController.mapToText(value);
+
+        assertEquals(capitalized, result);
+    }
+
+    @Test
+    public void mapToTextHomeDelivery() {
+        String value = DeliveryMethodEnum.HEMLEVERANS.value();
+        String result = UtilController.mapToText(value);
+
+        assertEquals("Leveransadress", result);
+    }
+
+    @Test
+    public void mapToTextIllegalArgument() {
+        String value = "asdfaea";
+        try {
+            String result = UtilController.mapToText(value);
+            fail();
+        } catch (IllegalArgumentException e) {
+            // ok
+        }
+    }
 }

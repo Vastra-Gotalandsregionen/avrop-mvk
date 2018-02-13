@@ -38,7 +38,7 @@ public class ViewExpiredExceptionExceptionWrapper extends ExceptionHandlerWrappe
                 FacesContext facesContext = FacesContext.getCurrentInstance();
                 NavigationHandler navigationHandler = facesContext.getApplication().getNavigationHandler();
                 try {
-                    navigationHandler.handleNavigation(facesContext, null, "/viewExpired.xhtml");
+                    navigationHandler.handleNavigation(facesContext, null, "/order.xhtml?faces-redirect=true&amp;includeViewParams=true");
                     facesContext.renderResponse();
                 } finally {
                     i.remove();

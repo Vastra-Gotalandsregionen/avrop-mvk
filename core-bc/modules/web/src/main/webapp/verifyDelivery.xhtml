@@ -132,7 +132,7 @@
                                     #{item.noOfRemainingOrders}/#{item.noOfOrders}
                                 </td>
                                 <td class="column-4">
-                                    #{utilController.capitalizeFully(deliveryController.deliveryMethodForEachItem[item])}
+                                    #{utilController.mapToText(deliveryController.deliveryMethodForEachItem[item])}
                                     <h:panelGroup rendered="#{deliveryController.deliveryMethodForEachItem[item] eq 'UTLÄMNINGSSTÄLLE'
                                      and not ('Ingen' eq utilController.toProviderName(collectDeliveryController.getServicePointProviderForItem(item)))}"><br/>
                                         #{utilController.toProviderName(collectDeliveryController.getServicePointProviderForItem(item))}
