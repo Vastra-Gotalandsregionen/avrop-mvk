@@ -8,11 +8,13 @@ import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.Properties;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -101,8 +103,11 @@ public class UtilControllerTest {
     }
 
     @Test
-    public void getCustomerServiceInfo() {
-        assertEquals("Info...", utilController.getCustomerServiceInfo());
+    public void getCustomerServiceInfo() throws IOException {
+        Properties properties = new Properties();
+        properties.load(this.getClass().getClassLoader().getResourceAsStream("application_sv_SE_14.properties"));
+
+        assertEquals(properties.getProperty("customer.service.info"), utilController.getCustomerServiceInfo());
     }
 
     @Test
