@@ -18,7 +18,7 @@
         <o:messages showSummary="true" styleClass="alert alert-danger" escape="false"/>
 
         <div>
-            <h3>Kontrollera din beställning</h3>
+            <h2>Kontrollera din beställning</h2>
 
             <h:form>
                 <div class="gray-box">
@@ -38,7 +38,7 @@
                     </div>
                 </div>
 
-                <h4>Produkter</h4>
+                <h3>Produkter</h3>
 
                 <h:panelGroup rendered="#{deliveryController.anyDeliveryMethodFitsAll() and deliveryController.deliveryMethod eq 'HEMLEVERANS' or (deliveryController.anyDeliveryMethodFitsAll() and deliveryController.deliveryMethod eq 'UTLÄMNINGSSTÄLLE' and collectDeliveryController.possibleCollectCombinationsFittingAllWithNotificationMethods.size() gt 0)}">
                     <table class="avrop-table my-products-table contentFontSize verify-delivery" style="table-layout: fixed">
