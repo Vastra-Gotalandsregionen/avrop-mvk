@@ -92,7 +92,14 @@
             <div class="breadcrumbs-container">
                 <div class="breadcrumbs">
                     <o:form>
-                        <a class="link" href="#{utilController.mvkStartPageLink}">Start</a>&#160;»&#160;<a class="link" href="#{utilController.mvkOtherServicesLink}">Övriga tjänster</a>&#160;»&#160;<a href="#{request.contextPath}/order.xhtml#{userProfileController.delegateUrlParameters}">Förskrivna förbrukningsprodukter</a>&#160;»&#160;<ui:insert name="currentPage"/>
+                        <a class="link" href="#{utilController.mvkStartPageLink}">Start</a>&#160;»&#160;<a class="link" href="#{utilController.mvkOtherServicesLink}">Övriga tjänster</a>&#160;»&#160;
+                        <ui:repeat value="#{navigationController.views}" var="view_" varStatus="varStatus">
+                            <span class="link-section"><h:commandLink value="#{view_.label}" action="#{navigationController.goBackTo(view_)}"/>
+                            <ui:fragment rendered="#{not varStatus.last}">
+                                &#160;»&#160;
+                            </ui:fragment>
+                            </span>
+                        </ui:repeat>
                     </o:form>
                 </div><!--breadcrumbs-->
             </div><!--breadcrumbs-container-->

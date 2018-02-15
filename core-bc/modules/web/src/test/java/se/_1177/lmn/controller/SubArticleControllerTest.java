@@ -35,6 +35,9 @@ public class SubArticleControllerTest {
     @Mock
     private PrescriptionItemInfo prescriptionItemInfo;
 
+    @Mock
+    private NavigationController navigationController;
+
     @InjectMocks
     private SubArticleController subArticleController = new SubArticleController();
 

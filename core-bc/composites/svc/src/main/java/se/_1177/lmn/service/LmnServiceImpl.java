@@ -61,17 +61,21 @@ public class LmnServiceImpl implements LmnService {
 
     private String receptionHsaId;
 
+    private boolean defaultSelectedPrescriptions;
+
     public LmnServiceImpl(
             GetMedicalSupplyDeliveryPointsResponderInterface medicalSupplyDeliveryPoint,
             GetMedicalSupplyPrescriptionsResponderInterface medicalSupplyPrescriptions,
             RegisterMedicalSupplyOrderResponderInterface registerMedicalSupplyOrder,
             String logicalAddress,
-            String receptionHsaId) {
+            String receptionHsaId,
+            boolean defaultSelectedPrescriptions) {
         this.medicalSupplyDeliveryPoint = medicalSupplyDeliveryPoint;
         this.medicalSupplyPrescriptions = medicalSupplyPrescriptions;
         this.registerMedicalSupplyOrder = registerMedicalSupplyOrder;
         this.logicalAddress = logicalAddress;
         this.receptionHsaId = receptionHsaId;
+        this.defaultSelectedPrescriptions = defaultSelectedPrescriptions;
     }
 
     /**
@@ -314,6 +318,11 @@ public class LmnServiceImpl implements LmnService {
     @Override
     public String getReceptionHsaId() {
         return receptionHsaId;
+    }
+
+    @Override
+    public boolean getDefaultSelectedPrescriptions() {
+        return defaultSelectedPrescriptions;
     }
 
     public static boolean isAfterToday(XMLGregorianCalendar date) {

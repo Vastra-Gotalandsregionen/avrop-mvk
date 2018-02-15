@@ -38,6 +38,8 @@ import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class DeliveryController {
 
+    public static final String VIEW_NAME = "Leveranssätt";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(DeliveryController.class);
 
     @Autowired
@@ -57,6 +59,9 @@ public class DeliveryController {
 
     @Autowired
     private UtilController utilController;
+
+    @Autowired
+    private NavigationController navigationController;
 
     private DeliveryMethodEnum deliveryMethod = null;
     private boolean userNeedsToChooseDeliveryMethodForEachItem;
@@ -122,15 +127,7 @@ public class DeliveryController {
     }
 
     public String toOrder() {
-        String delegateUrlParameters = userProfileController.getDelegateUrlParameters();
-
-        String ampOrQuestionMark = delegateUrlParameters != null && delegateUrlParameters.length() > 0 ? "&amp;" : "?";
-
-        String result = "order" + delegateUrlParameters
-                + ampOrQuestionMark
-                + "faces-redirect=true&amp;includeViewParams=true";
-
-        return result;
+        return navigationController.goBack();
     }
 
     /**
@@ -162,9 +159,9 @@ public class DeliveryController {
 
                 homeDeliveryController.setNextViewIsCollectDelivery(false);
 
-                return "homeDelivery" + ACTION_SUFFIX;
+                return navigationController.gotoView("homeDelivery" + ACTION_SUFFIX, HomeDeliveryController.VIEW_NAME);
             } else if (deliveryMethod.equals(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)) {
-                return "collectDelivery" + ACTION_SUFFIX;
+                return navigationController.gotoView("collectDelivery" + ACTION_SUFFIX, CollectDeliveryController.VIEW_NAME);
             } else {
                 throw new RuntimeException("Unexpected " + DeliveryMethodEnum.class.getCanonicalName());
             }
@@ -200,7 +197,7 @@ public class DeliveryController {
             });
 
             homeDeliveryController.setNextViewIsCollectDelivery(true);
-            return "homeDelivery" + ACTION_SUFFIX;
+            return navigationController.gotoView("homeDelivery" + ACTION_SUFFIX, HomeDeliveryController.VIEW_NAME);
         }
     }
 

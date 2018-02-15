@@ -36,4 +36,6 @@ public interface LmnService {
     DeliveryPointType getDeliveryPointById(String deliveryPointId);
 
     String getReceptionHsaId();
+
+    boolean getDefaultSelectedPrescriptions();
 }

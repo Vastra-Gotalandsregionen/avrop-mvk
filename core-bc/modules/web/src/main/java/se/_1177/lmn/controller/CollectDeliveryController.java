@@ -62,6 +62,8 @@ import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CollectDeliveryController {
 
+    public static final String VIEW_NAME = "Utlämningsställe";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(CollectDeliveryController.class);
 
     @Autowired
@@ -84,6 +86,9 @@ public class CollectDeliveryController {
 
     @Autowired
     private BackgroundExecutor backgroundExecutor;
+
+    @Autowired
+    private NavigationController navigationController;
 
     private AddressModel addressModel;
 
@@ -519,7 +524,7 @@ public class CollectDeliveryController {
             }
         });
 
-        return "verifyDelivery" + ACTION_SUFFIX;
+        return navigationController.gotoView("verifyDelivery" + ACTION_SUFFIX, VerifyDeliveryController.VIEW_NAME);
     }
 
     private boolean collectDeliveryChosen(OrderRowType orderRowType) {
@@ -743,6 +748,9 @@ public class CollectDeliveryController {
     }
 
     public void resetChoices() {
+
+        // I would like to retain already chosen notification methods but it turns out that it's challenging to keep up
+        // with all possible combinations of providers and notifications that may occur.
         chosenDeliveryNotificationMethod = null;
         possibleCollectCombinationsFittingAllWithNotificationMethods = null;
 
@@ -779,8 +787,8 @@ public class CollectDeliveryController {
 
         final boolean[] validationSuccess = {true};
 
-        getDeliveryNotificationMethodsPerProvider().entrySet().forEach(entry -> {
-            String chosenDeliveryMethod = getChosenDeliveryNotificationMethod().get(entry.getKey());
+        getDeliveryNotificationMethodsPerProvider().forEach((key, value) -> {
+            String chosenDeliveryMethod = getChosenDeliveryNotificationMethod().get(key);
 
             if (DeliveryNotificationMethodEnum.E_POST.name().equals(chosenDeliveryMethod)) {
                 String email = getEmail();

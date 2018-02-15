@@ -7,6 +7,7 @@ public class County {
     private String registerMedicalSupplyOrderAddress;
     private String rtjpLogicalAddress;
     private String receptionHsaId;
+    private boolean defaultSelectedPrescriptions;
 
     public String getCountyCode() {
         return countyCode;
@@ -54,5 +55,13 @@ public class County {
 
     public void setReceptionHsaId(String receptionHsaId) {
         this.receptionHsaId = receptionHsaId;
+    }
+
+    public boolean isDefaultSelectedPrescriptions() {
+        return defaultSelectedPrescriptions;
+    }
+
+    public void setDefaultSelectedPrescriptions(boolean defaultSelectedPrescriptions) {
+        this.defaultSelectedPrescriptions = defaultSelectedPrescriptions;
     }
 }

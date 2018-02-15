@@ -2,7 +2,6 @@ package se._1177.lmn.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._1.DeliveryPointType;
 import riv.crm.selfservice.medicalsupply._1.OrderRowType;
@@ -63,6 +62,11 @@ public class LmnServiceRoutingImpl implements LmnService {
         return getContextLmnService().getReceptionHsaId();
     }
 
+    @Override
+    public boolean getDefaultSelectedPrescriptions() {
+        return getContextLmnService().getDefaultSelectedPrescriptions();
+    }
+
     /**
      * This method's only purpose is to delay the external web service from going into "sleep mode" where it becomes
      * slower than preferred. We allow it to go into sleep mode when time is 3.XX in the night only. This method is
@@ -101,7 +105,7 @@ public class LmnServiceRoutingImpl implements LmnService {
             // Last resort. We don't want exceptions when the customer service properties are called from the views.
             // That would cause a blank page.
             if (lmnService == null) {
-                lmnService = new LmnServiceImpl(null, null, null, null, "");
+                lmnService = new LmnServiceImpl(null, null, null, null, "", true);
             }
         }
 

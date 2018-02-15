@@ -69,13 +69,15 @@ public class BeanConfig {
             String registerMedicalSupplyOrderAddress = county.getRegisterMedicalSupplyOrderAddress();
             String rtjpLogicalAddress = county.getRtjpLogicalAddress();
             String receptionHsaId = county.getReceptionHsaId();
+            boolean defaultSelectedPrescriptions = county.isDefaultSelectedPrescriptions();
 
             LmnService vgrLmnService = new LmnServiceImpl(
                     getMedicalSupplyDeliveryPointsResponderInterface(getMedicalSupplyDeliveryPointsAddress),
                     getMedicalSupplyPrescriptionsResponderInterface(getMedicalSupplyPrescriptionsAddress),
                     getRegisterMedicalSupplyOrderResponderInterface(registerMedicalSupplyOrderAddress),
                     rtjpLogicalAddress,
-                    receptionHsaId
+                    receptionHsaId,
+                    defaultSelectedPrescriptions
             );
 
             countyCodeToLmnService.put(countyCodeToCountEntry.getKey(), vgrLmnService);

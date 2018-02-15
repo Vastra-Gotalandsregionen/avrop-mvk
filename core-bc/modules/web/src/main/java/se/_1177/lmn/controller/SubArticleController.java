@@ -34,6 +34,8 @@ import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class SubArticleController {
 
+    public static final String VIEW_NAME = "Fördela underartiklar";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(SubArticleController.class);
 
     @Autowired
@@ -44,6 +46,9 @@ public class SubArticleController {
 
     @Autowired
     private UserProfileController userProfileController;
+
+    @Autowired
+    private NavigationController navigationController;
 
     private List<ArticleWithSubArticlesModel> articleWithSubArticlesModels;
 
@@ -204,22 +209,14 @@ public class SubArticleController {
     }
 
     public String toOrder() {
-        String delegateUrlParameters = userProfileController.getDelegateUrlParameters();
-
-        String ampOrQuestionMark = delegateUrlParameters != null && delegateUrlParameters.length() > 0 ? "&amp;" : "?";
-
-        String result = "order" + delegateUrlParameters
-                + ampOrQuestionMark
-                + "faces-redirect=true&amp;includeViewParams=true";
-
-        return result;
+        return navigationController.goBack();
     }
 
     public String toDelivery() {
         // The sub articles were not added in the previous step since more information was needed.
         complementCartWithSubArticles();
 
-        return "delivery" + ACTION_SUFFIX;
+        return navigationController.gotoView("delivery" + ACTION_SUFFIX, DeliveryController.VIEW_NAME);
     }
 
     private void complementCartWithSubArticles() {

@@ -41,6 +41,8 @@ import static se._1177.lmn.service.util.Constants.PRODUCTS_FETCH_DEFAULT_ERROR;
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class OrderController {
 
+    public static final String VIEW_NAME = "Mina förskrivna förbrukningsprodukter";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
@@ -69,6 +71,9 @@ public class OrderController {
 
     @Autowired
     private MessageController messageController;
+
+    @Autowired
+    private NavigationController navigationController;
 
     private MedicalSupplyPrescriptionsHolder medicalSupplyPrescriptions;
 
@@ -113,7 +118,8 @@ public class OrderController {
 
                 if (!UtilController.isAfterToday(prescriptionItem.getNextEarliestOrderDate())
                         && prescriptionItem.getArticle().isIsOrderable()) {
-                    chosenItemMap.put(prescriptionItemId, true);
+
+                    chosenItemMap.put(prescriptionItemId, lmnService.getDefaultSelectedPrescriptions());
 
                     prescriptionItem.getDeliveryAlternative().forEach(alternative -> {
                         if (!alternative.getServicePointProvider().equals(ServicePointProviderEnum.INGEN)
@@ -138,6 +144,16 @@ public class OrderController {
             String msg = messageController.getMessage(PRODUCTS_FETCH_DEFAULT_ERROR);
 
             utilController.addErrorMessageWithCustomerServiceInfo(msg);
+        } finally {
+            String delegateUrlParameters = userProfileController.getDelegateUrlParameters();
+
+            String ampOrQuestionMark = delegateUrlParameters != null && delegateUrlParameters.length() > 0 ? "&amp;" : "?";
+
+            String result = "order" + delegateUrlParameters
+                    + ampOrQuestionMark
+                    + "faces-redirect=true&amp;includeViewParams=true";
+
+            navigationController.init(result, VIEW_NAME);
         }
     }
 
@@ -217,11 +233,11 @@ public class OrderController {
 
             subArticleController.init();
 
-            return "subArticle" + ACTION_SUFFIX;
+            return navigationController.gotoView("subArticle" + ACTION_SUFFIX, SubArticleController.VIEW_NAME);
         } else {
             prepareDeliveryOptions(prescriptionItemInfo.getChosenPrescriptionItemInfoList());
 
-            return "delivery" + ACTION_SUFFIX;
+            return navigationController.gotoView("delivery" + ACTION_SUFFIX, DeliveryController.VIEW_NAME);
         }
 
     }

@@ -70,14 +70,16 @@ public class LmnServiceRoutingImplTest {
                 mdp10,
                 rms10,
                 "theLogicalAddress" + key10,
-                "SE21341234-234234234" + key10));
+                "SE21341234-234234234" + key10,
+                true));
 
         countyCodeToLmnService.put(key20, new LmnServiceImpl(
                 msdp20,
                 mdp20,
                 rms20,
                 "theLogicalAddress" + key20,
-                "SE21341234-234234234" + key20));
+                "SE21341234-234234234" + key20,
+                true));
 
         lmnServiceRouting = new LmnServiceRoutingImpl(countyCodeToLmnService);
     }

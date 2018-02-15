@@ -9,6 +9,11 @@ html, body {
     position: relative;
 }
 
+.breadcrumbs .link-section {
+    display: inline-block;
+    white-space: nowrap;
+}
+
 .row-main {
     padding-bottom: 112px; /* Height of footer */
 }

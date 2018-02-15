@@ -32,6 +32,8 @@ import java.util.HashMap;
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class VerifyDeliveryController {
 
+    public static final String VIEW_NAME = "Kontrollera din beställning";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(VerifyDeliveryController.class);
 
     @Autowired
@@ -57,6 +59,9 @@ public class VerifyDeliveryController {
 
     @Autowired
     private PrescriptionItemInfo prescriptionItemInfo;
+
+    @Autowired
+    private NavigationController navigationController;
 
     private Boolean orderSuccess;
 
@@ -148,7 +153,7 @@ public class VerifyDeliveryController {
             return "verifyDelivery";
         }
 
-        return "orderConfirmation";
+        return navigationController.gotoView("orderConfirmation", OrderConfirmationController.VIEW_NAME);
     }
 
     private void resetCartAndRelated() {

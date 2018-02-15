@@ -45,6 +45,8 @@ import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class HomeDeliveryController {
 
+    public static final String VIEW_NAME = "Hemleverans";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(HomeDeliveryController.class);
 
     @Autowired
@@ -58,6 +60,9 @@ public class HomeDeliveryController {
 
     @Autowired
     private PrescriptionItemInfo prescriptionItemInfo;
+
+    @Autowired
+    private NavigationController navigationController;
 
     private AddressModel addressModel;
 
@@ -277,9 +282,9 @@ public class HomeDeliveryController {
 
 
         if (nextViewIsCollectDelivery) {
-            return "collectDelivery" + ACTION_SUFFIX;
+            return navigationController.gotoView("collectDelivery" + ACTION_SUFFIX, CollectDeliveryController.VIEW_NAME);
         } else {
-            return "verifyDelivery" + ACTION_SUFFIX;
+            return navigationController.gotoView("verifyDelivery" + ACTION_SUFFIX, VerifyDeliveryController.VIEW_NAME);
         }
     }
 
