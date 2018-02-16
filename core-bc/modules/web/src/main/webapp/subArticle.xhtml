@@ -60,7 +60,7 @@
                     </ui:repeat>
 
                     <div class="right-align">
-                        <h:commandButton tabindex="150" styleClass="button back-button full-page-submit" value="Bakåt" action="#{navigationController.goBack}" />
+                        <h:commandButton tabindex="150" styleClass="button back-button full-page-submit" value="Bakåt" action="#{navigationController.goBack}" immediate="true" />
                         <h:commandButton tabindex="151" styleClass="button full-page-submit" value="Nästa" action="#{subArticleController.toDelivery}" />
                     </div>
                 </div>

@@ -199,7 +199,7 @@
                 </h:panelGroup>
 
                 <div class="right-align">
-                    <h:commandButton styleClass="button back-button full-page-submit" value="Bakåt" action="#{navigationController.goBack}"/>
+                    <h:commandButton styleClass="button back-button full-page-submit" value="Bakåt" action="#{navigationController.goBack}" immediate="true"/>
                     <h:commandButton styleClass="button full-page-submit" value="Nästa"
                                      action="#{collectDeliveryController.toVerifyDelivery}"/>
                 </div>
