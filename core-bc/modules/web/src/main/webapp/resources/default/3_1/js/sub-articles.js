@@ -1,77 +1,33 @@
 var realOldVal = JSON.parse(JSON.stringify(app.jsonData));
 
-var subArticlesPriority = {};
-
 app.$watch('jsonData', function (newVal, oldVal) {
     if (JSON.stringify(newVal) === JSON.stringify(realOldVal)) {
         // Nothing's changed...
         return;
     }
+
+    app.discrepanceItems = [];
+
     for (var outerIndex in newVal) {
-        var changedIndex = null;
-        var diff = null;
+        var sum = 0;
+
         for (var index in newVal[outerIndex].subArticles) {
-            var newOrderCount = Number(newVal[outerIndex].subArticles[index].orderCount);
-            var oldOrderCount = Number(realOldVal[outerIndex].subArticles[index].orderCount);
-            if (newOrderCount !== oldOrderCount) {
-                changedIndex = index;
-                diff = newOrderCount - oldOrderCount;
-            }
+            sum += Number(newVal[outerIndex].subArticles[index].orderCount);
         }
-        if (changedIndex) {
-            // Get or setup priority order for which subarticles' count which are first adjusted
-            if (!subArticlesPriority[outerIndex]) {
-                // We haven't setup any priority for this parent article yet
-                subArticlesPriority[outerIndex] = [];
-                for (var i in newVal[outerIndex].subArticles) {
-                    subArticlesPriority[outerIndex].push(i);
-                }
-            }
 
-            // Remove currently changed index and put last in the priority list (to make it most recent changed and thus prioritized)
-            var indexOfChangedIndex = subArticlesPriority[outerIndex].indexOf(changedIndex);
-            subArticlesPriority[outerIndex].splice(indexOfChangedIndex, 1);
-            subArticlesPriority[outerIndex].push(changedIndex);
+        app.jsonData[outerIndex].distributedNumber = sum;
 
-            // Find other range(s) to compensate for the change...
-            var numbersLeftToRegulate = diff;
-
-            var loopIndex = 0;
-            while (numbersLeftToRegulate !== 0) {
-                var subArticleIndexToInvestigate = subArticlesPriority[outerIndex][loopIndex];
-                var orderCount = Number(app.jsonData[outerIndex].subArticles[subArticleIndexToInvestigate].orderCount);
-                if (diff > 0) {
-                    // We need to remove from others
-                    // First check if we can remove from the first in the list and possibly go on
-                    if (orderCount > 0) {
-                        // We can at least take something. Check if we can take all we need.
-                        if (orderCount >= numbersLeftToRegulate) {
-                            app.jsonData[outerIndex].subArticles[subArticleIndexToInvestigate].orderCount = Number(orderCount) - numbersLeftToRegulate;
-                            numbersLeftToRegulate -= numbersLeftToRegulate;
-                        } else {
-                            app.jsonData[outerIndex].subArticles[subArticleIndexToInvestigate].orderCount = Number(orderCount) - orderCount;
-                            numbersLeftToRegulate -= orderCount;
-                        }
-                    }
-                } else {
-                    // We need to add to others
-                    app.jsonData[outerIndex].subArticles[subArticleIndexToInvestigate].orderCount = Number(orderCount) - numbersLeftToRegulate;
-                    numbersLeftToRegulate = 0;
-                }
-
-                loopIndex++;
-                var subArticlesLength = newVal[outerIndex].subArticles.length;
-                while (loopIndex >= subArticlesLength) {
-                    loopIndex -= subArticlesLength;
-                }
-            }
-
-            // Sync values to JSF components
-            for (var index in app.jsonData[outerIndex].subArticles) {
-                document.getElementsByClassName('jsf-input-' + outerIndex + '-' + index)[0].value = app.jsonData[outerIndex].subArticles[index].orderCount;
-            }
-            realOldVal = JSON.parse(JSON.stringify(newVal));
+        if (app.jsonData[outerIndex].distributedNumber !== app.jsonData[outerIndex].totalOrderSize) {
+            app.discrepanceItems.push(app.jsonData[outerIndex].parentArticleName);
         }
+
+        // Sync values to JSF components
+        for (var index in app.jsonData[outerIndex].subArticles) {
+            document.getElementsByClassName('jsf-input-' + outerIndex + '-' + index)[0].value = app.jsonData[outerIndex].subArticles[index].orderCount;
+        }
+
+        realOldVal = JSON.parse(JSON.stringify(newVal));
+
     }
 }, {deep: true});
 
@@ -105,6 +61,7 @@ jq('.circle-icon-content').click(function (e) {
     makeUnselectable(e.target);
 });
 
+// To avoid double-click
 function makeUnselectable(elem) {
     if (typeof(elem) == 'string')
         elem = document.getElementById(elem);

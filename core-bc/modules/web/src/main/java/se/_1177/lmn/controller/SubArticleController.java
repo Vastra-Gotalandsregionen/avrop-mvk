@@ -45,9 +45,6 @@ public class SubArticleController {
     private PrescriptionItemInfo prescriptionItemInfo;
 
     @Autowired
-    private UserProfileController userProfileController;
-
-    @Autowired
     private NavigationController navigationController;
 
     private List<ArticleWithSubArticlesModel> articleWithSubArticlesModels;
@@ -79,12 +76,9 @@ public class SubArticleController {
 
             model.setPrescriptionItemId(prescriptionItemType.getPrescriptionItemId());
 
-            int numbersStillInNeedToDistribute = prescriptionItemType.getNoOfArticlesPerOrder()
-                    / prescriptionItemType.getArticle().getPackageSize();
-
-            float numberSubArticlesLeftToDistributeTo = prescriptionItemType.getSubArticle().size();
-
-            model.setTotalOrderSize(numbersStillInNeedToDistribute);
+            model.setTotalOrderSize(
+                    prescriptionItemType.getNoOfArticlesPerOrder()
+                    / prescriptionItemType.getArticle().getPackageSize());
 
             // Zero packages per order means we're dealing with articles and not packages
             model.setTotalOrderSizeUnit(prescriptionItemType.getNoOfPackagesPerOrder() == 0
@@ -97,18 +91,18 @@ public class SubArticleController {
                 continue;
             }
 
-            int nextOrderCountNumberToDistribute;
-
-            Map<String, Map<String, OrderItemType>> latestOrderItemsByArticleNoAndPrescriptionItem = prescriptionItemInfo
-                    .getLatestOrderItemsByArticleNoAndPrescriptionItem();
+            Map<String, Map<String, OrderItemType>> latestOrderItemsByArticleNoAndPrescriptionItem =
+                    prescriptionItemInfo.getLatestOrderItemsByArticleNoAndPrescriptionItem();
 
             Map<String, OrderItemType> latestOrderedForThisPrescriptionItem =
                     latestOrderItemsByArticleNoAndPrescriptionItem.get(prescriptionItemType.getPrescriptionItemId());
 
-            boolean thisPrescriptionItemHasBeenOrderedBefore = latestOrderedForThisPrescriptionItem != null;
+            int numberDistributedForPrescriptionItem = 0;
 
             for (ArticleType subArticle : prescriptionItemType.getSubArticle()) {
                 // Update these values for this iteration
+
+                int orderCountThisSubArticle = 0;
 
                 if (latestOrderedForThisPrescriptionItem != null
                         && latestOrderedForThisPrescriptionItem.get(subArticle.getArticleNo()) != null) {
@@ -118,29 +112,18 @@ public class SubArticleController {
 
                     Integer previouslyOrderedPackages = previouslyOrderedPcs / subArticle.getPackageSize();
 
-                    nextOrderCountNumberToDistribute = Math.min(
-                            previouslyOrderedPackages,
-                            numbersStillInNeedToDistribute
-                    );
-                } else if (thisPrescriptionItemHasBeenOrderedBefore) {
-                    // This subArticle wasn't ordered at the last order occasion.
-                    nextOrderCountNumberToDistribute = 0;
-                } else {
-                    int numberByDefaultUniformDistribution = (int) Math.ceil(numbersStillInNeedToDistribute
-                            / numberSubArticlesLeftToDistributeTo);
+                    orderCountThisSubArticle = previouslyOrderedPackages;
 
-                    nextOrderCountNumberToDistribute = numberByDefaultUniformDistribution;
                 }
-
-                numbersStillInNeedToDistribute -= nextOrderCountNumberToDistribute;
-                numberSubArticlesLeftToDistributeTo -= 1;
 
                 String variety = subArticle.getVariety();
 
                 SubArticleDto subArticleDto = new SubArticleDto();
                 subArticleDto.setName(!isEmpty(variety) ? variety : subArticle.getArticleName());
                 subArticleDto.setArticleNo(subArticle.getArticleNo());
-                subArticleDto.setOrderCount(nextOrderCountNumberToDistribute);
+                subArticleDto.setOrderCount(orderCountThisSubArticle);
+
+                numberDistributedForPrescriptionItem += orderCountThisSubArticle;
 
                 ImageType articleImage = subArticle.getArticleImage();
                 if (articleImage != null) {
@@ -153,41 +136,7 @@ public class SubArticleController {
                 subArticleIdToArticle.put(subArticle.getArticleNo(), subArticle);
             }
 
-            // Verify the numbers adds up as expected. In abnormal circumstances the numbers may not add up to expected
-            // numbers.
-            int totalOrderSize = model.getTotalOrderSize();
-            int totalIncludedNumber = 0;
-            for (SubArticleDto subArticleDto : model.getSubArticles()) {
-                totalIncludedNumber += subArticleDto.getOrderCount();
-            }
-
-            if (totalIncludedNumber < totalOrderSize) {
-                // We need to add the difference to the order. We make this easy and just add the number to arbitrary
-                // sub-article.
-                SubArticleDto subArticleDto = model.getSubArticles().get(0);
-                subArticleDto.setOrderCount(subArticleDto.getOrderCount() + totalOrderSize - totalIncludedNumber);
-            }
-
-            if (totalIncludedNumber > totalOrderSize) {
-                // We need to remove items until we are down to the expected number. We distribute the decrements
-                // evenly.
-                int index = 0;
-                while (totalIncludedNumber > totalOrderSize) {
-                    SubArticleDto subArticleDto = model.getSubArticles().get(index);
-                    if (subArticleDto.getOrderCount() > 0) {
-                        subArticleDto.setOrderCount(subArticleDto.getOrderCount() - 1);
-                        totalIncludedNumber -= 1;
-                    }
-
-                    // If size is e.g. 5 we should increment if index is 3 but we shouldn't increment from 4 to 5. Then
-                    // we start over.
-                    if (index < model.getSubArticles().size() - 1 - 1) {
-                        index++;
-                    } else {
-                        index = 0;
-                    }
-                }
-            }
+            model.setDistributedNumber(numberDistributedForPrescriptionItem);
 
             list.add(model);
         }
@@ -226,6 +175,10 @@ public class SubArticleController {
                     .stream()
                     .filter(subArticleDto -> subArticleDto.getOrderCount() > 0)
                     .collect(Collectors.toList());
+
+            // We'll remove all orderRows with the same prescriptionItemId and then re-add.
+            cart.getOrderRows().removeIf(orderRowType -> orderRowType.getPrescriptionItemId()
+                            .equals(articleWithSubArticlesModel.getPrescriptionItemId()));
 
             for (SubArticleDto subArticleDto : subArticlesToOrder) {
                 ArticleType subArticle = subArticleIdToArticle.get(subArticleDto.getArticleNo());

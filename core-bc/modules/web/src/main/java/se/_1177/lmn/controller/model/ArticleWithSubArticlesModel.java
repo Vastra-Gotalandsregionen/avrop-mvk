@@ -50,6 +50,13 @@ public class ArticleWithSubArticlesModel {
         return totalOrderSizeUnit;
     }
 
+    public int getDistributedNumber() {
+        return subArticles.stream().map(subArticleDto -> subArticleDto.getOrderCount()).reduce(0, (i1, i2) -> i1 + i2);
+    }
+
+    public void setDistributedNumber(int distributedNumber) {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

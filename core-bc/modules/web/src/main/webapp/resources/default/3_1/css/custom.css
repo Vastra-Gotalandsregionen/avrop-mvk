@@ -277,6 +277,11 @@ ul.alert {
     margin-top: -8px;
 }
 
+.sub-article-form .alert ul {
+    list-style: initial;
+    padding-left: 32px;
+}
+
 /**************************/
 
 #startPageContainer .more-info-container {

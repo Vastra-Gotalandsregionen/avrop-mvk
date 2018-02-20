@@ -27,8 +27,8 @@
                 </div>
             </div>
 
-            <h:form>
-                <div id="app" v-cloak="">
+            <h:form class="sub-article-form">
+                <div id="app" v-cloak="" class="sub-article-form">
                     <ui:repeat value="#{subArticleController.articleWithSubArticlesModels}" var="articleWithSubArticlesModel"
                                varStatus="parentArticleStatus">
                         <h3>#{articleWithSubArticlesModel.parentArticleName}</h3>
@@ -55,23 +55,54 @@
                                     </td>
                                 </tr>
                             </ui:repeat>
+                            <tr v-if="jsonData[#{parentArticleStatus.index}].distributedNumber === jsonData[#{parentArticleStatus.index}].totalOrderSize">
+                                <td class="sub-article-name"><strong>Summa fördelade:</strong></td>
+                                <td class="sub-article-number-wrapper"><strong style="margin-left: calc(50% + 4px);">{{jsonData[#{parentArticleStatus.index}].distributedNumber}} av {{jsonData[#{parentArticleStatus.index}].totalOrderSize}}</strong></td>
+                            </tr>
+                            <tr v-else="" class="warning" style="color: red">
+                                <td class="sub-article-name"><strong>Summa fördelade:</strong></td>
+                                <td class="sub-article-number-wrapper"><strong style="margin-left: calc(50% + 4px);">{{jsonData[#{parentArticleStatus.index}].distributedNumber}} av {{jsonData[#{parentArticleStatus.index}].totalOrderSize}}</strong></td>
+                            </tr>
 
                         </table>
                     </ui:repeat>
 
+                    <div v-if="discrepanceItems.length > 0" class="alert alert-warning">
+                        Innan du kan gå vidare behöver du fördela rätt antal för följande:
+                        <ul>
+                            <li v-for="item in discrepanceItems">
+                                {{item}}
+                            </li>
+                        </ul>
+                    </div>
                     <div class="right-align">
                         <h:commandButton tabindex="150" styleClass="button back-button full-page-submit" value="Bakåt" action="#{navigationController.goBack}" immediate="true" />
-                        <h:commandButton tabindex="151" styleClass="button full-page-submit" value="Nästa" action="#{subArticleController.toDelivery}" />
+                        <h:commandButton p:v-if="discrepanceItems.length > 0" disabled="true" styleClass="button full-page-submit" value="Nästa" action="#{subArticleController.toDelivery}" />
+                        <h:commandButton p:v-if="discrepanceItems.length === 0" tabindex="151" styleClass="button full-page-submit" value="Nästa" action="#{subArticleController.toDelivery}" />
                     </div>
                 </div>
+
 
                 <script>
                     var app = new Vue({
                         el: '#app',
                         data: {
-                            myData: 'Hello Vue!',
-                            seen: true,
-                            jsonData: #{subArticleController.jsonData}
+                            jsonData: #{subArticleController.jsonData},
+                            discrepanceItems: []
+                        },
+                        created: function() {
+                            // initSubArticles(this);
+                            var jsonData = this.jsonData;
+
+                            var discrepanceItems = [];
+
+                            for (var outerIndex in jsonData) {
+                                if (this.jsonData[outerIndex].distributedNumber !== this.jsonData[outerIndex].totalOrderSize) {
+                                    discrepanceItems.push(this.jsonData[outerIndex].parentArticleName);
+                                }
+                            }
+
+                            this.discrepanceItems = discrepanceItems;
                         }
                     });
                 </script>

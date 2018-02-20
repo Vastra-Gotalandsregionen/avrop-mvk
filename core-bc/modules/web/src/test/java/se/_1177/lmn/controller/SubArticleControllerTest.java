@@ -227,9 +227,9 @@ public class SubArticleControllerTest {
         assertEquals(11, result.get(2).getTotalOrderSize());
         assertEquals(3, result.get(2).getSubArticles().size());
         assertEquals("21", result.get(2).getSubArticles().get(0).getArticleNo());
-        assertEquals(4, result.get(2).getSubArticles().get(0).getOrderCount()); // Two package as in setup.
-        assertEquals(4, result.get(2).getSubArticles().get(1).getOrderCount()); // Wasn't included in last order so zero.
-        assertEquals(3, result.get(2).getSubArticles().get(2).getOrderCount()); // Five packages as in setup.
+        assertEquals(0, result.get(2).getSubArticles().get(0).getOrderCount()); // Hasn't been ordered before.
+        assertEquals(0, result.get(2).getSubArticles().get(1).getOrderCount()); // Hasn't been ordered before.
+        assertEquals(0, result.get(2).getSubArticles().get(2).getOrderCount()); // Hasn't been ordered before.
     }
 
     @Test
