@@ -202,7 +202,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
             deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
             orderItem.setDeliveryChoice(deliveryChoice);
             orderItem.setArticle(subArticle);
-            orderItem.setNoOfPcs(random.nextInt(8) * subArticle.getPackageSize());
+            orderItem.setNoOfPcs(random.nextInt(100) * subArticle.getPackageSize());
             orderItem.setPrescriptionItemId(prescriptionItemId);
             orderItem.setOrderDate(getRandomCalendar(random, -365)); // Todo To make more realistic take from a set of order dates so some items were ordered at the same time.
 
@@ -248,8 +248,8 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriber.setPrescriberTitle("Läkare");
         prescriptionItem.setPrescriber(prescriber);
         prescriptionItem.setLastValidDate(getRandomCalendar(random, 665L));
-        prescriptionItem.setNoOfArticlesPerOrder(32);
-        prescriptionItem.setNoOfPackagesPerOrder(16);
+        prescriptionItem.setNoOfArticlesPerOrder(320);
+        prescriptionItem.setNoOfPackagesPerOrder(160);
         prescriptionItem.setStatus(StatusEnum.AKTIV);
 
         subjectOfCare.getPrescriptionItem().add(prescriptionItem);

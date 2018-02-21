@@ -53,16 +53,25 @@
                                     </td>
                                 </tr>
                             </ui:repeat>
+
+                            <tr v-if="#{parentArticleStatus.index % 2 eq 0 ? 'true' : 'false'}"> <!-- TODO Just to try different designs. -->
+                                <td class="sub-article-name"><strong>Kvar att fördela:</strong></td>
+                                <td class="sub-article-number-wrapper"><strong style="" class="aligned whats-left">{{jsonData[#{parentArticleStatus.index}].totalOrderSize - jsonData[#{parentArticleStatus.index}].distributedNumber}}</strong></td>
+                            </tr>
+
                             <tr v-if="jsonData[#{parentArticleStatus.index}].distributedNumber === jsonData[#{parentArticleStatus.index}].totalOrderSize">
                                 <td class="sub-article-name"><strong>Summa fördelade:</strong></td>
-                                <td class="sub-article-number-wrapper"><strong style="margin-left: calc(50% + 4px);">{{jsonData[#{parentArticleStatus.index}].distributedNumber}} av {{jsonData[#{parentArticleStatus.index}].totalOrderSize}}</strong></td>
+                                <td class="sub-article-number-wrapper"><strong style=";" class="aligned">{{jsonData[#{parentArticleStatus.index}].distributedNumber}} av {{jsonData[#{parentArticleStatus.index}].totalOrderSize}}</strong></td>
                             </tr>
+
                             <tr v-else="" class="warning" style="color: red">
                                 <td class="sub-article-name"><strong>Summa fördelade:</strong></td>
-                                <td class="sub-article-number-wrapper"><strong style="margin-left: calc(50% + 4px);">{{jsonData[#{parentArticleStatus.index}].distributedNumber}} av {{jsonData[#{parentArticleStatus.index}].totalOrderSize}}</strong></td>
+                                <td class="sub-article-number-wrapper"><strong style=";" class="aligned">{{jsonData[#{parentArticleStatus.index}].distributedNumber}} av {{jsonData[#{parentArticleStatus.index}].totalOrderSize}}</strong></td>
                             </tr>
 
                         </table>
+
+                        <hr class="#{parentArticleStatus.last ? 'hidden' : ''}"/>
                     </ui:repeat>
 
                     <div v-if="discrepanceItems.length > 0" class="alert alert-warning">

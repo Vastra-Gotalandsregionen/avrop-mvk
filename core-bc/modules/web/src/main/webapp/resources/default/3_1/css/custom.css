@@ -899,7 +899,17 @@ table.sub-articles-list td {
     table.sub-articles-table:not(.embedded-table) tbody td {
         display: table-row;
         line-height: 36px;
+        white-space: nowrap;
     }
+
+    table.sub-articles-table:not(.embedded-table) tbody td .whats-left {
+        left: 26px;
+        position: relative;
+    }
+}
+
+table.sub-articles-table:not(.embedded-table) tbody td .aligned {
+    margin-left: calc(50% + 4px);
 }
 
 .paragraph {
