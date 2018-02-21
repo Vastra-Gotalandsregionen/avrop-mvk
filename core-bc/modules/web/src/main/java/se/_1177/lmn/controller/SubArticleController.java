@@ -1,5 +1,6 @@
 package se._1177.lmn.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.omnifaces.util.Json;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +47,9 @@ public class SubArticleController {
 
     @Autowired
     private NavigationController navigationController;
+
+    @Autowired
+    private UtilController utilController;
 
     private List<ArticleWithSubArticlesModel> articleWithSubArticlesModels;
 
@@ -162,6 +166,22 @@ public class SubArticleController {
     }
 
     public String toDelivery() {
+
+        // Validate distributed numbers
+        List<String> invalidDistributedNumbers = articleWithSubArticlesModels.stream()
+                .filter(model -> model.getTotalOrderSize() != model.getDistributedNumber())
+                .map(model -> model.getParentArticleName())
+                .collect(Collectors.toList());
+
+        if (invalidDistributedNumbers.size() > 0) {
+            String text = "Följande har fel antal fördelade artiklar:<br/>"
+                    + StringUtils.join(invalidDistributedNumbers, "<br/>");
+
+            utilController.addErrorMessageWithCustomerServiceInfo(text);
+
+            return "subArticle";
+        }
+
         // The sub articles were not added in the previous step since more information was needed.
         complementCartWithSubArticles();
 

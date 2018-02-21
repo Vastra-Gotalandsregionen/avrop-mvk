@@ -38,6 +38,9 @@ public class SubArticleControllerTest {
     @Mock
     private NavigationController navigationController;
 
+    @Mock
+    private UtilController utilController;
+
     @InjectMocks
     private SubArticleController subArticleController = new SubArticleController();
 
@@ -302,6 +305,8 @@ public class SubArticleControllerTest {
 
         // p2 is the one with subarticle.
         p2.getSubArticle().add(subArticle);
+        p2.setNoOfPackagesPerOrder(1);
+        p2.setNoOfArticlesPerOrder(2);
 
         List<PrescriptionItemType> prescriptionItemTypes = new ArrayList<>();
 
