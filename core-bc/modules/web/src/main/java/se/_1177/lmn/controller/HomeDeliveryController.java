@@ -45,7 +45,7 @@ import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class HomeDeliveryController {
 
-    public static final String VIEW_NAME = "Hemleverans";
+    public static final String VIEW_NAME = "Hemleverans eller annan leveransadress";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HomeDeliveryController.class);
 
