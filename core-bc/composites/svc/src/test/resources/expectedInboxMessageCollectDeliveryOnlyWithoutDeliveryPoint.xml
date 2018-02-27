@@ -3,6 +3,9 @@
 
     <section>
         <title>Beställda produkter</title>
+    </section>
+
+    <section>
         <variablelist>
             <varlistentry>
                 <term>&nbsp;</term>
@@ -94,6 +97,12 @@
         <variablelist>
             <varlistentry>
                 <term>&nbsp;</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+        </variablelist>
+        <variablelist>
+            <varlistentry>
+                <term>___________________________________________________________________________</term>
                 <listitem>&nbsp;</listitem>
             </varlistentry>
         </variablelist>

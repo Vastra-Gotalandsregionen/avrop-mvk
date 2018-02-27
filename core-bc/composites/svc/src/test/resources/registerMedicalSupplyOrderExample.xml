@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:RegisterMedicalSupplyOrder xmlns="urn:riv:crm:selfservice:medicalsupply:1"
+                                xmlns:ns2="urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrderResponder:1"
+                                xmlns:ns3="urn:riv:itintegration:registry:1">
+    <ns2:Order>
+        <SubjectOfCareId>199201012391</SubjectOfCareId>
+        <Orderer>Testperson3 Stockholm</Orderer>
+        <OrderByDelegate>false</OrderByDelegate>
+        <OrderRow>
+            <PrescriptionId>3382126</PrescriptionId>
+            <PrescriptionItemId>6260795</PrescriptionItemId>
+            <DeliveryChoice>
+                <DeliveryMethodId>4</DeliveryMethodId>
+                <DeliveryMethod>UTLÄMNINGSSTÄLLE</DeliveryMethod>
+                <HomeDeliveryAddress>
+                    <Receiver>Testperson3 Stockholm</Receiver>
+                    <CareOfAddress/>
+                    <Street>GATAN 1</Street>
+                    <PostalCode>12345</PostalCode>
+                    <City>ORTEN</City>
+                    <Phone>0733564545</Phone>
+                </HomeDeliveryAddress>
+            </DeliveryChoice>
+            <Article>
+                <ArticleNo>329605</ArticleNo>
+                <ArticleName>Kanyl t insulinpenna 0,30x5mm 30G Autoshield duo</ArticleName>
+                <PackageSize>1</PackageSize>
+                <ProductArea>DIABETES</ProductArea>
+                <IsOrderable>true</IsOrderable>
+                <ArticleImage>
+                    <Original>https://example.com</Original>
+                    <Thumbnail>https://example.com</Thumbnail>
+                </ArticleImage>
+                <GrossPrice>101,92 kr</GrossPrice>
+            </Article>
+            <NoOfPackages>0</NoOfPackages>
+            <NoOfPcs>182</NoOfPcs>
+            <Source>BP</Source>
+        </OrderRow>
+        <OrderRow>
+            <PrescriptionId>3382093</PrescriptionId>
+            <PrescriptionItemId>6260735</PrescriptionItemId>
+            <DeliveryChoice>
+                <DeliveryMethodId>2</DeliveryMethodId>
+                <DeliveryMethod>HEMLEVERANS</DeliveryMethod>
+                <HomeDeliveryAddress>
+                    <Receiver>Testperson3 Stockholm</Receiver>
+                    <CareOfAddress/>
+                    <Street>GATAN 1</Street>
+                    <PostalCode>12345</PostalCode>
+                    <City>ORTEN</City>
+                    <DoorCode>1234</DoorCode>
+                    <Phone>0733564545</Phone>
+                </HomeDeliveryAddress>
+                <DeliveryNotificationMethod>TELEFON</DeliveryNotificationMethod>
+                <DeliveryNotificationReceiver>08123456</DeliveryNotificationReceiver>
+            </DeliveryChoice>
+            <Article>
+                <ArticleNo>725122</ArticleNo>
+                <ArticleName>Allt-i-ett-skydd TENA Flex Maxi S 921 ml praktisk abs. höft 60-90 cm</ArticleName>
+                <PackageSize>1</PackageSize>
+                <ProductArea>INKONTINENS</ProductArea>
+                <IsOrderable>true</IsOrderable>
+                <ArticleImage>
+                    <Original>
+                        https://example.com
+                    </Original>
+                    <Thumbnail>
+                        https://example.com
+                    </Thumbnail>
+                </ArticleImage>
+                <GrossPrice>64,80 kr</GrossPrice>
+            </Article>
+            <NoOfPackages>0</NoOfPackages>
+            <NoOfPcs>360</NoOfPcs>
+            <Source>BP</Source>
+        </OrderRow>
+        <OrderRow>
+            <PrescriptionId>3382095</PrescriptionId>
+            <PrescriptionItemId>6260739</PrescriptionItemId>
+            <DeliveryChoice>
+                <DeliveryMethodId>4</DeliveryMethodId>
+                <DeliveryMethod>UTLÄMNINGSSTÄLLE</DeliveryMethod>
+                <HomeDeliveryAddress>
+                    <Receiver>Testperson3 Stockholm</Receiver>
+                    <CareOfAddress/>
+                    <Street>GATAN 1</Street>
+                    <PostalCode>12345</PostalCode>
+                    <City>ORTEN</City>
+                    <Phone>0733564545</Phone>
+                </HomeDeliveryAddress>
+            </DeliveryChoice>
+            <Article>
+                <ArticleNo>320212</ArticleNo>
+                <ArticleName>Kanyl t insulinpenna BD 0,25x5mm 31G, Thin wall</ArticleName>
+                <PackageSize>1</PackageSize>
+                <ProductArea>DIABETES</ProductArea>
+                <IsOrderable>true</IsOrderable>
+                <ArticleImage>
+                    <Original>https://example.com</Original>
+                    <Thumbnail>https://example.com</Thumbnail>
+                </ArticleImage>
+                <GrossPrice>1 183,00 kr</GrossPrice>
+            </Article>
+            <NoOfPackages>0</NoOfPackages>
+            <NoOfPcs>4550</NoOfPcs>
+            <Source>BP</Source>
+        </OrderRow>
+        <OrderRow>
+            <PrescriptionId>3382094</PrescriptionId>
+            <PrescriptionItemId>6260736</PrescriptionItemId>
+            <DeliveryChoice>
+                <DeliveryMethodId>2</DeliveryMethodId>
+                <DeliveryMethod>HEMLEVERANS</DeliveryMethod>
+                <HomeDeliveryAddress>
+                    <Receiver>Testperson3 Stockholm</Receiver>
+                    <CareOfAddress/>
+                    <Street>GATAN 1</Street>
+                    <PostalCode>12345</PostalCode>
+                    <City>ORTEN</City>
+                    <DoorCode>1234</DoorCode>
+                    <Phone>0733564545</Phone>
+                </HomeDeliveryAddress>
+                <DeliveryNotificationMethod>TELEFON</DeliveryNotificationMethod>
+                <DeliveryNotificationReceiver>08123456</DeliveryNotificationReceiver>
+            </DeliveryChoice>
+            <Article>
+                <ArticleNo>260002</ArticleNo>
+                <ArticleName>Inko skyddsbyxa vid bad stl 1 Netti Combi Aqua Child</ArticleName>
+                <PackageSize>1</PackageSize>
+                <ProductArea>INKONTINENS</ProductArea>
+                <IsOrderable>true</IsOrderable>
+                <ArticleImage>
+                    <Original>https://example.com</Original>
+                    <Thumbnail>https://example.com</Thumbnail>
+                </ArticleImage>
+                <GrossPrice>38 682,00 kr</GrossPrice>
+            </Article>
+            <NoOfPackages>0</NoOfPackages>
+            <NoOfPcs>360</NoOfPcs>
+            <Source>BP</Source>
+        </OrderRow>
+        <OrderRow>
+            <PrescriptionId>3382096</PrescriptionId>
+            <PrescriptionItemId>6260743</PrescriptionItemId>
+            <DeliveryChoice>
+                <DeliveryMethodId>2</DeliveryMethodId>
+                <DeliveryMethod>HEMLEVERANS</DeliveryMethod>
+                <HomeDeliveryAddress>
+                    <Receiver>Testperson3 Stockholm</Receiver>
+                    <CareOfAddress/>
+                    <Street>GATAN 1</Street>
+                    <PostalCode>12345</PostalCode>
+                    <City>ORTEN</City>
+                    <DoorCode>1234</DoorCode>
+                    <Phone>0733564545</Phone>
+                </HomeDeliveryAddress>
+                <DeliveryNotificationMethod>TELEFON</DeliveryNotificationMethod>
+                <DeliveryNotificationReceiver>08123456</DeliveryNotificationReceiver>
+            </DeliveryChoice>
+            <Article>
+                <ArticleNo>900349</ArticleNo>
+                <ArticleName>Calogen 4x200ml jordgubb</ArticleName>
+                <PackageSize>1</PackageSize>
+                <ProductArea>NUTRITION</ProductArea>
+                <IsOrderable>true</IsOrderable>
+                <ArticleImage>
+                    <Original>https://example.com</Original>
+                    <Thumbnail>https://example.com</Thumbnail>
+                </ArticleImage>
+                <GrossPrice>4,02 kr</GrossPrice>
+            </Article>
+            <NoOfPackages>1</NoOfPackages>
+            <NoOfPcs>1</NoOfPcs>
+            <Source>BP</Source>
+        </OrderRow>
+        <OrderRow>
+            <PrescriptionId>3382090</PrescriptionId>
+            <PrescriptionItemId>6260731</PrescriptionItemId>
+            <DeliveryChoice>
+                <DeliveryMethodId>2</DeliveryMethodId>
+                <DeliveryMethod>HEMLEVERANS</DeliveryMethod>
+                <HomeDeliveryAddress>
+                    <Receiver>Testperson3 Stockholm</Receiver>
+                    <CareOfAddress/>
+                    <Street>GATAN 1</Street>
+                    <PostalCode>12345</PostalCode>
+                    <City>ORTEN</City>
+                    <DoorCode>1234</DoorCode>
+                    <Phone>0733564545</Phone>
+                </HomeDeliveryAddress>
+                <DeliveryNotificationMethod>TELEFON</DeliveryNotificationMethod>
+                <DeliveryNotificationReceiver>08123456</DeliveryNotificationReceiver>
+            </DeliveryChoice>
+            <Article>
+                <ArticleNo>752152</ArticleNo>
+                <ArticleName>Fortimel Compact Fibre 4x125ml jordgubb</ArticleName>
+                <PackageSize>1</PackageSize>
+                <ProductArea>NUTRITION</ProductArea>
+                <IsOrderable>true</IsOrderable>
+                <ArticleImage>
+                    <Original>https://example.com</Original>
+                    <Thumbnail>https://example.com</Thumbnail>
+                </ArticleImage>
+                <GrossPrice>0,78 kr</GrossPrice>
+            </Article>
+            <NoOfPackages>60</NoOfPackages>
+            <NoOfPcs>60</NoOfPcs>
+            <Source>BP</Source>
+        </OrderRow>
+        <OrderRow>
+            <PrescriptionId>3382090</PrescriptionId>
+            <PrescriptionItemId>6260731</PrescriptionItemId>
+            <DeliveryChoice>
+                <DeliveryMethodId>2</DeliveryMethodId>
+                <DeliveryMethod>HEMLEVERANS</DeliveryMethod>
+                <HomeDeliveryAddress>
+                    <Receiver>Testperson3 Stockholm</Receiver>
+                    <CareOfAddress/>
+                    <Street>GATAN 1</Street>
+                    <PostalCode>12345</PostalCode>
+                    <City>ORTEN</City>
+                    <DoorCode>1234</DoorCode>
+                    <Phone>0733564545</Phone>
+                </HomeDeliveryAddress>
+                <DeliveryNotificationMethod>TELEFON</DeliveryNotificationMethod>
+                <DeliveryNotificationReceiver>08123456</DeliveryNotificationReceiver>
+            </DeliveryChoice>
+            <Article>
+                <ArticleNo>753300</ArticleNo>
+                <ArticleName>Fortimel Compact Fibre 4x125ml mocca</ArticleName>
+                <PackageSize>1</PackageSize>
+                <ProductArea>NUTRITION</ProductArea>
+                <IsOrderable>true</IsOrderable>
+                <ArticleImage>
+                    <Original>https://example.com</Original>
+                    <Thumbnail>https://example.com</Thumbnail>
+                </ArticleImage>
+                <GrossPrice>0,78 kr</GrossPrice>
+            </Article>
+            <NoOfPackages>60</NoOfPackages>
+            <NoOfPcs>60</NoOfPcs>
+            <Source>BP</Source>
+        </OrderRow>
+        <OrderRow>
+            <PrescriptionId>3382090</PrescriptionId>
+            <PrescriptionItemId>6260731</PrescriptionItemId>
+            <DeliveryChoice>
+                <DeliveryMethodId>2</DeliveryMethodId>
+                <DeliveryMethod>HEMLEVERANS</DeliveryMethod>
+                <HomeDeliveryAddress>
+                    <Receiver>Testperson3 Stockholm</Receiver>
+                    <CareOfAddress/>
+                    <Street>GATAN 1</Street>
+                    <PostalCode>12345</PostalCode>
+                    <City>ORTEN</City>
+                    <DoorCode>1234</DoorCode>
+                    <Phone>0733564545</Phone>
+                </HomeDeliveryAddress>
+                <DeliveryNotificationMethod>TELEFON</DeliveryNotificationMethod>
+                <DeliveryNotificationReceiver>08123456</DeliveryNotificationReceiver>
+            </DeliveryChoice>
+            <Article>
+                <ArticleNo>752153</ArticleNo>
+                <ArticleName>Fortimel Compact Fibre 4x125ml vanilj</ArticleName>
+                <PackageSize>1</PackageSize>
+                <ProductArea>NUTRITION</ProductArea>
+                <IsOrderable>true</IsOrderable>
+                <ArticleImage>
+                    <Original>https://example.com</Original>
+                    <Thumbnail>https://example.com</Thumbnail>
+                </ArticleImage>
+                <GrossPrice>0,78 kr</GrossPrice>
+            </Article>
+            <NoOfPackages>120</NoOfPackages>
+            <NoOfPcs>120</NoOfPcs>
+            <Source>BP</Source>
+        </OrderRow>
+        <OrderRow>
+            <PrescriptionId>3382096</PrescriptionId>
+            <PrescriptionItemId>6260746</PrescriptionItemId>
+            <DeliveryChoice>
+                <DeliveryMethodId>2</DeliveryMethodId>
+                <DeliveryMethod>HEMLEVERANS</DeliveryMethod>
+                <HomeDeliveryAddress>
+                    <Receiver>Testperson3 Stockholm</Receiver>
+                    <CareOfAddress/>
+                    <Street>GATAN 1</Street>
+                    <PostalCode>12345</PostalCode>
+                    <City>ORTEN</City>
+                    <DoorCode>1234</DoorCode>
+                    <Phone>0733564545</Phone>
+                </HomeDeliveryAddress>
+                <DeliveryNotificationMethod>TELEFON</DeliveryNotificationMethod>
+                <DeliveryNotificationReceiver>08123456</DeliveryNotificationReceiver>
+            </DeliveryChoice>
+            <Article>
+                <ArticleNo>204704</ArticleNo>
+                <ArticleName>Fortimel Jucy 4x200 apelsin</ArticleName>
+                <PackageSize>1</PackageSize>
+                <ProductArea>NUTRITION</ProductArea>
+                <IsOrderable>true</IsOrderable>
+                <ArticleImage>
+                    <Original>https://example.com</Original>
+                    <Thumbnail>https://example.com</Thumbnail>
+                </ArticleImage>
+                <GrossPrice>0,82 kr</GrossPrice>
+            </Article>
+            <NoOfPackages>1</NoOfPackages>
+            <NoOfPcs>1</NoOfPcs>
+            <Source>BP</Source>
+        </OrderRow>
+        <OrderRow>
+            <PrescriptionId>3382096</PrescriptionId>
+            <PrescriptionItemId>6260744</PrescriptionItemId>
+            <DeliveryChoice>
+                <DeliveryMethodId>2</DeliveryMethodId>
+                <DeliveryMethod>HEMLEVERANS</DeliveryMethod>
+                <HomeDeliveryAddress>
+                    <Receiver>Testperson3 Stockholm</Receiver>
+                    <CareOfAddress/>
+                    <Street>GATAN 1</Street>
+                    <PostalCode>12345</PostalCode>
+                    <City>ORTEN</City>
+                    <DoorCode>1234</DoorCode>
+                    <Phone>0733564545</Phone>
+                </HomeDeliveryAddress>
+                <DeliveryNotificationMethod>TELEFON</DeliveryNotificationMethod>
+                <DeliveryNotificationReceiver>08123456</DeliveryNotificationReceiver>
+            </DeliveryChoice>
+            <Article>
+                <ArticleNo>825913</ArticleNo>
+                <ArticleName>Fresubin 5 Kcal Shot 120ml citron med LCT/MCT</ArticleName>
+                <PackageSize>1</PackageSize>
+                <ProductArea>NUTRITION</ProductArea>
+                <IsOrderable>true</IsOrderable>
+                <ArticleImage>
+                    <Original>https://example.com</Original>
+                    <Thumbnail>https://example.com</Thumbnail>
+                </ArticleImage>
+                <GrossPrice>4,02 kr</GrossPrice>
+            </Article>
+            <NoOfPackages>1</NoOfPackages>
+            <NoOfPcs>1</NoOfPcs>
+            <Source>BP</Source>
+        </OrderRow>
+        <OrderRow>
+            <PrescriptionId>3382096</PrescriptionId>
+            <PrescriptionItemId>6260747</PrescriptionItemId>
+            <DeliveryChoice>
+                <DeliveryMethodId>2</DeliveryMethodId>
+                <DeliveryMethod>HEMLEVERANS</DeliveryMethod>
+                <HomeDeliveryAddress>
+                    <Receiver>Testperson3 Stockholm</Receiver>
+                    <CareOfAddress/>
+                    <Street>GATAN 1</Street>
+                    <PostalCode>12345</PostalCode>
+                    <City>ORTEN</City>
+                    <DoorCode>1234</DoorCode>
+                    <Phone>0733564545</Phone>
+                </HomeDeliveryAddress>
+                <DeliveryNotificationMethod>TELEFON</DeliveryNotificationMethod>
+                <DeliveryNotificationReceiver>08123456</DeliveryNotificationReceiver>
+            </DeliveryChoice>
+            <Article>
+                <ArticleNo>825914</ArticleNo>
+                <ArticleName>Fresubin Jucy DRINK 4x200ml körsbär</ArticleName>
+                <PackageSize>1</PackageSize>
+                <ProductArea>NUTRITION</ProductArea>
+                <IsOrderable>true</IsOrderable>
+                <ArticleImage>
+                    <Original>https://example.com</Original>
+                    <Thumbnail>https://example.com</Thumbnail>
+                </ArticleImage>
+                <GrossPrice>0,82 kr</GrossPrice>
+            </Article>
+            <NoOfPackages>1</NoOfPackages>
+            <NoOfPcs>1</NoOfPcs>
+            <Source>BP</Source>
+        </OrderRow>
+    </ns2:Order>
+</ns2:RegisterMedicalSupplyOrder>

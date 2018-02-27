@@ -14,6 +14,7 @@ import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._1.DeliveryPointType;
 import riv.crm.selfservice.medicalsupply._1.OrderRowType;
+import se._1177.lmn.model.DeliveryChoiceTypeWrapper;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -23,6 +24,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
@@ -69,11 +72,7 @@ public class MvkInboxService {
         messageCase.setHealthCareFacility(healthCareFacility);
 
         try {
-            Collection<DeliveryChoiceType> deliveryChoices = orderRows.stream()
-                    .map(OrderRowType::getDeliveryChoice)
-                    .collect(Collectors.toList());
-
-            messageCase.setMsg(composeMsg(orderRows, deliveryChoices));
+            messageCase.setMsg(composeMsg(orderRows));
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
         } catch (TemplateException e) {
@@ -95,13 +94,22 @@ public class MvkInboxService {
         return response;
     }
 
-    String composeMsg(List<OrderRowType> orderRows,
-                      Collection<DeliveryChoiceType> deliveryChoices) throws IOException, TemplateException {
+    String composeMsg(List<OrderRowType> orderRows) throws IOException, TemplateException {
 
-        if (allAreSame(deliveryChoices)) {
-            // Make just one
-            deliveryChoices = Arrays.asList(deliveryChoices.iterator().next());
-        }
+        // Use reduce function to group order rows by delivery choices.
+        SortedMap<DeliveryChoiceTypeWrapper, List<OrderRowType>> reduce = orderRows.stream()
+                .reduce(new TreeMap<DeliveryChoiceTypeWrapper, List<OrderRowType>>(),
+                        (map, orderRow) -> {
+                            merge(map, orderRow);
+
+                            return map;
+                        }, (map1, map2) -> {
+                            map1.entrySet().stream().flatMap(entry -> entry.getValue().stream()).forEach(orderRow -> {
+                                merge(map2, orderRow);
+                            });
+
+                            return map2;
+                        });
 
         Configuration cfg = new Configuration();
 
@@ -117,14 +125,23 @@ public class MvkInboxService {
         }
 
         Map<String, Object> root = new HashMap<>();
-        root.put("orderRows", orderRows);
-        root.put("deliveryChoices", deliveryChoices);
+        root.put("deliveryChoiceMappedToOrderRows", reduce);
 
         StringWriter out = new StringWriter();
 
         template.process(root, out);
 
         return out.toString();
+    }
+
+    private void merge(Map<DeliveryChoiceTypeWrapper, List<OrderRowType>> map, OrderRowType orderRow) {
+        DeliveryChoiceTypeWrapper wrapper = DeliveryChoiceTypeWrapper.of(orderRow.getDeliveryChoice());
+
+        map.merge(wrapper, Arrays.asList(orderRow), (rows1, rows2) -> union(rows1, rows2));
+    }
+
+    public static <T> List<T> union(List<T>... collections) {
+        return Arrays.stream(collections).flatMap(Collection::stream).collect(Collectors.toList());
     }
 
     static boolean allAreSame(Collection<DeliveryChoiceType> deliveryChoices) {

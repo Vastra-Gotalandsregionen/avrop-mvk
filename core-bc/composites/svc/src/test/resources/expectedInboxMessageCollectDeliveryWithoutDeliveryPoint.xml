@@ -3,6 +3,9 @@
 
     <section>
         <title>Beställda produkter</title>
+    </section>
+
+    <section>
         <variablelist>
             <varlistentry>
                 <term>&nbsp;</term>
@@ -23,28 +26,6 @@
             <varlistentry>
                 <term>Antal förpackningar:</term>
                 <listitem>3</listitem>
-            </varlistentry>
-        </variablelist>
-        <variablelist>
-            <varlistentry>
-                <term>&nbsp;</term>
-                <listitem>&nbsp;</listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>Produktgrupp:</term>
-                <listitem>Inkontinens</listitem>
-            </varlistentry>
-            <varlistentry>
-                <term></term>
-                <listitem>Artikelnamn2</listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>Artikelnr.:</term>
-                <listitem>4321</listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>Antal förpackningar:</term>
-                <listitem>4</listitem>
             </varlistentry>
         </variablelist>
     </section>
@@ -99,6 +80,40 @@
         </variablelist>
         <variablelist>
             <varlistentry>
+                <term>___________________________________________________________________________</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+        </variablelist>
+    </section>
+    <section>
+        <variablelist>
+            <varlistentry>
+                <term>&nbsp;</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Produktgrupp:</term>
+                <listitem>Inkontinens</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term></term>
+                <listitem>Artikelnamn2</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Artikelnr.:</term>
+                <listitem>4321</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Antal förpackningar:</term>
+                <listitem>4</listitem>
+            </varlistentry>
+        </variablelist>
+    </section>
+
+    <section>
+        <title>Leveransinformation</title>
+        <variablelist>
+            <varlistentry>
                 <term>&nbsp;</term>
                 <listitem>&nbsp;</listitem>
             </varlistentry>
@@ -120,6 +135,12 @@
             </varlistentry>
         </variablelist>
 
+        <variablelist>
+            <varlistentry>
+                <term>___________________________________________________________________________</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+        </variablelist>
     </section>
 
 </article>

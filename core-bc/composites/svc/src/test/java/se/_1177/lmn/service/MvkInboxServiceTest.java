@@ -17,8 +17,13 @@ import riv.crm.selfservice.medicalsupply._1.DeliveryPointType;
 import riv.crm.selfservice.medicalsupply._1.ObjectFactory;
 import riv.crm.selfservice.medicalsupply._1.OrderRowType;
 import riv.crm.selfservice.medicalsupply._1.ProductAreaEnum;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.RegisterMedicalSupplyOrderType;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,9 +33,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Patrik Björk
@@ -52,20 +55,21 @@ public class MvkInboxServiceTest {
                 getContent("expectedInboxMessageCollectDeliveryOnlyWithoutDeliveryPoint.xml");
     }
 
-    private String getContent(String fileName) throws IOException {
-        InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(fileName);
+    @Test
+    public void complexMessage() throws Exception {
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        // Given
+        RegisterMedicalSupplyOrderType order = getComplexRegisterMedicalSupplyOrderType();
 
-        byte[] buf = new byte[1024];
-        int n;
-        while ((n = resourceAsStream.read(buf)) > -1) {
-            baos.write(buf, 0, n);
-        }
+        AddMessageResponderInterface mock = mock(AddMessageResponderInterface.class);
 
-        resourceAsStream.close();
+        MvkInboxService mvkInboxService = new MvkInboxService(mock);
 
-        return baos.toString("UTF-8");
+        // When
+        String msg = mvkInboxService.composeMsg(order.getOrder().getOrderRow());
+
+        // Then
+        assertEquals(getContent("expectedInboxMessageComplexExample.xml"), msg);
     }
 
     @Test
@@ -77,7 +81,6 @@ public class MvkInboxServiceTest {
         MvkInboxService mvkInboxService = new MvkInboxService(mock);
 
         List<OrderRowType> orderRows = new ArrayList<>();
-        List<DeliveryChoiceType> deliveryChoices = new ArrayList<>();
 
         ArticleType article1 = new ArticleType();
         ArticleType article2 = new ArticleType();
@@ -130,9 +133,6 @@ public class MvkInboxServiceTest {
         homeAddress.setPhone("031-123456");
 
         choice2.setHomeDeliveryAddress(homeAddress);
-
-        deliveryChoices.add(choice1);
-        deliveryChoices.add(choice2);
 
         item1.setDeliveryChoice(choice1);
         item2.setDeliveryChoice(choice2);
@@ -149,7 +149,6 @@ public class MvkInboxServiceTest {
         MvkInboxService mvkInboxService = new MvkInboxService(null);
 
         List<OrderRowType> orderRows = new ArrayList<>();
-        List<DeliveryChoiceType> deliveryChoices = new ArrayList<>();
 
         ArticleType article1 = new ArticleType();
         ArticleType article2 = new ArticleType();
@@ -203,16 +202,12 @@ public class MvkInboxServiceTest {
 
         choice2.setHomeDeliveryAddress(homeAddress);
 
-        deliveryChoices.add(choice1);
-        deliveryChoices.add(choice2);
+        item1.setDeliveryChoice(choice1);
+        item2.setDeliveryChoice(choice2);
 
-        String result = mvkInboxService.composeMsg(orderRows, deliveryChoices);
+        String result = mvkInboxService.composeMsg(orderRows);
 
         assertEquals(expectedMessage, result);
-    }
-
-    private JAXBElement<DeliveryNotificationMethodEnum> wrapInJAXBElement(DeliveryNotificationMethodEnum sms) {
-        return new ObjectFactory().createDeliveryChoiceTypeDeliveryNotificationMethod(sms);
     }
 
     @Test
@@ -220,7 +215,6 @@ public class MvkInboxServiceTest {
         MvkInboxService mvkInboxService = new MvkInboxService(null);
 
         List<OrderRowType> orderRows = new ArrayList<>();
-        List<DeliveryChoiceType> deliveryChoices = new ArrayList<>();
 
         ArticleType article1 = new ArticleType();
         ArticleType article2 = new ArticleType();
@@ -260,21 +254,19 @@ public class MvkInboxServiceTest {
         deliveryPoint.setCountryCode(CountryCodeEnum.SE);
 
         choice1.setDeliveryPoint(deliveryPoint);
-        choice1.setDeliveryNotificationReceiver("070-2345678");
         choice1.setDeliveryNotificationMethod(wrapInJAXBElement(DeliveryNotificationMethodEnum.BREV));
 
         choice2.setDeliveryPoint(deliveryPoint);
-        choice2.setDeliveryNotificationReceiver("0731234234");
         choice2.setDeliveryNotificationMethod(null);
 
-        deliveryChoices.add(choice1);
-        deliveryChoices.add(choice2);
+        item1.setDeliveryChoice(choice1);
+        item2.setDeliveryChoice(choice2);
 
         try {
-            String result = mvkInboxService.composeMsg(orderRows, deliveryChoices);
+            String result = mvkInboxService.composeMsg(orderRows);
             fail();
         } catch (InvalidReferenceException e) {
-            // choice2 has BREV as delivery notification method and therefore must have a home address.
+            // choice1 has BREV as delivery notification method and therefore must have a home address.
         } catch (Exception e) {
             fail();
         }
@@ -285,7 +277,6 @@ public class MvkInboxServiceTest {
         MvkInboxService mvkInboxService = new MvkInboxService(null);
 
         List<OrderRowType> orderRows = new ArrayList<>();
-        List<DeliveryChoiceType> deliveryChoices = new ArrayList<>();
 
         ArticleType article1 = new ArticleType();
         ArticleType article2 = new ArticleType();
@@ -341,10 +332,10 @@ public class MvkInboxServiceTest {
         choice2.setDeliveryNotificationReceiver("0731234234");
         choice2.setDeliveryNotificationMethod(null);
 
-        deliveryChoices.add(choice1);
-        deliveryChoices.add(choice2);
+        item1.setDeliveryChoice(choice1);
+        item2.setDeliveryChoice(choice2);
 
-        String result = mvkInboxService.composeMsg(orderRows, deliveryChoices);
+        String result = mvkInboxService.composeMsg(orderRows);
 
         assertEquals(expectedMessageCollectDeliveryWithoutDeliveryPoint, result);
     }
@@ -354,7 +345,6 @@ public class MvkInboxServiceTest {
         MvkInboxService mvkInboxService = new MvkInboxService(null);
 
         List<OrderRowType> orderRows = new ArrayList<>();
-        List<DeliveryChoiceType> deliveryChoices = new ArrayList<>();
 
         ArticleType article1 = new ArticleType();
         ArticleType article2 = new ArticleType();
@@ -404,9 +394,10 @@ public class MvkInboxServiceTest {
         choice1.setDeliveryNotificationReceiver("070-2345678");
         choice1.setDeliveryNotificationMethod(wrapInJAXBElement(DeliveryNotificationMethodEnum.SMS));
 
-        deliveryChoices.add(choice1);
+        item1.setDeliveryChoice(choice1);
+        item2.setDeliveryChoice(choice1);
 
-        String result = mvkInboxService.composeMsg(orderRows, deliveryChoices);
+        String result = mvkInboxService.composeMsg(orderRows);
 
         assertEquals(expectedMessageCollectDeliveryOnlyWithoutDeliveryPoint, result);
     }
@@ -477,4 +468,36 @@ public class MvkInboxServiceTest {
 
         assertFalse(result);
     }
+
+    private RegisterMedicalSupplyOrderType getComplexRegisterMedicalSupplyOrderType() throws JAXBException {
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("registerMedicalSupplyOrderExample.xml");
+
+        JAXBContext jaxbContext = JAXBContext.newInstance(RegisterMedicalSupplyOrderType.class);
+        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+
+        JAXBElement<RegisterMedicalSupplyOrderType> orderType = unmarshaller.unmarshal(new StreamSource(inputStream), RegisterMedicalSupplyOrderType.class);
+
+        return orderType.getValue();
+    }
+
+    private String getContent(String fileName) throws IOException {
+        InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(fileName);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        byte[] buf = new byte[1024];
+        int n;
+        while ((n = resourceAsStream.read(buf)) > -1) {
+            baos.write(buf, 0, n);
+        }
+
+        resourceAsStream.close();
+
+        return baos.toString("UTF-8");
+    }
+
+    private JAXBElement<DeliveryNotificationMethodEnum> wrapInJAXBElement(DeliveryNotificationMethodEnum sms) {
+        return new ObjectFactory().createDeliveryChoiceTypeDeliveryNotificationMethod(sms);
+    }
+
 }

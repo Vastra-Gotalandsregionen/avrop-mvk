@@ -3,7 +3,11 @@
 
     <section>
         <title>Beställda produkter</title>
-<#list orderRows as item>
+    </section>
+
+<#list deliveryChoiceMappedToOrderRows as choice, itemList>
+    <section>
+<#list itemList as item>
         <variablelist>
             <varlistentry>
                 <term>&nbsp;</term>
@@ -36,7 +40,6 @@
 
     <section>
         <title>Leveransinformation</title>
-<#list deliveryChoices as choice>
         <variablelist>
             <varlistentry>
                 <term>&nbsp;</term>
@@ -136,7 +139,13 @@
             </varlistentry>
         </variablelist>
 </#if>
-</#list>
+        <variablelist>
+            <varlistentry>
+                <term>___________________________________________________________________________</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+        </variablelist>
     </section>
+</#list>
 
 </article>
