@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
 /**
@@ -97,21 +99,30 @@ public class MvkInboxService {
     String composeMsg(List<OrderRowType> orderRows) throws IOException, TemplateException {
 
         // Use reduce function to group order rows by delivery choices.
+        SortedMap<DeliveryChoiceTypeWrapper, List<OrderRowType>> identity = new TreeMap<>();
+
+        BiFunction<
+                SortedMap<DeliveryChoiceTypeWrapper, List<OrderRowType>>,
+                OrderRowType,
+                SortedMap<DeliveryChoiceTypeWrapper, List<OrderRowType>>> biFunction = (map, orderRow) -> {
+
+            merge(map, orderRow);
+
+            return map;
+        };
+
+        BinaryOperator<SortedMap<DeliveryChoiceTypeWrapper, List<OrderRowType>>> binaryOperator = (map1, map2) -> {
+            map1.entrySet().stream().flatMap(entry -> entry.getValue().stream()).forEach(orderRow -> {
+                merge(map2, orderRow);
+            });
+
+            return map2;
+        };
+
         SortedMap<DeliveryChoiceTypeWrapper, List<OrderRowType>> reduce = orderRows.stream()
-                .reduce(new TreeMap<DeliveryChoiceTypeWrapper, List<OrderRowType>>(),
-                        (map, orderRow) -> {
-                            merge(map, orderRow);
+                .reduce(identity, biFunction, binaryOperator);
 
-                            return map;
-                        }, (map1, map2) -> {
-                            map1.entrySet().stream().flatMap(entry -> entry.getValue().stream()).forEach(orderRow -> {
-                                merge(map2, orderRow);
-                            });
-
-                            return map2;
-                        });
-
-        Configuration cfg = new Configuration();
+        Configuration cfg = new Configuration(Configuration.VERSION_2_3_27);
 
         cfg.setClassForTemplateLoading(this.getClass(), "/");
 
