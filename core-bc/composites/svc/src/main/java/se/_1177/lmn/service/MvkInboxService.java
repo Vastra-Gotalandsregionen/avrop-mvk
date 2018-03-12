@@ -99,18 +99,20 @@ public class MvkInboxService {
     String composeMsg(List<OrderRowType> orderRows) throws IOException, TemplateException {
 
         // Use reduce function to group order rows by delivery choices.
+
+        // Paramater 1
         SortedMap<DeliveryChoiceTypeWrapper, List<OrderRowType>> identity = new TreeMap<>();
 
-        BiFunction<
-                SortedMap<DeliveryChoiceTypeWrapper, List<OrderRowType>>,
+        // Paramater 2
+        BiFunction<SortedMap<DeliveryChoiceTypeWrapper, List<OrderRowType>>,
                 OrderRowType,
                 SortedMap<DeliveryChoiceTypeWrapper, List<OrderRowType>>> biFunction = (map, orderRow) -> {
 
             merge(map, orderRow);
-
             return map;
         };
 
+        // Paramater 3
         BinaryOperator<SortedMap<DeliveryChoiceTypeWrapper, List<OrderRowType>>> binaryOperator = (map1, map2) -> {
             map1.entrySet().stream().flatMap(entry -> entry.getValue().stream()).forEach(orderRow -> {
                 merge(map2, orderRow);
@@ -119,6 +121,7 @@ public class MvkInboxService {
             return map2;
         };
 
+        // Here we use parameter 1, 2 and 3 to make the reduce operation.
         SortedMap<DeliveryChoiceTypeWrapper, List<OrderRowType>> reduce = orderRows.stream()
                 .reduce(identity, biFunction, binaryOperator);
 
