@@ -159,6 +159,8 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.setNoOfPackagesPerOrder(random.nextInt(5) * 50 + 50);
         prescriptionItem.setStatus(StatusEnum.values()[random.nextInt(StatusEnum.values().length)]);
 
+        prescriptionItem.setAllowOtherInvoiceAddress(random.nextBoolean());
+
         subjectOfCare.getPrescriptionItem().add(prescriptionItem);
 
         OrderItemType orderItem = new OrderItemType();
@@ -432,7 +434,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         article2.setPackageSize(1); // Important
         article2.setPackageSizeUnit("st");
         article2.setProductArea(ProductAreaEnum.SÄRNÄR);
-        article2.setGrossPrice("1 200 kr");
+//        article2.setGrossPrice("1 200 kr");
         article2.setArticleImage(articleImage);
 
         prescriptionItem.setArticle(article2);
@@ -441,6 +443,8 @@ public class MockGetMedicalSupplyPrescriptionsResponder
 
         prescriptionItem.setNoOfOrders(4);
         prescriptionItem.setNoOfRemainingOrders(3);
+
+        prescriptionItem.setGrossPrice("1 200 kr");
 
         DeliveryAlternativeType deliveryAlternative = getRandomDeliveryAlternativeType(random);
         prescriptionItem.getDeliveryAlternative().add(deliveryAlternative);
@@ -712,6 +716,8 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         deliveryAlternative.setDeliveryMethodId(random.nextInt(10000) + "");
         deliveryAlternative.setDeliveryMethod(
                 DeliveryMethodEnum.values()[random.nextInt(DeliveryMethodEnum.values().length)]);
+
+        deliveryAlternative.setAllowDeliveryComment(random.nextBoolean());
 
         if (deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS)) {
             deliveryAlternative.setServicePointProvider(ServicePointProviderEnum.INGEN);
