@@ -3,10 +3,8 @@ package se._1177.lmn.service.util;
 import org.junit.Test;
 
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.time.*;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -110,4 +108,42 @@ public class UtilTest {
         gregorianCalendar.add(Calendar.MILLISECOND, 1); // The important detail.
         assertTrue(Util.isAfterToday(Util.toXmlGregorianCalendar(gregorianCalendar)));
     }
+
+    @Test
+    public void isBetween13And18Excactly13YearsOld() throws Exception {
+
+        String exactly13YearsAgo = get13YearsAgoPlusDaysToAdd(0);
+
+        assertTrue(Util.isBetween13And18(exactly13YearsAgo));
+    }
+
+    @Test
+    public void isBetween13And18TooOld() throws Exception {
+        assertFalse(Util.isBetween13And18("200003149999"));
+    }
+
+    @Test
+    public void isBetween13And18TooYoung() throws Exception {
+        String turns13Tomorrow = get13YearsAgoPlusDaysToAdd(1);
+
+        assertFalse(Util.isBetween13And18(turns13Tomorrow));
+    }
+
+    private String get13YearsAgoPlusDaysToAdd(int daysToAdd) {
+        ZoneId zoneId = ZoneId.of("Europe/Stockholm");
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(zoneId));
+        calendar.add(Calendar.YEAR, -13);
+        calendar.add(Calendar.DAY_OF_MONTH, daysToAdd);
+
+        int year13YearsAgo = calendar.get(Calendar.YEAR);
+        String thisMonth = (calendar.get(Calendar.MONTH) + 1) + ""; // Zero-based
+        String thisDay = calendar.get(Calendar.DAY_OF_MONTH) + "";
+
+        String month = thisMonth.length() == 1 ? "0" + thisMonth : thisMonth;
+        String day = thisDay.length() == 1 ? "0" + thisDay : thisDay;
+
+        return year13YearsAgo + month + day + "nnnn";
+    }
+
 }

@@ -8,6 +8,8 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -86,6 +88,36 @@ public class Util {
         Date toGregorian = new GregorianCalendar(date.getYear(), date.getMonth() - 1, date.getDay()).getTime();
 
         return toGregorian.before(firstMilliSecondToday.getTime());
+    }
+
+    public static boolean isBetween13And18(String subjectOfCareId) {
+
+        String birthDate = subjectOfCareId.substring(0, 8);
+
+        LocalDate birthLocalDate = stringToLocalDate(birthDate);
+
+        LocalDate now = LocalDate.now(ZoneId.of("Europe/Stockholm"));
+
+        return isBetween13And18YearsBetween(birthLocalDate, now);
+    }
+
+    static LocalDate stringToLocalDate(String birthDate) {
+
+        if (birthDate.length() != 8) {
+            throw new IllegalArgumentException("Birth date must be of form yyyyMMdd, i.e. eight characters long.");
+        }
+
+        return LocalDate.of(
+                Integer.parseInt(birthDate.substring(0, 4)),
+                Integer.parseInt(birthDate.substring(4, 6)),
+                Integer.parseInt(birthDate.substring(6, 8))
+                );
+    }
+
+    static boolean isBetween13And18YearsBetween(LocalDate birthLocalDate, LocalDate now) {
+        int years = Period.between(birthLocalDate, now).getYears();
+
+        return years >= 13 && years < 18;
     }
 
     public static boolean isValidEmailAddress(String email) {

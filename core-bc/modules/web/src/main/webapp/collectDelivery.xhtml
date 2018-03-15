@@ -103,6 +103,20 @@
                     <p>Ange din adressinformation för att speditören ska kunna lämna till närmaste utlämningsställe.</p>
                     <mvk:homeAddress model="#{collectDeliveryController.addressModel}" renderDoorCode="false" />
                 </h:panelGroup>
+                
+                <h:panelGroup rendered="#{collectDeliveryController.showContactPerson}">
+                    <hr/>
+                    
+                    <h3>Kontaktperson</h3>
+                    <p>Info blabla...</p>
+
+                    <div class="input-group">
+                        <div class="clearfix">
+                            <h:outputLabel for="contactPersonField" value="Kontaktpersons namn (valfri)"/>
+                        </div>
+                        <h:inputText id="contactPersonField" value="#{collectDeliveryController.contactPerson}" maxlength="100"/>
+                    </div>
+                </h:panelGroup>
 
                 <h:panelGroup rendered="#{not empty collectDeliveryController.deliveryNotificationMethodsPerProvider}">
                     <hr/>

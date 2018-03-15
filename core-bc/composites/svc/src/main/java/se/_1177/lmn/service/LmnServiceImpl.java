@@ -283,7 +283,7 @@ public class LmnServiceImpl implements LmnService {
             boolean orderByDelegate,
             String orderer, // May be delegate
             List<OrderRowType> orderRows,
-            Map<PrescriptionItemType, DeliveryChoiceType> deliveryChoicePerItem) {
+            Map<PrescriptionItemType, DeliveryChoiceType> deliveryChoicePerItem) { // todo deliveryChoicePerItem isn't used so remove
         RegisterMedicalSupplyOrderType parameters = new RegisterMedicalSupplyOrderType();
 
         OrderType order = new OrderType();

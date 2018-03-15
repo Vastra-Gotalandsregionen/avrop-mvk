@@ -186,6 +186,13 @@
                                     </div>
                                 </div>
                             </h:panelGroup>
+
+                            <h:panelGroup styleClass="input-group" rendered="#{collectDeliveryController.showContactPerson}">
+                                <label>Kontaktperson:</label>
+                                <div class="bold">
+                                    <h:outputText value="#{collectDeliveryController.contactPerson}"/>
+                                </div>
+                            </h:panelGroup>
                         </div>
 
                         <div class="col50">

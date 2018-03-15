@@ -35,16 +35,7 @@ import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 import javax.xml.ws.WebServiceException;
 import javax.xml.ws.soap.SOAPFaultException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum.HEMLEVERANS;
@@ -102,6 +93,7 @@ public class CollectDeliveryController {
             possibleCollectCombinationsFittingAllWithNotificationMethods;
     private Map<ServicePointProviderEnum, String> chosenDeliveryNotificationMethod;
     private String phoneNumber;
+    private String contactPerson;
 
     /**
      * Called from view in order to update the selects with delivery points for each {@link ServicePointProviderEnum}.
@@ -524,6 +516,11 @@ public class CollectDeliveryController {
             }
         });
 
+        if (this.contactPerson != null) {
+            orderRowsWithCollectDelivery.stream()
+                    .forEach(orderRowType -> orderRowType.getDeliveryChoice().setContactPerson(this.contactPerson));
+        }
+
         return navigationController.gotoView("verifyDelivery" + ACTION_SUFFIX, VerifyDeliveryController.VIEW_NAME);
     }
 
@@ -912,5 +909,19 @@ public class CollectDeliveryController {
 
     public void setAddressModel(AddressModel addressModel) {
         this.addressModel = addressModel;
+    }
+
+    public boolean getShowContactPerson() {
+        String subjectOfCareId = userProfileController.getUserProfile().getSubjectOfCareId();
+
+        return Util.isBetween13And18(subjectOfCareId);
+    }
+
+    public String getContactPerson() {
+        return contactPerson;
+    }
+
+    public void setContactPerson(String contactPerson) {
+        this.contactPerson = contactPerson;
     }
 }
