@@ -83,6 +83,36 @@ public class DeliveryChoiceTypeWrapper extends DeliveryChoiceType implements Com
     }
 
     @Override
+    public AddressType getInvoiceAddress() {
+        return wrapped.getInvoiceAddress();
+    }
+
+    @Override
+    public void setInvoiceAddress(AddressType value) {
+        wrapped.setInvoiceAddress(value);
+    }
+
+    @Override
+    public String getDeliveryComment() {
+        return wrapped.getDeliveryComment();
+    }
+
+    @Override
+    public void setDeliveryComment(String value) {
+        wrapped.setDeliveryComment(value);
+    }
+
+    @Override
+    public String getContactPerson() {
+        return wrapped.getContactPerson();
+    }
+
+    @Override
+    public void setContactPerson(String value) {
+        wrapped.setContactPerson(value);
+    }
+
+    @Override
     public List<Object> getAny() {
         return wrapped.getAny();
     }
@@ -96,7 +126,43 @@ public class DeliveryChoiceTypeWrapper extends DeliveryChoiceType implements Com
                 Objects.equals(wrap(getHomeDeliveryAddress()), wrap(that.getHomeDeliveryAddress())) &&
                 Objects.equals(wrap(getDeliveryPoint()), wrap(that.getDeliveryPoint())) &&
                 Objects.equals(extract(getDeliveryNotificationMethod()), extract(that.getDeliveryNotificationMethod())) &&
-                Objects.equals(getDeliveryNotificationReceiver(), that.getDeliveryNotificationReceiver());
+                Objects.equals(getDeliveryNotificationReceiver(), that.getDeliveryNotificationReceiver()) &&
+                Objects.equals(getContactPerson(), that.getContactPerson()) &&
+                Objects.equals(getDeliveryComment(), that.getDeliveryComment()) &&
+                Objects.equals(wrap(getInvoiceAddress()), wrap(that.getInvoiceAddress()));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                getDeliveryMethod(),
+                wrap(getHomeDeliveryAddress()),
+                wrap(getDeliveryPoint()),
+                extract(getDeliveryNotificationMethod()),
+                getDeliveryNotificationReceiver(),
+                getContactPerson(),
+                getDeliveryComment(),
+                wrap(getInvoiceAddress())
+        );
+    }
+
+    @Override
+    public String toString() {
+        return "{\"DeliveryChoiceType\":{"
+                + "\"deliveryMethod\":\"" + getDeliveryMethod() + "\""
+                + ", \"homeDeliveryAddress\":" + wrap(getHomeDeliveryAddress())
+                + ", \"deliveryPoint\":" + wrap(getDeliveryPoint())
+                + ", \"deliveryNotificationMethod\":" + extract(getDeliveryNotificationMethod())
+                + ", \"deliveryNotificationReceiver\":\"" + getDeliveryNotificationReceiver() + "\""
+                + ", \"contactPerson\":" + getContactPerson()
+                + ", \"deliveryComment\":" + getDeliveryComment()
+                + ", \"invoiceAddress\":" + wrap(getInvoiceAddress())
+                + "}}";
+    }
+
+    @Override
+    public int compareTo(DeliveryChoiceTypeWrapper o) {
+        return toString().compareTo(o.toString());
     }
 
     private DeliveryNotificationMethodEnum extract(JAXBElement<DeliveryNotificationMethodEnum> element) {
@@ -111,27 +177,6 @@ public class DeliveryChoiceTypeWrapper extends DeliveryChoiceType implements Com
         return AddressTypeWrapper.of(addressType);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getDeliveryMethod(), wrap(getHomeDeliveryAddress()), wrap(getDeliveryPoint()),
-                extract(getDeliveryNotificationMethod()), getDeliveryNotificationReceiver());
-    }
-
-    @Override
-    public String toString() {
-        return "{\"DeliveryChoiceType\":{"
-                + "\"deliveryMethod\":\"" + getDeliveryMethod() + "\""
-                + ", \"homeDeliveryAddress\":" + wrap(getHomeDeliveryAddress())
-                + ", \"deliveryPoint\":" + wrap(getDeliveryPoint())
-                + ", \"deliveryNotificationMethod\":" + extract(getDeliveryNotificationMethod())
-                + ", \"deliveryNotificationReceiver\":\"" + getDeliveryNotificationReceiver() + "\""
-                + "}}";
-    }
-
-    @Override
-    public int compareTo(DeliveryChoiceTypeWrapper o) {
-        return toString().compareTo(o.toString());
-    }
     /*@Override
     public int hashCode() {
         return wrapped.hashCode();

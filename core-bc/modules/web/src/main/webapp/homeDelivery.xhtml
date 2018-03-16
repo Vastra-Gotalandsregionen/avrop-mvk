@@ -29,9 +29,33 @@
 
                 <mvk:homeAddress id="homeAddress" model="#{homeDeliveryController.addressModel}" renderDoorCode="true"/>
 
+                <h:panelGroup rendered="#{homeDeliveryController.showDeliveryComment}">
+                    <div class="input-group">
+                        <div class="clearfix">
+                            <h:outputLabel for="deliveryComment" value="Leveranskommentar (valfri)"/>
+                        </div>
+
+                        <textarea jsf:id="deliveryComment" class="delivery-comment" maxlength="100" cols="50" rows="3" jsf:value="#{homeDeliveryController.deliveryComment}"></textarea>
+
+                        <div><span id="numberInput">#{not empty homeDeliveryController.deliveryComment ? homeDeliveryController.deliveryComment.length() : '0'}</span> av 100 tecken</div>
+
+                        <script type="text/javascript">
+                            jq('textarea.delivery-comment').on('input', function (e) {
+                                var numberInput = jq(e.target).val().length;
+                                jq('#numberInput')[0].innerHTML = numberInput;
+                            });
+
+                            var numberInput = jq('textarea.delivery-comment').val().length;
+                            jq('#numberInput')[0].innerHTML = numberInput;
+                        </script>
+                    </div>
+                </h:panelGroup>
+
                 <h:panelGroup style="display: block; margin: 1em 0" rendered="#{homeDeliveryController.isMultipleGroups()}">
                     <hr/>
+
                     <p>Observera att dina produkter har delats in i grupper med olika alternativ.</p>
+
                     <h:panelGroup layout="block" styleClass="" rendered="#{homeDeliveryController.notificationOptional.size() gt 0}">
                         <b>Produkter med val mellan avisering eller leverans utanför dörr:</b>
                         <ul class="articles-info">
@@ -42,6 +66,7 @@
                             </ui:repeat>
                         </ul>
                     </h:panelGroup>
+
                     <h:panelGroup layout="block" styleClass="" rendered="#{homeDeliveryController.notificationMandatory.size() gt 0}">
                         <b>Produkter med obligatoriskt val av aviseringssätt:</b>
                         <ul class="articles-info">
@@ -52,6 +77,7 @@
                             </ui:repeat>
                         </ul>
                     </h:panelGroup>
+
                     <h:panelGroup layout="block" styleClass="" rendered="#{homeDeliveryController.notificationUnavailable.size() gt 0}">
                         <b>Produkter utan val av avisering (syns därför inte på denna sida):</b>
                         <ul class="articles-info">

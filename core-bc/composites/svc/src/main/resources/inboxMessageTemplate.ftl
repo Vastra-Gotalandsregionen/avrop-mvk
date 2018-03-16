@@ -79,7 +79,7 @@
                 <term>${choice.homeDeliveryAddress.postalCode} ${choice.homeDeliveryAddress.city}</term>
                 <listitem>&nbsp;</listitem>
             </varlistentry>
-<#else >
+<#else>
             <varlistentry>
                 <term></term>
                 <listitem>Leveransadress:</listitem>
@@ -96,6 +96,16 @@
                 <term>${choice.homeDeliveryAddress.postalCode} ${choice.homeDeliveryAddress.city}</term>
                 <listitem>&nbsp;</listitem>
             </varlistentry>
+<#if choice.deliveryComment??>
+            <varlistentry>
+                <term></term>
+                <listitem>Leveranskommentar:</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>${choice.deliveryComment}:</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+</#if>
 </#if>
         </variablelist>
 

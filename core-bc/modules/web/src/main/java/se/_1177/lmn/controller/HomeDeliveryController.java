@@ -73,6 +73,8 @@ public class HomeDeliveryController {
     private String smsNumber;
     private String email;
 
+    private String deliveryComment;
+
     private NotificationOrDoorDelivery notificationOrDoorDelivery;
 
     private List<PrescriptionItemType> notificationOptional;
@@ -193,8 +195,7 @@ public class HomeDeliveryController {
             return "homeDelivery";
         }
 
-        List<OrderRowType> orderRowsWithHomeDelivery = cart.getOrderRows().stream()
-                .filter(orderRowType -> homeDeliveryChosen(orderRowType)).collect(Collectors.toList());
+        List<OrderRowType> orderRowsWithHomeDelivery = getOrderRowsWithHomeDelivery();
 
         // Add info from this step to the order rows
         orderRowsWithHomeDelivery.forEach(orderRowType -> {
@@ -220,6 +221,8 @@ public class HomeDeliveryController {
 
             deliveryChoice.setHomeDeliveryAddress(address);
             deliveryChoice.setDeliveryMethodId(deliveryMethodId);
+
+            deliveryChoice.setDeliveryComment(deliveryComment);
 
             String notificationMethod;
             String smsNumber;
@@ -288,7 +291,19 @@ public class HomeDeliveryController {
         }
     }
 
+    private List<OrderRowType> getOrderRowsWithHomeDelivery() {
+        return cart.getOrderRows().stream()
+                    .filter(orderRowType -> homeDeliveryChosen(orderRowType)).collect(Collectors.toList());
+    }
+
     private String findTheDeliveryMethodId(PrescriptionItemType prescriptionItem,
+                                           NotificationVariant notificationVariant,
+                                           DeliveryChoiceType deliveryChoice) {
+
+        return findTheDeliveryAlternative(prescriptionItem, notificationVariant, deliveryChoice).getDeliveryMethodId();
+    }
+
+    private DeliveryAlternativeType findTheDeliveryAlternative(PrescriptionItemType prescriptionItem,
                                            NotificationVariant notificationVariant,
                                            DeliveryChoiceType deliveryChoice) {
 
@@ -319,7 +334,7 @@ public class HomeDeliveryController {
                     || notificationOptionalWithoutNotificationMatches;
 
             if (deliveryMethodMatches && notificationMatches) {
-                return deliveryAlternative.getDeliveryMethodId();
+                return deliveryAlternative;
             }
         }
 
@@ -487,6 +502,27 @@ public class HomeDeliveryController {
         numberGroups += getNotificationUnavailable() != null && getNotificationUnavailable().size() > 0 ? 1 : 0;
 
         return numberGroups > 1;
+    }
+
+    public boolean isShowDeliveryComment() {
+        return getOrderRowsWithHomeDelivery().stream()
+                .flatMap(orderRow -> {
+                    PrescriptionItemType item = prescriptionItemInfo.getPrescriptionItem(orderRow);
+
+                    // We'd like to check whether any of the chosen deliveryAlternatives has allowDeliveryComment=true
+                    // but we may not have chosen notification variant yet so we don't know all chosen
+                    // deliveryAlternatives yet, so we look for allowDeliveryComment in a slightly wider way.
+                    return item.getDeliveryAlternative().stream();
+                }).filter(alternative -> alternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS))
+                .anyMatch(DeliveryAlternativeType::isAllowDeliveryComment);
+    }
+
+    public String getDeliveryComment() {
+        return deliveryComment;
+    }
+
+    public void setDeliveryComment(String deliveryComment) {
+        this.deliveryComment = deliveryComment;
     }
 
     static enum NotificationVariant {

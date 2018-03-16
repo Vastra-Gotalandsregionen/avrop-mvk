@@ -28,6 +28,28 @@
                 <listitem>4</listitem>
             </varlistentry>
         </variablelist>
+        <variablelist>
+            <varlistentry>
+                <term>&nbsp;</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Produktgrupp:</term>
+                <listitem>Inkontinens</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term></term>
+                <listitem>Artikelnamn3</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Artikelnr.:</term>
+                <listitem>5678</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Antal förpackningar:</term>
+                <listitem>0</listitem>
+            </varlistentry>
+        </variablelist>
     </section>
 
     <section>
@@ -51,6 +73,14 @@
             </varlistentry>
             <varlistentry>
                 <term>43213 Bullerbyn</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term></term>
+                <listitem>Leveranskommentar:</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Delivery comment 1.:</term>
                 <listitem>&nbsp;</listitem>
             </varlistentry>
         </variablelist>

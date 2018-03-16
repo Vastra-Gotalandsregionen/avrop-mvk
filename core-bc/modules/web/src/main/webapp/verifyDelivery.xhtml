@@ -187,10 +187,35 @@
                                 </div>
                             </h:panelGroup>
 
-                            <h:panelGroup styleClass="input-group" rendered="#{collectDeliveryController.showContactPerson}">
+                            <h:panelGroup layout="block" styleClass="input-group" rendered="#{collectDeliveryController.showContactPerson and navigationController.hasVisitedCollectDelivery()}">
                                 <label>Kontaktperson:</label>
                                 <div class="bold">
-                                    <h:outputText value="#{collectDeliveryController.contactPerson}"/>
+                                    <h:outputText value="#{empty collectDeliveryController.contactPerson ? 'Ej angiven' : collectDeliveryController.contactPerson}"/>
+                                </div>
+                            </h:panelGroup>
+
+                            <h:panelGroup layout="block" styleClass="input-group" rendered="#{not empty homeDeliveryController.deliveryComment}">
+                                <label>Leveranskommentar:</label>
+                                <div class="bold">
+                                    #{homeDeliveryController.deliveryComment}
+                                </div>
+                            </h:panelGroup>
+
+                            <h:panelGroup layout="block" styleClass="input-group" rendered="#{invoiceAddressController.sameOrDifferent eq 'DIFFERENT'}">
+                                <label>Fakturaadress:</label>
+                                <div class="bold">
+                                    <div>
+                                        <h:outputText value="#{invoiceAddressController.addressModel.fullName}"/>
+                                    </div>
+                                    <h:panelGroup rendered="#{not empty invoiceAddressController.addressModel.coAddress}">
+                                        <h:outputText value="#{invoiceAddressController.addressModel.coAddress}"/>
+                                    </h:panelGroup>
+                                    <div>
+                                        <h:outputText value="#{invoiceAddressController.addressModel.address}"/>
+                                    </div>
+                                    <div>
+                                        <h:outputText value="#{invoiceAddressController.addressModel.zip} #{invoiceAddressController.addressModel.city}"/>
+                                    </div>
                                 </div>
                             </h:panelGroup>
                         </div>
