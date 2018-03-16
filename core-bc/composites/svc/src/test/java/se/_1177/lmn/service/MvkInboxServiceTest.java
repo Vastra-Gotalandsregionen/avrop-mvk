@@ -346,6 +346,7 @@ public class MvkInboxServiceTest {
 
         choice2.setDeliveryNotificationReceiver("0731234234");
         choice2.setDeliveryNotificationMethod(null);
+        choice2.setContactPerson("The contact person");
 
         item1.setDeliveryChoice(choice1);
         item2.setDeliveryChoice(choice2);
@@ -408,6 +409,8 @@ public class MvkInboxServiceTest {
 
         choice1.setDeliveryNotificationReceiver("070-2345678");
         choice1.setDeliveryNotificationMethod(wrapInJAXBElement(DeliveryNotificationMethodEnum.SMS));
+
+        choice1.setContactPerson("The contact person");
 
         item1.setDeliveryChoice(choice1);
         item2.setDeliveryChoice(choice1);

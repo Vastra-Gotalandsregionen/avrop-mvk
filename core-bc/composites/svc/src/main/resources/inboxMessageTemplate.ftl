@@ -79,7 +79,17 @@
                 <term>${choice.homeDeliveryAddress.postalCode} ${choice.homeDeliveryAddress.city}</term>
                 <listitem>&nbsp;</listitem>
             </varlistentry>
-<#else>
+<#if choice.contactPerson??>
+            <varlistentry>
+                <term></term>
+                <listitem>Kontaktperson:</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>${choice.contactPerson}:</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+</#if>
+<#else >
             <varlistentry>
                 <term></term>
                 <listitem>Leveransadress:</listitem>
