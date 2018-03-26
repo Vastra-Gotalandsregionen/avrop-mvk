@@ -485,7 +485,7 @@ ul.delivery-options li input[disabled="disabled"]+label {
     cursor: default;
 }
 
-.input-group input[type="text"] {
+.input-group input[type="text"], .input-group textarea {
     border-radius: 5px;
     border: 1px solid #888;
     padding: 7px;

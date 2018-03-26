@@ -89,6 +89,16 @@
                 <listitem>&nbsp;</listitem>
             </varlistentry>
 </#if>
+<#if choice.deliveryComment??>
+            <varlistentry>
+                <term></term>
+                <listitem>Leveranskommentar:</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>${choice.deliveryComment}:</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+</#if>
 <#else >
             <varlistentry>
                 <term></term>
