@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:mvk="http://java.sun.com/jsf/composite/component/mvk"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="WEB-INF/xhtml/template/wideContent.xhtml">
+
+    <ui:define name="boxContent">
+
+        <o:messages showSummary="true" styleClass="alert alert-danger" escape="false"/>
+
+        <div>
+            <h2>Fakturaadress</h2>
+            <div class="page-introduction">
+                <div>
+                    <p>
+                        För dessa produkter har du möjlighet att välja annan fakturaadress än leveransadressen.
+                    </p>
+                </div>
+            </div>
+
+            <ul>
+                <ui:repeat value="#{invoiceAddressController.otherInvoiceAddressItems}" var="item">
+                    <li>#{item.article.articleName}</li>
+                </ui:repeat>
+            </ul>
+
+            <h:form id="invoiceAddressForm">
+
+                <div class="row">
+                    <h:selectOneRadio styleClass="notification-or-door-delivery"
+                                      style="margin-top: 12px"
+                                      id="sameOrDifferent"
+                                      value="#{invoiceAddressController.sameOrDifferent}"
+                                      required="true"
+                                      requiredMessage="Val av Leverans utanför dörren eller Avisering saknas">
+
+                        <f:ajax event="change" execute="notificationOrDoorDelivery" render="invoiceAddressForm"/>
+                        <f:selectItem itemValue="SAME" itemLabel="Samma som leveransadress"/>
+                        <f:selectItem itemValue="DIFFERENT" itemLabel="Annan fakturaadress"/>
+                    </h:selectOneRadio>
+
+                    <h:message for="sameOrDifferent" styleClass="alert alert-danger field-error"/>
+                    <h:message for="sameOrDifferent" styleClass="small-screen alert alert-danger field-error"/>
+                </div>
+
+                <mvk:homeAddress id="otherAddress" model="#{invoiceAddressController.addressModel}"
+                                 rendered="#{invoiceAddressController.sameOrDifferent eq 'DIFFERENT'}"
+                                 renderDoorCode="false"/>
+
+                <div class="right-align">
+                    <h:commandButton styleClass="button back-button full-page-submit" value="Bakåt" action="#{navigationController.goBack}" immediate="true"/>
+                    <h:commandButton styleClass="button confirm-submit-button full-page-submit"
+                                     value="Nästa"
+                                     action="#{invoiceAddressController.toVerifyDelivery}"/>
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

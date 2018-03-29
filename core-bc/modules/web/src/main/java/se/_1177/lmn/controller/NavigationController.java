@@ -31,6 +31,10 @@ public class NavigationController {
         return views;
     }
 
+    public boolean hasVisitedCollectDelivery() {
+        return views.stream().map(v -> v.label).anyMatch(value -> value.equals(CollectDeliveryController.VIEW_NAME));
+    }
+
     public String goBackTo(View view) {
         while (!views.peek().equals(view)) {
             views.pop();

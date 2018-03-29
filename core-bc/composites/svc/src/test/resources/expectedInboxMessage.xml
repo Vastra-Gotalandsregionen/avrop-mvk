@@ -172,5 +172,22 @@
             </varlistentry>
         </variablelist>
     </section>
+    <section>
+        <title>Fakturaadress:</title>
+        <variablelist>
+            <varlistentry>
+                <term>receiver 1</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>street 1</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>12345 city 1</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+        </variablelist>
+    </section>
 
 </article>

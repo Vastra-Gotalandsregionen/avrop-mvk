@@ -1,6 +1,7 @@
 package se._1177.lmn.controller.model;
 
 import mvk.itintegration.userprofile._2.UserProfileType;
+import riv.crm.selfservice.medicalsupply._1.AddressType;
 import se._1177.lmn.controller.UserProfileController;
 
 import javax.annotation.PostConstruct;
@@ -122,5 +123,19 @@ public class AddressModel {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public AddressType toAddressType() {
+        AddressType address = new AddressType();
+
+        address.setReceiver(this.getFullName());
+        address.setCareOfAddress(this.getCoAddress());
+        address.setStreet(this.getAddress());
+        address.setPostalCode(this.getZip());
+        address.setCity(this.getCity());
+        address.setPhone(this.getPhoneNumber());
+        address.setDoorCode(this.getDoorCode());
+
+        return address;
     }
 }

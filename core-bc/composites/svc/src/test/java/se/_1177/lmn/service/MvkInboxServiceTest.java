@@ -202,6 +202,14 @@ public class MvkInboxServiceTest {
         choice1.setDeliveryNotificationReceiver("070-2345678");
         choice1.setDeliveryNotificationMethod(wrapInJAXBElement(DeliveryNotificationMethodEnum.SMS));
 
+        AddressType address = new AddressType();
+        address.setReceiver("receiver 1");
+        address.setCareOfAddress("careof 1");
+        address.setStreet("street 1");
+        address.setPostalCode("12345");
+        address.setCity("city 1");
+        choice1.setInvoiceAddress(address);
+
         AddressType homeAddress = new AddressType();
         homeAddress.setStreet("Gatan 37");
         homeAddress.setPostalCode("43213");

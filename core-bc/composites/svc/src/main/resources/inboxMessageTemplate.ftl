@@ -176,6 +176,25 @@
             </varlistentry>
         </variablelist>
     </section>
+<#if choice.getInvoiceAddress()??>
+    <section>
+        <title>Fakturaadress:</title>
+        <variablelist>
+            <varlistentry>
+                <term>${choice.invoiceAddress.receiver}</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>${choice.invoiceAddress.street}</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>${choice.invoiceAddress.postalCode} ${choice.invoiceAddress.city}</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+        </variablelist>
+    </section>
+</#if>
 </#list>
 
 </article>

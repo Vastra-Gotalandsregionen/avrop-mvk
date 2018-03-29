@@ -283,12 +283,31 @@ public class HomeDeliveryController {
             }
         });
 
-
         if (nextViewIsCollectDelivery) {
             return navigationController.gotoView("collectDelivery" + ACTION_SUFFIX, CollectDeliveryController.VIEW_NAME);
+        } else if (anyItemHasAllowOtherInvoiceAddress()) {
+            return navigationController.gotoView("invoiceAddress" + ACTION_SUFFIX, InvoiceAddressController.VIEW_NAME);
         } else {
             return navigationController.gotoView("verifyDelivery" + ACTION_SUFFIX, VerifyDeliveryController.VIEW_NAME);
         }
+    }
+
+    private boolean anyItemHasAllowOtherInvoiceAddress() {
+        return prescriptionItemInfo.getChosenPrescriptionItemInfoList()
+                .stream()
+                .anyMatch(item -> item.isAllowOtherInvoiceAddress() != null && item.isAllowOtherInvoiceAddress());
+    }
+
+    private DeliveryAlternativeType findDeliveryAlternative(OrderRowType orderRowType) {
+        PrescriptionItemType item = prescriptionItemInfo.getPrescriptionItem(orderRowType);
+
+        // Take the first deliveryAlternative with matching deliveryMethod and service point provider. This
+        // assumes no two deliveryAlternatives share the same deliveryMethod and service point provider. That
+        // would lead to arbitrary result.
+        NotificationVariant notificationVariant = hasWithAndWithoutNotificationForHomeDelivery(item);
+        DeliveryChoiceType deliveryChoice = orderRowType.getDeliveryChoice();
+
+        return findTheDeliveryAlternative(item, notificationVariant, deliveryChoice);
     }
 
     private List<OrderRowType> getOrderRowsWithHomeDelivery() {

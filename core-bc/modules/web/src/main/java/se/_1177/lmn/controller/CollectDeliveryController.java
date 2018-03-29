@@ -1,6 +1,7 @@
 package se._1177.lmn.controller;
 
 import mvk.itintegration.userprofile._2.UserProfileType;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -521,7 +522,18 @@ public class CollectDeliveryController {
                     .forEach(orderRowType -> orderRowType.getDeliveryChoice().setContactPerson(this.contactPerson));
         }
 
-        return navigationController.gotoView("verifyDelivery" + ACTION_SUFFIX, VerifyDeliveryController.VIEW_NAME);
+        if (anyItemHasAllowOtherInvoiceAddress()) {
+            return navigationController.gotoView("invoiceAddress" + ACTION_SUFFIX, InvoiceAddressController.VIEW_NAME);
+        } else {
+            return navigationController.gotoView("verifyDelivery" + ACTION_SUFFIX, VerifyDeliveryController.VIEW_NAME);
+        }
+    }
+
+    private boolean anyItemHasAllowOtherInvoiceAddress() {
+        return prescriptionItemInfo.getChosenPrescriptionItemInfoList()
+                .stream()
+                .anyMatch(item -> BooleanUtils.isTrue(item.isAllowOtherInvoiceAddress()));
+
     }
 
     private boolean collectDeliveryChosen(OrderRowType orderRowType) {
