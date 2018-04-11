@@ -19,7 +19,7 @@
                     <h:panelGroup rendered="#{verifyDeliveryController.orderSuccess}">
                         <h2>Bekräftelse</h2>
 
-                        <p>#{msg['order.confirmation']}</p>
+                        <p><h:outputText escape="false" value="#{msg['order.confirmation']}"/></p>
 
                         <p>Beställningen har sparats i din inkorg i 1177 Vårdguidens e-tjänster. Observera att viss fördröjning kan förekomma innan meddelandet syns i din inkorg.</p>
 
