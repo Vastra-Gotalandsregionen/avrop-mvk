@@ -114,15 +114,15 @@
             </varlistentry>
 <#if choice.deliveryNotificationMethod.value.name() == 'BREV'>
             <varlistentry>
-                <term>${choice.homeDeliveryAddress.receiver}</term>
+                <term>${choice.homeDeliveryAddress.receiver!}</term>
                 <listitem>&nbsp;</listitem>
             </varlistentry>
             <varlistentry>
-                <term>${choice.homeDeliveryAddress.street}</term>
+                <term>${choice.homeDeliveryAddress.street!}</term>
                 <listitem>&nbsp;</listitem>
             </varlistentry>
             <varlistentry>
-                <term>${choice.homeDeliveryAddress.postalCode} ${choice.homeDeliveryAddress.city}</term>
+                <term>${choice.homeDeliveryAddress.postalCode!} ${choice.homeDeliveryAddress.city!}</term>
                 <listitem>&nbsp;</listitem>
             </varlistentry>
 <#else>

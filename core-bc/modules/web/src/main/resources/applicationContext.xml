@@ -88,7 +88,7 @@
     </http:conduit>
 
     <http:conduit name="*">
-        <http:client ConnectionTimeout="10000" ReceiveTimeout="10000"/>
+        <http:client ConnectionTimeout="10000" ReceiveTimeout="30000"/>
     </http:conduit>
 
     <task:annotation-driven executor="oneThreadExecutor"/>
