@@ -54,7 +54,7 @@
                                 </tr>
                             </ui:repeat>
 
-                            <tr v-if="#{parentArticleStatus.index % 2 eq 0 ? 'true' : 'false'}"> <!-- TODO Just to try different designs. -->
+                            <tr>
                                 <td class="sub-article-name"><strong>Kvar att fördela:</strong></td>
                                 <td class="sub-article-number-wrapper"><strong style="" class="aligned whats-left">{{jsonData[#{parentArticleStatus.index}].totalOrderSize - jsonData[#{parentArticleStatus.index}].distributedNumber}}</strong></td>
                             </tr>

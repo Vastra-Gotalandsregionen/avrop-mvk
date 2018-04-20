@@ -32,7 +32,7 @@
 
                         <!-- If any delivery method is disabled, inform the user. -->
                         <h:panelGroup rendered="#{(not deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.hemleveransEnum)) or (not deliveryController.possibleDeliveryMethodsFittingAllItems.contains(deliveryController.utlamningsstalleEnum))}">
-                            Observera att för dina valda produkter är endast ett av leveranssätten möjligt.
+                            <strong>Observera att för dina valda produkter är endast ett av leveranssätten möjligt.</strong>
                         </h:panelGroup>
 
 

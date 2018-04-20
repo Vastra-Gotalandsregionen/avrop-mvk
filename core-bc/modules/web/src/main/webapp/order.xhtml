@@ -145,8 +145,8 @@
                     <thead>
                     <tr>
                         <td class="column-0">Information</td>
-                        <td class="column-1">Produktgrupp / Artikel-nr.</td>
-                        <td class="column-2">Benämning</td>
+                        <td class="column-1">Produktgrupp</td>
+                        <td class="column-2">Artikel</td>
                         <td class="column-3">Uttag kvar / antal uttag</td>
                     </tr>
                     </thead>
@@ -159,6 +159,7 @@
                             <td>#{utilController.capitalizeFully(expiredItem.article.productArea)}<br/>#{expiredItem.article.articleNo}</td>
                             <td>
                                 <div class="bold">#{expiredItem.article.articleName}</div>
+                                <div>Artikel-nr: #{expiredItem.article.articleNo}</div>
                                 <mvk:moreInfo item="#{expiredItem}"/>
                             </td>
                             <td><span class="#{expiredItem.noOfRemainingOrders le 0 ? 'alert-text' : ''}">#{expiredItem.noOfRemainingOrders} / #{expiredItem.noOfOrders}</span></td>
