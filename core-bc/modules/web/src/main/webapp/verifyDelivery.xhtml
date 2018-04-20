@@ -170,7 +170,7 @@
                             </h:panelGroup>
 
                             <h:panelGroup id="homeDeliveryAddressWrapper" layout="block" styleClass="input-group" rendered="#{deliveryController.deliveryMethodUsedForAnyItem(deliveryController.hemleveransEnum)}">
-                                <label for="homeDeliveryAddress">Hemleverans:</label>
+                                <label for="homeDeliveryAddress">Leveransadress:</label>
                                 <div id="homeDeliveryAddress" class="bold">
                                     <div>
                                         <h:outputText value="#{homeDeliveryController.addressModel.fullName}"/>
@@ -218,22 +218,22 @@
                             <h:panelGroup rendered="#{not empty homeDeliveryController.chosenDeliveryNotificationMethod.keySet()}">
                                 <ui:repeat value="#{utilController.toList(homeDeliveryController.chosenDeliveryNotificationMethod.keySet())}" var="item">
                                     <h:panelGroup layout="block" styleClass="input-group" rendered="#{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'E_POST'}">
-                                        <div>Epost-avisering (hemleverans):</div>
+                                        <div>Epost-avisering (leveransadress):</div>
                                         <div class="bold">#{homeDeliveryController.getNotifacationReceiver(item)}</div>
                                     </h:panelGroup>
 
                                     <h:panelGroup layout="block" styleClass="input-group" rendered="#{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'SMS'}">
-                                        <div>SMS-avisering (hemleverans):</div>
+                                        <div>SMS-avisering (leveransadress):</div>
                                         <div class="bold">#{homeDeliveryController.getNotifacationReceiver(item)}</div>
                                     </h:panelGroup>
 
                                     <h:panelGroup layout="block" styleClass="input-group" rendered="#{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'TELEFON'}">
-                                        <div>Telefon-avisering (hemleverans):</div>
+                                        <div>Telefon-avisering (leveransadress):</div>
                                         <div class="bold">#{homeDeliveryController.getNotifacationReceiver(item)}</div>
                                     </h:panelGroup>
 
                                     <h:panelGroup layout="block" styleClass="input-group" rendered="#{homeDeliveryController.chosenDeliveryNotificationMethod[item] eq 'BREV'}">
-                                        <div>Brev-avisering (hemleverans):</div>
+                                        <div>Brev-avisering (leveransadress):</div>
                                         <div class="bold">
                                             <div>#{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}</div>
                                             <div>#{userProfileController.userProfile.streetAddress}</div>

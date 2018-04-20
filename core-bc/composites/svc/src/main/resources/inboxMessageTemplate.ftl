@@ -82,7 +82,7 @@
 <#else >
             <varlistentry>
                 <term></term>
-                <listitem>Hemleverans:</listitem>
+                <listitem>Leveransadress:</listitem>
             </varlistentry>
             <varlistentry>
                 <term>${choice.homeDeliveryAddress.receiver}</term>
