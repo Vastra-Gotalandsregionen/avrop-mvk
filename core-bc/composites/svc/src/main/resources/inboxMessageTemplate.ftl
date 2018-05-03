@@ -18,7 +18,7 @@
                 <listitem>${item.article.productArea?capitalize}</listitem>
             </varlistentry>
             <varlistentry>
-                <term></term>
+                <term>Artikel:</term>
                 <listitem>${item.article.articleName}</listitem>
             </varlistentry>
             <varlistentry>
@@ -65,7 +65,7 @@
 <#elseif choice.deliveryMethod.name() == 'UTLÄMNINGSSTÄLLE' && choice.getDeliveryPoint()!??>
             <varlistentry>
                 <term></term>
-                <listitem>Utlämningsställe:</listitem>
+                <listitem>Närmaste utlämningsställe för:</listitem>
             </varlistentry>
             <varlistentry>
                 <term>${choice.homeDeliveryAddress.receiver}</term>

@@ -16,7 +16,7 @@
                 <listitem>Diabetes</listitem>
             </varlistentry>
             <varlistentry>
-                <term></term>
+                <term>Artikel:</term>
                 <listitem>Artikalnamn1</listitem>
             </varlistentry>
             <varlistentry>
@@ -96,7 +96,7 @@
                 <listitem>Inkontinens</listitem>
             </varlistentry>
             <varlistentry>
-                <term></term>
+                <term>Artikel:</term>
                 <listitem>Artikelnamn2</listitem>
             </varlistentry>
             <varlistentry>
@@ -119,7 +119,7 @@
             </varlistentry>
             <varlistentry>
                 <term></term>
-                <listitem>Utlämningsställe:</listitem>
+                <listitem>Närmaste utlämningsställe för:</listitem>
             </varlistentry>
             <varlistentry>
                 <term>Kalle Karlsson</term>
