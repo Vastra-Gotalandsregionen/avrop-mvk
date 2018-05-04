@@ -3,6 +3,7 @@ package se._1177.lmn.controller;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import se._1177.lmn.service.util.Constants;
 
 import java.util.Objects;
 import java.util.Stack;
@@ -35,11 +36,19 @@ public class NavigationController {
         return views.stream().map(v -> v.label).anyMatch(value -> value.equals(CollectDeliveryController.VIEW_NAME));
     }
 
+    public String goBackTo(String view, String name) {
+        return goBackTo(View.from(view, name));
+    }
+
     public String goBackTo(View view) {
         while (!views.peek().equals(view)) {
             views.pop();
         }
         return views.peek().value;
+    }
+
+    public String getActionSuffix() {
+        return Constants.ACTION_SUFFIX;
     }
 
     public static class View {

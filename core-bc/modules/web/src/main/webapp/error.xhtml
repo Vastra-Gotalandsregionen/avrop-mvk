@@ -12,7 +12,7 @@
             <div>
                 <ul class="alert alert-danger">
                     <li>
-                        Ett tekniskt fel har inträffat. Gå tillbaka till <h:commandLink action="order?faces-redirect=true&amp;includeViewParams=true">startsidan</h:commandLink>.
+                        Ett tekniskt fel har inträffat. Gå tillbaka till <h:commandLink action="#{navigationController.goBackTo('order'.concat(navigationController.actionSuffix), orderController.viewName)}">startsidan</h:commandLink>.
                     </li>
                     <li>
                         <h:outputText escape="false" value="#{messageController.getMessage('customer.service.info')}"/>

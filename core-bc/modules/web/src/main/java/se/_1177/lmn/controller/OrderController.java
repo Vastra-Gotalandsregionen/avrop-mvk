@@ -265,4 +265,7 @@ public class OrderController {
         deliveryController.setPossibleDeliveryMethodsFittingAllItems(remainingDeliveryMethods);
     }
 
+    public String getViewName() {
+        return VIEW_NAME;
+    }
 }
