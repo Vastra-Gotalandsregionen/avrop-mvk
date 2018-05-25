@@ -31,6 +31,8 @@ public class CollectDeliveryControllerTest {
 
     private CollectDeliveryController collectDeliveryController;
     private PrescriptionItemInfo prescriptionItemInfo;
+    private Cart cart;
+    private DeliveryAlternativeType alternative1;
 
     @Before
     public void setup() throws Exception {
@@ -48,9 +50,9 @@ public class CollectDeliveryControllerTest {
         prescriptionItemInfoField.setAccessible(true);
         prescriptionItemInfoField.set(collectDeliveryController, prescriptionItemInfo);
 
-        Cart cart = new Cart();
+        cart = new Cart();
 
-        DeliveryAlternativeType alternative1 = new DeliveryAlternativeType();
+        alternative1 = new DeliveryAlternativeType();
         DeliveryAlternativeType alternative2 = new DeliveryAlternativeType();
         DeliveryAlternativeType alternative3 = new DeliveryAlternativeType();
         DeliveryAlternativeType alternative4 = new DeliveryAlternativeType();
@@ -254,4 +256,59 @@ public class CollectDeliveryControllerTest {
         assertFalse(collectDeliveryController.isAnyItemWhereAllowChoiceOfDeliveryPointIsFalse());
     }
 
+    @Test
+    public void getDeliveryAlternativeForOrderRow() {
+
+        // Given
+        OrderRowType orderRowType = cart.getOrderRows().get(0);
+        PrescriptionItemType prescriptionItem = prescriptionItemInfo.getPrescriptionItem(orderRowType);
+
+        // Add an extra deliveryAlternative so the test isn't too easy.
+        DeliveryAlternativeType additionalAlternative = new DeliveryAlternativeType();
+        additionalAlternative.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        prescriptionItem.getDeliveryAlternative().add(0, additionalAlternative);
+
+        // When
+        DeliveryAlternativeType dat = collectDeliveryController.getDeliveryAlternativeForOrderRow(orderRowType);
+
+        // Then
+        assertEquals(this.alternative1, dat);
+    }
+
+    @Test
+    public void anyItemHasAllowOtherInvoiceAddressFalse() {
+        assertFalse(collectDeliveryController.anyItemHasAllowOtherInvoiceAddress());
+    }
+
+    @Test
+    public void anyItemHasAllowOtherInvoiceAddressTrue() {
+
+        // Pick any and set allowOtherInvoiceAddress
+        prescriptionItemInfo.getChosenPrescriptionItemInfoList().get(1).setAllowOtherInvoiceAddress(true);
+
+        assertTrue(collectDeliveryController.anyItemHasAllowOtherInvoiceAddress());
+    }
+
+    @Test
+    public void anyItemHasAllowContactPersonFalse() {
+        assertFalse(collectDeliveryController.anyItemHasAllowContactPerson());
+    }
+
+    @Test
+    public void anyItemHasAllowContactPersonTrue() {
+
+        // Pick any and set allowContactPerson
+        prescriptionItemInfo.getChosenPrescriptionItemInfoList().get(1).getDeliveryAlternative().get(1)
+                .setAllowContactPerson(true);
+
+        assertTrue(collectDeliveryController.anyItemHasAllowContactPerson());
+    }
+
+    @Test
+    public void initPossibleCollectCombinationsFittingAllWithNotificationMethods() {
+        collectDeliveryController.initPossibleCollectCombinationsFittingAllWithNotificationMethods();
+
+        // No common service providers are found.
+        assertEquals(0, collectDeliveryController.getPossibleCollectCombinationsFittingAllWithNotificationMethods().size());
+    }
 }

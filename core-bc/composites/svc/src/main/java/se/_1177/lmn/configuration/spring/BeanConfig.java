@@ -36,7 +36,7 @@ import java.util.Map;
 @PropertySource("classpath:lakemedelsnara.properties")
 public class BeanConfig {
 
-    private final String COUNTIES_CONFIGURATION_FILE = "counties-configuration-10.yml";
+    private static final String COUNTIES_CONFIGURATION_FILE = "counties-configuration-10.yml";
 
     @Autowired
     private Environment env;

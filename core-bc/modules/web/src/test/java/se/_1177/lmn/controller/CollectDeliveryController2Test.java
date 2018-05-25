@@ -212,7 +212,7 @@ public class CollectDeliveryController2Test {
         String schenker = chosenDeliveryNotificationMethod.get(ServicePointProviderEnum.SCHENKER);
         String dhl = chosenDeliveryNotificationMethod.get(ServicePointProviderEnum.DHL);
 
-        // Only POSTNORD is available for all items and SMS is the preferred method according to setup(). todo CHANGE TEXT
+        // Only POSTNORD is available for all items but no notification method is available for all with POSTNORD.
         assertEquals(null, postnord);
         assertEquals("SMS", schenker);
         assertEquals(null, dhl);
@@ -231,7 +231,7 @@ public class CollectDeliveryController2Test {
     public void getServicePointProviderForItem() {
         ServicePointProviderEnum providerItem1 = collectDeliveryController.getServicePointProviderForItem(item1);
 
-
+        assertEquals(ServicePointProviderEnum.SCHENKER, providerItem1);
     }
 
 }

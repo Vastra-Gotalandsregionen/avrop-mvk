@@ -63,6 +63,7 @@
       <xs:element name="ServicePointProvider" type="tns:ServicePointProviderEnum" minOccurs='1' maxOccurs='1'/>
       <xs:element name="AllowChioceOfDeliveryPoints" type="xs:boolean" minOccurs='1' maxOccurs='1'/>
       <xs:element name="AllowDeliveryComment" type="xs:boolean" minOccurs='0' maxOccurs='1'/>
+      <xs:element name="AllowContactPerson" type="xs:boolean" minOccurs='0' maxOccurs='1'/>
       <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodEnum" minOccurs='0'
                   maxOccurs='unbounded'/>
       <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded'/>

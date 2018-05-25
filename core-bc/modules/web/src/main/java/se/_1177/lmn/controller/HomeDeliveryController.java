@@ -1,6 +1,7 @@
 package se._1177.lmn.controller;
 
 import mvk.itintegration.userprofile._2.UserProfileType;
+import org.apache.commons.lang3.BooleanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -533,7 +534,7 @@ public class HomeDeliveryController {
                     // deliveryAlternatives yet, so we look for allowDeliveryComment in a slightly wider way.
                     return item.getDeliveryAlternative().stream();
                 }).filter(alternative -> alternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS))
-                .anyMatch(DeliveryAlternativeType::isAllowDeliveryComment);
+                .anyMatch(deliveryAlternative -> BooleanUtils.isTrue(deliveryAlternative.isAllowDeliveryComment()));
     }
 
     public String getDeliveryComment() {

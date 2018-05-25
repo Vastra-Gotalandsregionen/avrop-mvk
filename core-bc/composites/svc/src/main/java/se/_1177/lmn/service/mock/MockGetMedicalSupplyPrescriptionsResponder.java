@@ -718,6 +718,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
                 DeliveryMethodEnum.values()[random.nextInt(DeliveryMethodEnum.values().length)]);
 
         deliveryAlternative.setAllowDeliveryComment(random.nextBoolean());
+        deliveryAlternative.setAllowContactPerson(true);
 
         if (deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS)) {
             deliveryAlternative.setServicePointProvider(ServicePointProviderEnum.INGEN);

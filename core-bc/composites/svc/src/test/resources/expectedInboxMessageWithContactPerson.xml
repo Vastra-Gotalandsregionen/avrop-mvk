@@ -13,28 +13,6 @@
             </varlistentry>
             <varlistentry>
                 <term>Produktgrupp:</term>
-                <listitem>Diabetes</listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>Artikel:</term>
-                <listitem>Artikalnamn1</listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>Artikelnr.:</term>
-                <listitem>1234</listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>Antal förpackningar:</term>
-                <listitem>3</listitem>
-            </varlistentry>
-        </variablelist>
-        <variablelist>
-            <varlistentry>
-                <term>&nbsp;</term>
-                <listitem>&nbsp;</listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>Produktgrupp:</term>
                 <listitem>Inkontinens</listitem>
             </varlistentry>
             <varlistentry>
@@ -50,6 +28,28 @@
                 <listitem>4</listitem>
             </varlistentry>
         </variablelist>
+        <variablelist>
+            <varlistentry>
+                <term>&nbsp;</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Produktgrupp:</term>
+                <listitem>Inkontinens</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Artikel:</term>
+                <listitem>Artikelnamn3</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Artikelnr.:</term>
+                <listitem>5678</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Antal förpackningar:</term>
+                <listitem>0</listitem>
+            </varlistentry>
+        </variablelist>
     </section>
 
     <section>
@@ -61,7 +61,7 @@
             </varlistentry>
             <varlistentry>
                 <term></term>
-                <listitem>Närmaste utlämningsställe för:</listitem>
+                <listitem>Leveransadress:</listitem>
             </varlistentry>
             <varlistentry>
                 <term>Kalle Karlsson</term>
@@ -77,10 +77,75 @@
             </varlistentry>
             <varlistentry>
                 <term></term>
+                <listitem>Leveranskommentar:</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Delivery comment 1.:</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+        </variablelist>
+
+        <variablelist>
+            <varlistentry>
+                <term>___________________________________________________________________________</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+        </variablelist>
+    </section>
+    <section>
+        <variablelist>
+            <varlistentry>
+                <term>&nbsp;</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Produktgrupp:</term>
+                <listitem>Diabetes</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Artikel:</term>
+                <listitem>Artikalnamn1</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Artikelnr.:</term>
+                <listitem>1234</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Antal förpackningar:</term>
+                <listitem>3</listitem>
+            </varlistentry>
+        </variablelist>
+    </section>
+
+    <section>
+        <title>Leveransinformation</title>
+        <variablelist>
+            <varlistentry>
+                <term>&nbsp;</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term></term>
+                <listitem>Utlämningsställe:</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Matnära</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Gatan 1</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>12345 Ankeborg</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term></term>
                 <listitem>Kontaktperson:</listitem>
             </varlistentry>
             <varlistentry>
-                <term>The contact person</term>
+                <term>Alfons Åberg</term>
                 <listitem>&nbsp;</listitem>
             </varlistentry>
         </variablelist>
@@ -111,6 +176,23 @@
         <variablelist>
             <varlistentry>
                 <term>___________________________________________________________________________</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+        </variablelist>
+    </section>
+    <section>
+        <title>Fakturaadress:</title>
+        <variablelist>
+            <varlistentry>
+                <term>receiver 1</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>street 1</term>
+                <listitem>&nbsp;</listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>12345 city 1</term>
                 <listitem>&nbsp;</listitem>
             </varlistentry>
         </variablelist>

@@ -403,7 +403,7 @@ public class CollectDeliveryController {
 
         // Add info from this step
         List<OrderRowType> orderRowsWithCollectDelivery = cart.getOrderRows().stream()
-                .filter(orderRowType -> collectDeliveryChosen(orderRowType)).collect(Collectors.toList());
+                .filter(this::collectDeliveryChosen).collect(Collectors.toList());
 
         orderRowsWithCollectDelivery.forEach(orderRowType -> {
             DeliveryChoiceType deliveryChoice = orderRowType.getDeliveryChoice();
@@ -419,16 +419,11 @@ public class CollectDeliveryController {
                 // assumes no two deliveryAlternatives share the same deliveryMethod and service point provider. That
                 // would lead to arbitrary result.
                 PrescriptionItemType prescriptionItem = prescriptionItemInfo.getPrescriptionItem(orderRowType);
-                for (DeliveryAlternativeType deliveryAlternative : prescriptionItem.getDeliveryAlternative()) {
+                DeliveryAlternativeType deliveryAlternativeForThisOrderRow = getDeliveryAlternativeForOrderRow(orderRowType);
 
-                    if (deliveryAlternative.getDeliveryMethod().equals(deliveryMethod)
-                            && getServicePointProviderForItem(prescriptionItem)
-                            .equals(deliveryAlternative.getServicePointProvider())) {
-
-                        deliveryMethodId = deliveryAlternative.getDeliveryMethodId();
-                        allowChoiceOfDeliveryPoints = deliveryAlternative.isAllowChioceOfDeliveryPoints();
-                        break;
-                    }
+                if (deliveryAlternativeForThisOrderRow != null) {
+                    deliveryMethodId = deliveryAlternativeForThisOrderRow.getDeliveryMethodId();
+                        allowChoiceOfDeliveryPoints = deliveryAlternativeForThisOrderRow.isAllowChioceOfDeliveryPoints();
                 }
 
                 if (deliveryMethodId == null) {
@@ -518,7 +513,9 @@ public class CollectDeliveryController {
         });
 
         if (this.contactPerson != null) {
+            // We only set contact person on those order rows where the chosen delivery alternative allows so.
             orderRowsWithCollectDelivery.stream()
+                    .filter(orderRowType -> getDeliveryAlternativeForOrderRow(orderRowType).isAllowContactPerson())
                     .forEach(orderRowType -> orderRowType.getDeliveryChoice().setContactPerson(this.contactPerson));
         }
 
@@ -529,11 +526,37 @@ public class CollectDeliveryController {
         }
     }
 
-    private boolean anyItemHasAllowOtherInvoiceAddress() {
+    DeliveryAlternativeType getDeliveryAlternativeForOrderRow(OrderRowType orderRowType) {
+        PrescriptionItemType prescriptionItem = prescriptionItemInfo.getPrescriptionItem(orderRowType);
+        DeliveryAlternativeType deliveryAlternativeForThisOrderRow = null;
+        for (DeliveryAlternativeType deliveryAlternative : prescriptionItem.getDeliveryAlternative()) {
+
+            // If deliveryMethod and servicePointProvider match we assume it is the one.
+            if (deliveryAlternative.getDeliveryMethod().equals(orderRowType.getDeliveryChoice().getDeliveryMethod())
+                    && getServicePointProviderForItem(prescriptionItem)
+                    .equals(deliveryAlternative.getServicePointProvider())) {
+
+                deliveryAlternativeForThisOrderRow = deliveryAlternative;
+                break;
+            }
+        }
+
+        return deliveryAlternativeForThisOrderRow;
+    }
+
+    boolean anyItemHasAllowOtherInvoiceAddress() {
         return prescriptionItemInfo.getChosenPrescriptionItemInfoList()
                 .stream()
                 .anyMatch(item -> BooleanUtils.isTrue(item.isAllowOtherInvoiceAddress()));
 
+    }
+
+    boolean anyItemHasAllowContactPerson() {
+        return cart.getOrderRows().stream()
+                .filter(this::collectDeliveryChosen)
+                .map(orderRowType -> prescriptionItemInfo.getPrescriptionItem(orderRowType))
+                .flatMap(prescriptionItemType -> prescriptionItemType.getDeliveryAlternative().stream())
+                .anyMatch(deliveryAlternative -> BooleanUtils.isTrue(deliveryAlternative.isAllowContactPerson()));
     }
 
     private boolean collectDeliveryChosen(OrderRowType orderRowType) {
@@ -605,7 +628,6 @@ public class CollectDeliveryController {
             List<ServicePointProviderEnum> remainingAvailableProvidersCommonForAllWithCollectDelivery = new ArrayList<>(
                     Arrays.asList(ServicePointProviderEnum.values()));
 
-            // todo Shouldn't we filter out prescription items so only those where collect delivery is chosen???
             List<OrderRowType> filteredOrderRows = cart.getOrderRows().stream()
                     .filter(orderRowType -> orderRowType.getDeliveryChoice().getDeliveryMethod().equals(
                             UTLÄMNINGSSTÄLLE))
@@ -926,7 +948,7 @@ public class CollectDeliveryController {
     public boolean getShowContactPerson() {
         String subjectOfCareId = userProfileController.getUserProfile().getSubjectOfCareId();
 
-        return Util.isBetween13And18(subjectOfCareId);
+        return Util.isBetween13And18(subjectOfCareId) && anyItemHasAllowContactPerson();
     }
 
     public String getContactPerson() {
