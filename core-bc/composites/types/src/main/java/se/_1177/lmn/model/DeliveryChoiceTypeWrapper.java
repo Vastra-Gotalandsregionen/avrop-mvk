@@ -113,11 +113,6 @@ public class DeliveryChoiceTypeWrapper extends DeliveryChoiceType implements Com
     }
 
     @Override
-    public List<Object> getAny() {
-        return wrapped.getAny();
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

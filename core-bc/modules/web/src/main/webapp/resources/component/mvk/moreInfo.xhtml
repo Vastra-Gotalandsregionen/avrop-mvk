@@ -34,7 +34,7 @@
                 <tr>
                     <td style="display: #{item.noOfPackagesPerOrder == 0 ? 'none' : 'table-cell'}">Förpackning / uttag</td>
                     <td>Totalt antal styck / uttag</td>
-                    <td style="display: #{empty item.grossPrice ? 'none' : 'table-cell'}">Pris per uttag</td>
+                    <td style="display: #{empty item.grossPrice and empty item.article.grossPrice ? 'none' : 'table-cell'}">Pris per uttag</td>
                     <td>Förskrivare</td>
                     <td class="#{empty item.prescribingOrganization ? 'hidden' : ''}">Förskrivande enhet</td>
                     <td>Giltigt t.o.m.</td>
@@ -44,7 +44,7 @@
                 <tr>
                     <td style="display: #{item.noOfPackagesPerOrder == 0 ? 'none' : 'table-cell'}">#{item.noOfPackagesPerOrder}</td>
                     <td>#{item.noOfArticlesPerOrder}</td>
-                    <td style="display: #{empty item.grossPrice ? 'none' : 'table-cell'}">#{item.grossPrice}</td>
+                    <td style="display: #{empty item.grossPrice and empty item.article.grossPrice ? 'none' : 'table-cell'}">#{not empty item.grossPrice ? item.grossPrice:  item.article.grossPrice }</td>
                     <td>#{item.prescriber.prescriberName}</td>
                     <td class="#{empty item.prescribingOrganization ? 'hidden' : ''}">#{item.prescribingOrganization.prescribingOrganizationName}</td>
                     <td>
@@ -65,9 +65,9 @@
                     <td class="column-0">Totalt antal styck/uttag</td>
                     <td>#{item.noOfArticlesPerOrder}</td>
                 </tr>
-                <tr style="display: #{empty item.grossPrice ? 'none' : 'table-row'}">
+                <tr style="display: #{empty item.grossPrice and empty item.article.grossPrice  ? 'none' : 'table-row'}">
                     <td class="column-0">Pris per uttag</td>
-                    <td>#{item.grossPrice}</td>
+                    <td>#{not empty item.grossPrice ? item.grossPrice:  item.article.grossPrice }</td>
                 </tr>
                 <tr>
                     <td class="column-0">Förskrivare</td>

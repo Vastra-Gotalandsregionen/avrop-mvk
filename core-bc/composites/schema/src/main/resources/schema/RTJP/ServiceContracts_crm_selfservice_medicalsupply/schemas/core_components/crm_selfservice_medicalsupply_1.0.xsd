@@ -17,9 +17,7 @@
  specific language governing permissions and limitations
  under the License.
  -->
-<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tns='urn:riv:crm:selfservice:medicalsupply:1'
-           targetNamespace='urn:riv:crm:selfservice:medicalsupply:1' elementFormDefault='qualified'
-           attributeFormDefault='unqualified' version='1.0'>
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:tns='urn:riv:crm:selfservice:medicalsupply:1' targetNamespace='urn:riv:crm:selfservice:medicalsupply:1' elementFormDefault='qualified' attributeFormDefault='unqualified' version='1.0'>
   <xs:complexType name="AddressType">
     <xs:sequence>
       <xs:element name="Receiver" type="xs:string" minOccurs='1' maxOccurs='1'/>
@@ -29,7 +27,7 @@
       <xs:element name="City" type="xs:string" minOccurs='1' maxOccurs='1'/>
       <xs:element name="DoorCode" type="xs:string" minOccurs='0' maxOccurs='1'/>
       <xs:element name="Phone" type="xs:string" minOccurs='1' maxOccurs='1'/>
-      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded'/>
+      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>
   </xs:complexType>
 
@@ -44,7 +42,7 @@
       <xs:element name="Variety" type="xs:string" minOccurs='0' maxOccurs='1'/>
       <xs:element name="ArticleImage" type="tns:ImageType" minOccurs='0' maxOccurs='1'/>
       <xs:element name="GrossPrice" type="xs:string" minOccurs='0' maxOccurs='1'/>
-      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded'/>
+      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>
   </xs:complexType>
 
@@ -62,11 +60,9 @@
       <xs:element name="DeliveryMethod" type="tns:DeliveryMethodEnum" minOccurs='1' maxOccurs='1'/>
       <xs:element name="ServicePointProvider" type="tns:ServicePointProviderEnum" minOccurs='1' maxOccurs='1'/>
       <xs:element name="AllowChioceOfDeliveryPoints" type="xs:boolean" minOccurs='1' maxOccurs='1'/>
+      <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodEnum" minOccurs='0' maxOccurs='unbounded'/>
       <xs:element name="AllowDeliveryComment" type="xs:boolean" minOccurs='0' maxOccurs='1'/>
       <xs:element name="AllowContactPerson" type="xs:boolean" minOccurs='0' maxOccurs='1'/>
-      <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodEnum" minOccurs='0'
-                  maxOccurs='unbounded'/>
-      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded'/>
     </xs:sequence>
   </xs:complexType>
 
@@ -75,14 +71,12 @@
       <xs:element name="DeliveryMethodId" type="xs:string" minOccurs='1' maxOccurs='1'/>
       <xs:element name="DeliveryMethod" type="tns:DeliveryMethodEnum" minOccurs='1' maxOccurs='1'/>
       <xs:element name="HomeDeliveryAddress" type="tns:AddressType" minOccurs='0' maxOccurs='1'/>
-      <xs:element name="InvoiceAddress" type="tns:AddressType" minOccurs='0' maxOccurs='1'/>
       <xs:element name="DeliveryPoint" type="tns:DeliveryPointType" minOccurs='0' maxOccurs='1'/>
-      <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodEnum" minOccurs='0'
-                  maxOccurs='1' nillable='true'/>
+      <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodEnum" minOccurs='0' maxOccurs='1' nillable='true'/>
       <xs:element name="DeliveryNotificationReceiver" type="xs:string" minOccurs='0' maxOccurs='1'/>
       <xs:element name="DeliveryComment" type="xs:string" minOccurs='0' maxOccurs='1'/>
+      <xs:element name="InvoiceAddress" type="tns:AddressType" minOccurs='0' maxOccurs='1'/>
       <xs:element name="ContactPerson" type="xs:string" minOccurs='0' maxOccurs='1'/>
-      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded'/>
     </xs:sequence>
   </xs:complexType>
 
@@ -94,7 +88,7 @@
       <xs:element name="DeliveryPointPostalCode" type="xs:string" minOccurs='1' maxOccurs='1'/>
       <xs:element name="DeliveryPointCity" type="xs:string" minOccurs='1' maxOccurs='1'/>
       <xs:element name="CountryCode" type="tns:CountryCodeEnum" minOccurs='1' maxOccurs='1'/>
-      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded'/>
+      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>
   </xs:complexType>
 
@@ -107,7 +101,7 @@
       <xs:element name="NoOfPcs" type="xs:int" minOccurs='1' maxOccurs='1'/>
       <xs:element name="OrderDate" type="xs:date" minOccurs='1' maxOccurs='1'/>
       <xs:element name="DeliveredDate" type="xs:date" minOccurs='0' maxOccurs='1' nillable='true'/>
-      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded'/>
+      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>
   </xs:complexType>
 
@@ -120,7 +114,7 @@
       <xs:element name="NoOfPackages" type="xs:int" minOccurs='1' maxOccurs='1'/>
       <xs:element name="NoOfPcs" type="xs:int" minOccurs='1' maxOccurs='1'/>
       <xs:element name="Source" type="xs:string" minOccurs='1' maxOccurs='1'/>
-      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded'/>
+      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>
   </xs:complexType>
 
@@ -130,7 +124,7 @@
       <xs:element name="Orderer" type="xs:string" minOccurs='1' maxOccurs='1'/>
       <xs:element name="OrderByDelegate" default="false" type="xs:boolean" minOccurs='1' maxOccurs='1'/>
       <xs:element name="OrderRow" type="tns:OrderRowType" minOccurs='1' maxOccurs='unbounded'/>
-      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded'/>
+      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>
   </xs:complexType>
 
@@ -140,7 +134,7 @@
       <xs:element name="PrescriberName" type="xs:string" minOccurs='1' maxOccurs='1'/>
       <xs:element name="PrescriberTitle" type="xs:string" minOccurs='0' maxOccurs='1'/>
       <xs:element name="PrescriberCode" type="xs:string" minOccurs='0' maxOccurs='1'/>
-      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded'/>
+      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>
   </xs:complexType>
 
@@ -148,7 +142,7 @@
     <xs:sequence>
       <xs:element name="PrescribingOrganizationId" type="xs:string" minOccurs='1' maxOccurs='1'/>
       <xs:element name="PrescribingOrganizationName" type="xs:string" minOccurs='1' maxOccurs='1'/>
-      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded'/>
+      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>
   </xs:complexType>
 
@@ -171,7 +165,6 @@
       <xs:element name="Status" type="tns:StatusEnum" minOccurs='1' maxOccurs='1'/>
       <xs:element name="GrossPrice" type="xs:string" minOccurs='0' maxOccurs='1'/>
       <xs:element name="AllowOtherInvoiceAddress" type="xs:boolean" minOccurs='0' maxOccurs='1'/>
-      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded'/>
     </xs:sequence>
   </xs:complexType>
 
@@ -180,9 +173,12 @@
       <xs:element name="SubjectOfCareId" type="xs:string" minOccurs='1' maxOccurs='1'/>
       <xs:element name="PrescriptionItem" type="tns:PrescriptionItemType" minOccurs='0' maxOccurs='unbounded'/>
       <xs:element name="OrderItem" type="tns:OrderItemType" minOccurs='0' maxOccurs='unbounded'/>
-      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded'/>
+      <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>
   </xs:complexType>
+
+
+
 
 
   <xs:simpleType name="CountryCodeEnum">
@@ -245,7 +241,7 @@
 
   <xs:simpleType name="HttpsURI">
     <xs:restriction base="xs:anyURI">
-      <xs:pattern value="https://.+"/>
+      <xs:pattern value="https://.+" />
     </xs:restriction>
   </xs:simpleType>
 
