@@ -373,4 +373,8 @@ public class DeliveryController {
 
         return newList;
     }
+
+    public String getViewName() {
+        return VIEW_NAME;
+    }
 }

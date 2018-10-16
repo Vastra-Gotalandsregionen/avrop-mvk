@@ -51,6 +51,25 @@ public class NavigationController {
         return Constants.ACTION_SUFFIX;
     }
 
+    public void ensureLastViewIs(String viewWithoutSuffix, String name) {
+
+        View view = View.from(viewWithoutSuffix + Constants.ACTION_SUFFIX, name);
+
+        int index = views.indexOf(view);
+
+        if (index == views.size() - 1) {
+            // Do nothing. It is already last.
+            return;
+        }
+
+        if (index > -1) {
+            goBackTo(view);
+        } else {
+            // The user has probably used the browser back button to jump forward in the flow
+            gotoView(view.value, view.label);
+        }
+    }
+
     public static class View {
         String value;
         String label;

@@ -166,4 +166,8 @@ public class VerifyDeliveryController {
     public Boolean getOrderSuccess() {
         return orderSuccess;
     }
+
+    public String getViewName() {
+        return VIEW_NAME;
+    }
 }

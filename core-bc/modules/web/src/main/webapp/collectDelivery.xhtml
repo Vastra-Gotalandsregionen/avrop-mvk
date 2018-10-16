@@ -10,6 +10,12 @@
 
 <ui:composition template="WEB-INF/xhtml/template/wideContent.xhtml">
 
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewAction action="#{navigationController.ensureLastViewIs('collectDelivery', collectDeliveryController.viewName)}" />
+        </f:metadata>
+    </ui:define>
+
     <ui:define name="boxContent">
 
         <h:panelGroup id="messagesWrapper">
@@ -108,7 +114,7 @@
                     <hr/>
                     
                     <h3>Kontaktperson</h3>
-                    <p>Namn på annan person än mottagaren som får kvittera eller hämta leveransen.</p>
+                    <p>Skriv in för- och efternamn på annan person som får kvittera eller hämta leveransen.</p>
 
                     <div class="input-group">
                         <div class="clearfix">

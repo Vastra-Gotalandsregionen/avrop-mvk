@@ -220,4 +220,8 @@ public class SubArticleController {
             }
         }
     }
+
+    public String getViewName() {
+        return VIEW_NAME;
+    }
 }

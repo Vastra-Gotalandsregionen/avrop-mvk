@@ -30,7 +30,12 @@
 
     <div class="input-group">
         <div class="clearfix">
-            <h:outputLabel for="coField" value="C/O-adress (valfri)"/>
+            <h:outputLabel for="coField" value="C/O-adress (valfri)">
+                <span class="toggle-trigger info-icon expand" data-toggle-for="coInfo"/>
+            </h:outputLabel>
+            <div id="coInfo" class="expanded-content" style="display: none;">
+                Skriv in för- och efternamn på den som bor på adressen du ändrar till.
+            </div>
         </div>
         <h:inputText id="coField" value="#{model.coAddress}" maxlength="100"/>
     </div>

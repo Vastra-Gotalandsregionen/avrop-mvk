@@ -11,6 +11,12 @@
 
 <ui:composition template="WEB-INF/xhtml/template/wideContent.xhtml">
 
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewAction action="#{navigationController.ensureLastViewIs('homeDelivery', homeDeliveryController.viewName)}" />
+        </f:metadata>
+    </ui:define>
+
     <ui:define name="boxContent">
 
         <o:messages showSummary="true" styleClass="alert alert-danger" escape="false"/>

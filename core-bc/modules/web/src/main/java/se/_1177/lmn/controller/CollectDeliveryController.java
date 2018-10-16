@@ -958,4 +958,8 @@ public class CollectDeliveryController {
     public void setContactPerson(String contactPerson) {
         this.contactPerson = contactPerson;
     }
+
+    public String getViewName() {
+        return VIEW_NAME;
+    }
 }

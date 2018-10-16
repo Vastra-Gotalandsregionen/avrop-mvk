@@ -16,6 +16,7 @@
             <f:viewParam name="objectId" value="#{userProfileController.objectId}" />
             <f:viewAction action="#{orderController.possiblyReinit()}" />
             <f:viewAction action="#{userProfileController.checkDelegate()}" />
+            <f:viewAction action="#{navigationController.ensureLastViewIs('order', orderController.viewName)}" />
         </f:metadata>
     </ui:define>
 

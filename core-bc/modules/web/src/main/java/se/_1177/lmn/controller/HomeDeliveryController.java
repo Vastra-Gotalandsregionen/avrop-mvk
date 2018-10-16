@@ -545,6 +545,10 @@ public class HomeDeliveryController {
         this.deliveryComment = deliveryComment;
     }
 
+    public String getViewName() {
+        return VIEW_NAME;
+    }
+
     static enum NotificationVariant {
         WITH_NOTIFICATION, WITHOUT_NOTIFICATION, BOTH_WITH_AND_WITHOUT_NOTIFICATION
     }

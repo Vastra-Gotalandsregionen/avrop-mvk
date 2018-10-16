@@ -88,6 +88,10 @@ public class InvoiceAddressController {
         return navigationController.gotoView("verifyDelivery" + ACTION_SUFFIX, VerifyDeliveryController.VIEW_NAME);
     }
 
+    public String getViewName() {
+        return VIEW_NAME;
+    }
+
     public static enum SameOrDifferent {
         SAME, DIFFERENT
     }

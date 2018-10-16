@@ -13,6 +13,12 @@
 
     <ui:define name="currentPage">Bekräfta</ui:define>
 
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewAction action="#{navigationController.ensureLastViewIs('verifyDelivery', verifyDeliveryController.viewName)}" />
+        </f:metadata>
+    </ui:define>
+
     <ui:define name="boxContent">
 
         <o:messages showSummary="true" styleClass="alert alert-danger" escape="false"/>
