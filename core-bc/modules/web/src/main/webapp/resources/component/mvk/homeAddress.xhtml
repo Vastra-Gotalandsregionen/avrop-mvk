@@ -82,8 +82,8 @@
             <span>
                 <h:outputLabel for="doorCodeField" style="float:none;"
                                value="Portkod (om portkod inte finns, lämna fältet blankt)"/>
-                <h:inputText id="doorCodeField" value="#{model.doorCode}" maxlength="50" validatorMessage="För långt värde för portkod">
-                    <f:validateLength maximum="50"/>
+                <h:inputText id="doorCodeField" value="#{model.doorCode}" maxlength="10" validatorMessage="För långt värde för portkod">
+                    <f:validateLength maximum="10"/>
                 </h:inputText>
             </span>
             <span id="doorCodeReminderText"
@@ -96,9 +96,9 @@
             <h:outputLabel for="phoneField" value="Telefon"/>
             <h:message for="phoneField" styleClass="small-screen alert alert-danger field-error"/>
         </div>
-        <h:inputText id="phoneField" value="#{model.phoneNumber}" required="true" maxlength="20"
+        <h:inputText id="phoneField" value="#{model.phoneNumber}" required="true" maxlength="25"
                      requiredMessage="Telefon saknas" validatorMessage="Ogiltig telefon">
-            <f:validateLength minimum="3" maximum="20"/>
+            <f:validateLength minimum="3" maximum="25"/>
         </h:inputText>
         <h:message for="phoneField" styleClass="alert alert-danger field-error"/>
     </div>

@@ -164,7 +164,7 @@
                                         <h:outputLabel for="smsInput" value="Mobiltelefon"/>
                                         <h:message for="smsInput" styleClass="small-screen alert alert-danger field-error"/>
                                     </div>
-                                    <h:inputText id="smsInput" value="#{collectDeliveryController.smsNumber}" maxlength="20">
+                                    <h:inputText id="smsInput" value="#{collectDeliveryController.smsNumber}" maxlength="25">
                                         <f:ajax event="change"
                                                 execute="smsInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
                                                 render="collectDeliveryForm:notificationMethodRepeat:0:smsInput collectDeliveryForm:notificationMethodRepeat:1:smsInput collectDeliveryForm:notificationMethodRepeat:2:smsInput collectDeliveryForm:notificationMethodRepeat:3:smsInput collectDeliveryForm:notificationMethodRepeat:4:smsInput collectDeliveryForm:notificationMethodRepeat:5:smsInput"/>
@@ -180,7 +180,7 @@
                                         <h:message for="phoneInput" styleClass="small-screen alert alert-danger field-error"/>
                                     </div>
 
-                                    <h:inputText id="phoneInput" value="#{collectDeliveryController.phoneNumber}" maxlength="20">
+                                    <h:inputText id="phoneInput" value="#{collectDeliveryController.phoneNumber}" maxlength="25">
                                         <f:ajax event="change"
                                                 execute="phoneInput collectDeliveryForm:notificationMethodRepeat:0:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:1:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:2:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:3:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:4:chosenDeliveryNotificationMethod collectDeliveryForm:notificationMethodRepeat:5:chosenDeliveryNotificationMethod"
                                                 render="collectDeliveryForm:notificationMethodRepeat:0:phoneInput collectDeliveryForm:notificationMethodRepeat:1:phoneInput collectDeliveryForm:notificationMethodRepeat:2:phoneInput collectDeliveryForm:notificationMethodRepeat:3:phoneInput collectDeliveryForm:notificationMethodRepeat:4:phoneInput collectDeliveryForm:notificationMethodRepeat:5:phoneInput"/>
