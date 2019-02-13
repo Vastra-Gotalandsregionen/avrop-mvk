@@ -106,20 +106,7 @@ public class BeanConfig {
         bean.setServiceClass(serviceClass);
         bean.setAddress(endpointUrl);
 
-        addLoggingInterceptors(bean);
-
         return bean;
-    }
-
-    private void addLoggingInterceptors(JaxWsProxyFactoryBean bean) {
-        LoggingOutInterceptor loggingOutInterceptor = new LoggingOutInterceptor(-1);
-        LoggingInInterceptor loggingInInterceptor = new LoggingInInterceptor(-1);
-
-        loggingOutInterceptor.setPrettyLogging(true);
-        loggingInInterceptor.setPrettyLogging(true);
-
-        bean.getOutInterceptors().add(loggingOutInterceptor);
-        bean.getInInterceptors().add(loggingInInterceptor);
     }
 
     private GetMedicalSupplyDeliveryPointsResponderInterface getMedicalSupplyDeliveryPointsResponderInterface(String endpointUrl) {
