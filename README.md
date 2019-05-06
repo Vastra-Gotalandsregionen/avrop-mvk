@@ -107,3 +107,27 @@ A typical flow is as follows:
 * The confirmation mail is shown.
 
 ![](https://raw.githubusercontent.com/Vastra-Gotalandsregionen/avrop-lakemedelsnara-produkter/release/1.0/core-bc/modules/web/doc/flow10.png)
+
+## Configuration per county
+The application is used across multiple independent counties in Sweden where each county uses its own source system and has separate contracts with suppliers. Each county can therefore be configured according to their needs. Some needs are configured in the application and some are decided by the SOAP messages. Here the settings which are configured, per county in counties-configuration-10.yml, in the application are listed:
+
+* ``getMedicalSupplyDeliveryPointsAddress`` - the endpoint address for fetching delivery points (optional - not all counties have delivery points)
+* ``getMedicalSupplyPrescriptionsAddress`` - the endpoint address for fetching prescriptions for a patient
+* ``registerMedicalSupplyOrderAddress`` - the endpoint address for registering the order
+* ``rtjpLogicalAddress`` - HSA ID for the county
+* ``receptionHsaId`` - HSA ID for the reception
+* ``defaultSelectedPrescriptions`` - whether all orderable articles should be preselected or the patient needs to pick all he/she wishes to order 
+
+In addition, a number of text strings, are configured per county in each application_sv_SE_NN.properties file where NN corresponds to the county code. These are examples: 
+
+* ``customer.service.phone``=XXX-XXX XX XX
+* ``customer.service.info``=Kundtjänst Skövdedepån: Telefon XXX-XXX XX XX. Öppet vardagar kl 08:00 till 16:30. E-post <a href="mailto:kundtjanst@example.com">kundtjanst@example.com</a>
+* ``products.fetch.default.error``=Dina förskrivna produkter kunde inte visas.
+* ``products.fetch.none.found``=Inga förskrivna produkter hittades. Om du förväntat dig beställningsbara produkter, kontakta kundtjänst på XXX-XXX XX XX.
+* ``order.confirmation``=Tack för din beställning, produkterna levereras inom 5 arbetsdagar
+
+Moreover, each county can send instructions via the SOAP messages. See https://github.com/Vastra-Gotalandsregionen/oppna-program-icc-crm-selfservice-medicalsupply-schemas for a complete reference. Examples of elements which can be seen as "configuration-ish" are:
+
+* ``AllowOtherInvoiceAddress`` - If the patient chooses any article with this set to true he/she will need to choose another address for the invoice or same as delivery address.
+* ``AllowChioceOfDeliveryPoints`` - Whether the patient can choose delivery point or the supplier will choose the closest.
+* ``AllowContactPerson`` - Whether an input field for contact person should be displayed for collect delivery. May be usable especially when people aged 13-18 years are concerned, so the package may be collected.
