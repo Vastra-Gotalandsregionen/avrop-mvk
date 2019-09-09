@@ -132,7 +132,7 @@ public class MvkInboxService {
         Template template;
         try {
             // Needs prescriptionItems and deliveryChoices.
-            template = cfg.getTemplate("inboxMessageTemplate.ftl");
+            template = cfg.getTemplate("inboxMessageTemplate.ftl", "UTF-8");
         } catch (IOException e) {
             // Should happen always or never.
             throw new RuntimeException("Unable to process freemarker template.");

@@ -1,3 +1,4 @@
+<#setting locale="sv_SE">
 <?xml version="1.0"?>
 <article>
 
