@@ -68,29 +68,33 @@ A typical flow is as follows:
 
 ![](https://raw.githubusercontent.com/Vastra-Gotalandsregionen/avrop-lakemedelsnara-produkter/release/1.0/core-bc/modules/web/doc/flow1.png)
 
-* The user clicks on "förskrivna förbrukningsprodukter".
+* The user clicks on "Beställ förskrivna förbrukningsprodukter".
 
-![](https://raw.githubusercontent.com/Vastra-Gotalandsregionen/avrop-lakemedelsnara-produkter/release/1.0/core-bc/modules/web/doc/flow2.png)
+![](https://github.com/Vastra-Gotalandsregionen/avrop-lakemedelsnara-produkter/raw/java11-compatibility/core-bc/modules/web/doc/flow2.PNG)
 
-* The user clicks on "Till beställning".
-
-![](https://raw.githubusercontent.com/Vastra-Gotalandsregionen/avrop-lakemedelsnara-produkter/release/1.0/core-bc/modules/web/doc/flow3.png)
-
-* The user chooses the products he/she wants to order, from available products, and clicks "Till leverans".
+* The user chooses the products he/she wants to order, from available products.
 
 ![](https://raw.githubusercontent.com/Vastra-Gotalandsregionen/avrop-lakemedelsnara-produkter/release/1.0/core-bc/modules/web/doc/flow4.png)
 
-* The user chooses delivery method and clicks "Till adressinformation".
+* If any of the chosen products has subarticles, e.g. with different tastes, the user chooses distribution of those.
+
+![](https://github.com/Vastra-Gotalandsregionen/avrop-lakemedelsnara-produkter/raw/java11-compatibility/core-bc/modules/web/doc/flow4b.PNG)
+
+* The user chooses delivery method.
 
 ![](https://raw.githubusercontent.com/Vastra-Gotalandsregionen/avrop-lakemedelsnara-produkter/release/1.0/core-bc/modules/web/doc/flow5.png)
 
-* If the user chose home delivery he/she fills in the form and clicks "Kontrollera beställning".
+* If the user chose home delivery he/she fills in the form.
 
 ![](https://raw.githubusercontent.com/Vastra-Gotalandsregionen/avrop-lakemedelsnara-produkter/release/1.0/core-bc/modules/web/doc/flow6a.png)
 
-* If the user chose collect delivery he/she chooses delivery point and notification method and clicks "Kontrollera beställning".
+* If the user chose collect delivery he/she chooses delivery point and notification method.
 
 ![](https://raw.githubusercontent.com/Vastra-Gotalandsregionen/avrop-lakemedelsnara-produkter/release/1.0/core-bc/modules/web/doc/flow6b.png)
+
+* If any of the chosen products allows invoice to another address the user chooses whether the invoice should be sent to the same as the shipping address or a custom adress.
+
+![](https://github.com/Vastra-Gotalandsregionen/avrop-lakemedelsnara-produkter/raw/java11-compatibility/core-bc/modules/web/doc/flow6c.PNG)
 
 * The user verifies the order and clicks "Beställ / Bekräfta beställning".
 
