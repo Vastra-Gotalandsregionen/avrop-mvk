@@ -1,0 +1,44 @@
+counties:
+  default:
+    getMedicalSupplyDeliveryPointsAddress:
+    getMedicalSupplyPrescriptionsAddress:
+    registerMedicalSupplyOrderAddress:
+    rtjpLogicalAddress:
+    receptionHsaId:
+    defaultSelectedPrescriptions:
+
+## VGR
+  14:
+    getMedicalSupplyDeliveryPointsAddress:
+    getMedicalSupplyPrescriptionsAddress: 
+    registerMedicalSupplyOrderAddress:
+    rtjpLogicalAddress:
+    receptionHsaId:
+    defaultSelectedPrescriptions:
+
+## Skåne
+  12:
+    getMedicalSupplyDeliveryPointsAddress:
+    getMedicalSupplyPrescriptionsAddress: 
+    registerMedicalSupplyOrderAddress:
+    rtjpLogicalAddress:
+    receptionHsaId:
+    defaultSelectedPrescriptions:
+
+## Stockholm
+  01:
+    getMedicalSupplyPrescriptionsAddress: 
+    registerMedicalSupplyOrderAddress:
+    getMedicalSupplyDeliveryPointsAddress:
+    rtjpLogicalAddress:
+    receptionHsaId:
+    defaultSelectedPrescriptions:
+
+## Jönköping
+  06:
+    getMedicalSupplyPrescriptionsAddress: 
+    registerMedicalSupplyOrderAddress:
+    getMedicalSupplyDeliveryPointsAddress:
+    rtjpLogicalAddress:
+    receptionHsaId:
+    defaultSelectedPrescriptions:
