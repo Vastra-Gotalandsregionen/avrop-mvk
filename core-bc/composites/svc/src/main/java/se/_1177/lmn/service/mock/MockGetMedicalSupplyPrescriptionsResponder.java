@@ -1,24 +1,22 @@
 package se._1177.lmn.service.mock;
 
-import riv.crm.selfservice.medicalsupply._1.ArticleType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.ImageType;
-import riv.crm.selfservice.medicalsupply._1.OrderItemType;
-import riv.crm.selfservice.medicalsupply._1.PrescriberType;
-import riv.crm.selfservice.medicalsupply._1.PrescribingOrganizationType;
-import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._1.ProductAreaEnum;
-import riv.crm.selfservice.medicalsupply._1.ResultCodeEnum;
-import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
-import riv.crm.selfservice.medicalsupply._1.StatusEnum;
-import riv.crm.selfservice.medicalsupply._1.SubjectOfCareType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._1.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsResponseType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.ObjectFactory;
+import riv.crm.selfservice.medicalsupply._2.ArticleType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryAlternativeType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryChoiceType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.DeliveryNotificationMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.ImageType;
+import riv.crm.selfservice.medicalsupply._2.OrderItemType;
+import riv.crm.selfservice.medicalsupply._2.PrescriberType;
+import riv.crm.selfservice.medicalsupply._2.PrescribingOrganizationType;
+import riv.crm.selfservice.medicalsupply._2.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._2.ResultCodeEnum;
+import riv.crm.selfservice.medicalsupply._2.StatusEnum;
+import riv.crm.selfservice.medicalsupply._2.SubjectOfCareType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._2.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._2.GetMedicalSupplyPrescriptionsResponseType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._2.GetMedicalSupplyPrescriptionsType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._2.ObjectFactory;
 
 import javax.jws.WebService;
 import javax.xml.bind.JAXBElement;
@@ -33,10 +31,13 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 
+import static riv.crm.selfservice.medicalsupply._2.DeliveryMethodEnum.HEMLEVERANS;
+import static se._1177.lmn.service.mock.MockUtil.toCvType;
+
 /**
  * @author Patrik Björk
  */
-@WebService(targetNamespace = "urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyPrescriptions:0:rivtabp21")
+@WebService(targetNamespace = "urn:riv:crm:selfservice:medicalsupply:GetMedicalSupplyPrescriptions:2:rivtabp21")
 public class MockGetMedicalSupplyPrescriptionsResponder
         implements GetMedicalSupplyPrescriptionsResponderInterface {
 
@@ -99,7 +100,8 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         article.setIsOrderable(random.nextBoolean());
         article.setPackageSize(random.nextInt(100));
         article.setPackageSizeUnit("Enhet" + random.nextInt(100));
-        article.setProductArea(ProductAreaEnum.values()[random.nextInt(ProductAreaEnum.values().length)]);
+        MockProductAreaEnum value = MockProductAreaEnum.values()[random.nextInt(MockProductAreaEnum.values().length)];
+        article.setProductArea(toCvType(value));
 
         PrescriptionItemType prescriptionItem = new PrescriptionItemType();
 
@@ -109,7 +111,8 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         article2.setIsOrderable(random.nextBoolean());
         article2.setPackageSize(random.nextInt(100));
         article2.setPackageSizeUnit("Enhet" + random.nextInt(100));
-        article2.setProductArea(ProductAreaEnum.values()[random.nextInt(ProductAreaEnum.values().length)]);
+        MockProductAreaEnum value1 = MockProductAreaEnum.values()[random.nextInt(MockProductAreaEnum.values().length)];
+        article2.setProductArea(toCvType(value1));
 
         prescriptionItem.setArticle(article2);
 
@@ -171,7 +174,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
         orderItem.setOrderDate(getRandomCalendar(random, 0));
         DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
-        deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        deliveryChoice.setDeliveryMethod(HEMLEVERANS);
         orderItem.setDeliveryChoice(deliveryChoice);
         orderItem.setPrescriptionItemId(prescriptionItem.getPrescriptionItemId());
         orderItem.setOrderDate(getRandomCalendar(random, -365)); // Todo To make more realistic take from a set of order dates so some items were ordered at the same time.
@@ -191,7 +194,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
             subArticle.setIsOrderable(true);
             subArticle.setPackageSize(4);
             subArticle.setPackageSizeUnit("st");
-            subArticle.setProductArea(ProductAreaEnum.SÄRNÄR);
+            subArticle.setProductArea(toCvType(MockProductAreaEnum.SÄRNÄR));
             if (random.nextBoolean()) {
                 subArticle.setVariety("Smak " + i);
             }
@@ -202,7 +205,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
             orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
             orderItem.setOrderDate(getRandomCalendar(random, 0));
             DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
-            deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+            deliveryChoice.setDeliveryMethod(HEMLEVERANS);
             orderItem.setDeliveryChoice(deliveryChoice);
             orderItem.setArticle(subArticle);
             orderItem.setNoOfPcs(random.nextInt(100) * subArticle.getPackageSize());
@@ -220,7 +223,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         article2.setIsOrderable(true);
         article2.setPackageSize(2);
         article2.setPackageSizeUnit("st");
-        article2.setProductArea(ProductAreaEnum.SÄRNÄR);
+        article2.setProductArea(toCvType(MockProductAreaEnum.SÄRNÄR));
 
         prescriptionItem.getSubArticle().addAll(subArticles);
 
@@ -260,7 +263,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         OrderItemType orderItem = new OrderItemType();
         orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
         DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
-        deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        deliveryChoice.setDeliveryMethod(HEMLEVERANS);
         orderItem.setDeliveryChoice(deliveryChoice);
         orderItem.setArticle(article2);
         orderItem.setNoOfPcs(article2.getPackageSize() * prescriptionItem.getNoOfPackagesPerOrder());
@@ -282,7 +285,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
             subArticle.setIsOrderable(true);
             subArticle.setPackageSize(4);
             subArticle.setPackageSizeUnit("st");
-            subArticle.setProductArea(ProductAreaEnum.SÄRNÄR);
+            subArticle.setProductArea(toCvType(MockProductAreaEnum.SÄRNÄR));
             if (random.nextBoolean()) {
                 subArticle.setVariety("Smak " + i);
             }
@@ -293,7 +296,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
             orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
             orderItem.setOrderDate(getRandomCalendar(random, 0));
             DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
-            deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+            deliveryChoice.setDeliveryMethod(HEMLEVERANS);
             orderItem.setDeliveryChoice(deliveryChoice);
             orderItem.setArticle(subArticle);
             orderItem.setNoOfPcs(random.nextInt(8) * subArticle.getPackageSize());
@@ -311,7 +314,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         article2.setIsOrderable(true);
         article2.setPackageSize(2);
         article2.setPackageSizeUnit("st");
-        article2.setProductArea(ProductAreaEnum.SÄRNÄR);
+        article2.setProductArea(toCvType(MockProductAreaEnum.SÄRNÄR));
 
         prescriptionItem.getSubArticle().addAll(subArticles);
 
@@ -321,8 +324,8 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.setNoOfRemainingOrders(3);
 
         DeliveryAlternativeType deliveryAlternativeType1 = new DeliveryAlternativeType();
-        deliveryAlternativeType1.setServicePointProvider(ServicePointProviderEnum.INGEN);
-        deliveryAlternativeType1.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        deliveryAlternativeType1.setServicePointProvider(toCvType(MockServicePointProviderEnum.INGEN));
+        deliveryAlternativeType1.setDeliveryMethod(HEMLEVERANS);
         deliveryAlternativeType1.setDeliveryMethodId("1234");
         deliveryAlternativeType1.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.TELEFON);
         deliveryAlternativeType1.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.BREV);
@@ -360,7 +363,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         OrderItemType orderItem = new OrderItemType();
         orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
         DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
-        deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        deliveryChoice.setDeliveryMethod(HEMLEVERANS);
         orderItem.setDeliveryChoice(deliveryChoice);
         orderItem.setArticle(article2);
         orderItem.setNoOfPcs(article2.getPackageSize() * prescriptionItem.getNoOfPackagesPerOrder());
@@ -369,6 +372,12 @@ public class MockGetMedicalSupplyPrescriptionsResponder
 
         subjectOfCare.getOrderItem().add(orderItem);
     }
+
+    /*private CVType toCvType(MockServicePointProviderEnum providerEnum) {
+        CVType cvType = new CVType();
+        cvType.setDisplayName(providerEnum.name());
+        return cvType;
+    }*/
 
     private void addSpecificPrescriptionItemZeroPackages(Random random, SubjectOfCareType subjectOfCare) {
 
@@ -386,7 +395,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
             subArticle.setIsOrderable(true);
             subArticle.setPackageSize(1); // Important
             subArticle.setPackageSizeUnit("st");
-            subArticle.setProductArea(ProductAreaEnum.DIABETES);
+            subArticle.setProductArea(toCvType(MockProductAreaEnum.DIABETES));
             if (random.nextBoolean()) {
                 subArticle.setVariety("Smak " + i);
             }
@@ -412,7 +421,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
             orderItem.setDeliveredDate(wrapInJaxBElement(getRandomCalendar(random, 0)));
             orderItem.setOrderDate(getRandomCalendar(random, 0));
             DeliveryChoiceType deliveryChoice = new DeliveryChoiceType();
-            deliveryChoice.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+            deliveryChoice.setDeliveryMethod(HEMLEVERANS);
             orderItem.setDeliveryChoice(deliveryChoice);
             orderItem.setArticle(subArticle);
             orderItem.setNoOfPcs(random.nextInt(8) * subArticle.getPackageSize());
@@ -434,7 +443,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         article2.setIsOrderable(true);
         article2.setPackageSize(1); // Important
         article2.setPackageSizeUnit("st");
-        article2.setProductArea(ProductAreaEnum.SÄRNÄR);
+        article2.setProductArea(toCvType(MockProductAreaEnum.SÄRNÄR));
 //        article2.setGrossPrice("1 200 kr");
         article2.setArticleImage(articleImage);
 
@@ -513,7 +522,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         article2.setIsOrderable(true);
         article2.setPackageSize(1); // Important
         article2.setPackageSizeUnit("st");
-        article2.setProductArea(ProductAreaEnum.DIABETES);
+        article2.setProductArea(toCvType(MockProductAreaEnum.DIABETES));
         article2.setArticleImage(articleImage);
 
         prescriptionItem.setArticle(article2);
@@ -522,8 +531,8 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.setNoOfRemainingOrders(3);
 
         DeliveryAlternativeType deliveryAlternativeType1 = new DeliveryAlternativeType();
-        deliveryAlternativeType1.setServicePointProvider(ServicePointProviderEnum.INGEN);
-        deliveryAlternativeType1.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        deliveryAlternativeType1.setServicePointProvider(toCvType(MockServicePointProviderEnum.INGEN));
+        deliveryAlternativeType1.setDeliveryMethod(HEMLEVERANS);
         deliveryAlternativeType1.setDeliveryMethodId("1234");
         deliveryAlternativeType1.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.TELEFON);
         deliveryAlternativeType1.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.SMS);
@@ -531,8 +540,8 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.getDeliveryAlternative().add(deliveryAlternativeType1);
 
         DeliveryAlternativeType deliveryAlternativetype2 = new DeliveryAlternativeType();
-        deliveryAlternativetype2.setServicePointProvider(ServicePointProviderEnum.INGEN);
-        deliveryAlternativetype2.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        deliveryAlternativetype2.setServicePointProvider(toCvType(MockServicePointProviderEnum.INGEN));
+        deliveryAlternativetype2.setDeliveryMethod(HEMLEVERANS);
         deliveryAlternativetype2.setDeliveryMethodId("1234");
 
         prescriptionItem.getDeliveryAlternative().add(deliveryAlternativetype2);
@@ -568,7 +577,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         article2.setIsOrderable(true);
         article2.setPackageSize(1); // Important
         article2.setPackageSizeUnit("st");
-        article2.setProductArea(ProductAreaEnum.DIABETES);
+        article2.setProductArea(toCvType(MockProductAreaEnum.DIABETES));
 
         prescriptionItem.setArticle(article2);
 
@@ -576,8 +585,8 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.setNoOfRemainingOrders(3);
 
         DeliveryAlternativeType deliveryAlternativeType1 = new DeliveryAlternativeType();
-        deliveryAlternativeType1.setServicePointProvider(ServicePointProviderEnum.INGEN);
-        deliveryAlternativeType1.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        deliveryAlternativeType1.setServicePointProvider(toCvType(MockServicePointProviderEnum.INGEN));
+        deliveryAlternativeType1.setDeliveryMethod(HEMLEVERANS);
         deliveryAlternativeType1.setDeliveryMethodId("1234");
         deliveryAlternativeType1.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.BREV);
         deliveryAlternativeType1.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.E_POST);
@@ -585,8 +594,8 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.getDeliveryAlternative().add(deliveryAlternativeType1);
 
         DeliveryAlternativeType deliveryAlternativetype2 = new DeliveryAlternativeType();
-        deliveryAlternativetype2.setServicePointProvider(ServicePointProviderEnum.INGEN);
-        deliveryAlternativetype2.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        deliveryAlternativetype2.setServicePointProvider(toCvType(MockServicePointProviderEnum.INGEN));
+        deliveryAlternativetype2.setDeliveryMethod(HEMLEVERANS);
         deliveryAlternativetype2.setDeliveryMethodId("1234");
 
         prescriptionItem.getDeliveryAlternative().add(deliveryAlternativetype2);
@@ -622,7 +631,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         article2.setIsOrderable(true);
         article2.setPackageSize(1); // Important
         article2.setPackageSizeUnit("st");
-        article2.setProductArea(ProductAreaEnum.DIABETES);
+        article2.setProductArea(toCvType(MockProductAreaEnum.DIABETES));
 
         prescriptionItem.setArticle(article2);
 
@@ -630,8 +639,8 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.setNoOfRemainingOrders(3);
 
         DeliveryAlternativeType deliveryAlternativeType1 = new DeliveryAlternativeType();
-        deliveryAlternativeType1.setServicePointProvider(ServicePointProviderEnum.INGEN);
-        deliveryAlternativeType1.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        deliveryAlternativeType1.setServicePointProvider(toCvType(MockServicePointProviderEnum.INGEN));
+        deliveryAlternativeType1.setDeliveryMethod(HEMLEVERANS);
         deliveryAlternativeType1.setDeliveryMethodId("1234");
         deliveryAlternativeType1.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.TELEFON);
         deliveryAlternativeType1.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.E_POST);
@@ -639,8 +648,8 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.getDeliveryAlternative().add(deliveryAlternativeType1);
 
         DeliveryAlternativeType deliveryAlternativetype2 = new DeliveryAlternativeType();
-        deliveryAlternativetype2.setServicePointProvider(ServicePointProviderEnum.INGEN);
-        deliveryAlternativetype2.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        deliveryAlternativetype2.setServicePointProvider(toCvType(MockServicePointProviderEnum.INGEN));
+        deliveryAlternativetype2.setDeliveryMethod(HEMLEVERANS);
         deliveryAlternativetype2.setDeliveryMethodId("1234");
 
         prescriptionItem.getDeliveryAlternative().add(deliveryAlternativetype2);
@@ -676,7 +685,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         article2.setIsOrderable(true);
         article2.setPackageSize(1); // Important
         article2.setPackageSizeUnit("st");
-        article2.setProductArea(ProductAreaEnum.DIABETES);
+        article2.setProductArea(toCvType(MockProductAreaEnum.DIABETES));
 
         prescriptionItem.setArticle(article2);
 
@@ -684,7 +693,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.setNoOfRemainingOrders(3);
 
         DeliveryAlternativeType deliveryAlternativeType1 = new DeliveryAlternativeType();
-        deliveryAlternativeType1.setServicePointProvider(ServicePointProviderEnum.INGEN);
+        deliveryAlternativeType1.setServicePointProvider(toCvType(MockServicePointProviderEnum.INGEN));
         deliveryAlternativeType1.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
         deliveryAlternativeType1.setDeliveryMethodId("1234");
 
@@ -776,7 +785,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
     }
 
     private JAXBElement<XMLGregorianCalendar> wrapInJaxBElement(XMLGregorianCalendar calendar) {
-        return new riv.crm.selfservice.medicalsupply._1.ObjectFactory().createOrderItemTypeDeliveredDate(calendar);
+        return new riv.crm.selfservice.medicalsupply._2.ObjectFactory().createOrderItemTypeDeliveredDate(calendar);
     }
 
     private DeliveryAlternativeType getRandomDeliveryAlternativeType(Random random) {
@@ -788,17 +797,18 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         deliveryAlternative.setAllowDeliveryComment(random.nextBoolean());
         deliveryAlternative.setAllowContactPerson(true);
 
-        if (deliveryAlternative.getDeliveryMethod().equals(DeliveryMethodEnum.HEMLEVERANS)) {
-            deliveryAlternative.setServicePointProvider(ServicePointProviderEnum.INGEN);
+        if (deliveryAlternative.getDeliveryMethod().equals(HEMLEVERANS)) {
+            deliveryAlternative.setServicePointProvider(toCvType(MockServicePointProviderEnum.INGEN));
         } else {
             deliveryAlternative.setServicePointProvider(
-                    ServicePointProviderEnum.values()[random.nextInt(ServicePointProviderEnum.values().length)]);
+                    toCvType(MockServicePointProviderEnum.values()[random.nextInt(MockServicePointProviderEnum.values().length)]));
 
             // Inefficient but this is a mock...
-            while (deliveryAlternative.getServicePointProvider().equals(ServicePointProviderEnum.INGEN)) {
-                // Continue until something other than ServicePointProviderEnum.INGEN gets set.
+            while (MockServicePointProviderEnum.valueOf(deliveryAlternative.getServicePointProvider().getOriginalText())
+                    .equals(MockServicePointProviderEnum.INGEN)) {
+                // Continue until something other than MockServicePointProviderEnum.INGEN gets set.
                 deliveryAlternative.setServicePointProvider(
-                        ServicePointProviderEnum.values()[random.nextInt(ServicePointProviderEnum.values().length)]);
+                        toCvType(MockServicePointProviderEnum.values()[random.nextInt(MockServicePointProviderEnum.values().length)]));
 
             }
         }
@@ -812,6 +822,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
 
             DeliveryNotificationMethodEnum first = DeliveryNotificationMethodEnum.values()
                     [random.nextInt(DeliveryNotificationMethodEnum.values().length)];
+
             deliveryAlternative.getDeliveryNotificationMethod().add(first);
 
             DeliveryNotificationMethodEnum second = DeliveryNotificationMethodEnum.values()

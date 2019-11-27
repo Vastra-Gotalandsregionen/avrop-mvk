@@ -7,13 +7,14 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._1.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._1.GetMedicalSupplyDeliveryPointsResponseType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._1.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsResponseType;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._1.rivtabp21.RegisterMedicalSupplyOrderResponderInterface;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.RegisterMedicalSupplyOrderResponseType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._2.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._2.GetMedicalSupplyDeliveryPointsResponseType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._2.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._2.GetMedicalSupplyPrescriptionsResponseType;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._2.rivtabp21.RegisterMedicalSupplyOrderResponderInterface;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._2.RegisterMedicalSupplyOrderResponseType;
+import se._1177.lmn.service.mock.MockServicePointProviderEnum;
+import se._1177.lmn.service.mock.MockUtil;
 import se._1177.lmn.service.mock.MockWebServiceServer;
 
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class LmnServiceImplLocalIT {
     public void smokeTest() throws Exception {
 
         GetMedicalSupplyDeliveryPointsResponseType deliveryPoints =
-                lmnService.getMedicalSupplyDeliveryPoints(ServicePointProviderEnum.POSTNORD, "12345");
+                lmnService.getMedicalSupplyDeliveryPoints(MockUtil.toCvType(MockServicePointProviderEnum.POSTNORD), "12345");
 
         GetMedicalSupplyPrescriptionsResponseType prescriptions =
                 lmnService.getMedicalSupplyPrescriptions("19121212-1212");

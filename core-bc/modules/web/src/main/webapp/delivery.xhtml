@@ -109,7 +109,7 @@
                             <ui:repeat value="#{deliveryController.sortByNumberDeliveryMethodChoices(prescriptionItemInfo.chosenPrescriptionItemInfoList)}" var="item" varStatus="varStatus">
                                 <tr>
                                     <td>
-                                        #{utilController.capitalizeFully(item.article.productArea.name())}<br/>#{item.article.articleNo}
+                                        #{utilController.capitalizeFully(item.article.productArea.originalText)}<br/>#{item.article.articleNo}
                                     </td>
                                     <td>
                                         #{item.article.articleName}

@@ -38,7 +38,7 @@
       <xs:element name="ArticleName" type="xs:string" minOccurs='1' maxOccurs='1'/>
       <xs:element name="PackageSize" type="xs:int" minOccurs='1' maxOccurs='1'/>
       <xs:element name="PackageSizeUnit" type="xs:string" minOccurs='0' maxOccurs='1'/>
-      <xs:element name="ProductArea" type="xs:CVType" minOccurs='1' maxOccurs='1'/>
+      <xs:element name="ProductArea" type="tns:CVType" minOccurs='1' maxOccurs='1'/>
       <xs:element name="IsOrderable" type="xs:boolean" minOccurs='1' maxOccurs='1'/>
       <xs:element name="Variety" type="xs:string" minOccurs='0' maxOccurs='1'/>
       <xs:element name="ArticleImage" type="tns:ImageType" minOccurs='0' maxOccurs='1'/>
@@ -59,7 +59,7 @@
       <xs:element name="DeliveryMethodId" type="xs:string" minOccurs='1' maxOccurs='1'/>
       <xs:element name="DeliveryMethodName" type="xs:string" minOccurs='1' maxOccurs='1'/>
       <xs:element name="DeliveryMethod" type="tns:DeliveryMethodEnum" minOccurs='1' maxOccurs='1'/>
-      <xs:element name="ServicePointProvider" type="xs:CVType" minOccurs='1' maxOccurs='1'/>
+      <xs:element name="ServicePointProvider" type="tns:CVType" minOccurs='1' maxOccurs='1'/>
       <xs:element name="AllowChioceOfDeliveryPoints" type="xs:boolean" minOccurs='1' maxOccurs='1'/>
       <xs:element name="DeliveryNotificationMethod" type="tns:DeliveryNotificationMethodEnum" minOccurs='0' maxOccurs='unbounded'/>
       <xs:element name="AllowDeliveryComment" type="xs:boolean" minOccurs='0' maxOccurs='1'/>

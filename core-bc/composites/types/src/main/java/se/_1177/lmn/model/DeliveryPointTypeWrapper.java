@@ -1,7 +1,7 @@
 package se._1177.lmn.model;
 
-import riv.crm.selfservice.medicalsupply._1.CountryCodeEnum;
-import riv.crm.selfservice.medicalsupply._1.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._2.CountryCodeEnum;
+import riv.crm.selfservice.medicalsupply._2.DeliveryPointType;
 
 import java.util.List;
 import java.util.Objects;

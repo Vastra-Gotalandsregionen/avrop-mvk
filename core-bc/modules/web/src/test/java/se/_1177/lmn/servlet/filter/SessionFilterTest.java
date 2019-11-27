@@ -1,7 +1,7 @@
 package se._1177.lmn.servlet.filter;
 
 import org.junit.Test;
-import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._2.PrescriptionItemType;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
 
 import javax.servlet.FilterChain;

@@ -16,7 +16,7 @@
             </varlistentry>
             <varlistentry>
                 <term>Produktgrupp:</term>
-                <listitem>${item.article.productArea?capitalize}</listitem>
+                <listitem>${item.article.productArea.originalText?capitalize}</listitem>
             </varlistentry>
             <varlistentry>
                 <term>Artikel:</term>

@@ -69,7 +69,7 @@
                                     </h:panelGroup>
                                 </td>
                                 <td>
-                                    #{utilController.capitalizeFully(item.article.productArea)}
+                                    #{utilController.capitalizeFully(item.article.productArea.originalText)}
                                 </td>
                                 <td>
                                     <div class="bold">
@@ -157,7 +157,7 @@
                             <td>
                                 #{utilController.getStatusText(expiredItem)}
                             </td>
-                            <td>#{utilController.capitalizeFully(expiredItem.article.productArea)}<br/>#{expiredItem.article.articleNo}</td>
+                            <td>#{utilController.capitalizeFully(expiredItem.article.productArea.originalText)}<br/>#{expiredItem.article.articleNo}</td>
                             <td>
                                 <div class="bold">#{expiredItem.article.articleName}</div>
                                 <div>Artikel-nr: #{expiredItem.article.articleNo}</div>

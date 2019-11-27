@@ -4,20 +4,22 @@ import freemarker.core.InvalidReferenceException;
 import mvk.crm.casemanagement.inbox.addmessage._2.rivtabp21.AddMessageResponderInterface;
 import mvk.crm.casemanagement.inbox.addmessageresponder._2.AddMessageType;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import riv.crm.selfservice.medicalsupply._1.AddressType;
-import riv.crm.selfservice.medicalsupply._1.ArticleType;
-import riv.crm.selfservice.medicalsupply._1.CountryCodeEnum;
-import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.DeliveryPointType;
-import riv.crm.selfservice.medicalsupply._1.ObjectFactory;
-import riv.crm.selfservice.medicalsupply._1.OrderRowType;
-import riv.crm.selfservice.medicalsupply._1.ProductAreaEnum;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.RegisterMedicalSupplyOrderType;
+import riv.crm.selfservice.medicalsupply._2.AddressType;
+import riv.crm.selfservice.medicalsupply._2.ArticleType;
+import riv.crm.selfservice.medicalsupply._2.CountryCodeEnum;
+import riv.crm.selfservice.medicalsupply._2.DeliveryChoiceType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.DeliveryNotificationMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._2.ObjectFactory;
+import riv.crm.selfservice.medicalsupply._2.OrderRowType;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._2.RegisterMedicalSupplyOrderType;
+import se._1177.lmn.service.mock.MockProductAreaEnum;
+import se._1177.lmn.service.mock.MockUtil;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -96,8 +98,8 @@ public class MvkInboxServiceTest {
         article1.setArticleName("Artikalnamn1");
         article2.setArticleName("Artikelnamn2");
 
-        article1.setProductArea(ProductAreaEnum.DIABETES);
-        article2.setProductArea(ProductAreaEnum.INKONTINENS);
+        article1.setProductArea(MockUtil.toCvType(MockProductAreaEnum.DIABETES));
+        article2.setProductArea(MockUtil.toCvType(MockProductAreaEnum.INKONTINENS));
 
         item1.setArticle(article1);
         item2.setArticle(article2);
@@ -168,9 +170,9 @@ public class MvkInboxServiceTest {
         article2.setArticleName("Artikelnamn2");
         article3.setArticleName("Artikelnamn3");
 
-        article1.setProductArea(ProductAreaEnum.DIABETES);
-        article2.setProductArea(ProductAreaEnum.INKONTINENS);
-        article3.setProductArea(ProductAreaEnum.INKONTINENS);
+        article1.setProductArea(MockUtil.toCvType(MockProductAreaEnum.DIABETES));
+        article2.setProductArea(MockUtil.toCvType(MockProductAreaEnum.INKONTINENS));
+        article3.setProductArea(MockUtil.toCvType(MockProductAreaEnum.INKONTINENS));
 
         item1.setArticle(article1);
         item2.setArticle(article2);
@@ -257,9 +259,9 @@ public class MvkInboxServiceTest {
         article2.setArticleName("Artikelnamn2");
         article3.setArticleName("Artikelnamn3");
 
-        article1.setProductArea(ProductAreaEnum.DIABETES);
-        article2.setProductArea(ProductAreaEnum.INKONTINENS);
-        article3.setProductArea(ProductAreaEnum.INKONTINENS);
+        article1.setProductArea(MockUtil.toCvType(MockProductAreaEnum.DIABETES));
+        article2.setProductArea(MockUtil.toCvType(MockProductAreaEnum.INKONTINENS));
+        article3.setProductArea(MockUtil.toCvType(MockProductAreaEnum.INKONTINENS));
 
         item1.setArticle(article1);
         item2.setArticle(article2);
@@ -344,8 +346,8 @@ public class MvkInboxServiceTest {
         article1.setArticleName("Artikalnamn1");
         article2.setArticleName("Artikelnamn2");
 
-        article1.setProductArea(ProductAreaEnum.DIABETES);
-        article2.setProductArea(ProductAreaEnum.INKONTINENS);
+        article1.setProductArea(MockUtil.toCvType(MockProductAreaEnum.DIABETES));
+        article2.setProductArea(MockUtil.toCvType(MockProductAreaEnum.INKONTINENS));
 
         item1.setArticle(article1);
         item2.setArticle(article2);
@@ -406,8 +408,8 @@ public class MvkInboxServiceTest {
         article1.setArticleName("Artikalnamn1");
         article2.setArticleName("Artikelnamn2");
 
-        article1.setProductArea(ProductAreaEnum.DIABETES);
-        article2.setProductArea(ProductAreaEnum.INKONTINENS);
+        article1.setProductArea(MockUtil.toCvType(MockProductAreaEnum.DIABETES));
+        article2.setProductArea(MockUtil.toCvType(MockProductAreaEnum.INKONTINENS));
 
         item1.setArticle(article1);
         item2.setArticle(article2);
@@ -475,8 +477,8 @@ public class MvkInboxServiceTest {
         article1.setArticleName("Artikalnamn1");
         article2.setArticleName("Artikelnamn2");
 
-        article1.setProductArea(ProductAreaEnum.DIABETES);
-        article2.setProductArea(ProductAreaEnum.INKONTINENS);
+        article1.setProductArea(MockUtil.toCvType(MockProductAreaEnum.DIABETES));
+        article2.setProductArea(MockUtil.toCvType(MockProductAreaEnum.INKONTINENS));
 
         item1.setArticle(article1);
         item2.setArticle(article2);

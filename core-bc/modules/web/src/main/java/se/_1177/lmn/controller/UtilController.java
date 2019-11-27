@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Transient;
 import org.springframework.stereotype.Component;
-import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
-import riv.crm.selfservice.medicalsupply._1.StatusEnum;
+import riv.crm.selfservice.medicalsupply._2.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.DeliveryNotificationMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._2.StatusEnum;
+import se._1177.lmn.model.ServicePointProvider;
 import se._1177.lmn.service.util.Util;
 
 import javax.faces.application.FacesMessage;
@@ -124,11 +124,11 @@ public class UtilController {
         return new ArrayList<>(collection);
     }
 
-    public static String toProviderName(ServicePointProviderEnum provider) {
-        if (provider.equals(ServicePointProviderEnum.DHL)) {
-            return ServicePointProviderEnum.DHL.name();
+    public static String toProviderName(ServicePointProvider provider) {
+        if (provider.equals(ServicePointProvider.from("DHL"))) {
+            return "DHL";
         } else {
-            return capitalizeFully(provider.name());
+            return capitalizeFully(provider.getName());
         }
     }
 

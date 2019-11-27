@@ -1,6 +1,6 @@
 package se._1177.lmn.model;
 
-import riv.crm.selfservice.medicalsupply._1.AddressType;
+import riv.crm.selfservice.medicalsupply._2.AddressType;
 
 import java.util.Objects;
 

@@ -24,7 +24,7 @@
   <xs:complexType name='GetMedicalSupplyDeliveryPointsType'>
 	<xs:sequence>
       <xs:element name='PostalCode' type='xs:string' minOccurs='1' maxOccurs='1'/>
-	  <xs:element name='ServicePointProvider' type='core:ServicePointProviderEnum' minOccurs='1' maxOccurs='1'/>
+	  <xs:element name='ServicePointProvider' type='core:CVType' minOccurs='1' maxOccurs='1'/>
       <xs:any namespace='##other' processContents='lax' minOccurs='0' maxOccurs='unbounded' />
     </xs:sequence>	
   </xs:complexType>
