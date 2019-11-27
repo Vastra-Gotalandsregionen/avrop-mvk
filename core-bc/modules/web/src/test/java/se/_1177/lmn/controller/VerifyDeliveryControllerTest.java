@@ -4,11 +4,12 @@ import mvk.itintegration.userprofile._2.UserProfileType;
 import mvk.itintegration.userprofile.getuserprofileresponder._2.GetUserProfileResponseType;
 import org.junit.Before;
 import org.junit.Test;
-import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
+import riv.crm.selfservice.medicalsupply._2.DeliveryAlternativeType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.PrescriptionItemType;
 import se._1177.lmn.controller.model.Cart;
+import se._1177.lmn.service.mock.MockServicePointProviderEnum;
+import se._1177.lmn.service.mock.MockUtil;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -32,15 +33,15 @@ public class VerifyDeliveryControllerTest {
         DeliveryAlternativeType deliveryAlternative3 = new DeliveryAlternativeType();
 
         deliveryAlternative1.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
-        deliveryAlternative1.setServicePointProvider(ServicePointProviderEnum.INGEN);
+        deliveryAlternative1.setServicePointProvider(MockUtil.toCvType(MockServicePointProviderEnum.INGEN));
         deliveryAlternative1.setDeliveryMethodId("da1");
 
         deliveryAlternative2.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
-        deliveryAlternative2.setServicePointProvider(ServicePointProviderEnum.DHL);
+        deliveryAlternative2.setServicePointProvider(MockUtil.toCvType(MockServicePointProviderEnum.DHL));
         deliveryAlternative2.setDeliveryMethodId("da2");
 
         deliveryAlternative3.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
-        deliveryAlternative3.setServicePointProvider(ServicePointProviderEnum.POSTNORD);
+        deliveryAlternative3.setServicePointProvider(MockUtil.toCvType(MockServicePointProviderEnum.POSTNORD));
         deliveryAlternative3.setDeliveryMethodId("da3");
 
         PrescriptionItemType item1 = new PrescriptionItemType();

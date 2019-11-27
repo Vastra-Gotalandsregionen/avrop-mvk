@@ -28,13 +28,13 @@
                             <wsdlOptions>
                                 <!-- RTJP services -->
                                 <wsdlOption>
-                                    <wsdl>${basedir}/src/main/resources/schema/RTJP/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyDeliveryPointsInteraction/GetMedicalSupplyDeliveryPointsInteraction_1.0_RIVTABP21.wsdl</wsdl>
+                                    <wsdl>${basedir}/src/main/resources/schema/RTJP/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyDeliveryPointsInteraction/GetMedicalSupplyDeliveryPointsInteraction_2.0_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
-                                    <wsdl>${basedir}/src/main/resources/schema/RTJP/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyPrescriptionsInteraction/GetMedicalSupplyPrescriptionsInteraction_1.0_RIVTABP21.wsdl</wsdl>
+                                    <wsdl>${basedir}/src/main/resources/schema/RTJP/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyPrescriptionsInteraction/GetMedicalSupplyPrescriptionsInteraction_2.0_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
-                                    <wsdl>${basedir}/src/main/resources/schema/RTJP/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/RegisterMedicalSupplyOrderInteraction/RegisterMedicalSupplyOrderInteraction_1.0_RIVTABP21.wsdl</wsdl>
+                                    <wsdl>${basedir}/src/main/resources/schema/RTJP/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/RegisterMedicalSupplyOrderInteraction/RegisterMedicalSupplyOrderInteraction_2.0_RIVTABP21.wsdl</wsdl>
                                 </wsdlOption>
 
                                 <!-- User profile services -->
@@ -66,32 +66,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.xml.ws</groupId>
-            <artifactId>jaxws-api</artifactId>
-            <version>2.3.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sun.xml.ws</groupId>
-            <artifactId>jaxws-ri</artifactId>
-            <version>2.3.1</version>
-            <type>pom</type>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.sun.xml.ws</groupId>
-                    <artifactId>jaxws-eclipselink-plugin</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.sun.xml.ws</groupId>
-                    <artifactId>sdo-eclipselink-plugin</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+            <version>${apache.cxf.version}</version>
         </dependency>
     </dependencies>
     

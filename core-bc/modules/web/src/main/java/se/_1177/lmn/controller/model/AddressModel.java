@@ -1,7 +1,7 @@
 package se._1177.lmn.controller.model;
 
 import mvk.itintegration.userprofile._2.UserProfileType;
-import riv.crm.selfservice.medicalsupply._1.AddressType;
+import riv.crm.selfservice.medicalsupply._2.AddressType;
 import se._1177.lmn.controller.UserProfileController;
 
 import javax.annotation.PostConstruct;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ns2:RegisterMedicalSupplyOrder xmlns="urn:riv:crm:selfservice:medicalsupply:1"
-                                xmlns:ns2="urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrderResponder:1"
+<ns2:RegisterMedicalSupplyOrder xmlns="urn:riv:crm:selfservice:medicalsupply:2"
+                                xmlns:ns2="urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrderResponder:2"
                                 xmlns:ns3="urn:riv:itintegration:registry:1">
     <ns2:Order>
         <SubjectOfCareId>199201012391</SubjectOfCareId>
@@ -25,7 +25,9 @@
                 <ArticleNo>329605</ArticleNo>
                 <ArticleName>Kanyl t insulinpenna 0,30x5mm 30G Autoshield duo</ArticleName>
                 <PackageSize>1</PackageSize>
-                <ProductArea>DIABETES</ProductArea>
+                <ProductArea>
+                    <originalText>DIABETES</originalText>
+                </ProductArea>
                 <IsOrderable>true</IsOrderable>
                 <ArticleImage>
                     <Original>https://example.com</Original>
@@ -59,7 +61,9 @@
                 <ArticleNo>725122</ArticleNo>
                 <ArticleName>Allt-i-ett-skydd TENA Flex Maxi S 921 ml praktisk abs. höft 60-90 cm</ArticleName>
                 <PackageSize>1</PackageSize>
-                <ProductArea>INKONTINENS</ProductArea>
+                <ProductArea>
+                    <originalText>INKONTINENS</originalText>
+                </ProductArea>
                 <IsOrderable>true</IsOrderable>
                 <ArticleImage>
                     <Original>
@@ -94,7 +98,9 @@
                 <ArticleNo>320212</ArticleNo>
                 <ArticleName>Kanyl t insulinpenna BD 0,25x5mm 31G, Thin wall</ArticleName>
                 <PackageSize>1</PackageSize>
-                <ProductArea>DIABETES</ProductArea>
+                <ProductArea>
+                    <originalText>DIABETES</originalText>
+                </ProductArea>
                 <IsOrderable>true</IsOrderable>
                 <ArticleImage>
                     <Original>https://example.com</Original>
@@ -128,7 +134,9 @@
                 <ArticleNo>260002</ArticleNo>
                 <ArticleName>Inko skyddsbyxa vid bad stl 1 Netti Combi Aqua Child</ArticleName>
                 <PackageSize>1</PackageSize>
-                <ProductArea>INKONTINENS</ProductArea>
+                <ProductArea>
+                    <originalText>INKONTINENS</originalText>
+                </ProductArea>
                 <IsOrderable>true</IsOrderable>
                 <ArticleImage>
                     <Original>https://example.com</Original>
@@ -162,7 +170,9 @@
                 <ArticleNo>900349</ArticleNo>
                 <ArticleName>Calogen 4x200ml jordgubb</ArticleName>
                 <PackageSize>1</PackageSize>
-                <ProductArea>NUTRITION</ProductArea>
+                <ProductArea>
+                    <originalText>NUTRITION</originalText>
+                </ProductArea>
                 <IsOrderable>true</IsOrderable>
                 <ArticleImage>
                     <Original>https://example.com</Original>
@@ -196,7 +206,9 @@
                 <ArticleNo>752152</ArticleNo>
                 <ArticleName>Fortimel Compact Fibre 4x125ml jordgubb</ArticleName>
                 <PackageSize>1</PackageSize>
-                <ProductArea>NUTRITION</ProductArea>
+                <ProductArea>
+                    <originalText>NUTRITION</originalText>
+                </ProductArea>
                 <IsOrderable>true</IsOrderable>
                 <ArticleImage>
                     <Original>https://example.com</Original>
@@ -230,7 +242,9 @@
                 <ArticleNo>753300</ArticleNo>
                 <ArticleName>Fortimel Compact Fibre 4x125ml mocca</ArticleName>
                 <PackageSize>1</PackageSize>
-                <ProductArea>NUTRITION</ProductArea>
+                <ProductArea>
+                    <originalText>NUTRITION</originalText>
+                </ProductArea>
                 <IsOrderable>true</IsOrderable>
                 <ArticleImage>
                     <Original>https://example.com</Original>
@@ -264,7 +278,9 @@
                 <ArticleNo>752153</ArticleNo>
                 <ArticleName>Fortimel Compact Fibre 4x125ml vanilj</ArticleName>
                 <PackageSize>1</PackageSize>
-                <ProductArea>NUTRITION</ProductArea>
+                <ProductArea>
+                    <originalText>NUTRITION</originalText>
+                </ProductArea>
                 <IsOrderable>true</IsOrderable>
                 <ArticleImage>
                     <Original>https://example.com</Original>
@@ -298,7 +314,9 @@
                 <ArticleNo>204704</ArticleNo>
                 <ArticleName>Fortimel Jucy 4x200 apelsin</ArticleName>
                 <PackageSize>1</PackageSize>
-                <ProductArea>NUTRITION</ProductArea>
+                <ProductArea>
+                    <originalText>NUTRITION</originalText>
+                </ProductArea>
                 <IsOrderable>true</IsOrderable>
                 <ArticleImage>
                     <Original>https://example.com</Original>
@@ -332,7 +350,9 @@
                 <ArticleNo>825913</ArticleNo>
                 <ArticleName>Fresubin 5 Kcal Shot 120ml citron med LCT/MCT</ArticleName>
                 <PackageSize>1</PackageSize>
-                <ProductArea>NUTRITION</ProductArea>
+                <ProductArea>
+                    <originalText>NUTRITION</originalText>
+                </ProductArea>
                 <IsOrderable>true</IsOrderable>
                 <ArticleImage>
                     <Original>https://example.com</Original>
@@ -366,7 +386,9 @@
                 <ArticleNo>825914</ArticleNo>
                 <ArticleName>Fresubin Jucy DRINK 4x200ml körsbär</ArticleName>
                 <PackageSize>1</PackageSize>
-                <ProductArea>NUTRITION</ProductArea>
+                <ProductArea>
+                    <originalText>NUTRITION</originalText>
+                </ProductArea>
                 <IsOrderable>true</IsOrderable>
                 <ArticleImage>
                     <Original>https://example.com</Original>

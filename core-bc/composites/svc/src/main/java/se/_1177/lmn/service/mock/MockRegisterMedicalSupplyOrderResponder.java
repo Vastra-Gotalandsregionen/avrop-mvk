@@ -1,13 +1,13 @@
 package se._1177.lmn.service.mock;
 
-import riv.crm.selfservice.medicalsupply._1.ArticleType;
-import riv.crm.selfservice.medicalsupply._1.OrderItemType;
-import riv.crm.selfservice.medicalsupply._1.ProductAreaEnum;
-import riv.crm.selfservice.medicalsupply._1.ResultCodeEnum;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._1.rivtabp21.RegisterMedicalSupplyOrderResponderInterface;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.ObjectFactory;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.RegisterMedicalSupplyOrderResponseType;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.RegisterMedicalSupplyOrderType;
+import riv.crm.selfservice.medicalsupply._2.ArticleType;
+import riv.crm.selfservice.medicalsupply._2.CVType;
+import riv.crm.selfservice.medicalsupply._2.OrderItemType;
+import riv.crm.selfservice.medicalsupply._2.ResultCodeEnum;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._2.rivtabp21.RegisterMedicalSupplyOrderResponderInterface;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._2.ObjectFactory;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._2.RegisterMedicalSupplyOrderResponseType;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._2.RegisterMedicalSupplyOrderType;
 import se._1177.lmn.service.util.Util;
 
 import javax.jws.WebService;
@@ -17,7 +17,7 @@ import java.util.Random;
 /**
  * @author Patrik Björk
  */
-@WebService(targetNamespace = "urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrder:0:rivtabp21", name = "RegisterMedicalSupplyOrderResponderInterface")
+@WebService(targetNamespace = "urn:riv:crm:selfservice:medicalsupply:RegisterMedicalSupplyOrder:2:rivtabp21", name = "RegisterMedicalSupplyOrderResponderInterface")
 public class MockRegisterMedicalSupplyOrderResponder
         implements RegisterMedicalSupplyOrderResponderInterface {
 
@@ -54,7 +54,7 @@ public class MockRegisterMedicalSupplyOrderResponder
             article.setIsOrderable(random.nextBoolean());
             article.setPackageSize(random.nextInt(100));
             article.setPackageSizeUnit("Enhet" + random.nextInt(100));
-            article.setProductArea(ProductAreaEnum.values()[random.nextInt(ProductAreaEnum.values().length)]);
+            article.setProductArea(toCvType(MockProductAreaEnum.values()[random.nextInt(MockProductAreaEnum.values().length)]));
 
             orderItem.setArticle(article);
 
@@ -63,5 +63,12 @@ public class MockRegisterMedicalSupplyOrderResponder
 
         return response;
     }
+
+    private CVType toCvType(MockProductAreaEnum value) {
+        CVType cvType = new CVType();
+        cvType.setOriginalText(value.name());
+        return cvType;
+    }
+
 
 }

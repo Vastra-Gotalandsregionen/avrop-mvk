@@ -59,7 +59,7 @@
                         <ui:repeat value="#{prescriptionItemInfo.getPrescriptionItems(cart.orderRows)}" var="item" varStatus="status">
                             <tr>
                                 <td>
-                                    #{utilController.capitalizeFully(item.article.productArea)}
+                                    #{utilController.capitalizeFully(item.article.productArea.originalText)}
                                 </td>
                                 <td>
                                     <div class="bold">#{item.article.articleName}</div>
@@ -109,7 +109,7 @@
                         <ui:repeat value="#{prescriptionItemInfo.getPrescriptionItems(cart.orderRows)}" var="item" varStatus="status">
                             <tr>
                                 <td>
-                                    #{utilController.capitalizeFully(item.article.productArea)}
+                                    #{utilController.capitalizeFully(item.article.productArea.originalText)}
                                 </td>
                                 <td>
                                     <div class="bold">#{item.article.articleName}</div>

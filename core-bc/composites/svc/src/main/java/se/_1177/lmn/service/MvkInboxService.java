@@ -10,10 +10,10 @@ import mvk.crm.casemanagement.inbox.addmessage._2.rivtabp21.AddMessageResponderI
 import mvk.crm.casemanagement.inbox.addmessageresponder._2.AddMessageResponseType;
 import mvk.crm.casemanagement.inbox.addmessageresponder._2.AddMessageType;
 import org.springframework.stereotype.Service;
-import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.DeliveryPointType;
-import riv.crm.selfservice.medicalsupply._1.OrderRowType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryChoiceType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._2.OrderRowType;
 import se._1177.lmn.model.DeliveryChoiceTypeWrapper;
 
 import java.io.IOException;
@@ -126,7 +126,7 @@ public class MvkInboxService {
                 .reduce(identity, biFunction, binaryOperator);
 
         Configuration cfg = new Configuration(Configuration.VERSION_2_3_27);
-
+        cfg.setLogTemplateExceptions(false);
         cfg.setClassForTemplateLoading(this.getClass(), "/");
 
         Template template;

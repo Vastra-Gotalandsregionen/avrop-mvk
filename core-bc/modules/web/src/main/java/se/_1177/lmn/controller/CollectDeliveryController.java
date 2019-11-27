@@ -9,23 +9,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import riv.crm.selfservice.medicalsupply._1.AddressType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.DeliveryPointType;
-import riv.crm.selfservice.medicalsupply._1.OrderRowType;
-import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._1.ResultCodeEnum;
-import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._1.GetMedicalSupplyDeliveryPointsResponseType;
+import riv.crm.selfservice.medicalsupply._2.AddressType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryAlternativeType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryChoiceType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.DeliveryNotificationMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._2.OrderRowType;
+import riv.crm.selfservice.medicalsupply._2.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._2.ResultCodeEnum;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._2.GetMedicalSupplyDeliveryPointsResponseType;
 import se._1177.lmn.controller.model.AddressModel;
 import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
+import se._1177.lmn.model.ServicePointProvider;
 import se._1177.lmn.service.LmnService;
 import se._1177.lmn.service.ThreadLocalStore;
 import se._1177.lmn.service.concurrent.BackgroundExecutor;
+import se._1177.lmn.service.mock.MockUtil;
 import se._1177.lmn.service.util.Util;
 
 import javax.annotation.PostConstruct;
@@ -39,9 +40,8 @@ import javax.xml.ws.soap.SOAPFaultException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum.HEMLEVERANS;
-import static riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum.UTLÄMNINGSSTÄLLE;
-import static riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum.INGEN;
+import static riv.crm.selfservice.medicalsupply._2.DeliveryMethodEnum.HEMLEVERANS;
+import static riv.crm.selfservice.medicalsupply._2.DeliveryMethodEnum.UTLÄMNINGSSTÄLLE;
 import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 
 /**
@@ -85,19 +85,19 @@ public class CollectDeliveryController {
     private AddressModel addressModel;
 
     private String zip;
-    private Map<ServicePointProviderEnum, String> deliveryPointIdsMap = new HashMap<>();
+    private Map<ServicePointProvider, String> deliveryPointIdsMap = new HashMap<>();
     private DeliveryNotificationMethodEnum preferredDeliveryNotificationMethod; // These gets stored in session memory
     private String email;
     private String smsNumber;
-    private Map<ServicePointProviderEnum, List<DeliveryPointType>> deliveryPointsPerProvider = new HashMap<>();
-    private Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>>
+    private Map<ServicePointProvider, List<DeliveryPointType>> deliveryPointsPerProvider = new HashMap<>();
+    private Map<ServicePointProvider, Set<DeliveryNotificationMethodEnum>>
             possibleCollectCombinationsFittingAllWithNotificationMethods;
-    private Map<ServicePointProviderEnum, String> chosenDeliveryNotificationMethod;
+    private Map<ServicePointProvider, String> chosenDeliveryNotificationMethod;
     private String phoneNumber;
     private String contactPerson;
 
     /**
-     * Called from view in order to update the selects with delivery points for each {@link ServicePointProviderEnum}.
+     * Called from view in order to update the selects with delivery points for each {@link ServicePointProvider}.
      *
      * @param ajaxBehaviorEvent
      */
@@ -105,7 +105,7 @@ public class CollectDeliveryController {
         // Just reset deliveryPoints, making them load again when they are requested.
         deliveryPointsPerProvider = null;
 
-        Set<ServicePointProviderEnum> allRelevantProviders = new HashSet<>();
+        Set<ServicePointProvider> allRelevantProviders = new HashSet<>();
 
         // Find service point providers for all order rows with UTLÄMNINGSSTÄLLE as delivery method for all delivery
         // alternatives where isAllowChioceOfDeliveryPoints is true.
@@ -114,8 +114,8 @@ public class CollectDeliveryController {
                 .map(or -> prescriptionItemInfo.getPrescriptionItem(or).getDeliveryAlternative())
                 .flatMap(Collection::stream)
                 .filter(DeliveryAlternativeType::isAllowChioceOfDeliveryPoints)
-                .filter(da -> !da.getServicePointProvider().equals(INGEN))
-                .forEach(da -> allRelevantProviders.add(da.getServicePointProvider()));
+                .filter(da -> !ServicePointProvider.from(da.getServicePointProvider()).equals(ServicePointProvider.INGEN))
+                .forEach(da -> allRelevantProviders.add(ServicePointProvider.from(da.getServicePointProvider())));
 
         loadDeliveryPointsForRelevantSuppliers(zip, allRelevantProviders);
     }
@@ -153,31 +153,31 @@ public class CollectDeliveryController {
 
     /**
      * This methods iterates through all {@link PrescriptionItemType}s with collect delivery in the {@link Cart},
-     * getting the {@link ServicePointProviderEnum} (assuming there's only one by taking the first) and the
+     * getting the {@link ServicePointProvider} (assuming there's only one by taking the first) and the
      * {@link DeliveryNotificationMethodEnum}s which are present for the
-     * {@link ServicePointProviderEnum} for all {@link PrescriptionItemType}s. If a
-     * {@link DeliveryNotificationMethodEnum} isn't available for a {@link ServicePointProviderEnum} for all
+     * {@link ServicePointProvider} for all {@link PrescriptionItemType}s. If a
+     * {@link DeliveryNotificationMethodEnum} isn't available for a {@link ServicePointProvider} for all
      * {@link PrescriptionItemType}s it is not included in the result.
      *
-     * @return the collected map with {@link ServicePointProviderEnum}s mapped to a list of strings of the names of the
+     * @return the collected map with {@link ServicePointProvider}s mapped to a list of strings of the names of the
      * {@link DeliveryNotificationMethodEnum}s
      */
-    public Map<ServicePointProviderEnum, List<String>> getDeliveryNotificationMethodsPerProvider() {
+    public Map<ServicePointProvider, List<String>> getDeliveryNotificationMethodsPerProvider() {
 
-        Map<ServicePointProviderEnum, List<String>> result = new TreeMap<>();
+        Map<ServicePointProvider, List<String>> result = new TreeMap<>();
 
         List<PrescriptionItemType> collectPrescriptionItems = getCollectPrescriptionItems();
 
         for (PrescriptionItemType item : collectPrescriptionItems) {
-            ServicePointProviderEnum servicePointProviderForItem = getServicePointProviderForItem(item);
+            ServicePointProvider servicePointProviderForItem = getServicePointProviderForItem(item);
 
             // Make a list where the number of first level entries will be equal to the number of delivery
             // alternatives where the service point provider equals servicePointProviderForItem. This will almost
             // certainly be a one-entry-list at the top level, except if there are multiple delivery alternatives with
-            // the same ServicePointProviderEnum.
+            // the same ServicePointProvider.
             List<List<String>> listOfListsWithNotificationMethodNames = item.getDeliveryAlternative()
                     .stream()
-                    .filter(alternative -> alternative.getServicePointProvider()
+                    .filter(alternative -> ServicePointProvider.from(alternative.getServicePointProvider())
                             .equals(servicePointProviderForItem))
                     .map(alternative -> alternative.getDeliveryNotificationMethod().stream().map(Enum::name)
                             .collect(Collectors.toList()))
@@ -223,14 +223,14 @@ public class CollectDeliveryController {
      *
      * @return
      */
-    public Map<ServicePointProviderEnum, List<SelectItemGroup>> getDeliverySelectItems() {
+    public Map<ServicePointProvider, List<SelectItemGroup>> getDeliverySelectItems() {
 
-        Map<ServicePointProviderEnum, List<SelectItemGroup>> selectOneMenuLists = new HashMap<>();
+        Map<ServicePointProvider, List<SelectItemGroup>> selectOneMenuLists = new HashMap<>();
 
-        Map<ServicePointProviderEnum, List<PrescriptionItemType>> servicePointProvidersForItems =
+        Map<ServicePointProvider, List<PrescriptionItemType>> servicePointProvidersForItems =
                 getServicePointProvidersForDeliveryPointChoice();
 
-        for (ServicePointProviderEnum servicePointProviderForItem : servicePointProvidersForItems.keySet()) {
+        for (ServicePointProvider servicePointProviderForItem : servicePointProvidersForItems.keySet()) {
             List<SelectItemGroup> singleSelectMenuItems = getSingleSelectMenuItems(servicePointProviderForItem);
 
             selectOneMenuLists.put(servicePointProviderForItem, singleSelectMenuItems);
@@ -258,15 +258,15 @@ public class CollectDeliveryController {
     }
 
     /**
-     * This method makes a map of all {@link ServicePointProviderEnum}s mapped to the {@link PrescriptionItemType}s
-     * which have that {@link ServicePointProviderEnum}. The map enables lookup of which {@link PrescriptionItemType}s
-     * have a specific {@link ServicePointProviderEnum}. The method assumes only one {@link DeliveryAlternativeType}
+     * This method makes a map of all {@link ServicePointProvider}s mapped to the {@link PrescriptionItemType}s
+     * which have that {@link ServicePointProvider}. The map enables lookup of which {@link PrescriptionItemType}s
+     * have a specific {@link ServicePointProvider}. The method assumes only one {@link DeliveryAlternativeType}
      * with {@link DeliveryMethodEnum} UTLÄMNINGSSTÄLLE. Otherwise an exception will be thrown.
      *
      * @return
      */
-    public Map<ServicePointProviderEnum, List<PrescriptionItemType>> getServicePointProvidersForDeliveryPointChoice() {
-        Map<ServicePointProviderEnum, List<PrescriptionItemType>> servicePointProvidersForItems = new TreeMap<>();
+    public Map<ServicePointProvider, List<PrescriptionItemType>> getServicePointProvidersForDeliveryPointChoice() {
+        Map<ServicePointProvider, List<PrescriptionItemType>> servicePointProvidersForItems = new TreeMap<>();
 
         cart.getOrderRows()
                 .stream()
@@ -287,7 +287,7 @@ public class CollectDeliveryController {
 
                     if (deliveryAlternatives.get(0).isAllowChioceOfDeliveryPoints()) {
 
-                        ServicePointProviderEnum servicePointProviderForItem = getServicePointProviderForItem(item);
+                        ServicePointProvider servicePointProviderForItem = getServicePointProviderForItem(item);
 
                         if (servicePointProvidersForItems.containsKey(servicePointProviderForItem)) {
                             servicePointProvidersForItems.get(servicePointProviderForItem).add(item);
@@ -303,22 +303,22 @@ public class CollectDeliveryController {
     }
 
     /**
-     * Finds the {@link ServicePointProviderEnum} for the first
+     * Finds the {@link ServicePointProvider} for the first
      * {@link DeliveryAlternativeType} with UTLÄMNINGSSTÄLLE as {@link DeliveryMethodEnum}.
      *
-     * @param item the {@link PrescriptionItemType} to determine {@link ServicePointProviderEnum} for
-     * @return The determined {@link ServicePointProviderEnum}.
+     * @param item the {@link PrescriptionItemType} to determine {@link ServicePointProvider} for
+     * @return The determined {@link ServicePointProvider}.
      */
-    public ServicePointProviderEnum getServicePointProviderForItem(PrescriptionItemType item) {
+    public ServicePointProvider getServicePointProviderForItem(PrescriptionItemType item) {
         return item.getDeliveryAlternative().stream()
                 .filter(da -> da.getDeliveryMethod().equals(UTLÄMNINGSSTÄLLE))
                 .findFirst() // We only allow one delivery method with UTLÄMNINGSSTÄLLE so we take the first one.
-                .map(DeliveryAlternativeType::getServicePointProvider)
+                .map(dat -> ServicePointProvider.from(dat.getServicePointProvider()))
                 .orElseThrow(() -> new IllegalStateException("A prescription item without UTLÄMNINGSSTÄLLE should not" +
                         "treated here."));
     }
 
-    private List<SelectItemGroup> getSingleSelectMenuItems(ServicePointProviderEnum provider) {
+    private List<SelectItemGroup> getSingleSelectMenuItems(ServicePointProvider provider) {
         SelectItemGroup group1 = new SelectItemGroup("Närmaste ombud");
         SelectItemGroup group2 = new SelectItemGroup("Övriga ombud till ditt postnummer");
 
@@ -356,7 +356,7 @@ public class CollectDeliveryController {
         return toReturn;
     }
 
-    public Map<ServicePointProviderEnum, String> getChosenDeliveryNotificationMethod() {
+    public Map<ServicePointProvider, String> getChosenDeliveryNotificationMethod() {
 
         if (chosenDeliveryNotificationMethod == null) {
             initChosenDeliveryNotificationMethod();
@@ -371,10 +371,10 @@ public class CollectDeliveryController {
     void initChosenDeliveryNotificationMethod() {
         chosenDeliveryNotificationMethod = new HashMap<>();
 
-        Map<ServicePointProviderEnum, List<String>> deliveryNotificationMethodsPerProvider =
+        Map<ServicePointProvider, List<String>> deliveryNotificationMethodsPerProvider =
                 getDeliveryNotificationMethodsPerProvider();
 
-        for (Map.Entry<ServicePointProviderEnum, List<String>> entry :
+        for (Map.Entry<ServicePointProvider, List<String>> entry :
                 deliveryNotificationMethodsPerProvider.entrySet()) {
 
             if (entry.getValue().contains(preferredDeliveryNotificationMethod.name())) {
@@ -387,7 +387,7 @@ public class CollectDeliveryController {
         }
     }
 
-    public Map<ServicePointProviderEnum, String> getDeliveryPointIdsMap() {
+    public Map<ServicePointProvider, String> getDeliveryPointIdsMap() {
         deliveryPointIdsMap.keySet().retainAll(getServicePointProvidersForDeliveryPointChoice().keySet());
 
         return deliveryPointIdsMap;
@@ -435,7 +435,7 @@ public class CollectDeliveryController {
 
                 deliveryChoice.setDeliveryMethodId(deliveryMethodId);
 
-                ServicePointProviderEnum provider = getServicePointProviderForItem(prescriptionItem);
+                ServicePointProvider provider = getServicePointProviderForItem(prescriptionItem);
 
                 if (allowChoiceOfDeliveryPoints) {
                     String deliveryPointId = getDeliveryPointIdsMap().get(provider);
@@ -534,7 +534,7 @@ public class CollectDeliveryController {
             // If deliveryMethod and servicePointProvider match we assume it is the one.
             if (deliveryAlternative.getDeliveryMethod().equals(orderRowType.getDeliveryChoice().getDeliveryMethod())
                     && getServicePointProviderForItem(prescriptionItem)
-                    .equals(deliveryAlternative.getServicePointProvider())) {
+                    .equals(ServicePointProvider.from(deliveryAlternative.getServicePointProvider()))) {
 
                 deliveryAlternativeForThisOrderRow = deliveryAlternative;
                 break;
@@ -613,20 +613,21 @@ public class CollectDeliveryController {
     }
 
     /**
-     * This method aims to find combinations of {@link ServicePointProviderEnum}s with possible
-     * {@link DeliveryNotificationMethodEnum}s. The algorithm is to start with all {@link ServicePointProviderEnum}s and
+     * This method aims to find combinations of {@link ServicePointProvider}s with possible
+     * {@link DeliveryNotificationMethodEnum}s. The algorithm is to start with all {@link ServicePointProvider}s and
      * "fill" all entries with the {@link DeliveryNotificationMethodEnum}s of the first {@link PrescriptionItemType}
      * iterated. As more {@link PrescriptionItemType}s are iterated both the {@link DeliveryNotificationMethodEnum}s,
-     * for each {@link ServicePointProviderEnum}, as well as {@link ServicePointProviderEnum} are removed as they are
+     * for each {@link ServicePointProvider}, as well as {@link ServicePointProvider} are removed as they are
      * determined as unavailable for all {@link PrescriptionItemType}s.
      */
     public void initPossibleCollectCombinationsFittingAllWithNotificationMethods() {
 
         if (possibleCollectCombinationsFittingAllWithNotificationMethods == null) {
-            Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> result = new TreeMap<>();
+            Map<ServicePointProvider, Set<DeliveryNotificationMethodEnum>> result = new TreeMap<>();
 
-            List<ServicePointProviderEnum> remainingAvailableProvidersCommonForAllWithCollectDelivery = new ArrayList<>(
-                    Arrays.asList(ServicePointProviderEnum.values()));
+            List<ServicePointProvider> remainingAvailableProvidersCommonForAllWithCollectDelivery = new ArrayList<>(
+                    deliveryPointsPerProvider.keySet()
+            );
 
             List<OrderRowType> filteredOrderRows = cart.getOrderRows().stream()
                     .filter(orderRowType -> orderRowType.getDeliveryChoice().getDeliveryMethod().equals(
@@ -641,7 +642,7 @@ public class CollectDeliveryController {
                 List<DeliveryAlternativeType> deliveryAlternatives = deliveryController
                         .getPossibleDeliveryAlternatives(item);
 
-                List<ServicePointProviderEnum> providersForItem = new ArrayList<>();
+                List<ServicePointProvider> providersForItem = new ArrayList<>();
 
                 for (DeliveryAlternativeType deliveryAlternative : deliveryAlternatives) {
 
@@ -649,7 +650,9 @@ public class CollectDeliveryController {
                         continue; // We're only interested in collect items.
                     }
 
-                    ServicePointProviderEnum provider = deliveryAlternative.getServicePointProvider();
+                    ServicePointProvider provider = ServicePointProvider.from(
+                            deliveryAlternative.getServicePointProvider()
+                    );
 
                     providersForItem.add(provider);
 
@@ -677,13 +680,13 @@ public class CollectDeliveryController {
     }
 
     public void setPossibleCollectCombinationsFittingAllCollectItems(
-            Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> possibleDeliveryNotificationMethods) {
+            Map<ServicePointProvider, Set<DeliveryNotificationMethodEnum>> possibleDeliveryNotificationMethods) {
 
         this.possibleCollectCombinationsFittingAllWithNotificationMethods = possibleDeliveryNotificationMethods;
     }
 
     public void loadDeliveryPointsForRelevantSuppliersInBackground(final String zip,
-                                                                   final Set<ServicePointProviderEnum> allRelevantProvider,
+                                                                   final Set<ServicePointProvider> allRelevantProvider,
                                                                    final String countyCode) {
         backgroundExecutor.submit(() -> {
             ThreadLocalStore.setCountyCode(countyCode);
@@ -692,31 +695,27 @@ public class CollectDeliveryController {
         });
     }
 
-    private void loadDeliveryPointsForRelevantSuppliers(String zip, Set<ServicePointProviderEnum> providers) {
+    private void loadDeliveryPointsForRelevantSuppliers(String zip, Set<ServicePointProvider> providers) {
 
         if (deliveryPointsPerProvider == null) {
             deliveryPointsPerProvider = new HashMap<>();
         }
 
-        for (ServicePointProviderEnum provider : providers) {
+        for (ServicePointProvider provider : providers) {
 
-            if (provider.equals(INGEN)) {
+            if (provider.equals(ServicePointProvider.INGEN)) {
                 continue;
             }
 
             GetMedicalSupplyDeliveryPointsResponseType medicalSupplyDeliveryPoints;
             try {
-                medicalSupplyDeliveryPoints = lmnService.getMedicalSupplyDeliveryPoints(provider, zip);
+                medicalSupplyDeliveryPoints = lmnService.getMedicalSupplyDeliveryPoints(MockUtil.toCvType(provider), zip);
 
                 if (medicalSupplyDeliveryPoints.getResultCode().equals(ResultCodeEnum.OK)) {
                     deliveryPointsPerProvider.put(provider, medicalSupplyDeliveryPoints.getDeliveryPoint());
                 } else {
                     utilController.addErrorMessageWithCustomerServiceInfo("Ett fel mot underliggande system inträffade. Försök senare eller kontakta kundtjänst.");
                 }
-            } catch (SOAPFaultException e) {
-                LOGGER.error(e.getMessage(), e);
-
-                utilController.addErrorMessageWithCustomerServiceInfo("Ett fel mot underliggande system inträffade. Försök senare eller kontakta kundtjänst.");
             } catch (WebServiceException e) {
                 LOGGER.error(e.getMessage(), e);
 
@@ -733,16 +732,16 @@ public class CollectDeliveryController {
     }
 
     public boolean notificationMethodUsedForAnyItem(DeliveryNotificationMethodEnum notificationMethod) {
-        return getChosenDeliveryNotificationMethod().values().contains(notificationMethod.name());
+        return getChosenDeliveryNotificationMethod().containsValue(notificationMethod.name());
     }
 
     public String providersWithNotificationMethod(String notificationMethod) {
-        Map<ServicePointProviderEnum, String> chosenDeliveryNotificationMethod =
+        Map<ServicePointProvider, String> chosenDeliveryNotificationMethod =
                 getChosenDeliveryNotificationMethod();
 
         List<String> providers = new ArrayList<>();
 
-        for (Map.Entry<ServicePointProviderEnum, String> entry :
+        for (Map.Entry<ServicePointProvider, String> entry :
                 chosenDeliveryNotificationMethod.entrySet()) {
 
             if (entry.getValue().equals(notificationMethod)) {
@@ -762,13 +761,13 @@ public class CollectDeliveryController {
     }
 
     /**
-     * Returns the collection of all {@link ServicePointProviderEnum}s mapped to a {@link Set} of
+     * Returns the collection of all {@link ServicePointProvider}s mapped to a {@link Set} of
      * {@link DeliveryNotificationMethodEnum} of which all are available for all chosen {@link PrescriptionItemType}s.
      *
-     * @return The combinations of {@link ServicePointProviderEnum}s and the {@link DeliveryNotificationMethodEnum}s
+     * @return The combinations of {@link ServicePointProvider}s and the {@link DeliveryNotificationMethodEnum}s
      * they are mapped to are available for all {@link PrescriptionItemType}s
      */
-    public Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>>
+    public Map<ServicePointProvider, Set<DeliveryNotificationMethodEnum>>
     getPossibleCollectCombinationsFittingAllWithNotificationMethods() {
 
         if (possibleCollectCombinationsFittingAllWithNotificationMethods == null) {
@@ -898,13 +897,13 @@ public class CollectDeliveryController {
     }
 
     /**
-     * Determines whether the fetch of {@link DeliveryPointType}s for each {@link ServicePointProviderEnum} was
+     * Determines whether the fetch of {@link DeliveryPointType}s for each {@link ServicePointProvider} was
      * successful.
      *
      * @return <code>true</code> if successful, false otherwise
      */
     public boolean isSuccessfulSelectItems() {
-        Map<ServicePointProviderEnum, List<SelectItemGroup>> deliverySelectItems = getDeliverySelectItems();
+        Map<ServicePointProvider, List<SelectItemGroup>> deliverySelectItems = getDeliverySelectItems();
 
         final boolean[] successfulFetch = {true};
 
@@ -927,7 +926,7 @@ public class CollectDeliveryController {
             return false;
         }
 
-        for (Map.Entry<ServicePointProviderEnum, List<SelectItemGroup>> entry : getDeliverySelectItems().entrySet()) {
+        for (Map.Entry<ServicePointProvider, List<SelectItemGroup>> entry : getDeliverySelectItems().entrySet()) {
             if (entry.getValue().get(0).getSelectItems().length < 1) {
                 // The 1 would be the closest collect delivery point. Here we don't have one since it must have failed.
                 return true;

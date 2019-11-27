@@ -2,15 +2,16 @@ package se._1177.lmn.controller;
 
 import org.junit.Before;
 import org.junit.Test;
-import riv.crm.selfservice.medicalsupply._1.ArticleType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.OrderRowType;
-import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
+import riv.crm.selfservice.medicalsupply._2.ArticleType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryAlternativeType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryChoiceType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.PrescriptionItemType;
 import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
+import se._1177.lmn.model.ServicePointProvider;
+import se._1177.lmn.service.mock.MockServicePointProviderEnum;
+import se._1177.lmn.service.mock.MockUtil;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -20,9 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum.BREV;
-import static riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum.E_POST;
-import static riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum.SMS;
+import static riv.crm.selfservice.medicalsupply._2.DeliveryNotificationMethodEnum.*;
 import static se._1177.lmn.service.util.CartUtil.createOrderRow;
 
 /**
@@ -60,12 +59,12 @@ public class CollectDeliveryController3Test {
         DeliveryAlternativeType alternative5 = new DeliveryAlternativeType();
         DeliveryAlternativeType alternative6 = new DeliveryAlternativeType();
 
-        alternative1.setServicePointProvider(ServicePointProviderEnum.SCHENKER);
+        alternative1.setServicePointProvider(MockUtil.toCvType(MockServicePointProviderEnum.SCHENKER));
 //        alternative2.setServicePointProvider(ServicePointProviderEnum.SCHENKER);
-        alternative3.setServicePointProvider(ServicePointProviderEnum.POSTNORD);
-        alternative4.setServicePointProvider(ServicePointProviderEnum.POSTNORD);
-        alternative5.setServicePointProvider(ServicePointProviderEnum.DHL);
-        alternative6.setServicePointProvider(ServicePointProviderEnum.INGEN);
+        alternative3.setServicePointProvider(MockUtil.toCvType(MockServicePointProviderEnum.POSTNORD));
+        alternative4.setServicePointProvider(MockUtil.toCvType(MockServicePointProviderEnum.POSTNORD));
+        alternative5.setServicePointProvider(MockUtil.toCvType(MockServicePointProviderEnum.DHL));
+        alternative6.setServicePointProvider(MockUtil.toCvType(MockServicePointProviderEnum.INGEN));
 
         alternative1.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
 //        alternative2.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
@@ -189,12 +188,12 @@ public class CollectDeliveryController3Test {
     @Test
     public void getDeliveryNotificationMethodsPerProvider() throws Exception {
 
-        Map<ServicePointProviderEnum, List<String>> deliveryNotificationMethodsPerProvider = collectDeliveryController
+        Map<ServicePointProvider, List<String>> deliveryNotificationMethodsPerProvider = collectDeliveryController
                 .getDeliveryNotificationMethodsPerProvider();
 
-        List<String> schenker = deliveryNotificationMethodsPerProvider.get(ServicePointProviderEnum.SCHENKER);
-        List<String> postnord = deliveryNotificationMethodsPerProvider.get(ServicePointProviderEnum.POSTNORD);
-        List<String> dhl = deliveryNotificationMethodsPerProvider.get(ServicePointProviderEnum.DHL);
+        List<String> schenker = deliveryNotificationMethodsPerProvider.get(ServicePointProvider.from("SCHENKER"));
+        List<String> postnord = deliveryNotificationMethodsPerProvider.get(ServicePointProvider.from("POSTNORD"));
+        List<String> dhl = deliveryNotificationMethodsPerProvider.get(ServicePointProvider.from("DHL"));
 
         // Only POSTNORD is available for all items so only POSTNORD will have any notification methods.
         assertEquals(Arrays.asList("E_POST", "BREV", "SMS"), schenker);
@@ -207,12 +206,12 @@ public class CollectDeliveryController3Test {
 
         collectDeliveryController.initChosenDeliveryNotificationMethod();
 
-        Map<ServicePointProviderEnum, String> chosenDeliveryNotificationMethod = collectDeliveryController
+        Map<ServicePointProvider, String> chosenDeliveryNotificationMethod = collectDeliveryController
                 .getChosenDeliveryNotificationMethod();
 
-        String postnord = chosenDeliveryNotificationMethod.get(ServicePointProviderEnum.POSTNORD);
-        String schenker = chosenDeliveryNotificationMethod.get(ServicePointProviderEnum.SCHENKER);
-        String dhl = chosenDeliveryNotificationMethod.get(ServicePointProviderEnum.DHL);
+        String postnord = chosenDeliveryNotificationMethod.get(ServicePointProvider.from("POSTNORD"));
+        String schenker = chosenDeliveryNotificationMethod.get(ServicePointProvider.from("SCHENKER"));
+        String dhl = chosenDeliveryNotificationMethod.get(ServicePointProvider.from("DHL"));
 
         // Only POSTNORD is available for all items and SMS is the preferred method according to setup(). // TODO: 2016-05-17 not true anymore
         assertEquals("SMS", postnord);
@@ -223,18 +222,18 @@ public class CollectDeliveryController3Test {
     @Test
     public void getRelevantServicePointProviders() {
 
-        List<ServicePointProviderEnum> relevantServicePointProviders = new ArrayList<>(collectDeliveryController
+        List<ServicePointProvider> relevantServicePointProviders = new ArrayList<>(collectDeliveryController
                 .getServicePointProvidersForDeliveryPointChoice().keySet());
 
-        assertEquals(Arrays.asList(ServicePointProviderEnum.POSTNORD, ServicePointProviderEnum.SCHENKER),
+        assertEquals(Arrays.asList(ServicePointProvider.from("POSTNORD"), ServicePointProvider.from("SCHENKER")),
                 relevantServicePointProviders); // No single provider is common to all.
     }
 
     @Test
     public void getServicePointProviderForItem() {
-        ServicePointProviderEnum providerItem1 = collectDeliveryController.getServicePointProviderForItem(item1);
+        ServicePointProvider providerItem1 = collectDeliveryController.getServicePointProviderForItem(item1);
 
-
+        assertEquals(ServicePointProvider.from("SCHENKER"), providerItem1);
     }
 
 }

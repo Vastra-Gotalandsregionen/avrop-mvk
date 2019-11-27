@@ -1,7 +1,7 @@
 package se._1177.lmn.controller;
 
 import org.junit.Test;
-import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.DeliveryMethodEnum;
 
 import java.util.Arrays;
 import java.util.HashSet;

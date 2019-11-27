@@ -21,8 +21,9 @@
     </scm>
 
     <properties>
-        <spring.version>4.2.5.RELEASE</spring.version>
+        <spring.version>5.2.1.RELEASE</spring.version>
         <jsf.version>2.2.13</jsf.version>
+        <apache.cxf.version>3.3.4</apache.cxf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>
