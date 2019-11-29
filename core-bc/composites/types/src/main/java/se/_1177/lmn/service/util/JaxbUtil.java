@@ -1,5 +1,10 @@
 package se._1177.lmn.service.util;
 
+import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._1.SubjectOfCareType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsResponseType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.ObjectFactory;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -71,5 +76,23 @@ public class JaxbUtil {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static String objectToXml(PrescriptionItemType value) {
+        SubjectOfCareType subjectOfCareType = new SubjectOfCareType();
+        subjectOfCareType.getPrescriptionItem().add(value);
+
+        GetMedicalSupplyPrescriptionsResponseType root = new GetMedicalSupplyPrescriptionsResponseType();
+        root.setSubjectOfCareType(subjectOfCareType);
+
+        JAXBElement<GetMedicalSupplyPrescriptionsResponseType> getMedicalSupplyPrescriptionsResponse =
+                new ObjectFactory().createGetMedicalSupplyPrescriptionsResponse(root);
+
+        return JaxbUtil.objectToXML(getMedicalSupplyPrescriptionsResponse);
+    }
+
+    public static PrescriptionItemType xmlToPrescriptionItemType(String value) {
+        return JaxbUtil.xmlToObject(value, GetMedicalSupplyPrescriptionsResponseType.class)
+                .getValue().getSubjectOfCareType().getPrescriptionItem().get(0);
     }
 }

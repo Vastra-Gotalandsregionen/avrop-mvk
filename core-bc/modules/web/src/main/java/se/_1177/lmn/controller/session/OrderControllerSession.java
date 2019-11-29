@@ -1,14 +1,13 @@
-package se._1177.lmn.controller.model;
+package se._1177.lmn.controller.session;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import riv.crm.selfservice.medicalsupply._1.OrderItemType;
-import riv.crm.selfservice.medicalsupply._1.OrderRowType;
 import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._1.SubjectOfCareType;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsResponseType;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.ObjectFactory;
+import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 import se._1177.lmn.service.util.JaxbUtil;
 
 import javax.xml.bind.JAXBElement;
@@ -16,66 +15,44 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import static se._1177.lmn.service.util.JaxbUtil.readObject;
 
 /**
  * @author Patrik Björk
  */
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class PrescriptionItemInfo implements Externalizable {
+public class OrderControllerSession implements Externalizable {
 
-    private Map<String, PrescriptionItemType> chosenPrescriptionItemInfo = new HashMap<>();
+    private MedicalSupplyPrescriptionsHolder medicalSupplyPrescriptions;
 
-    private Map<String, Map<String, OrderItemType>> latestOrderItemsByArticleNoAndPrescriptionItem;
+    private Map<String, Boolean> chosenItemMap = new HashMap<>();
 
-    public Map<String, PrescriptionItemType> getChosenPrescriptionItemInfo() {
-        return chosenPrescriptionItemInfo;
+    private Map<String, PrescriptionItemType> prescriptionItemInfosToPresent = new HashMap<>();
+
+    public MedicalSupplyPrescriptionsHolder getMedicalSupplyPrescriptions() {
+        return medicalSupplyPrescriptions;
     }
 
-    public void emptyChosenPrescriptionItems() {
-        chosenPrescriptionItemInfo = new HashMap<>();
+    public void setMedicalSupplyPrescriptions(MedicalSupplyPrescriptionsHolder medicalSupplyPrescriptions) {
+        this.medicalSupplyPrescriptions = medicalSupplyPrescriptions;
     }
 
-    public PrescriptionItemType getPrescriptionItem(String prescriptionItemId) {
-        return getChosenPrescriptionItemInfo().get(prescriptionItemId);
+    public Map<String, Boolean> getChosenItemMap() {
+        return chosenItemMap;
     }
 
-    public PrescriptionItemType getPrescriptionItem(OrderRowType orderRow) {
-        return getChosenPrescriptionItemInfo().get(orderRow.getPrescriptionItemId());
+    public void setChosenItemMap(Map<String, Boolean> chosenItemMap) {
+        this.chosenItemMap = chosenItemMap;
     }
 
-    public List<PrescriptionItemType> getPrescriptionItems(List<OrderRowType> orderRows) {
-        Set<PrescriptionItemType> prescriptionItems = new HashSet<>();
-
-        orderRows.forEach(orderRow -> prescriptionItems.add(getPrescriptionItem(orderRow)));
-
-        List<PrescriptionItemType> result = new ArrayList<>(prescriptionItems);
-
-        result.sort(Comparator.comparing(o -> o.getArticle().getArticleName()));
-
-        return new ArrayList<>(result);
+    public Map<String, PrescriptionItemType> getPrescriptionItemInfosToPresent() {
+        return prescriptionItemInfosToPresent;
     }
 
-    public List<PrescriptionItemType> getChosenPrescriptionItemInfoList() {
-        return new ArrayList<>(chosenPrescriptionItemInfo.values());
-    }
-
-    public Map<String, Map<String, OrderItemType>> getLatestOrderItemsByArticleNoAndPrescriptionItem() {
-        return latestOrderItemsByArticleNoAndPrescriptionItem;
-    }
-
-    public void setLatestOrderItemsByArticleNo(
-            Map<String, Map<String, OrderItemType>> latestOrderItemsByArticleNoAndPrescriptionItem) {
-         this.latestOrderItemsByArticleNoAndPrescriptionItem = latestOrderItemsByArticleNoAndPrescriptionItem;
+    public void setPrescriptionItemInfosToPresent(Map<String, PrescriptionItemType> prescriptionItemInfosToPresent) {
+        this.prescriptionItemInfosToPresent = prescriptionItemInfosToPresent;
     }
 
     @Override
@@ -89,7 +66,7 @@ public class PrescriptionItemInfo implements Externalizable {
         out.writeObject(serializableChosenPrescriptionItemInfo);
     }
 
-    /*private String objectToXml(PrescriptionItemType value) {
+    private String objectToXml(PrescriptionItemType value) {
         SubjectOfCareType subjectOfCareType = new SubjectOfCareType();
         subjectOfCareType.getPrescriptionItem().add(value);
 
@@ -100,7 +77,7 @@ public class PrescriptionItemInfo implements Externalizable {
                 new ObjectFactory().createGetMedicalSupplyPrescriptionsResponse(root);
 
         return JaxbUtil.objectToXML(getMedicalSupplyPrescriptionsResponse);
-    }*/
+    }
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
@@ -115,8 +92,8 @@ public class PrescriptionItemInfo implements Externalizable {
         this.chosenPrescriptionItemInfo = chosenPrescriptionItemInfo;
     }
 
-    /*private PrescriptionItemType xmlToObject(String value) {
+    private PrescriptionItemType xmlToObject(String value) {
         return JaxbUtil.xmlToObject(value, GetMedicalSupplyPrescriptionsResponseType.class)
                 .getValue().getSubjectOfCareType().getPrescriptionItem().get(0);
-    }*/
+    }
 }

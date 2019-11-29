@@ -29,28 +29,49 @@
                                 <!-- RTJP services -->
                                 <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/schema/RTJP/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyDeliveryPointsInteraction/GetMedicalSupplyDeliveryPointsInteraction_1.0_RIVTABP21.wsdl</wsdl>
+                                    <bindingFiles>
+                                        <bindingFile>${basedir}/src/main/resources/binding.xml</bindingFile>
+                                    </bindingFiles>
                                 </wsdlOption>
                                 <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/schema/RTJP/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/GetMedicalSupplyPrescriptionsInteraction/GetMedicalSupplyPrescriptionsInteraction_1.0_RIVTABP21.wsdl</wsdl>
+                                    <bindingFiles>
+                                        <bindingFile>${basedir}/src/main/resources/binding.xml</bindingFile>
+                                    </bindingFiles>
                                 </wsdlOption>
                                 <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/schema/RTJP/ServiceContracts_crm_selfservice_medicalsupply/schemas/interactions/RegisterMedicalSupplyOrderInteraction/RegisterMedicalSupplyOrderInteraction_1.0_RIVTABP21.wsdl</wsdl>
+                                    <bindingFiles>
+                                        <bindingFile>${basedir}/src/main/resources/binding.xml</bindingFile>
+                                    </bindingFiles>
                                 </wsdlOption>
 
                                 <!-- User profile services -->
                                 <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/schema/TD_USERPROFILE_2_0/schemas/interactions/GetSubjectOfCare/GetSubjectOfCareInteraction_2.0_RIVTABP21.wsdl</wsdl>
+                                    <bindingFiles>
+                                        <bindingFile>${basedir}/src/main/resources/binding.xml</bindingFile>
+                                    </bindingFiles>
                                 </wsdlOption>
                                 <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/schema/TD_USERPROFILE_2_0/schemas/interactions/GetUserProfile/GetUserProfileInteraction_2.0_RIVTABP21.wsdl</wsdl>
+                                    <bindingFiles>
+                                        <bindingFile>${basedir}/src/main/resources/binding.xml</bindingFile>
+                                    </bindingFiles>
                                 </wsdlOption>
                                 <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/schema/TD_USERPROFILE_2_0/schemas/interactions/GetUserProfileByAgent/GetUserProfileByAgentInteraction_2.0_RIVTABP21.wsdl</wsdl>
+                                    <bindingFiles>
+                                        <bindingFile>${basedir}/src/main/resources/binding.xml</bindingFile>
+                                    </bindingFiles>
                                 </wsdlOption>
 
                                 <!-- Inbox services -->
                                 <wsdlOption>
                                     <wsdl>${basedir}/src/main/resources/schema/TD_INBOX_2_0/schemas/interactions/AddMessage/AddMessageInteraction_2.0_RIVTABP21.wsdl</wsdl>
+                                    <bindingFiles>
+                                        <bindingFile>${basedir}/src/main/resources/binding.xml</bindingFile>
+                                    </bindingFiles>
                                 </wsdlOption>
                             </wsdlOptions>
                             <encoding>UTF-8</encoding>

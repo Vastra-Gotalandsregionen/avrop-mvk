@@ -16,6 +16,7 @@ import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsResponseType;
 import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
+import se._1177.lmn.controller.session.OrderControllerSession;
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 import se._1177.lmn.service.LmnService;
 
@@ -77,11 +78,8 @@ public class OrderController {
     @Autowired
     private NavigationController navigationController;
 
-    private MedicalSupplyPrescriptionsHolder medicalSupplyPrescriptions;
-
-    private Map<String, Boolean> chosenItemMap = new HashMap<>();
-
-    private Map<String, PrescriptionItemType> prescriptionItemInfosToPresent = new HashMap<>();
+    @Autowired
+    private OrderControllerSession sessionData;
 
     /**
      * This is called by UserProfileController. It fetches the {@link PrescriptionItemType}s, preserves them in a map
@@ -96,14 +94,17 @@ public class OrderController {
                 return;
             }
 
-            this.medicalSupplyPrescriptions = lmnService.getMedicalSupplyPrescriptionsHolder(
-                    userProfileController.getUserProfile().getSubjectOfCareId());
+            setMedicalSupplyPrescriptions(
+                    lmnService.getMedicalSupplyPrescriptionsHolder(
+                            userProfileController.getUserProfile().getSubjectOfCareId()
+                    )
+            );
 
             this.prescriptionItemInfo.setLatestOrderItemsByArticleNo(
-                    this.medicalSupplyPrescriptions.getLatestOrderedNumbersByArticleNo());
+                    getMedicalSupplyPrescriptionsHolder().getLatestOrderedNumbersByArticleNo());
 
             GetMedicalSupplyPrescriptionsResponseType supplyPrescriptionsResponse =
-                    this.medicalSupplyPrescriptions.getSupplyPrescriptionsResponse();
+                    getMedicalSupplyPrescriptionsHolder().getSupplyPrescriptionsResponse();
 
             if (!supplyPrescriptionsResponse.getResultCode().equals(ResultCodeEnum.OK)) {
                 String msg = supplyPrescriptionsResponse.getComment();
@@ -114,14 +115,14 @@ public class OrderController {
             }
 
             Set<ServicePointProviderEnum> allRelevantProviders = new HashSet<>();
-            for (PrescriptionItemType prescriptionItem : medicalSupplyPrescriptions.orderable) {
+            for (PrescriptionItemType prescriptionItem : getMedicalSupplyPrescriptionsHolder().orderable) {
                 String prescriptionItemId = prescriptionItem.getPrescriptionItemId();
-                prescriptionItemInfosToPresent.put(prescriptionItemId, prescriptionItem);
+                getPrescriptionItemInfosToPresent().put(prescriptionItemId, prescriptionItem);
 
                 if (!UtilController.isAfterToday(prescriptionItem.getNextEarliestOrderDate())
                         && prescriptionItem.getArticle().isIsOrderable()) {
 
-                    chosenItemMap.put(prescriptionItemId, lmnService.getDefaultSelectedPrescriptions());
+                    getChosenItemMap().put(prescriptionItemId, lmnService.getDefaultSelectedPrescriptions());
 
                     prescriptionItem.getDeliveryAlternative().forEach(alternative -> {
                         if (!alternative.getServicePointProvider().equals(ServicePointProviderEnum.INGEN)
@@ -159,15 +160,27 @@ public class OrderController {
         }
     }
 
+    private Map<String, PrescriptionItemType> getPrescriptionItemInfosToPresent() {
+        return sessionData.getPrescriptionItemInfosToPresent();
+    }
+
+    private void setMedicalSupplyPrescriptions(MedicalSupplyPrescriptionsHolder medicalSupplyPrescriptionsHolder) {
+        sessionData.setMedicalSupplyPrescriptions(medicalSupplyPrescriptionsHolder);
+    }
+
+    private MedicalSupplyPrescriptionsHolder getMedicalSupplyPrescriptionsHolder() {
+        return sessionData.getMedicalSupplyPrescriptions();
+    }
+
     public synchronized void possiblyReinit() {
-        if (medicalSupplyPrescriptions == null) {
+        if (getMedicalSupplyPrescriptionsHolder() == null) {
             init();
         }
     }
 
     public void reset() {
-        medicalSupplyPrescriptions = null;
-        chosenItemMap = new HashMap<>();
+        setMedicalSupplyPrescriptions(null);
+        setChosenItemMap(new HashMap<>());
     }
 
     public String reinit() {
@@ -177,23 +190,27 @@ public class OrderController {
     }
 
     public List<PrescriptionItemType> getMedicalSupplyPrescriptions() {
-        if (medicalSupplyPrescriptions != null) {
-            return medicalSupplyPrescriptions.orderable;
+        if (getMedicalSupplyPrescriptionsHolder() != null) {
+            return getMedicalSupplyPrescriptionsHolder().orderable;
         } else {
             return null;
         }
     }
 
     public List<PrescriptionItemType> getNoLongerOrderableMedicalSupplyPrescriptions() {
-        if (medicalSupplyPrescriptions != null) {
-            return medicalSupplyPrescriptions.noLongerOrderable;
+        if (getMedicalSupplyPrescriptionsHolder() != null) {
+            return getMedicalSupplyPrescriptionsHolder().noLongerOrderable;
         } else {
             return null;
         }
     }
 
+    public void setChosenItemMap(Map<String, Boolean> chosenItemMap) {
+        sessionData.setChosenItemMap(chosenItemMap);
+    }
+
     public Map<String, Boolean> getChosenItemMap() {
-        return chosenItemMap;
+        return sessionData.getChosenItemMap();
     }
 
     public String toDelivery() {
@@ -204,9 +221,9 @@ public class OrderController {
 
         prescriptionItemInfo.getChosenPrescriptionItemInfo().clear();
 
-        for (Map.Entry<String, Boolean> entry : chosenItemMap.entrySet()) {
+        for (Map.Entry<String, Boolean> entry : getChosenItemMap().entrySet()) {
             if (entry.getValue()) {
-                PrescriptionItemType prescriptionItem = prescriptionItemInfosToPresent.get(entry.getKey());
+                PrescriptionItemType prescriptionItem = getPrescriptionItemInfosToPresent().get(entry.getKey());
 
                 prescriptionItemInfo.getChosenPrescriptionItemInfo()
                         .put(prescriptionItem.getPrescriptionItemId(), prescriptionItem);

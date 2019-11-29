@@ -71,7 +71,6 @@ public class Cart implements Externalizable {
         OrderType orderType = new JAXBElement<OrderType>()new ObjectFactory().createOrderType();
         orderType.getOrderRow().addAll(orderRows);*/
         out.writeObject(objectToXML(registerMedicalSupplyOrder));
-
     }
 
     @Override
