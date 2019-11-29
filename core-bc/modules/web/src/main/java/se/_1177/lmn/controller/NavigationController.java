@@ -5,12 +5,13 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import se._1177.lmn.service.util.Constants;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Stack;
 
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class NavigationController {
+public class NavigationController implements Serializable {
 
     private Stack<View> views = new Stack<>();
 
@@ -70,7 +71,7 @@ public class NavigationController {
         }
     }
 
-    public static class View {
+    public static class View implements Serializable {
         String value;
         String label;
 

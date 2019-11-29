@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.data.annotation.Transient;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
@@ -38,13 +39,14 @@ import static se._1177.lmn.service.util.Constants.PRODUCTS_FETCH_DEFAULT_ERROR;
  * @author Patrik Björk
  */
 @Component
-@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class OrderController {
 
     public static final String VIEW_NAME = "Mina förskrivna förbrukningsprodukter";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
 
+    @Transient
     @Autowired
     private UserProfileController userProfileController;
 

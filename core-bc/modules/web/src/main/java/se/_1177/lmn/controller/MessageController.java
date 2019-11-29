@@ -6,13 +6,14 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 @Component
-@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class MessageController {
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class MessageController implements Serializable {
 
     @Autowired
     private LocaleController localeController;

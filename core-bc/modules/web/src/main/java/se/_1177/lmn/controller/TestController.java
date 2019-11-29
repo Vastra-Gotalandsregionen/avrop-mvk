@@ -12,8 +12,8 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 @Component
-@Scope(value = "session")
-//@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+//@Scope(value = "session")
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class TestController implements Serializable {
     private Integer number = 0;
 

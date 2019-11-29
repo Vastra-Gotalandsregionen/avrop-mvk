@@ -14,9 +14,9 @@
     </listener>
 
     <!--- The RequestContextListener gets rid of a WARN log message which occurs often otherwise. -->
-    <listener>
+    <!--<listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-    </listener>
+    </listener>-->
 
     <filter>
         <filter-name>springSessionRepositoryFilter</filter-name>

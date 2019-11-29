@@ -6,10 +6,10 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
 
-//@EnableRedisHttpSession
+@EnableRedisHttpSession
 public class RedisSessionConfig {
 
-//	@Bean
+	@Bean
 	public LettuceConnectionFactory connectionFactory() {
 		return new LettuceConnectionFactory(); 
 	}

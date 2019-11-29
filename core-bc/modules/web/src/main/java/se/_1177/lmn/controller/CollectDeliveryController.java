@@ -51,7 +51,7 @@ import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
  * @author Patrik Björk
  */
 @Component
-@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CollectDeliveryController {
 
     public static final String VIEW_NAME = "Utlämningsställe";

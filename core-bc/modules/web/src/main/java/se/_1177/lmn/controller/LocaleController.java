@@ -6,11 +6,12 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import java.io.Serializable;
 import java.util.Locale;
 
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class LocaleController {
+public class LocaleController implements Serializable {
 
     private static final String LANGUAGE = "sv";
     private static final String COUNTRY = "SE";

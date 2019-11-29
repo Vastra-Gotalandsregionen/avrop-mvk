@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Map;
 
 /**
@@ -75,6 +76,21 @@ public class SessionFilter implements Filter {
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
+
+        touchSessionObjects(request);
+    }
+
+    private void touchSessionObjects(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Enumeration<String> attributeNames = session.getAttributeNames();
+
+        while (attributeNames.hasMoreElements()) {
+            String element = attributeNames.nextElement();
+
+//            if (element.startsWith("scopedTarget")) {
+                session.setAttribute(element, session.getAttribute(element));
+//            }
+        }
     }
 
     private boolean redirectIfInappropriateRequest(HttpServletRequest request, HttpServletResponse response)
