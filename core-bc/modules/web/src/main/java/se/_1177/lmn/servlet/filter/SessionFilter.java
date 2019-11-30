@@ -145,11 +145,12 @@ public class SessionFilter implements Filter {
 
     // If any of the session attributes have changed invalidate session to start all over.
     private void handleSessionInvalidation(HttpServletRequest request, String subjectSerialNumber) {
-        String sessionSubjectSerialNumber = (String) request.getSession().getAttribute(USER_ID_HEADER);
+        HttpSession session = request.getSession();
+        String sessionSubjectSerialNumber = (String) session.getAttribute(USER_ID_HEADER);
 
         if (sessionSubjectSerialNumber != null && !sessionSubjectSerialNumber.equals(subjectSerialNumber)) {
             // A new user has logged in. Reset session.
-            request.getSession().invalidate();
+            session.invalidate();
         }
 
         String objectIdFromRequestParam = request.getParameter(OBJECTID_PARAMETER);
@@ -158,29 +159,29 @@ public class SessionFilter implements Filter {
             objectIdFromRequestParam = null;
         }
 
-        String sessionObjectId = (String) request.getSession().getAttribute(OBJECTID_PARAMETER);
-        String sessionShibSessionId = (String) request.getSession().getAttribute(SHIB_SESSION_ID_HEADER);
+        String sessionObjectId = (String) session.getAttribute(OBJECTID_PARAMETER);
+        String sessionShibSessionId = (String) session.getAttribute(SHIB_SESSION_ID_HEADER);
 
         String shibSessionIdFromRequest = request.getHeader(SHIB_SESSION_ID_HEADER);
 
         if (!EqualsBuilder.reflectionEquals(sessionShibSessionId, shibSessionIdFromRequest)) {
-            request.getSession().invalidate();
+            session.invalidate();
         }
 
         if (objectIdFromRequestParam != null && !objectIdFromRequestParam.equals(sessionObjectId)) {
-            request.getSession().invalidate();
-            request.getSession().setAttribute(OBJECTID_PARAMETER, objectIdFromRequestParam);
+            session.invalidate();
+            session.setAttribute(OBJECTID_PARAMETER, objectIdFromRequestParam);
         } else if (request.getRequestURI().endsWith(START_PAGE_SUFFIX)) {
             // It is normal that objectIdFromRequestParam is null when page isn't the start page but on the start page
             // the object id should always be passed if it exists.
             if (!EqualsBuilder.reflectionEquals(objectIdFromRequestParam, sessionObjectId)) {
-                request.getSession().invalidate();
-                request.getSession().setAttribute(OBJECTID_PARAMETER, objectIdFromRequestParam);
+                session.invalidate();
+                session.setAttribute(OBJECTID_PARAMETER, objectIdFromRequestParam);
             }
         }
 
-        request.getSession().setAttribute(SHIB_SESSION_ID_HEADER, shibSessionIdFromRequest);
-        request.getSession().setAttribute(USER_ID_HEADER, subjectSerialNumber);
+        session.setAttribute(SHIB_SESSION_ID_HEADER, shibSessionIdFromRequest);
+        session.setAttribute(USER_ID_HEADER, subjectSerialNumber);
     }
 
     public void destroy() {

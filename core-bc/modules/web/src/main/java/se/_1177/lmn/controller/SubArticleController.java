@@ -17,10 +17,10 @@ import se._1177.lmn.controller.model.ArticleWithSubArticlesModel;
 import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
 import se._1177.lmn.controller.model.SubArticleDto;
+import se._1177.lmn.controller.session.SubArticleSession;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,7 +32,7 @@ import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
  * @author Patrik Björk
  */
 @Component
-@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class SubArticleController {
 
     public static final String VIEW_NAME = "Fördela underartiklar";
@@ -51,20 +51,19 @@ public class SubArticleController {
     @Autowired
     private UtilController utilController;
 
-    private List<ArticleWithSubArticlesModel> articleWithSubArticlesModels;
-
-    private Map<String, ArticleType> subArticleIdToArticle = new HashMap<>();
+    @Autowired
+    private SubArticleSession sessionData;
 
     public void init() {
-        articleWithSubArticlesModels = makeDtoModel(getThoseWhereChoiceIsNeeded());
+        sessionData.setArticleWithSubArticlesModels(makeDtoModel(getThoseWhereChoiceIsNeeded()));
     }
 
     public List<ArticleWithSubArticlesModel> getArticleWithSubArticlesModels() {
-        return articleWithSubArticlesModels;
+        return sessionData.getArticleWithSubArticlesModels();
     }
 
     public String getJsonData() {
-        return jsonEncode(articleWithSubArticlesModels);
+        return jsonEncode(sessionData.getArticleWithSubArticlesModels());
     }
 
     String jsonEncode(List<ArticleWithSubArticlesModel> articleWithSubArticlesModels) {
@@ -87,6 +86,8 @@ public class SubArticleController {
             // Zero packages per order means we're dealing with articles and not packages
             model.setTotalOrderSizeUnit(prescriptionItemType.getNoOfPackagesPerOrder() == 0
                     ? "artiklar" : "förpackningar");
+
+            List<ArticleWithSubArticlesModel> articleWithSubArticlesModels = sessionData.getArticleWithSubArticlesModels();
 
             if (articleWithSubArticlesModels != null && articleWithSubArticlesModels.contains(model)) {
                 // The model is present from previous user interactions. We then want to keep the distribution.
@@ -137,7 +138,7 @@ public class SubArticleController {
 
                 model.getSubArticles().add(subArticleDto);
 
-                subArticleIdToArticle.put(subArticle.getArticleNo(), subArticle);
+                sessionData.getSubArticleIdToArticle().put(subArticle.getArticleNo(), subArticle);
             }
 
             model.setDistributedNumber(numberDistributedForPrescriptionItem);
@@ -168,9 +169,9 @@ public class SubArticleController {
     public String toDelivery() {
 
         // Validate distributed numbers
-        List<String> invalidDistributedNumbers = articleWithSubArticlesModels.stream()
+        List<String> invalidDistributedNumbers = sessionData.getArticleWithSubArticlesModels().stream()
                 .filter(model -> model.getTotalOrderSize() != model.getDistributedNumber())
-                .map(model -> model.getParentArticleName())
+                .map(ArticleWithSubArticlesModel::getParentArticleName)
                 .collect(Collectors.toList());
 
         if (invalidDistributedNumbers.size() > 0) {
@@ -189,7 +190,7 @@ public class SubArticleController {
     }
 
     private void complementCartWithSubArticles() {
-        for (ArticleWithSubArticlesModel articleWithSubArticlesModel : articleWithSubArticlesModels) {
+        for (ArticleWithSubArticlesModel articleWithSubArticlesModel : sessionData.getArticleWithSubArticlesModels()) {
 
             List<SubArticleDto> subArticlesToOrder = articleWithSubArticlesModel.getSubArticles()
                     .stream()
@@ -201,7 +202,7 @@ public class SubArticleController {
                             .equals(articleWithSubArticlesModel.getPrescriptionItemId()));
 
             for (SubArticleDto subArticleDto : subArticlesToOrder) {
-                ArticleType subArticle = subArticleIdToArticle.get(subArticleDto.getArticleNo());
+                ArticleType subArticle = sessionData.getSubArticleIdToArticle().get(subArticleDto.getArticleNo());
 
                 OrderRowType orderRowType = new OrderRowType();
 

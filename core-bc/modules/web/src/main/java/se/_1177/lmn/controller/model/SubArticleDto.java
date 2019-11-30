@@ -1,6 +1,8 @@
 package se._1177.lmn.controller.model;
 
-public class SubArticleDto {
+import java.io.Serializable;
+
+public class SubArticleDto implements Serializable {
     private String name;
     private int orderCount;
     private String articleNo;

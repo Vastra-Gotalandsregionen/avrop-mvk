@@ -16,6 +16,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ import static se._1177.lmn.service.util.JaxbUtil.readObject;
  */
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class PrescriptionItemInfo implements Externalizable {
+public class PrescriptionItemInfo implements Serializable {
 
     private Map<String, PrescriptionItemType> chosenPrescriptionItemInfo = new HashMap<>();
 
@@ -78,7 +79,7 @@ public class PrescriptionItemInfo implements Externalizable {
          this.latestOrderItemsByArticleNoAndPrescriptionItem = latestOrderItemsByArticleNoAndPrescriptionItem;
     }
 
-    @Override
+/*    @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         Map<String, String> serializableChosenPrescriptionItemInfo = new HashMap<>();
 
@@ -87,7 +88,7 @@ public class PrescriptionItemInfo implements Externalizable {
         }
 
         out.writeObject(serializableChosenPrescriptionItemInfo);
-    }
+    }*/
 
     /*private String objectToXml(PrescriptionItemType value) {
         SubjectOfCareType subjectOfCareType = new SubjectOfCareType();
@@ -102,7 +103,7 @@ public class PrescriptionItemInfo implements Externalizable {
         return JaxbUtil.objectToXML(getMedicalSupplyPrescriptionsResponse);
     }*/
 
-    @Override
+    /*@Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         Map<String, String> serializableChosenPrescriptionItemInfo = (Map<String, String>) in.readObject();
 
@@ -113,7 +114,7 @@ public class PrescriptionItemInfo implements Externalizable {
         }
 
         this.chosenPrescriptionItemInfo = chosenPrescriptionItemInfo;
-    }
+    }*/
 
     /*private PrescriptionItemType xmlToObject(String value) {
         return JaxbUtil.xmlToObject(value, GetMedicalSupplyPrescriptionsResponseType.class)

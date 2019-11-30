@@ -1,9 +1,10 @@
 package se._1177.lmn.controller.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArticleWithSubArticlesModel {
+public class ArticleWithSubArticlesModel implements Serializable {
     private String parentArticleName;
     private String prescriptionItemId;
     private int totalOrderSize;

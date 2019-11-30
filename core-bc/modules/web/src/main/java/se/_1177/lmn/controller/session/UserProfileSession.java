@@ -18,6 +18,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.io.StringWriter;
 
@@ -26,7 +27,7 @@ import static se._1177.lmn.service.util.JaxbUtil.readObject;
 
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class UserProfileSession implements Externalizable {
+public class UserProfileSession implements Serializable {
 
     private GetUserProfileResponseType userProfileResponse;
     private GetUserProfileResponseType userProfileResponseLoggedInUser;
@@ -36,7 +37,7 @@ public class UserProfileSession implements Externalizable {
     private String objectId;
     private UserProfileType userProfile;
 
-    @Override
+   /* @Override
     public void writeExternal(ObjectOutput out) throws IOException {
 //        out.writeObject(utilController);
 //        ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -62,7 +63,7 @@ public class UserProfileSession implements Externalizable {
         delegate = in.readBoolean();
         objectId = (String) in.readObject();
 //        updateUserProfile();
-    }
+    }*/
 
 
 

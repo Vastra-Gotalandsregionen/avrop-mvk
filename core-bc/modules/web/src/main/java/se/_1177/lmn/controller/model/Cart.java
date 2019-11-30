@@ -14,6 +14,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ import static se._1177.lmn.service.util.JaxbUtil.readObject;
  */
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class Cart implements Externalizable {
+public class Cart implements Serializable {
 
     private List<OrderRowType> orderRows = new ArrayList<>();
 
@@ -56,7 +57,7 @@ public class Cart implements Externalizable {
         return null;
     }
 
-    @Override
+    /*@Override
     public void writeExternal(ObjectOutput out) throws IOException {
         RegisterMedicalSupplyOrderType registerMedicalSupplyOrderType = new riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.ObjectFactory().createRegisterMedicalSupplyOrderType();
         OrderType order = new OrderType();
@@ -65,11 +66,11 @@ public class Cart implements Externalizable {
 
         JAXBElement<RegisterMedicalSupplyOrderType> registerMedicalSupplyOrder = new riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.ObjectFactory().createRegisterMedicalSupplyOrder(registerMedicalSupplyOrderType);
 
-       /* registerMedicalSupplyOrder.
+       *//* registerMedicalSupplyOrder.
 
         new ObjectFactory().
         OrderType orderType = new JAXBElement<OrderType>()new ObjectFactory().createOrderType();
-        orderType.getOrderRow().addAll(orderRows);*/
+        orderType.getOrderRow().addAll(orderRows);*//*
         out.writeObject(objectToXML(registerMedicalSupplyOrder));
     }
 
@@ -80,5 +81,5 @@ public class Cart implements Externalizable {
         if (registerMedicalSupplyOrderType != null) {
             orderRows = registerMedicalSupplyOrderType.getOrder().getOrderRow();
         }
-    }
+    }*/
 }

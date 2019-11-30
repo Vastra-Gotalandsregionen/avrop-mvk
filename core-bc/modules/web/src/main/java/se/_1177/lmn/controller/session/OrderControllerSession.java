@@ -15,6 +15,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ import java.util.Map;
  */
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class OrderControllerSession implements Externalizable {
+public class OrderControllerSession implements Serializable {
 
     private MedicalSupplyPrescriptionsHolder medicalSupplyPrescriptions;
 
@@ -55,7 +56,7 @@ public class OrderControllerSession implements Externalizable {
         this.prescriptionItemInfosToPresent = prescriptionItemInfosToPresent;
     }
 
-    @Override
+    /*@Override
     public void writeExternal(ObjectOutput out) throws IOException {
         Map<String, String> serializableChosenPrescriptionItemInfo = new HashMap<>();
 
@@ -95,5 +96,5 @@ public class OrderControllerSession implements Externalizable {
     private PrescriptionItemType xmlToObject(String value) {
         return JaxbUtil.xmlToObject(value, GetMedicalSupplyPrescriptionsResponseType.class)
                 .getValue().getSubjectOfCareType().getPrescriptionItem().get(0);
-    }
+    }*/
 }
