@@ -1,6 +1,6 @@
 @font-face {
     font-family: Open Sans;
-    src: url("/mvk/javax.faces.resource/opensans-regular.ttf.xhtml?ln=assets");
+    src: url("../opensans-regular.ttf.xhtml?ln=assets");
 }
 @font-face {
     font-family: Inter UI;
@@ -8,9 +8,9 @@
 }
 @font-face {
     font-family: Inter-UI-Bold;
-    src: url("/mvk/javax.faces.resource/inter-bold.woff.xhtml?ln=assets");
+    src: url("../inter-bold.woff.xhtml?ln=assets");
 }
-html, body {
+/*html, body {
     height: 100%;
 }
 
@@ -87,7 +87,7 @@ p a {
 li a {
     text-decoration: underline;
 }
-
+*/
 a {
     color: #17646F;
     text-decoration: none;
@@ -100,8 +100,8 @@ a:hover {
 .underline {
     text-decoration: underline;
 }
-
-/**** General ********/
+/*
+!**** General ********!
 fieldset.legendHidden {
     border-bottom: none !important;
 }
@@ -211,7 +211,7 @@ dl.oneLine dd {
     margin: 0
 }
 
-/* Item list */
+!* Item list *!
 .itemGradient {
     background-image: url("/mvk/javax.faces.resource/listItemBodyBg.png.xhtml?ln=images");
     background-position: right top;
@@ -233,9 +233,9 @@ li.item .icon .iconImg {
     margin: 0 auto;
 }
 
-/*  #####################
+!*  #####################
 	START ??? Mycket troligt, i sådanna fall skall det till start.css...
-	#####################*/
+	#####################*!
 a.startToInbox {
     font-size: 0.9375em;
     font-weight: bold;
@@ -261,7 +261,7 @@ a.startToInbox {
     margin: 0 0 30px 10px;
 }
 
-/* Icons */
+!* Icons *!
 .externalIconBlue {
     background-repeat: no-repeat;
     margin-left: 4px;
@@ -306,7 +306,7 @@ li.listItem span.iconLabel {
     background-image: url("/mvk/javax.faces.resource/icons/queue_icon.png.xhtml?ln=images");
 }
 
-/*****/
+!*****!
 .listItem .icon {
     position: absolute;
     top: 5px;
@@ -380,7 +380,7 @@ li.listItem span.iconLabel {
     word-wrap: break-word;
 }
 
-/****/
+!****!
 .icon.agentMode_icon .iconImg {
     background-image: url("/mvk/javax.faces.resource/icons/ombud-icon.png.xhtml?ln=images");
     background-position: 10px;
@@ -403,7 +403,7 @@ li.listItem span.iconLabel {
     font-weight: bold;
 }
 
-/*********************/
+!*********************!
 a.infoBoxToggler {
     display: block;
     height: 30px;
@@ -648,7 +648,7 @@ button.disabled:active, .button.disabled:active, input[type="submit"].disabled:a
     display: inline;
 }
 
-/* Facility list header */
+!* Facility list header *!
 .facilityListHeader {
     position: relative;
     overflow: auto;
@@ -709,7 +709,7 @@ button.disabled:active, .button.disabled:active, input[type="submit"].disabled:a
     float: right;
 }
 
-/*********************/
+!*********************!
 #bodyContainer {
     margin: 0 auto -30px;
     min-height: 100%;
@@ -725,7 +725,7 @@ button.disabled:active, .button.disabled:active, input[type="submit"].disabled:a
     margin: 20px 10px;
 }
 
-/**** Width dependant hiding ***/
+!**** Width dependant hiding ***!
 .onlyOnNarrow, .onlyOnNarrowInline {
     display: none !important;
 }
@@ -738,9 +738,10 @@ button.disabled:active, .button.disabled:active, input[type="submit"].disabled:a
     display: inline !important;
 }
 
-/*********************/
+!*********************!
 
-/**** HEADER *********/
+!**** HEADER *********!
+*/
 #header {
     position: relative;
     font-size: 0.8125em;
@@ -922,7 +923,7 @@ button.disabled:active, .button.disabled:active, input[type="submit"].disabled:a
 }
 
 #header .wrapper .header-right .user-icon {
-    background-image: url("/mvk/javax.faces.resource/icons/header-user.svg.xhtml?ln=images");
+    background-image: url("../header-user.svg.xhtml?ln=images");
     background-repeat: no-repeat;
     display: inline-block;
     height: 40px;
@@ -1136,7 +1137,7 @@ button.disabled:active, .button.disabled:active, input[type="submit"].disabled:a
 }
 
 .icon-1177 {
-    background-image: url("/mvk/javax.faces.resource/icons/1177-logo.svg.xhtml?ln=images");
+    background-image: url("../1177-logo.svg.xhtml?ln=images");
     background-repeat: no-repeat;
     display: inline-block;
     height: 45px;
@@ -1161,7 +1162,7 @@ button.disabled:active, .button.disabled:active, input[type="submit"].disabled:a
 
 @media all and (max-width:767px) {
     .icon-1177 {
-        background-image: url("/mvk/javax.faces.resource/icons/1177-logo-small.svg.xhtml?ln=images");
+        background-image: url("../1177-logo-small.svg.xhtml?ln=images");
         background-repeat: no-repeat;
         width: 60px;
         height: 22px;
@@ -1200,13 +1201,13 @@ button.disabled:active, .button.disabled:active, input[type="submit"].disabled:a
     width: 100%;
     display: none;
     font-weight: normal;
-    white-space: pre-wrap; /* CSS3 */
-    white-space: -moz-pre-wrap; /* Firefox */
-    white-space: -pre-wrap; /* Opera <7 */
-    white-space: -o-pre-wrap; /* Opera 7 */
+    white-space: pre-wrap; !* CSS3 *!
+    white-space: -moz-pre-wrap; !* Firefox *!
+    white-space: -pre-wrap; !* Opera <7 *!
+    white-space: -o-pre-wrap; !* Opera 7 *!
     word-wrap: break-word;
     font-weight: normal;
-    display: none; /* IE */
+    display: none; !* IE *!
     text-align: left;
     font-size: 14px;
 }
@@ -1216,6 +1217,8 @@ button.disabled:active, .button.disabled:active, input[type="submit"].disabled:a
         width: 95%;
     }
 }
+
+
 /*********************/
 /******BREADCRUMBS****/
 #breadcrumbs {
@@ -1287,7 +1290,7 @@ button.disabled:active, .button.disabled:active, input[type="submit"].disabled:a
 
 .footer-image-secondary {
     background-color: #faeef0;
-    background-image: url("/mvk/javax.faces.resource/footer-large-secondary.svg.xhtml?ln=images");
+    background-image: url("../footer-large-secondary.svg.xhtml?ln=images");
     background-repeat: no-repeat;
     height: 30px;
     background-size: 100% 30px;
@@ -1406,7 +1409,7 @@ button.disabled:active, .button.disabled:active, input[type="submit"].disabled:a
         cursor: pointer;
     }
     .footer-bar-bottom .icon-1177 {
-        background-image: url("/mvk/javax.faces.resource/icons/1177-logo.svg.xhtml?ln=images");
+        background-image: url("../1177-logo.svg.xhtml?ln=images");
         background-repeat: no-repeat;
         display: inline-block;
         height: 45px;
@@ -1570,8 +1573,8 @@ button.disabled:active, .button.disabled:active, input[type="submit"].disabled:a
     background-repeat: no-repeat;
     cursor: pointer;
 }
-
-/*********************/
+/*
+!*********************!
 #mainContainer {
     margin: 0 auto;
     overflow: auto;
@@ -1581,7 +1584,7 @@ button.disabled:active, .button.disabled:active, input[type="submit"].disabled:a
     clear: both;
 }
 
-/**** Menu ***********/
+!**** Menu ***********!
 #leftMenu {
     float: left;
     width: 320px;
@@ -1734,9 +1737,9 @@ button.disabled:active, .button.disabled:active, input[type="submit"].disabled:a
     text-align: center;
 }
 
-/*********************/
+!*********************!
 
-/**** Content ********/
+!**** Content ********!
 #contentContainer {
     margin-top: 20px;
     width: 630px;
@@ -1760,7 +1763,7 @@ button.disabled:active, .button.disabled:active, input[type="submit"].disabled:a
     }
 }
 
-/*** Genereal components ***/
+!*** Genereal components ***!
 .icon img {
     display: block;
     margin-left: auto;
@@ -1870,9 +1873,9 @@ a.backButton:hover span {
     margin-left: 40px;
 }
 
-/***********************/
+!***********************!
 
-/*** Form *******************/
+!*** Form *******************!
 label.checkboxLabel {
     display: block;
     padding-left: 30px;
@@ -2057,9 +2060,9 @@ textarea.sixLines {
     background-color: #F7E39E;
     margin-bottom: 10px;
 }
-/***/
+!***!
 
-/* Wrapper element to enable positioning */
+!* Wrapper element to enable positioning *!
 .custom-select-container {
     position: relative;
 }
@@ -2077,7 +2080,7 @@ textarea.sixLines {
     padding-left: 15px;
 }
 
-/* Set the dimensions of the replaced select element and make it transparent. */
+!* Set the dimensions of the replaced select element and make it transparent. *!
 select.custom.replaced {
     position: relative;
     z-index: 10;
@@ -2162,11 +2165,11 @@ select.custom.replaced {
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 }
 
-/*****************************/
+!*****************************!
 
-/**************************/
+!**************************!
 
-/*** find careListing *****/
+!*** find careListing *****!
 #findCareListingSearch {
     padding: 0px 10px 10px;
 }
@@ -2204,7 +2207,7 @@ select.custom.replaced {
 #getAvailableFacilitiesSearchResult .item.withIcon .boxShadowBody {
     padding-left: 15px;
 }
-/**************************/
+!**************************!
 .boxRoundedBody {
     border-radius: 10px;
     padding: 20px;
@@ -2243,11 +2246,11 @@ div.coloredPaperSheet {
     margin-bottom: 10px;
 }
 
-/* .coloredPaperSheet p { */
-/* 	margin-top: 0px; */
-/* 	margin-bottom: 2px; */
-/* 	word-wrap: break-word; */
-/* } */
+!* .coloredPaperSheet p { *!
+!* 	margin-top: 0px; *!
+!* 	margin-bottom: 2px; *!
+!* 	word-wrap: break-word; *!
+!* } *!
 .coloredPaperSheet a {
     font-size: 14px;
 }
@@ -2258,7 +2261,7 @@ div.coloredPaperSheet {
     font-weight: bold;
 }
 
-/*** Settings **************/
+!*** Settings **************!
 .settingsContainer {
     padding: 10px 6px 15px;
     -webkit-border-radius: 10px;
@@ -2375,7 +2378,7 @@ div.coloredPaperSheet {
     font-weight: bold !important;
 }
 
-/*** TOOLBAR ***/
+!*** TOOLBAR ***!
 ul.caseDetailToolbar, ul.toolbar {
     float: right;
     list-style: none;
@@ -2385,8 +2388,8 @@ ul.caseDetailToolbar, ul.toolbar {
 }
 
 ul.caseDetailToolbar a, ul.toolbar a {
-    /* 	text-decoration: none; */
-    /* 	color: inherit; */
+    !* 	text-decoration: none; *!
+    !* 	color: inherit; *!
 
 }
 
@@ -2438,7 +2441,7 @@ ul.caseDetailToolbar .icon.toolbar_pdf, ul.toolbar .icon.toolbar_pdf {
     background-position: -240px 0;
 }
 
-/**************************/
+!**************************!
 .topRow {
     overflow: visible;
     margin: 0 0 10px;
@@ -2448,7 +2451,7 @@ ul.caseDetailToolbar .icon.toolbar_pdf, ul.toolbar .icon.toolbar_pdf {
     margin-top: -25px !important;
 }
 
-/* Toggler */
+!* Toggler *!
 .togglerWrapper {
     overflow: auto;
 }
@@ -2486,9 +2489,9 @@ a.toggler:hover, .mvkToggler:hover {
     background-image: url("/mvk/javax.faces.resource/togglerClosedBlue.png.xhtml?ln=images");
 }
 
-/* .mvkToggler.hover { */
-/* 	background-image: url("/mvk/javax.faces.resource/togglerClosedBlue.png.xhtml?ln=images"); */
-/* } */
+!* .mvkToggler.hover { *!
+!* 	background-image: url("/mvk/javax.faces.resource/togglerClosedBlue.png.xhtml?ln=images"); *!
+!* } *!
 .mvkToggler.info {
     background-position: -48px 3px;
     width: 48px;
@@ -2509,7 +2512,7 @@ a.toggler:hover, .mvkToggler:hover {
     padding: 50px 20px;
 }
 
-/************selectCare..Confirm**************/
+!************selectCare..Confirm**************!
 .selectCareListingConfirmContainer {
     margin: 20px 0 25px;
 }
@@ -2518,7 +2521,7 @@ a.toggler:hover, .mvkToggler:hover {
     margin-bottom: 20px;
 }
 
-/************ notAllowed **************/
+!************ notAllowed **************!
 .notAllowedContainer {
     margin: 20px 0 25px;
 }
@@ -2531,7 +2534,7 @@ a.toggler:hover, .mvkToggler:hover {
     font-size: 0.8125em;
 }
 
-/***********otherServices*********************/
+!***********otherServices*********************!
 .otherServices h2 {
     margin: 0 10px !important;
 }
@@ -2545,7 +2548,7 @@ a.toggler:hover, .mvkToggler:hover {
     margin-top: 10px;
 }
 
-/********* termConditions *******************/
+!********* termConditions *******************!
 .termConditionsWrapper {
     margin-bottom: 0.3em;
     padding: 1.0em 1.5em 0.5em 1.5em;
@@ -2615,7 +2618,7 @@ div.termsWrapper ul {
 div.termsWrapper li {
     margin-bottom: 10px;
 }
-/*********** errorPage *******************/
+!*********** errorPage *******************!
 div.errorWrap .containerBoxShadow {
     margin-top: 15px;
 }
@@ -2655,9 +2658,9 @@ div.errorWrap .errorBox  .infoBox {
     border: 1px dashed #008391;
     border-radius: 5px 5px 5px 5px;
 }
-/********************/
+!********************!
 
-/********* dialog override*************/
+!********* dialog override*************!
 #sessionExpireDialog h3 {
     font-weight: normal;
     margin-bottom: 0;
@@ -2686,7 +2689,7 @@ div.errorWrap .errorBox  .infoBox {
     background: none;
 }
 
-/*************datepicker***************/
+!*************datepicker***************!
 .ui-widget-content a {
     color: #FFFFFF;
     background: #17646F;
@@ -2701,7 +2704,7 @@ div.errorWrap .errorBox  .infoBox {
     background: #F7E39E;
 }
 
-/**************************************/
+!**************************************!
 @media all and (max-width:767px) {
     body {
 
@@ -2719,7 +2722,7 @@ div.errorWrap .errorBox  .infoBox {
         width: 75%;
     }
 
-    /**** Width dependent hiding ***/
+    !**** Width dependent hiding ***!
     .onlyOnNarrow {
         display: block !important;
     }
@@ -2729,7 +2732,7 @@ div.errorWrap .errorBox  .infoBox {
     .notOnNarrow, .notOnNarrowInline {
         display: none !important;
     }
-    /*** Menu ***********/
+    !*** Menu ***********!
     #leftMenu {
         float: none;
         margin: 15px auto;
@@ -2753,24 +2756,24 @@ div.errorWrap .errorBox  .infoBox {
         background-image: url("/mvk/javax.faces.resource/closeMenuButton.png.xhtml?ln=images");
     }
 
-    /***    ***************/
+    !***    ***************!
     ul.checkboxList li, ul.radioButtonList li {
         width: 95%
     }
 
-    /*** Content ***********/
+    !*** Content ***********!
     #contentContainer {
         float: none;
         width: auto;
         margin: 0;
     }
-    /*** Toolbar ***********/
+    !*** Toolbar ***********!
     ul.caseDetailToolbar, ul.toolbar {
         position: relative;
         top: -20px;
         height: 59px;
     }
-    /*** Item list *********/
+    !*** Item list *********!
     li.listItem .icon {
         width: 45px;
     }
@@ -2781,12 +2784,12 @@ div.errorWrap .errorBox  .infoBox {
         margin-top: 10px !important;
     }
 
-    /*** Settings **********/
+    !*** Settings **********!
     .settingsContainer .inputWrapper {
         width: 80%;
     }
 
-    /*** Start *************/
+    !*** Start *************!
     .startContainer {
         margin: 0 20px;
     }
@@ -2796,7 +2799,7 @@ div.errorWrap .errorBox  .infoBox {
 }
 
 @media all and (max-width: 479px) {
-    /******************************/
+    !******************************!
     .pageDivider {
         margin: 15px 0px 10px 15px;
     }
@@ -2809,7 +2812,7 @@ div.errorWrap .errorBox  .infoBox {
         float: left;
     }
 
-    /*** facilityContactCard ******/
+    !*** facilityContactCard ******!
     a.addToButton>span.body {
         font-size: 0.8125em;
         width: 50%;
@@ -2839,7 +2842,7 @@ div.errorWrap .errorBox  .infoBox {
     }
 }
 
-/*** Survey, logout ***********/
+!*** Survey, logout ***********!
 .surveyPopupBackground {
     display: block;
     height: 100%;
@@ -2917,5 +2920,5 @@ div.errorWrap .errorBox  .infoBox {
     text-decoration: none;
     font-size: 14px;
     font-weight: normal;
-}
-}
+}*/
+/*}*/
