@@ -1035,11 +1035,13 @@ table.sub-articles-table:not(.embedded-table) tbody td .aligned {
     margin: 0 8px;
     font-family: sans-serif;
     font-weight: bold;
+    position: relative;
+    top: 3px;
 }
 
 .circle-icon .circle-icon-content {
-    position: relative;
-    top: 1px;
+    font-family: "Courier New";
+    line-height: 34px;
 }
 
 .circle-icon:hover {
