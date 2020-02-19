@@ -975,6 +975,7 @@ button.disabled:active, .button.disabled:active, input[type="submit"].disabled:a
         display: flex;
         justify-content: space-between;
         align-items: stretch;
+        font-size: 13px;
     }
 
     #header .wrapper .header-bottom .header-bottom-right {
