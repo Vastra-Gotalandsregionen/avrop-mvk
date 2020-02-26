@@ -337,7 +337,6 @@ ul { list-style: none;
 }
 
 .delegate-header {
-    margin-bottom: 10px;
     font-weight: 700;
 }
 ._1177-delegate-settings {
@@ -348,12 +347,10 @@ ul { list-style: none;
 }
 
 ._1177-delegate-title {
-    display: inline-block;
-    float: left;
-
+    display: block;
 }
 ._1177-header-info {
-    display: inline-block;
+    display: block;
 }
 ._1177-delegate-expand {
     padding-top: 10px;

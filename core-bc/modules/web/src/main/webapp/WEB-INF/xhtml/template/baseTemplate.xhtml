@@ -113,23 +113,17 @@
                     <div class="delegate-header">
                         <div class="_1177-delegate-title">
                             <div class="_1177-header-info">
-                                Du utför nu ärenden åt <span class="delegate-name no-wrap">#{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}</span>
+                                Du agerar just nu ombud och utför därmed ärenden åt <span class="delegate-name no-wrap">#{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}</span>
                                 <span class="toggle-trigger info-icon expand" data-toggle-for="delegateInfo"/>
-                                <div class="_1177-delegate-settings"><a class="_1177-delegate-settings-link link" href="#{utilController.settingsLink}">Inställningar</a></div>
+                                <div class="_1177-delegate-settings clearfix"><a class="_1177-delegate-settings-link link" href="#{utilController.settingsLink}">Inställningar</a></div>
 
                                 <div id="delegateInfo" class="expanded-content" style="display: none;">
-                                    Här utför du vårdärenden för #{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}. Det innebär att allt du gör här gäller #{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}. Den vårdgivare du har kontakt med ser vem som utför ärendet.
+                                    Den vårdgivare du har kontakt med ser vem som utför ärendet.
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="_1177-delegate-expand" id="delegate-expand" style="display: none;">Här utför du vårdärenden för&#160;Delegatnamn Delegatefternamn, 010203-0405. Det innebär att allt du gör här gäller Delegatnamn Delegatefternamn. Den vårdgivare du har kontakt med ser vem som utför ärendet.
-                    </div>
                 </div>
-
-                <script type="application/javascript">
-                    jq('.delegate-block').css('max-width', jq(".delegate-block")[0].getBoundingClientRect().width);
-                </script>
             </h:panelGroup>
 
             <div class="breadcrumbs-container">
