@@ -9,6 +9,10 @@ html, body {
     position: relative;
 }
 
+p {
+    font-family: Helvetica !important;
+}
+
 .breadcrumbs .link-section {
     display: inline-block;
     white-space: nowrap;
