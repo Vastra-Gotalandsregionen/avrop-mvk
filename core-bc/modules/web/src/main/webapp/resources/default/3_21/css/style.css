@@ -205,8 +205,6 @@ ul { list-style: none;
 }
 .breadcrumbs-container {
     clear: both;
-    padding-top: 20px;
-    max-width: 960px;
     margin-right: auto;
     margin-left: auto;
 }
@@ -250,7 +248,7 @@ ul { list-style: none;
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 10px;
-    background-color: #f8e2a6;
+    background-color: #F7E39E;
 }
 
 ._1177-footer {
@@ -323,12 +321,12 @@ ul { list-style: none;
     max-width: 960px;
     margin-right: auto;
     margin-left: auto;
-    padding-right: 0px;
-    padding-left: 0px;
+    margin-bottom: 20px;
+    padding-right: 0;
+    padding-left: 0;
 }
 
 .delegate-block {
-    margin: 0px 10px 0px 0px;
     padding: 10px 15px;
     float: right;
     border-bottom-left-radius: 10px;
@@ -337,7 +335,6 @@ ul { list-style: none;
 }
 
 .delegate-header {
-    margin-bottom: 10px;
     font-weight: 700;
 }
 ._1177-delegate-settings {
@@ -348,12 +345,10 @@ ul { list-style: none;
 }
 
 ._1177-delegate-title {
-    display: inline-block;
-    float: left;
-
+    display: block;
 }
 ._1177-header-info {
-    display: inline-block;
+    display: block;
 }
 ._1177-delegate-expand {
     padding-top: 10px;

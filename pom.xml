@@ -22,7 +22,7 @@
 
     <properties>
         <spring.version>5.2.1.RELEASE</spring.version>
-        <jsf.version>2.2.13</jsf.version>
+        <jsf.version>2.2.20</jsf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>

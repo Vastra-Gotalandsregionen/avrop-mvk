@@ -15,8 +15,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <h:outputScript library="thirdparty" name="jquery.1.12.0.min.js"/>
     <h:outputScript library="thirdparty" name="jquery-ui-dialog.min.js"/>
-    <!--<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>-->
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>-->
     <meta title="Avrop förskrivna förbrukningsprodukter" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
 
@@ -31,68 +29,55 @@
 
     <h:outputScript library="default" name="js/avrop-mvk.js"/>
     <h:outputStylesheet library="default" name="css/style.css"/>
-    <h:outputStylesheet library="default" name="css/grabbedFromMvk/components2.css"/>
+    <h:outputStylesheet library="vardguiden" name="css/styles.css"/>
+    <h:outputStylesheet library="default" name="css/vardguiden/components2.css"/>
     <h:outputStylesheet library="default" name="css/custom.css"/>
 
     <div id="container">
         <div id="wrapper" class="wrapper">
-            <header class="_1177-header-container" id="1177-topbar">
-                <div class="_1177-header">
-                    <div class="_1177-header-content">
-                        <div class="_1177-logo-block">
-                            <h1 class="_1177-sitetitle">
-                                <h:graphicImage library="default" name="img/1177-logo.png" alt="1177 Vårdguiden" styleClass="_1177-logo-img"/>
-                                <span class="_1177-sitename">E-tjänster</span>
-                            </h1>
-                        </div>
-
-                        <div class="_1177-user">
-                            <h:panelGroup layout="block" styleClass="_1177-settings" rendered="#{!userProfileController.delegate}">
-                                <a class="link-userblock" href="#{utilController.settingsLink}">Inställningar</a>
-                            </h:panelGroup>
-                            <div class="_1177-logout">
-                                <a class="link-userblock" href="#{utilController.logoutLink}">Logga ut</a>
+            <div id="header">
+                <div class="wrapper">
+                    <div class="header-top">
+                        <div class="header-icon-wrapper">
+                            <div class="header-left">
+                                <div class="icon-1177"></div>
                             </div>
-                            <h:panelGroup styleClass="_1177-currentuser" rendered="#{not userProfileController.delegate}">Inloggad som&#160;#{userProfileController.loggedInUser.firstName} #{userProfileController.loggedInUser.lastName}</h:panelGroup>
-                            <h:panelGroup styleClass="_1177-currentuser" rendered="#{userProfileController.delegate}">
-                                &#171; <a href="#{utilController.backToOwnProfileLink}">Tillbaka till #{userProfileController.loggedInUser.firstName} #{userProfileController.loggedInUser.lastName}</a>
-                            </h:panelGroup>
-                        </div><!--_1177-user-->
-                    </div><!--_1177-header-content-->
-                </div><!--_1177-header-->
+                        </div>
+                        <div class="header-right">
+                            <div class="user-icon"></div>
 
-            </header>
-
-            <h:panelGroup class="delegate-container" rendered="#{userProfileController.delegate}">
-                <div class="delegate-block">
-                    <div class="delegate-header">
-                        <div class="_1177-delegate-title">
-                            <div class="_1177-header-info">
-                                Du utför nu ärenden åt <span class="delegate-name no-wrap">#{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}</span>
-                                <span class="toggle-trigger info-icon expand" data-toggle-for="delegateInfo"/>
-                                <div class="_1177-delegate-settings"><a class="_1177-delegate-settings-link link" href="#{utilController.settingsLink}">Inställningar</a></div>
-
-                                <div id="delegateInfo" class="expanded-content" style="display: none;">
-                                    Här utför du vårdärenden för #{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}. Det innebär att allt du gör här gäller #{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}. Den vårdgivare du har kontakt med ser vem som utför ärendet.
-                                </div>
+                            <div class="user-wrapper">
+                                <p>#{userProfileController.loggedInUser.firstName} #{userProfileController.loggedInUser.lastName}</p>
+                                <h:outputLink value="#{utilController.settingsLink}" styleClass="settingsButton" rendered="#{!userProfileController.delegate}">Inställningar</h:outputLink>
+                                <h:outputLink value="#{utilController.backToOwnProfileLink}" styleClass="settingsButton" rendered="#{userProfileController.delegate}">Avbryt ombudsläge</h:outputLink>
+                                <h:outputLink value="#{utilController.logoutLink}" styleClass="logoutButton">Logga ut</h:outputLink>
                             </div>
                         </div>
                     </div>
-                    <div class="_1177-delegate-expand" id="delegate-expand" style="display: none;">Här utför du vårdärenden för&#160;Delegatnamn Delegatefternamn, 010203-0405. Det innebär att allt du gör här gäller Delegatnamn Delegatefternamn. Den vårdgivare du har kontakt med ser vem som utför ärendet.
+
+                    <div class="header-bottom">
+                        <h:panelGroup layout="block" styleClass="header-bottom-left" rendered="#{!userProfileController.delegate}">
+                            <a href="#{utilController.settingsLink}">Inställningar</a>
+                        </h:panelGroup>
+
+                        <h:panelGroup layout="block" styleClass="header-bottom-left" rendered="#{userProfileController.delegate}">
+                            <a href="#{utilController.backToOwnProfileLink}">Tillbaka till #{userProfileController.loggedInUser.firstName} #{userProfileController.loggedInUser.lastName}</a>
+                        </h:panelGroup>
+
+                        <div class="header-bottom-right">
+                            <a href="#{utilController.logoutLink}">Logga ut</a>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <script type="application/javascript">
-                    jq('.delegate-block').css('max-width', jq(".delegate-block")[0].getBoundingClientRect().width);
-                </script>
-            </h:panelGroup>
 
             <div class="breadcrumbs-container">
                 <div class="breadcrumbs">
                     <o:form>
                         <a class="link" href="#{utilController.mvkStartPageLink}">Start</a>&#160;»&#160;<a class="link" href="#{utilController.mvkOtherServicesLink}">Övriga tjänster</a>&#160;»&#160;
                         <ui:repeat value="#{navigationController.views}" var="view_" varStatus="varStatus">
-                            <span class="link-section"><h:commandLink value="#{view_.label}" action="#{navigationController.goBackTo(view_)}"/>
+                            <span class="link-section"><h:commandLink styleClass="link" value="#{view_.label}" action="#{navigationController.goBackTo(view_)}"/>
                             <ui:fragment rendered="#{not varStatus.last}">
                                 &#160;»&#160;
                             </ui:fragment>
@@ -102,51 +87,118 @@
                 </div><!--breadcrumbs-->
             </div><!--breadcrumbs-container-->
 
+            <h:panelGroup class="delegate-container clearfix" rendered="#{userProfileController.delegate}">
+                <div class="delegate-block">
+                    <div class="delegate-header">
+                        <div class="_1177-delegate-title">
+                            <div class="_1177-header-info">
+                                Du agerar just nu ombud och utför därmed ärenden åt <span class="delegate-name no-wrap">#{userProfileController.userProfile.firstName} #{userProfileController.userProfile.lastName}</span>
+                                <span class="toggle-trigger info-icon expand" data-toggle-for="delegateInfo"/>
+                                <div class="_1177-delegate-settings clearfix"><a class="_1177-delegate-settings-link link" href="#{utilController.settingsLink}">Inställningar</a></div>
+
+                                <div id="delegateInfo" class="expanded-content" style="display: none;">
+                                    Den vårdgivare du har kontakt med ser vem som utför ärendet.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
+<!--
+
+            <div class="breadcrumbs-container">
+                <div class="breadcrumbs">
+                    <o:form>
+                        <a class="link" href="#{utilController.mvkStartPageLink}">Start</a>&#160;»&#160;<a class="link" href="#{utilController.mvkOtherServicesLink}">Övriga tjänster</a>&#160;»&#160;
+                        <ui:repeat value="#{navigationController.views}" var="view_" varStatus="varStatus">
+                            <span class="link-section"><h:commandLink styleClass="link" value="#{view_.label}" action="#{navigationController.goBackTo(view_)}"/>
+                            <ui:fragment rendered="#{not varStatus.last}">
+                                &#160;»&#160;
+                            </ui:fragment>
+                            </span>
+                        </ui:repeat>
+                    </o:form>
+                </div>&lt;!&ndash;breadcrumbs&ndash;&gt;
+            </div>&lt;!&ndash;breadcrumbs-container&ndash;&gt;
+
+-->
 
         </div>
 
         <div class="row-main">
             <ui:insert name="mainContent"/>
-            <div class="push" id="push" style="height: 112px;"></div>
         </div>
 
-        <div class="footerblock1177" id="footerblock1177">
-            <div class="_1177-footer">
+        <div id="footer" style="position: static;">
+            <div class="footer-shadow">
+                <div class="footer-bar">
+                    <div class="footer-bar-top">
+                        <div class="footer-header">
+                            <span class="footer-header-red">1177 Vårdguiden </span> - tryggt om din hälsa och vård
+                        </div>
+                        <div class="footer-bar-text-mobile">
+                            1177 Vårdguiden är en tjänst från Sveriges regioner. Vi finns alltid med dig när du vill må bättre.
+                        </div>
+                    </div>
 
-                <div class="_1177-links">
-                    <div class="_1177-links-row">
-                        <div class="footer-link" id="link-phone">
-                            <a class="footer-link-text" href="tel:+46770720000">
-                                <h:graphicImage styleClass="icon-footer" library="default" name="img/icon-phone.png" alt="Bild på en telefon"/>
-                                Ring supporten 0770&#160;–&#160;72&#160;00&#160;00
-                            </a>
+                    <div class="footer-bar-bottom">
+                        <div class="footer-bar-text">1177 Vårdguiden är en tjänst från Sveriges regioner. Vi finns alltid med dig när du vill må bättre.</div>
+                        <div class="footer-links">
+                            <ul>
+                                <li><a href="https://www.1177.se/e-tjanster-support" target="_blank" class="footer-link">
+                                    <svg style="width:24px;height:24px;vertical-align:middle;margin-right:.5rem;" viewBox="0 0 24 24">
+                                        <path fill="#c12143" d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"></path>
+                                    </svg>Teknisk support
+                                    <span style="height: 24px; width: 24px;">
+											<svg class="link-out-icon" viewBox="0 0 12 12">
+										        <path d="M10.76 5.888a.383.383 0 01.767 0 5.644 5.644 0 01-5.639 5.639A5.644 5.644 0 01.25 5.888 5.644 5.644 0 015.888.25a.383.383 0 110 .766 4.878 4.878 0 00-4.872 4.872 4.878 4.878 0 004.872 4.872 4.878 4.878 0 004.872-4.872z"></path>
+										        <path d="M8.792.716h1.856c.207 0 .375.168.375.375v1.856a.375.375 0 01-.75 0v-.95L5.855 6.412a.375.375 0 11-.53-.53l4.416-4.417h-.95a.375.375 0 110-.75z"></path>
+											</svg></span></a><!-- No new line after </svg> since it causes an extra underlined space in IE -->
+                                </li>
+                                <li><a href="https://e-tjanster.1177.se/mvk/sitemap.xhtml" class="footer-link">
+                                    <svg style="width:24px;height:24px;vertical-align:middle;margin-right:.5rem;" viewBox="0 0 24 24">
+                                        <path fill="#c12143" d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"></path>
+                                    </svg>Webbkarta</a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li><a href="https://www.1177.se/e-tjanster" target="_blank" class="footer-link">
+                                    <svg style="width:24px;height:24px;vertical-align:middle;margin-right:.5rem;" viewBox="0 0 24 24">
+                                        <path fill="#c12143" d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"></path>
+                                    </svg>Läs mer om e-tjänster
+                                    <span style="height: 24px; width: 24px;">
+											<svg class="link-out-icon" viewBox="0 0 12 12">
+										        <path d="M10.76 5.888a.383.383 0 01.767 0 5.644 5.644 0 01-5.639 5.639A5.644 5.644 0 01.25 5.888 5.644 5.644 0 015.888.25a.383.383 0 110 .766 4.878 4.878 0 00-4.872 4.872 4.878 4.878 0 004.872 4.872 4.878 4.878 0 004.872-4.872z"></path>
+										        <path d="M8.792.716h1.856c.207 0 .375.168.375.375v1.856a.375.375 0 01-.75 0v-.95L5.855 6.412a.375.375 0 11-.53-.53l4.416-4.417h-.95a.375.375 0 110-.75z"></path>
+											</svg></span></a><!-- No new line after </svg> since it causes an extra underlined space in IE -->
+                                </li>
+                            </ul>
                         </div>
-                        <div class="footer-link" id="link-support">
-                            <a class="footer-link-text link1177" href="https://www.1177.se/e-tjanster-support" target="_blank" title="Öppnas i nytt fönster">
-                                <h:graphicImage styleClass="icon-footer" library="default" name="img/icon-mail.png" alt="Bild på ett kuvert"/>
-                                Mejla supporten
-                                <h:graphicImage styleClass="extlink" library="default" name="img/icon-newwindow.png" alt="Länken öppnas i nytt fönster."/>
-                            </a>
-                        </div>
-                        <div class="footer-link" id="link-1177more">
-                            <a class="footer-link-text link1177" href="https://www.1177.se/e-tjanster" target="_blank" title="Öppnas i nytt fönster">
-                                <h:graphicImage styleClass="icon-footer" library="default" name="img/icon-q.png" alt="Bild på ett frågetecken"/>
-                                Läs mer om e-tjänster
-                                <h:graphicImage styleClass="extlink" library="default" name="img/icon-newwindow.png" alt="Länken öppnas i nytt fönster."/>
-                            </a>
-                        </div>
-                        <div class="footer-link" id="link-sitemap">
-                            <a class="footer-link-text" href="https://e-tjanster.1177.se/mvk/sitemap.xhtml">
-                                <h:graphicImage styleClass="icon-footer" library="default" name="img/icon-list.png" alt="Bild på en lista"/>
-                                Webbkarta
-                            </a>
+                        <div class="footer-links-mobile">
+                            <div class="footer-link"><a href="https://www.1177.se/e-tjanster-support" target="_blank">Teknisk support
+                                <span style="height: 24px; width: 24px;">
+										<svg class="link-out-icon" viewBox="0 0 12 12">
+									        <path d="M10.76 5.888a.383.383 0 01.767 0 5.644 5.644 0 01-5.639 5.639A5.644 5.644 0 01.25 5.888 5.644 5.644 0 015.888.25a.383.383 0 110 .766 4.878 4.878 0 00-4.872 4.872 4.878 4.878 0 004.872 4.872 4.878 4.878 0 004.872-4.872z"></path>
+									        <path d="M8.792.716h1.856c.207 0 .375.168.375.375v1.856a.375.375 0 01-.75 0v-.95L5.855 6.412a.375.375 0 11-.53-.53l4.416-4.417h-.95a.375.375 0 110-.75z"></path>
+										</svg></span></a><!-- No new line after </svg> since it causes an extra underlined space in IE -->
+                            </div>
+                            <div class="footer-link"><a href="https://e-tjanster.1177.se/mvk/sitemap.xhtml">Webbkarta</a>
+                            </div>
+                            <div class="footer-link"><a href="https://www.1177.se/e-tjanster" target="_blank">Läs mer om e-tjänster
+                                <span style="height: 24px; width: 24px;">
+										<svg class="link-out-icon" viewBox="0 0 12 12">
+									        <path d="M10.76 5.888a.383.383 0 01.767 0 5.644 5.644 0 01-5.639 5.639A5.644 5.644 0 01.25 5.888 5.644 5.644 0 015.888.25a.383.383 0 110 .766 4.878 4.878 0 00-4.872 4.872 4.878 4.878 0 004.872 4.872 4.878 4.878 0 004.872-4.872z"></path>
+									        <path d="M8.792.716h1.856c.207 0 .375.168.375.375v1.856a.375.375 0 01-.75 0v-.95L5.855 6.412a.375.375 0 11-.53-.53l4.416-4.417h-.95a.375.375 0 110-.75z"></path>
+										</svg></span></a><!-- No new line after </svg> since it causes an extra underlined space in IE -->
+                            </div>
+                            <div class="footer-link">
+                                <div class="icon-1177"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="_1177-tagline-block">
-                    <div class="_1177-tagline-text"><a class="link-negative link1177i" title="Öppnas i nytt fönster" href="http://1177.se" target="_blank">1177 Vårdguiden</a>&#160;<h:graphicImage styleClass="extlink" library="default" name="img/icon-newwindow-inv.png" alt="Länken öppnas i nytt fönster."/> —&#160;En&#160;tjänst&#160;från&#160;Sveriges&#160;landsting&#160;och&#160;regioner</div>
-                </div>
+                <div class="footer-image-secondary"></div>
+                <div class="footer-bottom-filler"></div>
             </div>
         </div>
     </div>
