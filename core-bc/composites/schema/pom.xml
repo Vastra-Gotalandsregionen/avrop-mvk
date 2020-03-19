@@ -25,6 +25,13 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <sourceRoot>${project.build.directory}/generated/cxf</sourceRoot>
+                            <defaultOptions>
+                                <extraargs>
+                                    <extraarg>-verbose</extraarg>
+                                    <extraarg>-xjc-Xequals</extraarg>
+                                    <extraarg>-xjc-XhashCode</extraarg>
+                                </extraargs>
+                            </defaultOptions>
                             <wsdlOptions>
                                 <!-- RTJP services -->
                                 <wsdlOption>
@@ -81,6 +88,13 @@
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jvnet.jaxb2_commons</groupId>
+                        <artifactId>jaxb2-basics</artifactId>
+                        <version>0.12.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
@@ -113,6 +127,12 @@
                     <artifactId>sdo-eclipselink-plugin</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-basics</artifactId>
+            <version>0.12.0</version>
         </dependency>
     </dependencies>
     

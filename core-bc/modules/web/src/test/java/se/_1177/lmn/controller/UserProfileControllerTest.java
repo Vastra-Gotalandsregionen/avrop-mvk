@@ -1,5 +1,6 @@
 package se._1177.lmn.controller;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -13,6 +14,7 @@ import static org.junit.Assert.*;
 public class UserProfileControllerTest {
 
     @Test
+    @Ignore // The controller is request scoped and does not need to be serializable.
     public void serializeDeserialize() throws IOException, ClassNotFoundException {
         UserProfileController userProfileController = new UserProfileController();
 

@@ -67,9 +67,15 @@ public class SessionFilter implements Filter {
 
         String subjectSerialNumber = request.getHeader(USER_ID_HEADER);
 
-        handleSessionInvalidation(request, subjectSerialNumber);
+        boolean redirect = false;
+        try {
+            handleSessionInvalidation(request, subjectSerialNumber);
 
-        boolean redirect = redirectIfInappropriateRequest(request, response);
+            redirect = redirectIfInappropriateRequest(request, response);
+        } catch (Exception e) {
+            redirectToOrderPage(request, response);
+            return;
+        }
 
         if (redirect) {
             return;

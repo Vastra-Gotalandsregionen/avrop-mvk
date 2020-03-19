@@ -5,10 +5,9 @@ import riv.crm.selfservice.medicalsupply._1.AddressType;
 import se._1177.lmn.controller.UserProfileController;
 
 import javax.annotation.PostConstruct;
+import java.io.Serializable;
 
-public class AddressModel {
-
-    private UserProfileController userProfileController;
+public class AddressModel implements Serializable {
 
     private String fullName;
     private String coAddress;
@@ -18,12 +17,7 @@ public class AddressModel {
     private String doorCode;
     private String phoneNumber;
 
-    public AddressModel(UserProfileController userProfileController) {
-        this.userProfileController = userProfileController;
-    }
-
-    @PostConstruct
-    public void init() {
+    public void init(UserProfileController userProfileController) {
         if (address == null) {
             UserProfileType userProfile = userProfileController.getUserProfile();
 

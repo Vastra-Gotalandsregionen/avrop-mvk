@@ -1,25 +1,13 @@
 package se._1177.lmn.controller.model;
 
-import mvk.itintegration.userprofile.getuserprofileresponder._2.GetUserProfileResponseType;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import riv.crm.selfservice.medicalsupply._1.ObjectFactory;
 import riv.crm.selfservice.medicalsupply._1.OrderRowType;
-import riv.crm.selfservice.medicalsupply._1.OrderType;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.RegisterMedicalSupplyOrderType;
 
-import javax.xml.bind.JAXBElement;
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import static se._1177.lmn.service.util.JaxbUtil.objectToXML;
-import static se._1177.lmn.service.util.JaxbUtil.readObject;
 
 /**
  * @author Patrik Björk

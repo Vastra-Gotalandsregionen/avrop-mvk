@@ -110,7 +110,11 @@ public class DeliveryController {
             for (Map.Entry<PrescriptionItemType, String> entry : deliveryMethodForEachItem.entrySet()) {
                 entry.setValue(deliveryMethod.name());
             }
+
+            // Instead of relying on side-effects when we do entry.setValue()...
+            sessionData.setDeliveryMethodForEachItem(deliveryMethodForEachItem);
         }
+
         sessionData.setDeliveryMethod(deliveryMethod);
     }
 
@@ -282,6 +286,7 @@ public class DeliveryController {
                 .getPrescriptionItems(cart.getOrderRows());
 
         Map<PrescriptionItemType, String> deliveryMethodForEachItem = sessionData.getDeliveryMethodForEachItem();
+
         deliveryMethodForEachItem.keySet().retainAll(prescriptionItemsInCart);
 
         // Make sure chosen items are in the map. Otherwise add them.

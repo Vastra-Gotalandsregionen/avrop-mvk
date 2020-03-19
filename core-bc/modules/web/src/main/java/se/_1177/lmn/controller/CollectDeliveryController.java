@@ -23,6 +23,7 @@ import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder
 import se._1177.lmn.controller.model.AddressModel;
 import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
+import se._1177.lmn.controller.session.CollectDeliveryControllerSession;
 import se._1177.lmn.service.LmnService;
 import se._1177.lmn.service.ThreadLocalStore;
 import se._1177.lmn.service.concurrent.BackgroundExecutor;
@@ -82,19 +83,8 @@ public class CollectDeliveryController {
     @Autowired
     private NavigationController navigationController;
 
-    private AddressModel addressModel;
-
-    private String zip;
-    private Map<ServicePointProviderEnum, String> deliveryPointIdsMap = new HashMap<>();
-    private DeliveryNotificationMethodEnum preferredDeliveryNotificationMethod; // These gets stored in session memory
-    private String email;
-    private String smsNumber;
-    private Map<ServicePointProviderEnum, List<DeliveryPointType>> deliveryPointsPerProvider = new HashMap<>();
-    private Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>>
-            possibleCollectCombinationsFittingAllWithNotificationMethods;
-    private Map<ServicePointProviderEnum, String> chosenDeliveryNotificationMethod;
-    private String phoneNumber;
-    private String contactPerson;
+    @Autowired
+    private CollectDeliveryControllerSession sessionData;
 
     /**
      * Called from view in order to update the selects with delivery points for each {@link ServicePointProviderEnum}.
@@ -103,7 +93,7 @@ public class CollectDeliveryController {
      */
     public void updateDeliverySelectItems(AjaxBehaviorEvent ajaxBehaviorEvent) {
         // Just reset deliveryPoints, making them load again when they are requested.
-        deliveryPointsPerProvider = null;
+        sessionData.setDeliveryPointsPerProvider(null);
 
         Set<ServicePointProviderEnum> allRelevantProviders = new HashSet<>();
 
@@ -117,7 +107,7 @@ public class CollectDeliveryController {
                 .filter(da -> !da.getServicePointProvider().equals(INGEN))
                 .forEach(da -> allRelevantProviders.add(da.getServicePointProvider()));
 
-        loadDeliveryPointsForRelevantSuppliers(zip, allRelevantProviders);
+        loadDeliveryPointsForRelevantSuppliers(sessionData.getZip(), allRelevantProviders);
     }
 
     /**
@@ -126,28 +116,31 @@ public class CollectDeliveryController {
      */
     @PostConstruct
     public void init() {
-        addressModel = new AddressModel(userProfileController);
-        addressModel.init();
+        if (sessionData.getAddressModel() == null) {
+            AddressModel addressModel = new AddressModel();
+            addressModel.init(userProfileController);
+            sessionData.setAddressModel(addressModel);
+        }
 
         // Default zip is from user profile. It may be overridden if user chooses so.
         UserProfileType userProfile = userProfileController.getUserProfile();
 
         if (userProfile != null) {
-            zip = userProfile.getZip();
+            sessionData.setZip(userProfile.getZip());
 
             if (userProfile.isHasSmsNotification() != null && userProfile.isHasSmsNotification()) {
-                preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.SMS;
+                sessionData.setPreferredDeliveryNotificationMethod(DeliveryNotificationMethodEnum.SMS);
             } else if (userProfile.isHasMailNotification() != null && userProfile.isHasMailNotification()) {
-                preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.E_POST;
+                sessionData.setPreferredDeliveryNotificationMethod(DeliveryNotificationMethodEnum.E_POST);
             } else {
-                preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.BREV;
+                sessionData.setPreferredDeliveryNotificationMethod(DeliveryNotificationMethodEnum.BREV);
             }
 
-            smsNumber = userProfile.getMobilePhoneNumber();
-            email = userProfile.getEmail();
+            sessionData.setSmsNumber(userProfile.getMobilePhoneNumber());
+            sessionData.setEmail(userProfile.getEmail());
 
         } else {
-            preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.BREV;
+            sessionData.setPreferredDeliveryNotificationMethod(DeliveryNotificationMethodEnum.BREV);
         }
     }
 
@@ -326,6 +319,10 @@ public class CollectDeliveryController {
         List<SelectItem> toGroup2 = new ArrayList<>();
 
         int count = 0;
+
+        Map<ServicePointProviderEnum, List<DeliveryPointType>> deliveryPointsPerProvider =
+                sessionData.getDeliveryPointsPerProvider();
+
         if (deliveryPointsPerProvider.get(provider) != null) {
 
             for (DeliveryPointType deliveryPoint : deliveryPointsPerProvider.get(provider)) {
@@ -358,21 +355,24 @@ public class CollectDeliveryController {
 
     public Map<ServicePointProviderEnum, String> getChosenDeliveryNotificationMethod() {
 
-        if (chosenDeliveryNotificationMethod == null) {
+        if (sessionData.getChosenDeliveryNotificationMethod() == null) {
             initChosenDeliveryNotificationMethod();
         }
 
         // If there are remaining entries from when the user had chosen more items to order.
 //        chosenDeliveryNotificationMethod.keySet().retainAll(getServicePointProvidersForDeliveryPointChoice().keySet());
 
-        return chosenDeliveryNotificationMethod;
+        return sessionData.getChosenDeliveryNotificationMethod();
     }
 
     void initChosenDeliveryNotificationMethod() {
-        chosenDeliveryNotificationMethod = new HashMap<>();
+        Map<ServicePointProviderEnum, String> chosenDeliveryNotificationMethod = new HashMap<>();
 
         Map<ServicePointProviderEnum, List<String>> deliveryNotificationMethodsPerProvider =
                 getDeliveryNotificationMethodsPerProvider();
+
+        DeliveryNotificationMethodEnum preferredDeliveryNotificationMethod =
+                sessionData.getPreferredDeliveryNotificationMethod();
 
         for (Map.Entry<ServicePointProviderEnum, List<String>> entry :
                 deliveryNotificationMethodsPerProvider.entrySet()) {
@@ -385,12 +385,15 @@ public class CollectDeliveryController {
                 chosenDeliveryNotificationMethod.put(entry.getKey(), defaultNotificationMethod);
             }
         }
+
+        sessionData.setChosenDeliveryNotificationMethod(chosenDeliveryNotificationMethod);
     }
 
     public Map<ServicePointProviderEnum, String> getDeliveryPointIdsMap() {
-        deliveryPointIdsMap.keySet().retainAll(getServicePointProvidersForDeliveryPointChoice().keySet());
+        sessionData.getDeliveryPointIdsMap().keySet()
+                .retainAll(getServicePointProvidersForDeliveryPointChoice().keySet());
 
-        return deliveryPointIdsMap;
+        return sessionData.getDeliveryPointIdsMap();
     }
 
     public String toVerifyDelivery() {
@@ -441,6 +444,8 @@ public class CollectDeliveryController {
                     String deliveryPointId = getDeliveryPointIdsMap().get(provider);
                     deliveryChoice.setDeliveryPoint(lmnService.getDeliveryPointById(deliveryPointId));
                 } else {
+                    AddressModel addressModel = sessionData.getAddressModel();
+
                     AddressType value = new AddressType();
                     value.setCity(addressModel.getCity());
                     value.setPostalCode(addressModel.getZip());
@@ -512,11 +517,12 @@ public class CollectDeliveryController {
             }
         });
 
-        if (this.contactPerson != null) {
+        String contactPerson = sessionData.getContactPerson();
+        if (contactPerson != null) {
             // We only set contact person on those order rows where the chosen delivery alternative allows so.
             orderRowsWithCollectDelivery.stream()
                     .filter(orderRowType -> getDeliveryAlternativeForOrderRow(orderRowType).isAllowContactPerson())
-                    .forEach(orderRowType -> orderRowType.getDeliveryChoice().setContactPerson(this.contactPerson));
+                    .forEach(orderRowType -> orderRowType.getDeliveryChoice().setContactPerson(contactPerson));
         }
 
         if (anyItemHasAllowOtherInvoiceAddress()) {
@@ -564,20 +570,20 @@ public class CollectDeliveryController {
     }
 
     public String getZip() {
-        return zip;
+        return sessionData.getZip();
     }
 
     public void setZip(String zip) {
-        this.zip = zip;
+        sessionData.setZip(zip);
     }
 
     public DeliveryNotificationMethodEnum getPreferredDeliveryNotificationMethod() {
-        return preferredDeliveryNotificationMethod;
+        return sessionData.getPreferredDeliveryNotificationMethod();
     }
 
     public void setPreferredDeliveryNotificationMethod(
             DeliveryNotificationMethodEnum preferredDeliveryNotificationMethod) {
-        this.preferredDeliveryNotificationMethod = preferredDeliveryNotificationMethod;
+        sessionData.setPreferredDeliveryNotificationMethod(preferredDeliveryNotificationMethod);
     }
 
     public DeliveryNotificationMethodEnum getBrevValue() {
@@ -597,19 +603,19 @@ public class CollectDeliveryController {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        sessionData.setEmail(email);
     }
 
     public String getEmail() {
-        return email;
+        return sessionData.getEmail();
     }
 
     public void setSmsNumber(String smsNumber) {
-        this.smsNumber = smsNumber;
+        sessionData.setSmsNumber(smsNumber);
     }
 
     public String getSmsNumber() {
-        return smsNumber;
+        return sessionData.getSmsNumber();
     }
 
     /**
@@ -622,7 +628,7 @@ public class CollectDeliveryController {
      */
     public void initPossibleCollectCombinationsFittingAllWithNotificationMethods() {
 
-        if (possibleCollectCombinationsFittingAllWithNotificationMethods == null) {
+        if (sessionData.getPossibleCollectCombinationsFittingAllWithNotificationMethods() == null) {
             Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> result = new TreeMap<>();
 
             List<ServicePointProviderEnum> remainingAvailableProvidersCommonForAllWithCollectDelivery = new ArrayList<>(
@@ -672,14 +678,14 @@ public class CollectDeliveryController {
 
             result.keySet().retainAll(remainingAvailableProvidersCommonForAllWithCollectDelivery);
 
-            possibleCollectCombinationsFittingAllWithNotificationMethods = result;
+            sessionData.setPossibleCollectCombinationsFittingAllWithNotificationMethods(result);
         }
     }
 
     public void setPossibleCollectCombinationsFittingAllCollectItems(
             Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> possibleDeliveryNotificationMethods) {
 
-        this.possibleCollectCombinationsFittingAllWithNotificationMethods = possibleDeliveryNotificationMethods;
+        sessionData.setPossibleCollectCombinationsFittingAllWithNotificationMethods(possibleDeliveryNotificationMethods);
     }
 
     public void loadDeliveryPointsForRelevantSuppliersInBackground(final String zip,
@@ -694,8 +700,8 @@ public class CollectDeliveryController {
 
     private void loadDeliveryPointsForRelevantSuppliers(String zip, Set<ServicePointProviderEnum> providers) {
 
-        if (deliveryPointsPerProvider == null) {
-            deliveryPointsPerProvider = new HashMap<>();
+        if (sessionData.getDeliveryPointsPerProvider() == null) {
+            sessionData.setDeliveryPointsPerProvider(new HashMap<>());
         }
 
         for (ServicePointProviderEnum provider : providers) {
@@ -709,7 +715,10 @@ public class CollectDeliveryController {
                 medicalSupplyDeliveryPoints = lmnService.getMedicalSupplyDeliveryPoints(provider, zip);
 
                 if (medicalSupplyDeliveryPoints.getResultCode().equals(ResultCodeEnum.OK)) {
-                    deliveryPointsPerProvider.put(provider, medicalSupplyDeliveryPoints.getDeliveryPoint());
+                    sessionData.getDeliveryPointsPerProvider().put(
+                            provider,
+                            medicalSupplyDeliveryPoints.getDeliveryPoint()
+                    );
                 } else {
                     utilController.addErrorMessageWithCustomerServiceInfo("Ett fel mot underliggande system inträffade. Försök senare eller kontakta kundtjänst.");
                 }
@@ -754,11 +763,11 @@ public class CollectDeliveryController {
     }
 
     public String getPhoneNumber() {
-        return phoneNumber;
+        return sessionData.getPhoneNumber();
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        sessionData.setPhoneNumber(phoneNumber);
     }
 
     /**
@@ -771,24 +780,24 @@ public class CollectDeliveryController {
     public Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>>
     getPossibleCollectCombinationsFittingAllWithNotificationMethods() {
 
-        if (possibleCollectCombinationsFittingAllWithNotificationMethods == null) {
+        if (sessionData.getPossibleCollectCombinationsFittingAllWithNotificationMethods() == null) {
             initPossibleCollectCombinationsFittingAllWithNotificationMethods();
         }
 
-        return possibleCollectCombinationsFittingAllWithNotificationMethods;
+        return sessionData.getPossibleCollectCombinationsFittingAllWithNotificationMethods();
     }
 
     public void resetChoices() {
 
         // I would like to retain already chosen notification methods but it turns out that it's challenging to keep up
         // with all possible combinations of providers and notifications that may occur.
-        chosenDeliveryNotificationMethod = null;
-        possibleCollectCombinationsFittingAllWithNotificationMethods = null;
+        sessionData.setChosenDeliveryNotificationMethod(null);
+        sessionData.setPossibleCollectCombinationsFittingAllWithNotificationMethods(null);
 
         UserProfileType userProfile = userProfileController.getUserProfile();
 
         if (userProfile != null) {
-            zip = userProfile.getZip();
+            sessionData.setZip(userProfile.getZip());
         }
     }
 
@@ -796,7 +805,7 @@ public class CollectDeliveryController {
 
         boolean success[] = new boolean[]{true};
 
-        deliveryPointIdsMap.entrySet().forEach(entry -> {
+        sessionData.getDeliveryPointIdsMap().entrySet().forEach(entry -> {
             if (entry.getValue() == null) {
                 success[0] = false;
                 addErrorMessage("Du har inte valt utlämningsställe för " + UtilController.toProviderName(entry.getKey()),
@@ -938,11 +947,11 @@ public class CollectDeliveryController {
     }
 
     public AddressModel getAddressModel() {
-        return addressModel;
+        return sessionData.getAddressModel();
     }
 
     public void setAddressModel(AddressModel addressModel) {
-        this.addressModel = addressModel;
+        sessionData.setAddressModel(addressModel);
     }
 
     public boolean getShowContactPerson() {
@@ -952,11 +961,11 @@ public class CollectDeliveryController {
     }
 
     public String getContactPerson() {
-        return contactPerson;
+        return sessionData.getContactPerson();
     }
 
     public void setContactPerson(String contactPerson) {
-        this.contactPerson = contactPerson;
+        sessionData.setContactPerson(contactPerson);
     }
 
     public String getViewName() {

@@ -11,6 +11,7 @@ import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
 import se._1177.lmn.controller.model.AddressModel;
 import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
+import se._1177.lmn.controller.session.InvoiceAddressControllerSession;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -22,7 +23,7 @@ import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
  * @author Patrik Björk
  */
 @Component
-@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class InvoiceAddressController {
 
     public static final String VIEW_NAME = "Fakturaadress";
@@ -41,30 +42,32 @@ public class InvoiceAddressController {
     @Autowired
     private Cart cart;
 
-    private SameOrDifferent sameOrDifferent;
-
-    private AddressModel addressModel;
+    @Autowired
+    private InvoiceAddressControllerSession sessionData;
 
     @PostConstruct
     public void init() {
-        addressModel = new AddressModel(userProfileController);
-        addressModel.init();
+        if (sessionData.getAddressModel() == null) {
+            AddressModel addressModel = new AddressModel();
+            addressModel.init(userProfileController);
+            sessionData.setAddressModel(addressModel);
+        }
     }
 
     public void setSameOrDifferent(SameOrDifferent sameOrDifferent) {
-        this.sameOrDifferent = sameOrDifferent;
+        sessionData.setSameOrDifferent(sameOrDifferent);
     }
 
     public SameOrDifferent getSameOrDifferent() {
-        return sameOrDifferent;
+        return sessionData.getSameOrDifferent();
     }
 
     public AddressModel getAddressModel() {
-        return addressModel;
+        return sessionData.getAddressModel();
     }
 
     public void setAddressModel(AddressModel addressModel) {
-        this.addressModel = addressModel;
+        sessionData.setAddressModel(addressModel);
     }
 
     public List<PrescriptionItemType> getOtherInvoiceAddressItems() {
@@ -75,14 +78,15 @@ public class InvoiceAddressController {
 
     public String toVerifyDelivery() {
 
-        boolean useOtherAddress = sameOrDifferent.equals(SameOrDifferent.DIFFERENT);
+        boolean useOtherAddress = sessionData.getSameOrDifferent().equals(SameOrDifferent.DIFFERENT);
         cart.getOrderRows().stream().filter(orderRow -> {
             PrescriptionItemType prescriptionItem = prescriptionItemInfo.getPrescriptionItem(orderRow);
             Boolean allowOtherInvoiceAddress = prescriptionItem.isAllowOtherInvoiceAddress();
 
             return BooleanUtils.isTrue(allowOtherInvoiceAddress);
         }).forEach(orderRow -> {
-            orderRow.getDeliveryChoice().setInvoiceAddress(useOtherAddress ? addressModel.toAddressType() : null);
+            orderRow.getDeliveryChoice()
+                    .setInvoiceAddress(useOtherAddress ? sessionData.getAddressModel().toAddressType() : null);
         });
 
         return navigationController.gotoView("verifyDelivery" + ACTION_SUFFIX, VerifyDeliveryController.VIEW_NAME);
@@ -91,6 +95,7 @@ public class InvoiceAddressController {
     public String getViewName() {
         return VIEW_NAME;
     }
+
 
     public static enum SameOrDifferent {
         SAME, DIFFERENT
