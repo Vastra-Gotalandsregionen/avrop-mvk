@@ -25,6 +25,6 @@
         <jsf.version>2.2.20</jsf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <project.version.property>3.3.0-SNAPSHOT</project.version.property>
+        <project.version.property>3.3.0</project.version.property>
     </properties>
 </project>
