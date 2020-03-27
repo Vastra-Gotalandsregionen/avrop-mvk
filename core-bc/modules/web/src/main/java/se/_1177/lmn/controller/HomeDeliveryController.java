@@ -72,7 +72,7 @@ public class HomeDeliveryController {
 
     @PostConstruct
     public void init() {
-        if (sessionData.getAddressModel() == null) {
+        if (!sessionData.isInited()) {
             sessionData.setAddressModel(new AddressModel());
             sessionData.getAddressModel().init(userProfileController);
 
@@ -96,8 +96,10 @@ public class HomeDeliveryController {
             }
 
             initNotificationGroups();
+
+            sessionData.setInited(true);
         }
-    }Måste undvika att göra init i alla controllers om val redan är gjorda! Annars skrivs lombok.val över...
+    }
 
     public void initNotificationGroups() {
         // Group the PrescriptionItemTypes into different groups - those requiring choice of notification or not,

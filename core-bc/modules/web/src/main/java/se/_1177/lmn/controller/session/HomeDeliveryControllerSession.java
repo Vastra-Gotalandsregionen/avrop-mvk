@@ -20,7 +20,7 @@ import java.util.Set;
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Data
-public class HomeDeliveryControllerSession implements Serializable {
+public class HomeDeliveryControllerSession extends AbstractSessionData implements Serializable {
 
     private AddressModel addressModel;
 

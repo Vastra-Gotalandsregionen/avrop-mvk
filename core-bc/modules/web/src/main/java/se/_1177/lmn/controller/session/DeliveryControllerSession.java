@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class DeliveryControllerSession implements Serializable {
+public class DeliveryControllerSession extends AbstractSessionData implements Serializable {
 
     private DeliveryMethodEnum deliveryMethod = null;
     private boolean userNeedsToChooseDeliveryMethodForEachItem;

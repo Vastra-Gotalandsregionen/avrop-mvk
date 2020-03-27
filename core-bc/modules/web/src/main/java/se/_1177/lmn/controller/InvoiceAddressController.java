@@ -47,10 +47,12 @@ public class InvoiceAddressController {
 
     @PostConstruct
     public void init() {
-        if (sessionData.getAddressModel() == null) {
+        if (!sessionData.isInited()) {
             AddressModel addressModel = new AddressModel();
             addressModel.init(userProfileController);
             sessionData.setAddressModel(addressModel);
+
+            sessionData.setInited(true);
         }
     }
 

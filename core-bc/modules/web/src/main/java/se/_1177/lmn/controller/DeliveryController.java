@@ -65,7 +65,7 @@ public class DeliveryController {
     private NavigationController navigationController;
 
     @Autowired
-    private DeliveryControllerSession sessionData;
+    DeliveryControllerSession sessionData = new DeliveryControllerSession();
 
     /*private DeliveryMethodEnum deliveryMethod = null;
     private boolean userNeedsToChooseDeliveryMethodForEachItem;

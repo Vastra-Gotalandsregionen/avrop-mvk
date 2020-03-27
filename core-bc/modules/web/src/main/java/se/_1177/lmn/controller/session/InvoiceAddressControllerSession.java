@@ -17,7 +17,7 @@ import java.util.List;
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Data
-public class InvoiceAddressControllerSession implements Serializable {
+public class InvoiceAddressControllerSession extends AbstractSessionData implements Serializable {
 
     private InvoiceAddressController.SameOrDifferent sameOrDifferent;
 

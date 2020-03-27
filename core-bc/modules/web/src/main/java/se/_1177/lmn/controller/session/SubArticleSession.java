@@ -16,7 +16,7 @@ import java.util.Map;
  */
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class SubArticleSession implements Serializable {
+public class SubArticleSession extends AbstractSessionData implements Serializable {
 
     private List<ArticleWithSubArticlesModel> articleWithSubArticlesModels;
 

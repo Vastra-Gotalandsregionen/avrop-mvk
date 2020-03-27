@@ -84,7 +84,7 @@ public class CollectDeliveryController {
     private NavigationController navigationController;
 
     @Autowired
-    private CollectDeliveryControllerSession sessionData;
+    CollectDeliveryControllerSession sessionData = new CollectDeliveryControllerSession();
 
     /**
      * Called from view in order to update the selects with delivery points for each {@link ServicePointProviderEnum}.
@@ -116,31 +116,35 @@ public class CollectDeliveryController {
      */
     @PostConstruct
     public void init() {
-        if (sessionData.getAddressModel() == null) {
-            AddressModel addressModel = new AddressModel();
-            addressModel.init(userProfileController);
-            sessionData.setAddressModel(addressModel);
-        }
+        if (!sessionData.isInited()) {
+            if (sessionData.getAddressModel() == null) {
+                AddressModel addressModel = new AddressModel();
+                addressModel.init(userProfileController);
+                sessionData.setAddressModel(addressModel);
+            }
 
-        // Default zip is from user profile. It may be overridden if user chooses so.
-        UserProfileType userProfile = userProfileController.getUserProfile();
+            // Default zip is from user profile. It may be overridden if user chooses so.
+            UserProfileType userProfile = userProfileController.getUserProfile();
 
-        if (userProfile != null) {
-            sessionData.setZip(userProfile.getZip());
+            if (userProfile != null) {
+                sessionData.setZip(userProfile.getZip());
 
-            if (userProfile.isHasSmsNotification() != null && userProfile.isHasSmsNotification()) {
-                sessionData.setPreferredDeliveryNotificationMethod(DeliveryNotificationMethodEnum.SMS);
-            } else if (userProfile.isHasMailNotification() != null && userProfile.isHasMailNotification()) {
-                sessionData.setPreferredDeliveryNotificationMethod(DeliveryNotificationMethodEnum.E_POST);
+                if (userProfile.isHasSmsNotification() != null && userProfile.isHasSmsNotification()) {
+                    sessionData.setPreferredDeliveryNotificationMethod(DeliveryNotificationMethodEnum.SMS);
+                } else if (userProfile.isHasMailNotification() != null && userProfile.isHasMailNotification()) {
+                    sessionData.setPreferredDeliveryNotificationMethod(DeliveryNotificationMethodEnum.E_POST);
+                } else {
+                    sessionData.setPreferredDeliveryNotificationMethod(DeliveryNotificationMethodEnum.BREV);
+                }
+
+                sessionData.setSmsNumber(userProfile.getMobilePhoneNumber());
+                sessionData.setEmail(userProfile.getEmail());
+
             } else {
                 sessionData.setPreferredDeliveryNotificationMethod(DeliveryNotificationMethodEnum.BREV);
             }
 
-            sessionData.setSmsNumber(userProfile.getMobilePhoneNumber());
-            sessionData.setEmail(userProfile.getEmail());
-
-        } else {
-            sessionData.setPreferredDeliveryNotificationMethod(DeliveryNotificationMethodEnum.BREV);
+            sessionData.setInited(true);
         }
     }
 

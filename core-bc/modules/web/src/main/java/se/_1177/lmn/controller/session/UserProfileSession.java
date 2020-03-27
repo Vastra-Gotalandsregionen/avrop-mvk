@@ -27,7 +27,7 @@ import static se._1177.lmn.service.util.JaxbUtil.readObject;
 
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class UserProfileSession implements Serializable {
+public class UserProfileSession extends AbstractSessionData implements Serializable {
 
     private GetUserProfileResponseType userProfileResponse;
     private GetUserProfileResponseType userProfileResponseLoggedInUser;

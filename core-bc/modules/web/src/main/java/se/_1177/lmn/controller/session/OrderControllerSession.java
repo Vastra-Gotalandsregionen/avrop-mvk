@@ -24,7 +24,7 @@ import java.util.Map;
  */
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class OrderControllerSession implements Serializable {
+public class OrderControllerSession extends AbstractSessionData implements Serializable {
 
     private MedicalSupplyPrescriptionsHolder medicalSupplyPrescriptions;
 

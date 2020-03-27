@@ -52,10 +52,13 @@ public class SubArticleController {
     private UtilController utilController;
 
     @Autowired
-    private SubArticleSession sessionData;
+    private SubArticleSession sessionData = new SubArticleSession();
 
     public void init() {
-        sessionData.setArticleWithSubArticlesModels(makeDtoModel(getThoseWhereChoiceIsNeeded()));
+        if (!sessionData.isInited()) {
+            sessionData.setArticleWithSubArticlesModels(makeDtoModel(getThoseWhereChoiceIsNeeded()));
+            sessionData.setInited(true);
+        }
     }
 
     public List<ArticleWithSubArticlesModel> getArticleWithSubArticlesModels() {

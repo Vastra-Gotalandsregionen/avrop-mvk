@@ -64,38 +64,42 @@ public class UserProfileController {
 
     @PostConstruct
     public void init() {
+        if (!sessionData.isInited()) {
 
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+            ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
-        Map<String, String> requestParameterMap = externalContext.getRequestParameterMap();
+            Map<String, String> requestParameterMap = externalContext.getRequestParameterMap();
 
-        if (requestParameterMap.containsKey("objectId")) {
-            this.sessionData.setObjectId(requestParameterMap.get("objectId"));
-            this.sessionData.setDelegate(true);
-        } else {
-            this.sessionData.setObjectId(null);
-            this.sessionData.setDelegate(false);
-        }
-
-        try {
-            if (this.sessionData.getUserProfileResponseLoggedInUser() == null) {
-                String ssn = getSubjectCareIdLoggedInUser();
-
-                this.sessionData.setUserProfileResponseLoggedInUser(mvkUserProfileService.getUserProfile(ssn));
-
-                ResultCodeEnum resultCode = sessionData.getUserProfileResponseLoggedInUser().getResultCode();
-                if (resultCode.equals(ResultCodeEnum.ERROR) || resultCode.equals(ResultCodeEnum.INFO)) {
-                    String text = sessionData.getUserProfileResponseLoggedInUser().getResultText();
-                    utilController.addErrorMessageWithCustomerServiceInfo(text);
-                }
+            if (requestParameterMap.containsKey("objectId")) {
+                this.sessionData.setObjectId(requestParameterMap.get("objectId"));
+                this.sessionData.setDelegate(true);
+            } else {
+                this.sessionData.setObjectId(null);
+                this.sessionData.setDelegate(false);
             }
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            String text = "Dina inställningar och din adress kunde inte hämtas.";
-            utilController.addErrorMessageWithCustomerServiceInfo(text);
-        }
 
-        updateUserProfile();
+            try {
+                if (this.sessionData.getUserProfileResponseLoggedInUser() == null) {
+                    String ssn = getSubjectCareIdLoggedInUser();
+
+                    this.sessionData.setUserProfileResponseLoggedInUser(mvkUserProfileService.getUserProfile(ssn));
+
+                    ResultCodeEnum resultCode = sessionData.getUserProfileResponseLoggedInUser().getResultCode();
+                    if (resultCode.equals(ResultCodeEnum.ERROR) || resultCode.equals(ResultCodeEnum.INFO)) {
+                        String text = sessionData.getUserProfileResponseLoggedInUser().getResultText();
+                        utilController.addErrorMessageWithCustomerServiceInfo(text);
+                    }
+                }
+            } catch (Exception e) {
+                LOGGER.error(e.getMessage(), e);
+                String text = "Dina inställningar och din adress kunde inte hämtas.";
+                utilController.addErrorMessageWithCustomerServiceInfo(text);
+            }
+
+            updateUserProfile();
+
+            sessionData.setInited(true);
+        }
     }
 
     public void updateUserProfile() {
