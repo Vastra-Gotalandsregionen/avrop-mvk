@@ -5,7 +5,7 @@
 
     <groupId>se.1177.lmn</groupId>
     <artifactId>avrop-mvk</artifactId>
-    <version>3.2.0-SNAPSHOT</version>
+    <version>${project.version.property}</version>
     <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
@@ -24,5 +24,7 @@
         <spring.version>4.2.5.RELEASE</spring.version>
         <jsf.version>2.2.20</jsf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <project.version.property>3.3.0-SNAPSHOT</project.version.property>
     </properties>
 </project>
