@@ -5,7 +5,7 @@
 
     <groupId>se.1177.lmn</groupId>
     <artifactId>avrop-mvk</artifactId>
-    <version>${project.version.property}</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
@@ -25,6 +25,6 @@
         <jsf.version>2.2.20</jsf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <project.version.property>3.3.0-SNAPSHOT</project.version.property>
+        <revision>3.4.0-SNAPSHOT</revision>
     </properties>
 </project>

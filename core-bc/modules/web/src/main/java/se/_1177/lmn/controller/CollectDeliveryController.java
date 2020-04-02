@@ -469,6 +469,10 @@ public class CollectDeliveryController {
                     }
 
                     if (!found) {
+                        // There is a risk that this happens if the source system sends prescription items with the same
+                        // service point provider but with different notification methods. I.e. we assume that all
+                        // delivery alternatives with the same service point provider share the same notification
+                        // methods.
                         throw new IllegalStateException("A notification method not available for the given prescription " +
                                 "item has been chosen. That shouldn't be possible so it's a bug.");
                     }
