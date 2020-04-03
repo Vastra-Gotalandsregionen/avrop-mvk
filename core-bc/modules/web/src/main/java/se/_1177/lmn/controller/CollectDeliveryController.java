@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._1.AddressType;
 import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
@@ -32,12 +33,20 @@ import se._1177.lmn.service.util.Util;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import javax.faces.model.SelectItemGroup;
 import javax.xml.ws.WebServiceException;
 import javax.xml.ws.soap.SOAPFaultException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import static riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum.HEMLEVERANS;
@@ -89,9 +98,8 @@ public class CollectDeliveryController {
     /**
      * Called from view in order to update the selects with delivery points for each {@link ServicePointProviderEnum}.
      *
-     * @param ajaxBehaviorEvent
      */
-    public void updateDeliverySelectItems(AjaxBehaviorEvent ajaxBehaviorEvent) {
+    public void updateDeliverySelectItems() {
         // Just reset deliveryPoints, making them load again when they are requested.
         sessionData.setDeliveryPointsPerProvider(null);
 
@@ -430,7 +438,7 @@ public class CollectDeliveryController {
 
                 if (deliveryAlternativeForThisOrderRow != null) {
                     deliveryMethodId = deliveryAlternativeForThisOrderRow.getDeliveryMethodId();
-                        allowChoiceOfDeliveryPoints = deliveryAlternativeForThisOrderRow.isAllowChioceOfDeliveryPoints();
+                    allowChoiceOfDeliveryPoints = deliveryAlternativeForThisOrderRow.isAllowChioceOfDeliveryPoints();
                 }
 
                 if (deliveryMethodId == null) {
@@ -692,14 +700,16 @@ public class CollectDeliveryController {
         sessionData.setPossibleCollectCombinationsFittingAllWithNotificationMethods(possibleDeliveryNotificationMethods);
     }
 
-    public void loadDeliveryPointsForRelevantSuppliersInBackground(final String zip,
-                                                                   final Set<ServicePointProviderEnum> allRelevantProvider,
-                                                                   final String countyCode) {
-        backgroundExecutor.submit(() -> {
+    @Async
+    public void cacheDeliveryPointsForRelevantSuppliersInBackground(final String zip,
+                                                                    final Set<ServicePointProviderEnum> allRelevantProvider,
+                                                                    final String countyCode) {
             ThreadLocalStore.setCountyCode(countyCode);
-            loadDeliveryPointsForRelevantSuppliers(zip, allRelevantProvider);
+            for (ServicePointProviderEnum servicePointProviderEnum : allRelevantProvider) {
+                // The response will be cached.
+                lmnService.getMedicalSupplyDeliveryPoints(servicePointProviderEnum, zip);
+            }
             ThreadLocalStore.setCountyCode(null);
-        });
     }
 
     private void loadDeliveryPointsForRelevantSuppliers(String zip, Set<ServicePointProviderEnum> providers) {
@@ -716,6 +726,7 @@ public class CollectDeliveryController {
 
             GetMedicalSupplyDeliveryPointsResponseType medicalSupplyDeliveryPoints;
             try {
+                // Will probably use cache.
                 medicalSupplyDeliveryPoints = lmnService.getMedicalSupplyDeliveryPoints(provider, zip);
 
                 if (medicalSupplyDeliveryPoints.getResultCode().equals(ResultCodeEnum.OK)) {

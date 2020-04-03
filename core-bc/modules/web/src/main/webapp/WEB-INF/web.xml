@@ -14,6 +14,7 @@
     </listener>
 
     <!--- The RequestContextListener gets rid of a WARN log message which occurs often otherwise. -->
+    <!-- Keeping this leads to a jsessionid in addition to sessionid cookie-->
     <!--<listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>-->

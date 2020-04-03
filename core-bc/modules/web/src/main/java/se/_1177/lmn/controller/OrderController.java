@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.data.annotation.Transient;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
@@ -47,7 +46,6 @@ public class OrderController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
 
-    @Transient
     @Autowired
     private UserProfileController userProfileController;
 
@@ -135,7 +133,7 @@ public class OrderController {
 
             if (userProfileController.getUserProfile() != null) {
 
-                collectDeliveryController.loadDeliveryPointsForRelevantSuppliersInBackground(
+                collectDeliveryController.cacheDeliveryPointsForRelevantSuppliersInBackground(
                         userProfileController.getUserProfile().getZip(),
                         allRelevantProviders,
                         userProfileController.getUserProfile().getCountyCode());

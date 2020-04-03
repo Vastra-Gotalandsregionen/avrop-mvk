@@ -13,6 +13,7 @@
     <ui:define name="metadata">
         <f:metadata>
             <f:viewAction action="#{navigationController.ensureLastViewIs('collectDelivery', collectDeliveryController.viewName)}" />
+            <f:viewAction action="#{collectDeliveryController.updateDeliverySelectItems()}" />
         </f:metadata>
     </ui:define>
 

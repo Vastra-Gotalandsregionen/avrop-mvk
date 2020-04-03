@@ -37,5 +37,7 @@ public interface LmnService {
 
     String getReceptionHsaId();
 
+    String getLogicalAddress();
+
     boolean getDefaultSelectedPrescriptions();
 }

@@ -159,6 +159,7 @@ public class DeliveryController {
                 return "delivery";
             }
 
+            // Reset choices since it's not sure the same options are available this time.
             homeDeliveryController.initNotificationGroups();
             collectDeliveryController.resetChoices();
 

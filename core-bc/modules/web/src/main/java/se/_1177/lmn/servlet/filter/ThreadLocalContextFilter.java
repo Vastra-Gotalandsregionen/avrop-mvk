@@ -4,6 +4,7 @@ import mvk.itintegration.userprofile._2.UserProfileType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se._1177.lmn.controller.UserProfileController;
+import se._1177.lmn.controller.session.UserProfileSession;
 import se._1177.lmn.service.ThreadLocalStore;
 
 import javax.servlet.Filter;
@@ -38,8 +39,8 @@ public class ThreadLocalContextFilter implements Filter {
         UserProfileType userProfile = null;
 
         if (session != null) {
-            UserProfileController userProfileController = (UserProfileController) session
-                    .getAttribute("scopedTarget.userProfileController");
+            UserProfileSession userProfileController = (UserProfileSession) session
+                    .getAttribute("scopedTarget.userProfileSession");
 
             if (userProfileController != null) {
                 userProfile = userProfileController.getUserProfile();
