@@ -533,7 +533,7 @@ public class CollectDeliveryController {
         if (contactPerson != null) {
             // We only set contact person on those order rows where the chosen delivery alternative allows so.
             orderRowsWithCollectDelivery.stream()
-                    .filter(orderRowType -> getDeliveryAlternativeForOrderRow(orderRowType).isAllowContactPerson())
+                    .filter(orderRowType -> BooleanUtils.isTrue(getDeliveryAlternativeForOrderRow(orderRowType).isAllowContactPerson()))
                     .forEach(orderRowType -> orderRowType.getDeliveryChoice().setContactPerson(contactPerson));
         }
 

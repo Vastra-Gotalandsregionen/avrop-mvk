@@ -38,6 +38,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static se._1177.lmn.configuration.spring.CachingConfig.SUPPLY_DELIVERY_POINTS_CACHE;
+
 /**
  * This implementation handles all communication with the source system which is responsible for prescriptions,
  * delivery places and registering orders. This class uses web service proxy interfaces to communicate with the external
@@ -233,7 +235,7 @@ public class LmnServiceImpl implements LmnService {
      * @param postalCode the postal code
      * @return a {@link GetMedicalSupplyDeliveryPointsResponseType} containing {@link DeliveryPointType}s.
      */
-    @Cacheable(value = CachingConfig.SUPPLY_DELIVERY_POINTS_CACHE, keyGenerator = "supplyDeliveryKeyGenerator")
+    @Cacheable(value = SUPPLY_DELIVERY_POINTS_CACHE, keyGenerator = "supplyDeliveryKeyGenerator")
     public GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(ServicePointProviderEnum provider,
                                                                                      String postalCode) {
         GetMedicalSupplyDeliveryPointsType parameters = new GetMedicalSupplyDeliveryPointsType();
@@ -246,7 +248,7 @@ public class LmnServiceImpl implements LmnService {
 
         for (DeliveryPointType deliveryPoint : medicalSupplyDeliveryPoints.getDeliveryPoint()) {
             String cacheKey = getCacheKeyForDeliveryPoint(deliveryPoint.getDeliveryPointId());
-            cacheManager.getCache(CachingConfig.SUPPLY_DELIVERY_POINTS_CACHE)
+            cacheManager.getCache(SUPPLY_DELIVERY_POINTS_CACHE)
                     .put(cacheKey, deliveryPoint);
         }
 
@@ -322,7 +324,7 @@ public class LmnServiceImpl implements LmnService {
     @Override
     public DeliveryPointType getDeliveryPointById(String deliveryPointId) {
         String cacheKey = getCacheKeyForDeliveryPoint(deliveryPointId);
-        return cacheManager.getCache("supplyDeliveryPoints").get(cacheKey, DeliveryPointType.class);
+        return cacheManager.getCache(SUPPLY_DELIVERY_POINTS_CACHE).get(cacheKey, DeliveryPointType.class);
     }
 
     @Override

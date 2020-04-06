@@ -31,7 +31,24 @@ function initCommon() {
         setTimeout(function () {
             jq('.full-page-submit').attr('disabled', 'disabled');
         }, 100);
-    })
+    });
+
+    var formWhichMayWaitToSubmit = jq('form.wait-for-ajax');
+
+    if (formWhichMayWaitToSubmit) {
+        formWhichMayWaitToSubmit.on('submit', function (e) {
+            if (statusHelper.shouldWait) {
+                // We wait for the change event request to finish
+                e.preventDefault();
+
+                // When ready we "click" the submit button again.
+                statusHelper.callback = function () {
+                    jq('.full-page-submit').removeAttr('disabled');
+                    jq('.full-page-submit').click();
+                };
+            }
+        });
+    }
 }
 
 function initOrderPage() {
@@ -186,6 +203,34 @@ function handleProgressWithSpinner(data, successCallback) {
             break;
         default:
             alert(ajaxStatus);
+            break;
+    }
+}
+
+var statusHelper = {
+    shouldWait: false,
+    callback: null
+};
+
+// This is to mitigate the problem when submit and ajax request from e.g. a change event creates a race condition. So we make sure the ajax completes first
+function ajaxToBeWaitedFor(data) {
+    var ajaxStatus = data.status; // Can be "begin", "success" and "complete"
+
+    switch (ajaxStatus) {
+        case "begin": // This is called right before ajax request is been sent
+            statusHelper.shouldWait = true;
+            break;
+
+        case "complete": // This is called right after ajax response is received.
+            break;
+        case "success": // This is called when ajax response is successfully processed.
+            statusHelper.shouldWait = false;
+            if (statusHelper.callback) {
+                statusHelper.callback();
+            }
+
+            break;
+        default:
             break;
     }
 }
