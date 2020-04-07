@@ -29,7 +29,7 @@
             </h:panelGroup>
         </h:panelGroup>
 
-        <h:form id="collectDeliveryForm" styleClass="wait-for-ajax">
+        <h:form id="collectDeliveryForm">
             <div>
                 <h2>Utlämningsställe</h2>
                 <h:panelGroup rendered="#{collectDeliveryController.anyItemWhereAllowChoiceOfDeliveryPointIsTrue and collectDeliveryController.anyItemWhereAllowChoiceOfDeliveryPointIsFalse}">
@@ -219,7 +219,7 @@
 
                 <div class="right-align">
                     <h:commandButton styleClass="button back-button full-page-submit" value="Bakåt" action="#{navigationController.goBack}" immediate="true"/>
-                    <h:commandButton styleClass="button full-page-submit" value="Nästa"
+                    <h:commandButton styleClass="button full-page-submit wait-for-ajax" value="Nästa"
                                      action="#{collectDeliveryController.toVerifyDelivery}"/>
                 </div>
 

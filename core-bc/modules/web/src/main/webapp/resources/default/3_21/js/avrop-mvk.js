@@ -33,18 +33,19 @@ function initCommon() {
         }, 100);
     });
 
-    var formWhichMayWaitToSubmit = jq('form.wait-for-ajax');
+    var formWhichMayWaitToSubmit = jq('.wait-for-ajax');
 
     if (formWhichMayWaitToSubmit) {
-        formWhichMayWaitToSubmit.on('submit', function (e) {
+        formWhichMayWaitToSubmit.on('click', function (e) {
             if (statusHelper.shouldWait) {
                 // We wait for the change event request to finish
                 e.preventDefault();
 
                 // When ready we "click" the submit button again.
                 statusHelper.callback = function () {
-                    jq('.full-page-submit').removeAttr('disabled');
-                    jq('.full-page-submit').click();
+                    let waitForAjaxButton = jq('.wait-for-ajax');
+                    waitForAjaxButton.removeAttr('disabled');
+                    waitForAjaxButton.click();
                 };
             }
         });
@@ -122,9 +123,12 @@ function initHomeDeliveryPage() {
     jq('.to-be-confirmed-submit-button').on('click', function (e) {
         var doorCodeInput = jq('#homeDeliveryForm\\:homeAddress\\:doorCodeField');
 
+        e.preventDefault();
+
         if (doorCodeInput.val().length === 0) {
-            e.preventDefault();
             confirmDialog.dialog('open');
+        } else {
+            jq('.confirm-submit-button').click();
         }
     });
 
