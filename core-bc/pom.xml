@@ -5,12 +5,12 @@
     <parent>
         <groupId>se.1177.lmn</groupId>
         <artifactId>avrop-mvk</artifactId>
-        <version>${project.version.property}</version>
+        <version>${revision}</version>
     </parent>
 
     <groupId>se.1177.lmn</groupId>
     <artifactId>core-bc</artifactId>
-    <version>${project.version.property}</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
 
     <modules>
