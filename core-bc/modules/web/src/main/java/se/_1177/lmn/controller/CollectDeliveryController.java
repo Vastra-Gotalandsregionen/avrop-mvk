@@ -177,6 +177,7 @@ public class CollectDeliveryController {
             // the same ServicePointProviderEnum.
             List<List<String>> listOfListsWithNotificationMethodNames = item.getDeliveryAlternative()
                     .stream()
+                    .filter(alternative -> alternative.getDeliveryMethod().equals(UTLÄMNINGSSTÄLLE))
                     .filter(alternative -> alternative.getServicePointProvider()
                             .equals(servicePointProviderForItem))
                     .map(alternative -> alternative.getDeliveryNotificationMethod().stream().map(Enum::name)
