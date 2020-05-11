@@ -267,7 +267,7 @@ public class SubArticleControllerTest {
 
         Invocable invocable = (Invocable) engine;
 
-        Integer lengthOfObject = (Integer) invocable.invokeFunction("lengthOfObject", json);
+        Number lengthOfObject = (Number) invocable.invokeFunction("lengthOfObject", json);
         String nameOfSubArticleInSecondModel = (String) invocable.invokeFunction("nameOfSubArticleInSecondModel", json);
 
         assertEquals(2, lengthOfObject.intValue());

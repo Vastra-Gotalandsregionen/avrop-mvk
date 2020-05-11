@@ -2,6 +2,9 @@ package se._1177.lmn.service;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.concurrent.ConcurrentMapCache;
 import riv.crm.selfservice.medicalsupply._1.ResultCodeEnum;
 import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
 import riv.crm.selfservice.medicalsupply._1.SubjectOfCareType;
@@ -12,6 +15,8 @@ import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder.
 import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._1.rivtabp21.RegisterMedicalSupplyOrderResponderInterface;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
@@ -20,6 +25,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static se._1177.lmn.configuration.spring.CachingConfig.SUPPLY_DELIVERY_POINTS_CACHE;
 
 public class LmnServiceRoutingImplTest {
 
@@ -65,21 +71,28 @@ public class LmnServiceRoutingImplTest {
         when(mdp10.getMedicalSupplyPrescriptions(anyString(), any())).thenReturn(prescriptionsResponse);
         when(mdp20.getMedicalSupplyPrescriptions(anyString(), any())).thenReturn(prescriptionsResponse);
 
-        countyCodeToLmnService.put(key10, new LmnServiceImpl(
+        LmnServiceImpl lmnService1 = new LmnServiceImpl(
                 msdp10,
                 mdp10,
                 rms10,
                 "theLogicalAddress" + key10,
                 "SE21341234-234234234" + key10,
-                true));
+                true);
 
-        countyCodeToLmnService.put(key20, new LmnServiceImpl(
+        LmnServiceImpl lmnService2 = new LmnServiceImpl(
                 msdp20,
                 mdp20,
                 rms20,
                 "theLogicalAddress" + key20,
                 "SE21341234-234234234" + key20,
-                true));
+                true);
+
+        lmnService1.setCacheManager(cacheManager);
+        lmnService2.setCacheManager(cacheManager);
+
+        countyCodeToLmnService.put(key10, lmnService1);
+
+        countyCodeToLmnService.put(key20, lmnService2);
 
         lmnServiceRouting = new LmnServiceRoutingImpl(countyCodeToLmnService);
     }
@@ -144,8 +157,9 @@ public class LmnServiceRoutingImplTest {
 
     @Test
     public void getDeliveryPointById() throws Exception {
-        // Not yet implemented. More complicated to implement.
+        ThreadLocalStore.setCountyCode(key10);
         lmnServiceRouting.getDeliveryPointById("1");
+        ThreadLocalStore.setCountyCode(null);
     }
 
     @Test
@@ -159,4 +173,17 @@ public class LmnServiceRoutingImplTest {
         assertTrue(receptionHsaId.endsWith(key10));
     }
 
+    private CacheManager cacheManager = new CacheManager() {
+        private Cache cache = new ConcurrentMapCache(SUPPLY_DELIVERY_POINTS_CACHE);
+
+        @Override
+        public Cache getCache(String s) {
+            return cache;
+        }
+
+        @Override
+        public Collection<String> getCacheNames() {
+            return Arrays.asList(SUPPLY_DELIVERY_POINTS_CACHE);
+        }
+    };
 }

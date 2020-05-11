@@ -54,7 +54,6 @@ public class SessionFilter implements Filter {
         request.setCharacterEncoding("UTF-8");
 
         String requestURI = request.getRequestURI();
-        LOGGER.debug("RequestURI: " + requestURI);
 
         String contextPath = request.getContextPath();
         String resourcePath = contextPath + "/javax.faces.resource/";

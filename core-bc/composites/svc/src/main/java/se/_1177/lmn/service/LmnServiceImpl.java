@@ -342,6 +342,10 @@ public class LmnServiceImpl implements LmnService {
         return defaultSelectedPrescriptions;
     }
 
+    public void setCacheManager(CacheManager cacheManager) {
+        this.cacheManager = cacheManager;
+    }
+
     public static boolean isAfterToday(XMLGregorianCalendar date) {
         return Util.isAfterToday(date);
     }

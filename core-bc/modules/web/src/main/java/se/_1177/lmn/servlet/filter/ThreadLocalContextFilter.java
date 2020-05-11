@@ -39,11 +39,11 @@ public class ThreadLocalContextFilter implements Filter {
         UserProfileType userProfile = null;
 
         if (session != null) {
-            UserProfileSession userProfileController = (UserProfileSession) session
+            UserProfileSession userProfileSession = (UserProfileSession) session
                     .getAttribute("scopedTarget.userProfileSession");
 
-            if (userProfileController != null) {
-                userProfile = userProfileController.getUserProfile();
+            if (userProfileSession != null) {
+                userProfile = userProfileSession.getUserProfile();
             }
         }
 

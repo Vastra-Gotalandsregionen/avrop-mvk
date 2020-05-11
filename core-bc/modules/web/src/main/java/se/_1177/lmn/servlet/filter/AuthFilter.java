@@ -41,7 +41,6 @@ public class AuthFilter implements Filter {
         request.setCharacterEncoding("UTF-8");
 
         String requestURI = request.getRequestURI();
-        LOGGER.debug("RequestURI: " + requestURI);
 
         String env = System.getProperty("env");
         if (env != null && env.equalsIgnoreCase("dev")) {
