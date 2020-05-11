@@ -55,10 +55,7 @@ public class SubArticleController {
     private SubArticleSession sessionData = new SubArticleSession();
 
     public void init() {
-        if (!sessionData.isInited()) {
-            sessionData.setArticleWithSubArticlesModels(makeDtoModel(getThoseWhereChoiceIsNeeded()));
-            sessionData.setInited(true);
-        }
+        sessionData.setArticleWithSubArticlesModels(makeDtoModel(getThoseWhereChoiceIsNeeded()));
     }
 
     public List<ArticleWithSubArticlesModel> getArticleWithSubArticlesModels() {
