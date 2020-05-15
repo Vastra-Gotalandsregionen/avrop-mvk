@@ -234,7 +234,7 @@ public class SessionFilterTest {
         when(servletRequest.getRequestURI()).thenReturn("/contextPath/order.xhtml");
         when(servletRequest.getServletPath()).thenReturn("/order.xhtml");
         when(servletRequest.getSession()).thenReturn(session);
-        when(servletRequest.getSession(eq(false))).thenReturn(session);
+        when(servletRequest.getSession(anyBoolean())).thenReturn(session);
         when(servletRequest.getParameter(OBJECTID_PARAMETER)).thenReturn(null); // The important part. Null differs from "123".
 
         // When

@@ -72,6 +72,7 @@ public class SessionFilter implements Filter {
 
             redirect = redirectIfInappropriateRequest(request, response);
         } catch (Exception e) {
+            LOGGER.error(e.getLocalizedMessage(), e);
             redirectToOrderPage(request, response);
             return;
         }
@@ -103,6 +104,7 @@ public class SessionFilter implements Filter {
 
         String servletPath = request.getServletPath();
         if (servletPath.startsWith(START_PAGE_SUFFIX) || anyPublicPage(servletPath)) {
+            LOGGER.debug("Do not redirect1: " + servletPath);
             return false;
         }
 
@@ -117,12 +119,14 @@ public class SessionFilter implements Filter {
                         .getChosenPrescriptionItemInfo();
 
                 if (itemsInCart == null || itemsInCart.size() == 0) {
+                    LOGGER.debug("Redirect2: " + servletPath);
                     redirectToOrderPage(request, response);
                     return true;
                 } else {
                     return false;
                 }
             } else {
+                LOGGER.debug("Redirect3: " + servletPath);
                 redirectToOrderPage(request, response);
                 return true;
             }
@@ -145,6 +149,7 @@ public class SessionFilter implements Filter {
         if (sessionObjectId != null && !"".equals(sessionObjectId)) {
             queryString = "?objectId=" + sessionObjectId;
         }
+        LOGGER.debug("Redirect4: " + request.getServletPath());
         response.sendRedirect(request.getContextPath() + START_PAGE_SUFFIX + queryString);
     }
 
@@ -155,7 +160,8 @@ public class SessionFilter implements Filter {
 
         if (sessionSubjectSerialNumber != null && !sessionSubjectSerialNumber.equals(subjectSerialNumber)) {
             // A new user has logged in. Reset session.
-            session.invalidate();
+            LOGGER.debug("Invalidate session.");
+            session = resetSession(request, session);
         }
 
         String objectIdFromRequestParam = request.getParameter(OBJECTID_PARAMETER);
@@ -170,17 +176,17 @@ public class SessionFilter implements Filter {
         String shibSessionIdFromRequest = request.getHeader(SHIB_SESSION_ID_HEADER);
 
         if (!EqualsBuilder.reflectionEquals(sessionShibSessionId, shibSessionIdFromRequest)) {
-            session.invalidate();
+            session = resetSession(request, session);
         }
 
         if (objectIdFromRequestParam != null && !objectIdFromRequestParam.equals(sessionObjectId)) {
-            session.invalidate();
+            session = resetSession(request, session);
             session.setAttribute(OBJECTID_PARAMETER, objectIdFromRequestParam);
         } else if (request.getRequestURI().endsWith(START_PAGE_SUFFIX)) {
             // It is normal that objectIdFromRequestParam is null when page isn't the start page but on the start page
             // the object id should always be passed if it exists.
             if (!EqualsBuilder.reflectionEquals(objectIdFromRequestParam, sessionObjectId)) {
-                session.invalidate();
+                session = resetSession(request, session);
                 session.setAttribute(OBJECTID_PARAMETER, objectIdFromRequestParam);
             }
         }
@@ -191,5 +197,11 @@ public class SessionFilter implements Filter {
 
     public void destroy() {
 
+    }
+
+    private HttpSession resetSession(HttpServletRequest request, HttpSession session) {
+        new Exception("My debug exception - resetting session").printStackTrace();
+        session.invalidate();
+        return request.getSession(true);
     }
 }
