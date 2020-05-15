@@ -80,6 +80,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         addSpecificPrescriptionItemWithTwoHomeDeliveryOptionsWithOtherNotifications(random, subjectOfCare);
         addSpecificPrescriptionItemWithTwoHomeDeliveryOptionsWithOverlappingNotifications(random, subjectOfCare);
         addSpecificPrescriptionItemWithCollectDeliveryWithIngenProvider(random, subjectOfCare);
+        addSpecificPrescriptionItemsWithCollectDeliveryWithIngenProviderWithoutNotificationButAnotherWithHomeDeliveryWithNotification(random, subjectOfCare);
 
         response.setSubjectOfCareType(subjectOfCare);
 
@@ -705,6 +706,73 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         prescriptionItem.setStatus(StatusEnum.AKTIV);
 
         subjectOfCare.getPrescriptionItem().add(prescriptionItem);
+    }
+
+    private void addSpecificPrescriptionItemsWithCollectDeliveryWithIngenProviderWithoutNotificationButAnotherWithHomeDeliveryWithNotification(Random random, SubjectOfCareType subjectOfCare) {
+
+        String prescriptionItemId = random.nextInt(100000) + "";
+        String prescriptionItemId2 = random.nextInt(100000) + "";
+        random.nextInt(1234);
+
+        PrescriptionItemType prescriptionItem = createPrescriptionItemType(random, prescriptionItemId);
+
+        DeliveryAlternativeType deliveryAlternativeType1 = new DeliveryAlternativeType();
+        deliveryAlternativeType1.setServicePointProvider(ServicePointProviderEnum.INGEN);
+        deliveryAlternativeType1.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
+        deliveryAlternativeType1.setDeliveryMethodId("1234");
+
+        DeliveryAlternativeType deliveryAlternativeType2 = new DeliveryAlternativeType();
+        deliveryAlternativeType2.setServicePointProvider(ServicePointProviderEnum.INGEN);
+        deliveryAlternativeType2.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        deliveryAlternativeType2.setDeliveryMethodId("12345");
+        deliveryAlternativeType2.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.TELEFON);
+
+        DeliveryAlternativeType deliveryAlternativeType3 = new DeliveryAlternativeType();
+        deliveryAlternativeType3.setServicePointProvider(ServicePointProviderEnum.INGEN);
+        deliveryAlternativeType3.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
+        deliveryAlternativeType3.setDeliveryMethodId("123456");
+
+        prescriptionItem.getDeliveryAlternative().add(deliveryAlternativeType1);
+        prescriptionItem.getDeliveryAlternative().add(deliveryAlternativeType2);
+
+        PrescriptionItemType prescriptionItem2 = createPrescriptionItemType(random, prescriptionItemId2);
+        prescriptionItem2.getDeliveryAlternative().add(deliveryAlternativeType3);
+
+        subjectOfCare.getPrescriptionItem().add(prescriptionItem);
+        subjectOfCare.getPrescriptionItem().add(prescriptionItem2);
+    }
+
+    private PrescriptionItemType createPrescriptionItemType(Random random, String prescriptionItemId) {
+        PrescriptionItemType prescriptionItem = new PrescriptionItemType();
+
+        ArticleType article2 = new ArticleType();
+        article2.setArticleName("Diabetes med utlämningsställe och hemleverans. Notifiering endast på hemleverans, INGEN leverantör");
+        article2.setArticleNo(random.nextInt(100000) + "");
+        article2.setIsOrderable(true);
+        article2.setPackageSize(1); // Important
+        article2.setPackageSizeUnit("st");
+        article2.setProductArea(ProductAreaEnum.DIABETES);
+
+        prescriptionItem.setArticle(article2);
+
+        prescriptionItem.setNoOfOrders(4);
+        prescriptionItem.setNoOfRemainingOrders(3);
+
+        prescriptionItem.setNextEarliestOrderDate(getRandomCalendar(random, -365));
+
+        prescriptionItem.setPrescriptionId(random.nextInt(100000) + "");
+        prescriptionItem.setPrescriptionItemId(prescriptionItemId);
+        PrescriberType prescriber = new PrescriberType();
+        prescriber.setPrescriberName("Kalle Karlsson");
+        prescriber.setPrescriberCode(random.nextInt(1000) + "");
+        prescriber.setPrescriberId(random.nextInt(1000) + "");
+        prescriber.setPrescriberTitle("Läkare");
+        prescriptionItem.setPrescriber(prescriber);
+        prescriptionItem.setLastValidDate(getRandomCalendar(random, 730L));
+        prescriptionItem.setNoOfArticlesPerOrder(32);
+        prescriptionItem.setNoOfPackagesPerOrder(0);
+        prescriptionItem.setStatus(StatusEnum.AKTIV);
+        return prescriptionItem;
     }
 
     private JAXBElement<XMLGregorianCalendar> wrapInJaxBElement(XMLGregorianCalendar calendar) {
