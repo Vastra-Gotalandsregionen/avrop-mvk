@@ -1,0 +1,6 @@
+version: "3"
+services:
+ avrop-lakemedelsnara-produkter:
+  build:
+   context: ..
+  image: vgr/avrop-lakemedelsnara-produkter

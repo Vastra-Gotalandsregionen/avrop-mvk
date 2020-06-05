@@ -24,12 +24,16 @@ public class MvkContextListener extends ContextLoader implements ServletContextL
         WebApplicationContext webApplicationContext = WebApplicationContextUtils
                 .getWebApplicationContext(servletContextEvent.getServletContext());
 
-        String shouldStartup = ((XmlWebApplicationContext) webApplicationContext).getBeanFactory()
-                .resolveEmbeddedValue("${local.mock.service.startup}");
+        try {
+            String shouldStartup = ((XmlWebApplicationContext) webApplicationContext).getBeanFactory()
+                    .resolveEmbeddedValue("${local.mock.service.startup}");
 
-        if ("true".equals(shouldStartup)) {
-            MockWebServiceServer.publishEndpoints(18080);
-            started = true;
+            if ("true".equals(shouldStartup)) {
+                MockWebServiceServer.publishEndpoints(18080);
+                started = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -1,0 +1,15 @@
+version: "3"
+services:
+ redis:
+   image: redis
+   restart: always
+ avrop:
+  container_name: avrop-lakemedelsnara-produkter-debug
+  image: vgr/avrop-lakemedelsnara-produkter:debug
+  ports:
+   - 8080:8080
+   - 8001:8001
+  volumes:
+   - /opt/data:/opt/data
+  environment:
+    JPDA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8001"

@@ -2,7 +2,10 @@ package se._1177.lmn.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
 import riv.crm.selfservice.medicalsupply._1.DeliveryPointType;
@@ -22,21 +25,20 @@ import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder.
 import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._1.rivtabp21.RegisterMedicalSupplyOrderResponderInterface;
 import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.RegisterMedicalSupplyOrderResponseType;
 import riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.RegisterMedicalSupplyOrderType;
+import se._1177.lmn.configuration.spring.CachingConfig;
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 import se._1177.lmn.service.util.Util;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Comparator;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static se._1177.lmn.configuration.spring.CachingConfig.SUPPLY_DELIVERY_POINTS_CACHE;
 
 /**
  * This implementation handles all communication with the source system which is responsible for prescriptions,
@@ -45,17 +47,18 @@ import java.util.stream.Collectors;
  *
  * @author Patrik Björk
  */
+@Service
 public class LmnServiceImpl implements LmnService {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(LmnServiceImpl.class);
+
+    @Autowired
+    private CacheManager cacheManager;
 
     private GetMedicalSupplyDeliveryPointsResponderInterface medicalSupplyDeliveryPoint;
 
     private GetMedicalSupplyPrescriptionsResponderInterface medicalSupplyPrescriptions;
 
     private RegisterMedicalSupplyOrderResponderInterface registerMedicalSupplyOrder;
-
-    private Map<String, DeliveryPointType> deliveryPointIdToDeliveryPoint = new HashMap<>();
 
     private String logicalAddress;
 
@@ -232,6 +235,7 @@ public class LmnServiceImpl implements LmnService {
      * @param postalCode the postal code
      * @return a {@link GetMedicalSupplyDeliveryPointsResponseType} containing {@link DeliveryPointType}s.
      */
+    @Cacheable(value = SUPPLY_DELIVERY_POINTS_CACHE, keyGenerator = "supplyDeliveryKeyGenerator")
     public GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(ServicePointProviderEnum provider,
                                                                                      String postalCode) {
         GetMedicalSupplyDeliveryPointsType parameters = new GetMedicalSupplyDeliveryPointsType();
@@ -243,10 +247,17 @@ public class LmnServiceImpl implements LmnService {
                 .getMedicalSupplyDeliveryPoints(logicalAddress, parameters);
 
         for (DeliveryPointType deliveryPoint : medicalSupplyDeliveryPoints.getDeliveryPoint()) {
-            deliveryPointIdToDeliveryPoint.put(deliveryPoint.getDeliveryPointId(), deliveryPoint);
+            String cacheKey = getCacheKeyForDeliveryPoint(deliveryPoint.getDeliveryPointId());
+            cacheManager.getCache(SUPPLY_DELIVERY_POINTS_CACHE)
+                    .put(cacheKey, deliveryPoint);
         }
 
         return medicalSupplyDeliveryPoints;
+    }
+
+    private String getCacheKeyForDeliveryPoint(String deliveryPointId) {
+        // Add logicalAddress to separate cache for the different counties.
+        return deliveryPointId + this.logicalAddress;
     }
 
     /**
@@ -312,7 +323,8 @@ public class LmnServiceImpl implements LmnService {
 
     @Override
     public DeliveryPointType getDeliveryPointById(String deliveryPointId) {
-        return deliveryPointIdToDeliveryPoint.get(deliveryPointId);
+        String cacheKey = getCacheKeyForDeliveryPoint(deliveryPointId);
+        return cacheManager.getCache(SUPPLY_DELIVERY_POINTS_CACHE).get(cacheKey, DeliveryPointType.class);
     }
 
     @Override
@@ -321,8 +333,17 @@ public class LmnServiceImpl implements LmnService {
     }
 
     @Override
+    public String getLogicalAddress() {
+        return logicalAddress;
+    }
+
+    @Override
     public boolean getDefaultSelectedPrescriptions() {
         return defaultSelectedPrescriptions;
+    }
+
+    public void setCacheManager(CacheManager cacheManager) {
+        this.cacheManager = cacheManager;
     }
 
     public static boolean isAfterToday(XMLGregorianCalendar date) {

@@ -1,0 +1,7 @@
+version: "3"
+services:
+ avrop-lakemedelsnara-produkter:
+  build:
+   context: ..
+   dockerfile: Dockerfile-debug
+  image: vgr/avrop-lakemedelsnara-produkter:debug

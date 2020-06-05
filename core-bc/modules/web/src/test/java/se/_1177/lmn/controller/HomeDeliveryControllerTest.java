@@ -5,6 +5,7 @@ import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
 import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import se._1177.lmn.model.NotificationVariant;
 
 import static org.junit.Assert.*;
 
@@ -27,7 +28,7 @@ public class HomeDeliveryControllerTest {
         item.getDeliveryAlternative().add(da1);
         item.getDeliveryAlternative().add(da2);
 
-        assertEquals(HomeDeliveryController.NotificationVariant.BOTH_WITH_AND_WITHOUT_NOTIFICATION,
+        assertEquals(NotificationVariant.BOTH_WITH_AND_WITHOUT_NOTIFICATION,
                 controller.hasWithAndWithoutNotificationForHomeDelivery(item));
     }
 
@@ -42,7 +43,7 @@ public class HomeDeliveryControllerTest {
         PrescriptionItemType item = new PrescriptionItemType();
         item.getDeliveryAlternative().add(da2);
 
-        assertEquals(HomeDeliveryController.NotificationVariant.WITHOUT_NOTIFICATION,
+        assertEquals(NotificationVariant.WITHOUT_NOTIFICATION,
                 controller.hasWithAndWithoutNotificationForHomeDelivery(item));
     }
 
@@ -58,7 +59,7 @@ public class HomeDeliveryControllerTest {
         PrescriptionItemType item = new PrescriptionItemType();
         item.getDeliveryAlternative().add(da1);
 
-        assertEquals(HomeDeliveryController.NotificationVariant.WITH_NOTIFICATION,
+        assertEquals(NotificationVariant.WITH_NOTIFICATION,
                 controller.hasWithAndWithoutNotificationForHomeDelivery(item));
     }
 

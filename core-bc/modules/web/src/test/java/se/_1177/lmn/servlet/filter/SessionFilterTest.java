@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 
 import static org.mockito.Mockito.*;
@@ -24,6 +25,17 @@ public class SessionFilterTest {
     private static final String START_PAGE_SUFFIX = "/order.xhtml";
     private static final String SMS_NOT_AUTHORIZED_PAGE_SUFFIX = "/smsNotAuthorized.xhtml";
     private static final String NOT_AUTHENTICATED_PAGE_SUFFIX = "/notAuthenticated.xhtml";
+    private Enumeration<String> emptyEnumeration = new Enumeration<String>() {
+        @Override
+        public boolean hasMoreElements() {
+            return false;
+        }
+
+        @Override
+        public String nextElement() {
+            return null;
+        }
+    };
 
     @Test
     public void doFilterOkRequest() throws Exception {
@@ -47,6 +59,7 @@ public class SessionFilterTest {
         when(session.getAttribute("scopedTarget.prescriptionItemInfo")).thenReturn(prescriptionItemInfo);
         when(session.getAttribute(SHIB_SESSION_ID_HEADER)).thenReturn(shibbolethSessionId);
         when(session.getAttribute(OBJECTID_PARAMETER)).thenReturn(shibbolethSessionId);
+        when(session.getAttributeNames()).thenReturn(emptyEnumeration);
 
         when(servletRequest.getHeader(USER_ID_HEADER)).thenReturn(SUBJECT_SERIAL_NUMBER);
         when(servletRequest.getHeader(SHIB_SESSION_ID_HEADER)).thenReturn(shibbolethSessionId);
@@ -87,6 +100,7 @@ public class SessionFilterTest {
         when(session.getAttribute("scopedTarget.prescriptionItemInfo")).thenReturn(prescriptionItemInfo);
         when(session.getAttribute(SHIB_SESSION_ID_HEADER)).thenReturn(shibbolethSessionId);
         when(session.getAttribute(OBJECTID_PARAMETER)).thenReturn(shibbolethSessionId);
+        when(session.getAttributeNames()).thenReturn(emptyEnumeration);
 
         when(servletRequest.getHeader(USER_ID_HEADER)).thenReturn(SUBJECT_SERIAL_NUMBER);
         when(servletRequest.getHeader(SHIB_SESSION_ID_HEADER)).thenReturn("newSessionId"); // The important detail
@@ -128,6 +142,7 @@ public class SessionFilterTest {
         when(session.getAttribute("scopedTarget.prescriptionItemInfo")).thenReturn(prescriptionItemInfo);
         when(session.getAttribute(SHIB_SESSION_ID_HEADER)).thenReturn(shibbolethSessionId);
         when(session.getAttribute(OBJECTID_PARAMETER)).thenReturn(shibbolethSessionId);
+        when(session.getAttributeNames()).thenReturn(emptyEnumeration);
 
         when(servletRequest.getHeader(USER_ID_HEADER)).thenReturn(SUBJECT_SERIAL_NUMBER);
         when(servletRequest.getHeader(SHIB_SESSION_ID_HEADER)).thenReturn(shibbolethSessionId);
@@ -170,6 +185,7 @@ public class SessionFilterTest {
         when(session.getAttribute("scopedTarget.prescriptionItemInfo")).thenReturn(prescriptionItemInfo);
         when(session.getAttribute(SHIB_SESSION_ID_HEADER)).thenReturn(shibbolethSessionId);
         when(session.getAttribute(OBJECTID_PARAMETER)).thenReturn(shibbolethSessionId);
+        when(session.getAttributeNames()).thenReturn(emptyEnumeration);
 
         when(servletRequest.getHeader(USER_ID_HEADER)).thenReturn(SUBJECT_SERIAL_NUMBER);
         when(servletRequest.getHeader(SHIB_SESSION_ID_HEADER)).thenReturn(shibbolethSessionId);
@@ -210,6 +226,7 @@ public class SessionFilterTest {
         when(session.getAttribute("scopedTarget.prescriptionItemInfo")).thenReturn(prescriptionItemInfo);
         when(session.getAttribute(SHIB_SESSION_ID_HEADER)).thenReturn(shibbolethSessionId);
         when(session.getAttribute(OBJECTID_PARAMETER)).thenReturn(shibbolethSessionId);
+        when(session.getAttributeNames()).thenReturn(emptyEnumeration);
 
         when(servletRequest.getHeader(USER_ID_HEADER)).thenReturn(SUBJECT_SERIAL_NUMBER);
         when(servletRequest.getHeader(SHIB_SESSION_ID_HEADER)).thenReturn(shibbolethSessionId);
@@ -217,8 +234,8 @@ public class SessionFilterTest {
         when(servletRequest.getRequestURI()).thenReturn("/contextPath/order.xhtml");
         when(servletRequest.getServletPath()).thenReturn("/order.xhtml");
         when(servletRequest.getSession()).thenReturn(session);
-        when(servletRequest.getSession(eq(false))).thenReturn(session);
-        when(servletRequest.getParameter(OBJECTID_PARAMETER)).thenReturn(null);
+        when(servletRequest.getSession(anyBoolean())).thenReturn(session);
+        when(servletRequest.getParameter(OBJECTID_PARAMETER)).thenReturn(null); // The important part. Null differs from "123".
 
         // When
         sessionFilter.doFilter(servletRequest, servletResponse, filterChain);

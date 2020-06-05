@@ -95,4 +95,8 @@
 
     <task:annotation-driven executor="oneThreadExecutor"/>
     <task:executor id="oneThreadExecutor" pool-size="1"/>
+
+    <bean class="se._1177.lmn.configuration.session.RedisSessionConfig"/>
+<!--    <bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"/>-->
+<!--    <bean class="org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory"/>-->
 </beans>

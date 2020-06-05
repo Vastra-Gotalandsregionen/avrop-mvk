@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Map;
 
 /**
@@ -53,7 +54,6 @@ public class SessionFilter implements Filter {
         request.setCharacterEncoding("UTF-8");
 
         String requestURI = request.getRequestURI();
-        LOGGER.debug("RequestURI: " + requestURI);
 
         String contextPath = request.getContextPath();
         String resourcePath = contextPath + "/javax.faces.resource/";
@@ -66,15 +66,37 @@ public class SessionFilter implements Filter {
 
         String subjectSerialNumber = request.getHeader(USER_ID_HEADER);
 
-        handleSessionInvalidation(request, subjectSerialNumber);
+        boolean redirect = false;
+        try {
+            handleSessionInvalidation(request, subjectSerialNumber);
 
-        boolean redirect = redirectIfInappropriateRequest(request, response);
+            redirect = redirectIfInappropriateRequest(request, response);
+        } catch (Exception e) {
+            LOGGER.error(e.getLocalizedMessage(), e);
+            redirectToOrderPage(request, response);
+            return;
+        }
 
         if (redirect) {
             return;
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
+
+        touchSessionObjects(request);
+    }
+
+    private void touchSessionObjects(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Enumeration<String> attributeNames = session.getAttributeNames();
+
+        while (attributeNames.hasMoreElements()) {
+            String element = attributeNames.nextElement();
+
+//            if (element.startsWith("scopedTarget")) {
+                session.setAttribute(element, session.getAttribute(element));
+//            }
+        }
     }
 
     private boolean redirectIfInappropriateRequest(HttpServletRequest request, HttpServletResponse response)
@@ -129,11 +151,12 @@ public class SessionFilter implements Filter {
 
     // If any of the session attributes have changed invalidate session to start all over.
     private void handleSessionInvalidation(HttpServletRequest request, String subjectSerialNumber) {
-        String sessionSubjectSerialNumber = (String) request.getSession().getAttribute(USER_ID_HEADER);
+        HttpSession session = request.getSession();
+        String sessionSubjectSerialNumber = (String) session.getAttribute(USER_ID_HEADER);
 
         if (sessionSubjectSerialNumber != null && !sessionSubjectSerialNumber.equals(subjectSerialNumber)) {
             // A new user has logged in. Reset session.
-            request.getSession().invalidate();
+            session = resetSession(request, session);
         }
 
         String objectIdFromRequestParam = request.getParameter(OBJECTID_PARAMETER);
@@ -142,32 +165,37 @@ public class SessionFilter implements Filter {
             objectIdFromRequestParam = null;
         }
 
-        String sessionObjectId = (String) request.getSession().getAttribute(OBJECTID_PARAMETER);
-        String sessionShibSessionId = (String) request.getSession().getAttribute(SHIB_SESSION_ID_HEADER);
+        String sessionObjectId = (String) session.getAttribute(OBJECTID_PARAMETER);
+        String sessionShibSessionId = (String) session.getAttribute(SHIB_SESSION_ID_HEADER);
 
         String shibSessionIdFromRequest = request.getHeader(SHIB_SESSION_ID_HEADER);
 
-        if (!EqualsBuilder.reflectionEquals(sessionShibSessionId, shibSessionIdFromRequest)) {
-            request.getSession().invalidate();
+        if (!new EqualsBuilder().append(sessionShibSessionId, shibSessionIdFromRequest).isEquals()) {
+            session = resetSession(request, session);
         }
 
         if (objectIdFromRequestParam != null && !objectIdFromRequestParam.equals(sessionObjectId)) {
-            request.getSession().invalidate();
-            request.getSession().setAttribute(OBJECTID_PARAMETER, objectIdFromRequestParam);
+            session = resetSession(request, session);
+            session.setAttribute(OBJECTID_PARAMETER, objectIdFromRequestParam);
         } else if (request.getRequestURI().endsWith(START_PAGE_SUFFIX)) {
             // It is normal that objectIdFromRequestParam is null when page isn't the start page but on the start page
             // the object id should always be passed if it exists.
-            if (!EqualsBuilder.reflectionEquals(objectIdFromRequestParam, sessionObjectId)) {
-                request.getSession().invalidate();
-                request.getSession().setAttribute(OBJECTID_PARAMETER, objectIdFromRequestParam);
+            if (!new EqualsBuilder().append(objectIdFromRequestParam, sessionObjectId).isEquals()) {
+                session = resetSession(request, session);
+                session.setAttribute(OBJECTID_PARAMETER, objectIdFromRequestParam);
             }
         }
 
-        request.getSession().setAttribute(SHIB_SESSION_ID_HEADER, shibSessionIdFromRequest);
-        request.getSession().setAttribute(USER_ID_HEADER, subjectSerialNumber);
+        session.setAttribute(SHIB_SESSION_ID_HEADER, shibSessionIdFromRequest);
+        session.setAttribute(USER_ID_HEADER, subjectSerialNumber);
     }
 
     public void destroy() {
 
+    }
+
+    private HttpSession resetSession(HttpServletRequest request, HttpSession session) {
+        session.invalidate();
+        return request.getSession(true);
     }
 }

@@ -37,10 +37,10 @@ public class CollectDeliveryController4Test {
         collectDeliveryController = new CollectDeliveryController();
         prescriptionItemInfo = new PrescriptionItemInfo();
 
-        Field preferredDeliveryNotificationMethod = collectDeliveryController.getClass()
+        Field preferredDeliveryNotificationMethod = collectDeliveryController.sessionData.getClass()
                 .getDeclaredField("preferredDeliveryNotificationMethod");
         preferredDeliveryNotificationMethod.setAccessible(true);
-        preferredDeliveryNotificationMethod.set(collectDeliveryController, DeliveryNotificationMethodEnum.SMS);
+        preferredDeliveryNotificationMethod.set(collectDeliveryController.sessionData, DeliveryNotificationMethodEnum.SMS);
 
         Field prescriptionItemInfoField = collectDeliveryController.getClass()
                 .getDeclaredField("prescriptionItemInfo");
@@ -108,10 +108,10 @@ public class CollectDeliveryController4Test {
         deliveryMethodForEachItem.put(item2, "UTLÄMNINGSSTÄLLE");
 
         DeliveryController deliveryController = new DeliveryController();
-        Field deliveryMethodForEachItemField = deliveryController.getClass()
+        Field deliveryMethodForEachItemField = deliveryController.sessionData.getClass()
                 .getDeclaredField("deliveryMethodForEachItem");
         deliveryMethodForEachItemField.setAccessible(true);
-        deliveryMethodForEachItemField.set(deliveryController, deliveryMethodForEachItem);
+        deliveryMethodForEachItemField.set(deliveryController.sessionData, deliveryMethodForEachItem);
 
         Field cartFieldOnDeliveryController = deliveryController.getClass().getDeclaredField("cart");
         cartFieldOnDeliveryController.setAccessible(true);
