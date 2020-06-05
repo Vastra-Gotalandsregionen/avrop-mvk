@@ -102,6 +102,8 @@ public class SessionFilterTest {
         when(session.getAttribute(OBJECTID_PARAMETER)).thenReturn(shibbolethSessionId);
         when(session.getAttributeNames()).thenReturn(emptyEnumeration);
 
+        HttpSession newSession = mock(HttpSession.class);
+
         when(servletRequest.getHeader(USER_ID_HEADER)).thenReturn(SUBJECT_SERIAL_NUMBER);
         when(servletRequest.getHeader(SHIB_SESSION_ID_HEADER)).thenReturn("newSessionId"); // The important detail
         when(servletRequest.getContextPath()).thenReturn("/contextPath");
@@ -109,6 +111,7 @@ public class SessionFilterTest {
         when(servletRequest.getServletPath()).thenReturn("/somePage.xhtml");
         when(servletRequest.getSession()).thenReturn(session);
         when(servletRequest.getSession(eq(false))).thenReturn(session);
+        when(servletRequest.getSession(eq(true))).thenReturn(newSession);
 
         // When
         sessionFilter.doFilter(servletRequest, servletResponse, filterChain);
@@ -144,6 +147,8 @@ public class SessionFilterTest {
         when(session.getAttribute(OBJECTID_PARAMETER)).thenReturn(shibbolethSessionId);
         when(session.getAttributeNames()).thenReturn(emptyEnumeration);
 
+        HttpSession newSession = mock(HttpSession.class);
+
         when(servletRequest.getHeader(USER_ID_HEADER)).thenReturn(SUBJECT_SERIAL_NUMBER);
         when(servletRequest.getHeader(SHIB_SESSION_ID_HEADER)).thenReturn(shibbolethSessionId);
         when(servletRequest.getContextPath()).thenReturn("/contextPath");
@@ -151,6 +156,7 @@ public class SessionFilterTest {
         when(servletRequest.getServletPath()).thenReturn("/somePage.xhtml");
         when(servletRequest.getSession()).thenReturn(session);
         when(servletRequest.getSession(eq(false))).thenReturn(session);
+        when(servletRequest.getSession(eq(true))).thenReturn(newSession);
         when(servletRequest.getParameter(OBJECTID_PARAMETER)).thenReturn("newSessionId"); // The important detail
 
         // When
@@ -187,6 +193,8 @@ public class SessionFilterTest {
         when(session.getAttribute(OBJECTID_PARAMETER)).thenReturn(shibbolethSessionId);
         when(session.getAttributeNames()).thenReturn(emptyEnumeration);
 
+        HttpSession newSession = mock(HttpSession.class);
+
         when(servletRequest.getHeader(USER_ID_HEADER)).thenReturn(SUBJECT_SERIAL_NUMBER);
         when(servletRequest.getHeader(SHIB_SESSION_ID_HEADER)).thenReturn(shibbolethSessionId);
         when(servletRequest.getContextPath()).thenReturn("/contextPath");
@@ -194,6 +202,7 @@ public class SessionFilterTest {
         when(servletRequest.getServletPath()).thenReturn("/somePage.xhtml");
         when(servletRequest.getSession()).thenReturn(session);
         when(servletRequest.getSession(eq(false))).thenReturn(session);
+        when(servletRequest.getSession(eq(true))).thenReturn(newSession);
 
         // When
         sessionFilter.doFilter(servletRequest, servletResponse, filterChain);
