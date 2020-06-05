@@ -41,10 +41,10 @@ public class CollectDeliveryController3Test {
         collectDeliveryController = new CollectDeliveryController();
         prescriptionItemInfo = new PrescriptionItemInfo();
 
-        Field preferredDeliveryNotificationMethod = collectDeliveryController.getClass()
+        Field preferredDeliveryNotificationMethod = collectDeliveryController.sessionData.getClass()
                 .getDeclaredField("preferredDeliveryNotificationMethod");
         preferredDeliveryNotificationMethod.setAccessible(true);
-        preferredDeliveryNotificationMethod.set(collectDeliveryController, SMS);
+        preferredDeliveryNotificationMethod.set(collectDeliveryController.sessionData, SMS);
 
         Field prescriptionItemInfoField = collectDeliveryController.getClass()
                 .getDeclaredField("prescriptionItemInfo");
@@ -154,16 +154,17 @@ public class CollectDeliveryController3Test {
         deliveryMethodForEachItem.put(item3, "HEMLEVERANS");
 
         DeliveryController deliveryController = new DeliveryController();
-        Field deliveryMethodForEachItemField = deliveryController.getClass()
+        Field deliveryMethodForEachItemField = deliveryController.sessionData.getClass()
                 .getDeclaredField("deliveryMethodForEachItem");
         deliveryMethodForEachItemField.setAccessible(true);
-        deliveryMethodForEachItemField.set(deliveryController, deliveryMethodForEachItem);
+        deliveryMethodForEachItemField.set(deliveryController.sessionData, deliveryMethodForEachItem);
 
         Field cartFieldOnDeliveryController = deliveryController.getClass().getDeclaredField("cart");
         cartFieldOnDeliveryController.setAccessible(true);
         cartFieldOnDeliveryController.set(deliveryController, cart);
 
-        Field prescriptionItemInfoFieldOnDeliveryController = deliveryController.getClass().getDeclaredField("prescriptionItemInfo");
+        Field prescriptionItemInfoFieldOnDeliveryController = deliveryController.getClass()
+                .getDeclaredField("prescriptionItemInfo");
         prescriptionItemInfoFieldOnDeliveryController.setAccessible(true);
         prescriptionItemInfoFieldOnDeliveryController.set(deliveryController, prescriptionItemInfo);
 

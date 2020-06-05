@@ -5,6 +5,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import riv.crm.selfservice.medicalsupply._1.OrderRowType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
  */
 @Component
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class Cart {
+public class Cart implements Serializable {
 
     private List<OrderRowType> orderRows = new ArrayList<>();
 
@@ -43,4 +44,30 @@ public class Cart {
 
         return null;
     }
+
+    /*@Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        RegisterMedicalSupplyOrderType registerMedicalSupplyOrderType = new riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.ObjectFactory().createRegisterMedicalSupplyOrderType();
+        OrderType order = new OrderType();
+        order.getOrderRow().addAll(orderRows);
+        registerMedicalSupplyOrderType.setOrder(order);
+
+        JAXBElement<RegisterMedicalSupplyOrderType> registerMedicalSupplyOrder = new riv.crm.selfservice.medicalsupply.registermedicalsupplyorderresponder._1.ObjectFactory().createRegisterMedicalSupplyOrder(registerMedicalSupplyOrderType);
+
+       *//* registerMedicalSupplyOrder.
+
+        new ObjectFactory().
+        OrderType orderType = new JAXBElement<OrderType>()new ObjectFactory().createOrderType();
+        orderType.getOrderRow().addAll(orderRows);*//*
+        out.writeObject(objectToXML(registerMedicalSupplyOrder));
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        RegisterMedicalSupplyOrderType registerMedicalSupplyOrderType = readObject(in, RegisterMedicalSupplyOrderType.class);
+
+        if (registerMedicalSupplyOrderType != null) {
+            orderRows = registerMedicalSupplyOrderType.getOrder().getOrderRow();
+        }
+    }*/
 }

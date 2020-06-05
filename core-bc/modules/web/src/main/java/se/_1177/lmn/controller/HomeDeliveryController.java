@@ -1,5 +1,6 @@
 package se._1177.lmn.controller;
 
+import lombok.val;
 import mvk.itintegration.userprofile._2.UserProfileType;
 import org.apache.commons.lang3.BooleanUtils;
 import org.slf4j.Logger;
@@ -15,10 +16,13 @@ import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
 import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
 import riv.crm.selfservice.medicalsupply._1.OrderRowType;
 import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import se._1177.lmn.controller.model.AddressModel;
 import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.controller.model.HomeDeliveryNotificationModel;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
-import se._1177.lmn.controller.model.AddressModel;
+import se._1177.lmn.controller.session.HomeDeliveryControllerSession;
+import se._1177.lmn.model.NotificationOrDoorDelivery;
+import se._1177.lmn.model.NotificationVariant;
 import se._1177.lmn.service.util.Util;
 
 import javax.annotation.PostConstruct;
@@ -31,19 +35,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum.BREV;
-import static se._1177.lmn.controller.HomeDeliveryController.NotificationOrDoorDelivery.DOOR;
-import static se._1177.lmn.controller.HomeDeliveryController.NotificationOrDoorDelivery.NOTIFICATION;
-import static se._1177.lmn.controller.HomeDeliveryController.NotificationVariant.BOTH_WITH_AND_WITHOUT_NOTIFICATION;
-import static se._1177.lmn.controller.HomeDeliveryController.NotificationVariant.WITHOUT_NOTIFICATION;
-import static se._1177.lmn.controller.HomeDeliveryController.NotificationVariant.WITH_NOTIFICATION;
+import static riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum.*;
+import static se._1177.lmn.model.NotificationOrDoorDelivery.DOOR;
+import static se._1177.lmn.model.NotificationOrDoorDelivery.NOTIFICATION;
+import static se._1177.lmn.model.NotificationVariant.*;
 import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
 
 /**
  * @author Patrik Björk
  */
 @Component
-@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class HomeDeliveryController {
 
     public static final String VIEW_NAME = "Hemleverans eller annan leveransadress";
@@ -65,51 +67,38 @@ public class HomeDeliveryController {
     @Autowired
     private NavigationController navigationController;
 
-    private AddressModel addressModel;
-
-    private boolean nextViewIsCollectDelivery;
-
-    private DeliveryNotificationMethodEnum preferredDeliveryNotificationMethod;
-
-    private String smsNumber;
-    private String email;
-
-    private String deliveryComment;
-
-    private NotificationOrDoorDelivery notificationOrDoorDelivery;
-
-    private List<PrescriptionItemType> notificationOptional;
-    private List<PrescriptionItemType> notificationMandatory;
-    private List<PrescriptionItemType> notificationUnavailable;
-
-    private HomeDeliveryNotificationModel notificationOptionalModel;
-    private HomeDeliveryNotificationModel notificationMandatoryModel;
+    @Autowired
+    private HomeDeliveryControllerSession sessionData;
 
     @PostConstruct
     public void init() {
-        addressModel = new AddressModel(userProfileController);
-        addressModel.init();
+        if (!sessionData.isInited()) {
+            sessionData.setAddressModel(new AddressModel());
+            sessionData.getAddressModel().init(userProfileController);
 
-        UserProfileType userProfile = userProfileController.getUserProfile();
+            UserProfileType userProfile = userProfileController.getUserProfile();
 
-        if (userProfile != null) {
+            if (userProfile != null) {
 
-            if (userProfile.isHasSmsNotification() != null && userProfile.isHasSmsNotification()) {
-                preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.SMS;
-            } else if (userProfile.isHasMailNotification() != null && userProfile.isHasMailNotification()) {
-                preferredDeliveryNotificationMethod = DeliveryNotificationMethodEnum.E_POST;
+                if (userProfile.isHasSmsNotification() != null && userProfile.isHasSmsNotification()) {
+                    sessionData.setPreferredDeliveryNotificationMethod(SMS);
+                } else if (userProfile.isHasMailNotification() != null && userProfile.isHasMailNotification()) {
+                    sessionData.setPreferredDeliveryNotificationMethod(E_POST);
+                } else {
+                    sessionData.setPreferredDeliveryNotificationMethod(BREV);
+                }
+
+                sessionData.setSmsNumber(userProfile.getMobilePhoneNumber());
+                sessionData.setEmail(userProfile.getEmail());
+
             } else {
-                preferredDeliveryNotificationMethod = BREV;
+                sessionData.setPreferredDeliveryNotificationMethod(BREV);
             }
 
-            smsNumber = userProfile.getMobilePhoneNumber();
-            email = userProfile.getEmail();
+            initNotificationGroups();
 
-        } else {
-            preferredDeliveryNotificationMethod = BREV;
+            sessionData.setInited(true);
         }
-
-        initNotificationGroups();
     }
 
     public void initNotificationGroups() {
@@ -141,23 +130,32 @@ public class HomeDeliveryController {
                     }
                 });
 
-        this.notificationOptional = notificationOptional;
-        this.notificationMandatory = notificationMandatory;
-        this.notificationUnavailable = notificationUnavailable;
+        sessionData.setNotificationOptional(notificationOptional);
+        sessionData.setNotificationMandatory(notificationMandatory);
+        sessionData.setNotificationUnavailable(notificationUnavailable);
+
+        HomeDeliveryNotificationModel notificationOptionalModel = sessionData.getNotificationOptionalModel();
+        DeliveryNotificationMethodEnum preferredDeliveryNotificationMethod = sessionData
+                .getPreferredDeliveryNotificationMethod();
+        String smsNumber = sessionData.getSmsNumber();
+        String email = sessionData.getEmail();
+        HomeDeliveryNotificationModel notificationMandatoryModel = sessionData.getNotificationMandatoryModel();
 
         String previousPhoneNumber = notificationOptionalModel != null ? notificationOptionalModel.getPhoneNumber()
                 : null;
 
-        notificationOptionalModel =
+        sessionData.setNotificationOptionalModel(
                 new HomeDeliveryNotificationModel(notificationOptional, preferredDeliveryNotificationMethod, smsNumber,
-                        email, previousPhoneNumber, "homeDeliveryForm:optional:notificationMethodRepeat:");
+                        email, previousPhoneNumber, "homeDeliveryForm:optional:notificationMethodRepeat:")
+        );
 
         previousPhoneNumber = notificationMandatoryModel != null ? notificationMandatoryModel.getPhoneNumber()
                 : null;
 
-        notificationMandatoryModel =
+        sessionData.setNotificationMandatoryModel(
                 new HomeDeliveryNotificationModel(notificationMandatory, preferredDeliveryNotificationMethod, smsNumber,
-                        email, previousPhoneNumber, "homeDeliveryForm:mandatory:notificationMethodRepeat:");
+                        email, previousPhoneNumber, "homeDeliveryForm:mandatory:notificationMethodRepeat:")
+        );
     }
 
 
@@ -173,7 +171,10 @@ public class HomeDeliveryController {
     public String toVerifyDelivery() {
 
         boolean validateOptionalModel;
-        if (getNotificationOptional().size() > 0) {
+        if (sessionData.getNotificationOptional().size() > 0) {
+            NotificationOrDoorDelivery notificationOrDoorDelivery = sessionData.getNotificationOrDoorDelivery();
+            HomeDeliveryNotificationModel notificationOptionalModel = sessionData.getNotificationOptionalModel();
+
             if (notificationOrDoorDelivery == null) {
                 addMessage("Val av Leverans utanför dörren eller Avisering saknas", "notificationOrDoorDelivery");
                 return "homeDelivery";
@@ -187,7 +188,7 @@ public class HomeDeliveryController {
             validateOptionalModel = true;
         }
 
-        boolean validateMandatoryModel = notificationMandatoryModel.validateNotificationInput();
+        boolean validateMandatoryModel = sessionData.getNotificationMandatoryModel().validateNotificationInput();
 
         boolean success = validateOptionalModel
                 && validateMandatoryModel;
@@ -211,6 +212,8 @@ public class HomeDeliveryController {
 
             String deliveryMethodId = findTheDeliveryMethodId(item, notificationVariant, deliveryChoice);
 
+            AddressModel addressModel = sessionData.getAddressModel();
+
             AddressType address = new AddressType();
             address.setCareOfAddress(addressModel.getCoAddress());
             address.setCity(addressModel.getCity());
@@ -223,7 +226,7 @@ public class HomeDeliveryController {
             deliveryChoice.setHomeDeliveryAddress(address);
             deliveryChoice.setDeliveryMethodId(deliveryMethodId);
 
-            deliveryChoice.setDeliveryComment(deliveryComment);
+            deliveryChoice.setDeliveryComment(sessionData.getDeliveryComment());
 
             String notificationMethod;
             String smsNumber;
@@ -232,7 +235,11 @@ public class HomeDeliveryController {
 
             switch (notificationVariant) {
                 case BOTH_WITH_AND_WITHOUT_NOTIFICATION:
-                    if (notificationOrDoorDelivery.equals(NOTIFICATION)) {
+                    if (sessionData.getNotificationOrDoorDelivery().equals(NOTIFICATION)) {
+
+                        HomeDeliveryNotificationModel notificationOptionalModel = sessionData
+                                .getNotificationOptionalModel();
+
                         notificationMethod = notificationOptionalModel.getChosenDeliveryNotificationMethod(item);
                         smsNumber = notificationOptionalModel.getSmsNumber();
                         email = notificationOptionalModel.getEmail();
@@ -245,6 +252,9 @@ public class HomeDeliveryController {
                     }
                     break;
                 case WITH_NOTIFICATION:
+                    HomeDeliveryNotificationModel notificationMandatoryModel = sessionData
+                            .getNotificationMandatoryModel();
+
                     notificationMethod = notificationMandatoryModel.getChosenDeliveryNotificationMethod(item);
                     smsNumber = notificationMandatoryModel.getSmsNumber();
                     email = notificationMandatoryModel.getEmail();
@@ -284,7 +294,7 @@ public class HomeDeliveryController {
             }
         });
 
-        if (nextViewIsCollectDelivery) {
+        if (sessionData.isNextViewIsCollectDelivery()) {
             return navigationController.gotoView("collectDelivery" + ACTION_SUFFIX, CollectDeliveryController.VIEW_NAME);
         } else if (anyItemHasAllowOtherInvoiceAddress()) {
             return navigationController.gotoView("invoiceAddress" + ACTION_SUFFIX, InvoiceAddressController.VIEW_NAME);
@@ -342,11 +352,11 @@ public class HomeDeliveryController {
 
             boolean notificationOptionalWithNotificationMatches =
                     notificationVariant.equals(BOTH_WITH_AND_WITHOUT_NOTIFICATION)
-                            && notificationOrDoorDelivery.equals(NOTIFICATION) && size > 0;
+                            && sessionData.getNotificationOrDoorDelivery().equals(NOTIFICATION) && size > 0;
 
             boolean notificationOptionalWithoutNotificationMatches =
                     notificationVariant.equals(BOTH_WITH_AND_WITHOUT_NOTIFICATION)
-                            && notificationOrDoorDelivery.equals(DOOR) && size == 0;
+                            && sessionData.getNotificationOrDoorDelivery().equals(DOOR) && size == 0;
 
             boolean notificationMatches = notificationUnavailableMatches
                     || notificationMandatoryMatches
@@ -368,16 +378,17 @@ public class HomeDeliveryController {
     public Map<PrescriptionItemType, String> getChosenDeliveryNotificationMethod() {
         Map<PrescriptionItemType, String> aggregated = new HashMap<>();
 
-        if (NOTIFICATION.equals(notificationOrDoorDelivery)) {
-            aggregated.putAll(notificationOptionalModel.getChosenDeliveryNotificationMethod());
+        if (NOTIFICATION.equals(sessionData.getNotificationOrDoorDelivery())) {
+            aggregated.putAll(sessionData.getNotificationOptionalModel().getChosenDeliveryNotificationMethod());
         }
 
-        aggregated.putAll(notificationMandatoryModel.getChosenDeliveryNotificationMethod());
+        aggregated.putAll(sessionData.getNotificationMandatoryModel().getChosenDeliveryNotificationMethod());
 
         return aggregated;
     }
 
     public String getNotifacationReceiver(PrescriptionItemType item) {
+        HomeDeliveryNotificationModel notificationMandatoryModel = sessionData.getNotificationMandatoryModel();
         String method = notificationMandatoryModel.getChosenDeliveryNotificationMethod(item);
         if (method != null) {
             // The item is on the mandatory model
@@ -389,10 +400,13 @@ public class HomeDeliveryController {
                 case "E_POST":
                     return notificationMandatoryModel.getEmail();
                 default:
-                    throw new IllegalArgumentException("This method is not expected to be called when other notification methods are chosen.");
+                    throw new IllegalArgumentException(
+                            "This method is not expected to be called when other notification methods are chosen."
+                    );
             }
         }
 
+        HomeDeliveryNotificationModel notificationOptionalModel = sessionData.getNotificationOptionalModel();
         method = notificationOptionalModel.getChosenDeliveryNotificationMethod(item);
         if (method != null) {
             // The item is on the mandatory model
@@ -404,7 +418,9 @@ public class HomeDeliveryController {
                 case "E_POST":
                     return notificationOptionalModel.getEmail();
                 default:
-                    throw new IllegalArgumentException("This method is not expected to be called when other notification methods are chosen.");
+                    throw new IllegalArgumentException(
+                            "This method is not expected to be called when other notification methods are chosen."
+                    );
             }
         }
 
@@ -413,43 +429,43 @@ public class HomeDeliveryController {
 
     void resetChoices() {
         initNotificationGroups();
-        notificationOrDoorDelivery = null;
+        sessionData.setNotificationOrDoorDelivery(null);
     }
 
     void setNextViewIsCollectDelivery(boolean nextViewIsCollectDelivery) {
-        this.nextViewIsCollectDelivery = nextViewIsCollectDelivery;
+        sessionData.setNextViewIsCollectDelivery(nextViewIsCollectDelivery);
     }
 
     public AddressModel getAddressModel() {
-        return addressModel;
+        return sessionData.getAddressModel();
     }
 
     public void setAddressModel(AddressModel addressModel) {
-        this.addressModel = addressModel;
+        sessionData.setAddressModel(addressModel);
     }
 
     public String getSmsNumber() {
-        return smsNumber;
+        return sessionData.getSmsNumber();
     }
 
     public void setSmsNumber(String smsNumber) {
-        this.smsNumber = smsNumber;
+        sessionData.setSmsNumber(smsNumber);
     }
 
     public String getEmail() {
-        return email;
+        return sessionData.getEmail();
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        sessionData.setEmail(email);
     }
 
     public NotificationOrDoorDelivery getNotificationOrDoorDelivery() {
-        return notificationOrDoorDelivery;
+        return sessionData.getNotificationOrDoorDelivery();
     }
 
     public void setNotificationOrDoorDelivery(NotificationOrDoorDelivery notificationOrDoorDelivery) {
-        this.notificationOrDoorDelivery = notificationOrDoorDelivery;
+        sessionData.setNotificationOrDoorDelivery(notificationOrDoorDelivery);
     }
 
     public NotificationVariant hasWithAndWithoutNotificationForHomeDelivery(PrescriptionItemType prescriptionItemType) {
@@ -488,31 +504,31 @@ public class HomeDeliveryController {
     }
 
     public List<PrescriptionItemType> getNotificationOptional() {
-        return notificationOptional;
+        return sessionData.getNotificationOptional();
     }
 
     public List<PrescriptionItemType> getNotificationMandatory() {
-        return notificationMandatory;
+        return sessionData.getNotificationMandatory();
     }
 
     public List<PrescriptionItemType> getNotificationUnavailable() {
-        return notificationUnavailable;
+        return sessionData.getNotificationUnavailable();
     }
 
     public HomeDeliveryNotificationModel getNotificationOptionalModel() {
-        return notificationOptionalModel;
+        return sessionData.getNotificationOptionalModel();
     }
 
     public void setNotificationOptionalModel(HomeDeliveryNotificationModel notificationOptionalModel) {
-        this.notificationOptionalModel = notificationOptionalModel;
+        sessionData.setNotificationOptionalModel(notificationOptionalModel);
     }
 
     public HomeDeliveryNotificationModel getNotificationMandatoryModel() {
-        return notificationMandatoryModel;
+        return sessionData.getNotificationMandatoryModel();
     }
 
     public void setNotificationMandatoryModel(HomeDeliveryNotificationModel notificationMandatoryModel) {
-        this.notificationMandatoryModel = notificationMandatoryModel;
+        sessionData.setNotificationMandatoryModel(notificationMandatoryModel);
     }
 
     public Boolean isMultipleGroups() {
@@ -538,22 +554,15 @@ public class HomeDeliveryController {
     }
 
     public String getDeliveryComment() {
-        return deliveryComment;
+        return sessionData.getDeliveryComment();
     }
 
     public void setDeliveryComment(String deliveryComment) {
-        this.deliveryComment = deliveryComment;
+        sessionData.setDeliveryComment(deliveryComment);
     }
 
     public String getViewName() {
         return VIEW_NAME;
     }
 
-    static enum NotificationVariant {
-        WITH_NOTIFICATION, WITHOUT_NOTIFICATION, BOTH_WITH_AND_WITHOUT_NOTIFICATION
-    }
-
-    static enum NotificationOrDoorDelivery {
-        NOTIFICATION, DOOR
-    }
 }

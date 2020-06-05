@@ -63,6 +63,11 @@ public class LmnServiceRoutingImpl implements LmnService {
     }
 
     @Override
+    public String getLogicalAddress() {
+        return getContextLmnService().getLogicalAddress();
+    }
+
+    @Override
     public boolean getDefaultSelectedPrescriptions() {
         return getContextLmnService().getDefaultSelectedPrescriptions();
     }

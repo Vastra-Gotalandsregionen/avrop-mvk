@@ -14,9 +14,21 @@
     </listener>
 
     <!--- The RequestContextListener gets rid of a WARN log message which occurs often otherwise. -->
-    <listener>
+    <!-- Keeping this leads to a jsessionid in addition to sessionid cookie-->
+    <!--<listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-    </listener>
+    </listener>-->
+
+    <filter>
+        <filter-name>springSessionRepositoryFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSessionRepositoryFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
 
     <servlet>
         <servlet-name>FacesServlet</servlet-name>
@@ -67,4 +79,9 @@
         <location>/error.xhtml</location>
     </error-page>
 
+    <!--<session-config>
+        <cookie-config>
+            <name>JSESSIONID</name>
+        </cookie-config>
+    </session-config>-->
 </web-app>

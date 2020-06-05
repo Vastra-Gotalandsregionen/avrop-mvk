@@ -4,6 +4,7 @@ import riv.crm.selfservice.medicalsupply._1.OrderItemType;
 import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsResponseType;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ import java.util.Map;
  *
  * @author Patrik Björk
  */
-public class MedicalSupplyPrescriptionsHolder {
+public class MedicalSupplyPrescriptionsHolder implements Serializable {
 
     public List<PrescriptionItemType> orderable;
     public List<PrescriptionItemType> noLongerOrderable;
@@ -53,4 +54,23 @@ public class MedicalSupplyPrescriptionsHolder {
 
         this.latestOrderItemsByArticleNoAndPrescriptionItem = latestOrderItemsByArticleNoAndPrescriptionItem;
     }
+
+    /*@Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        List<String> orderables = this.orderable.stream().map(JaxbUtil::objectToXml).collect(Collectors.toList());
+
+        List<String> noLongerOrderables = this.noLongerOrderable.stream().map(JaxbUtil::objectToXml).collect(Collectors.toList());
+
+        JAXBElement<GetMedicalSupplyPrescriptionsResponseType> jaxbElement = new ObjectFactory()
+                .createGetMedicalSupplyPrescriptionsResponse(supplyPrescriptionsResponse);
+
+        out.writeObject(orderables);
+        out.writeObject(noLongerOrderables);
+        out.writeObject(JaxbUtil.objectToXML(jaxbElement));
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+
+    }*/
 }

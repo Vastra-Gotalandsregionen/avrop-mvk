@@ -14,6 +14,7 @@ import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
 import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
 import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
+import se._1177.lmn.controller.session.DeliveryControllerSession;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -35,7 +36,7 @@ import static se._1177.lmn.service.util.Constants.ACTION_SUFFIX;
  * @author Patrik Björk
  */
 @Component
-@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class DeliveryController {
 
     public static final String VIEW_NAME = "Leveranssätt";
@@ -63,12 +64,15 @@ public class DeliveryController {
     @Autowired
     private NavigationController navigationController;
 
-    private DeliveryMethodEnum deliveryMethod = null;
+    @Autowired
+    DeliveryControllerSession sessionData = new DeliveryControllerSession();
+
+    /*private DeliveryMethodEnum deliveryMethod = null;
     private boolean userNeedsToChooseDeliveryMethodForEachItem;
     private Set<DeliveryMethodEnum> possibleDeliveryMethodsFittingAllItems;
 
     // Chosen delivery method for each item
-    private Map<PrescriptionItemType, String> deliveryMethodForEachItem = new HashMap<>();
+    private Map<PrescriptionItemType, String> deliveryMethodForEachItem = new HashMap<>();*/
 
     /**
      * If both methods are available, choose UTLÄMNINGSSTÄLLE since that is preferred by design. If only one method is
@@ -80,18 +84,18 @@ public class DeliveryController {
 
         // First, check if only one choice is possible. If so, choose that.
         if (anyDeliveryMethodFitsAll()) {
-            if (possibleDeliveryMethodsFittingAllItems.contains(DeliveryMethodEnum.HEMLEVERANS) &&
-                    !possibleDeliveryMethodsFittingAllItems.contains(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)) {
+            if (sessionData.getPossibleDeliveryMethodsFittingAllItems().contains(DeliveryMethodEnum.HEMLEVERANS) &&
+                    !getPossibleDeliveryMethodsFittingAllItems().contains(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)) {
                 return DeliveryMethodEnum.HEMLEVERANS;
-            } else if (possibleDeliveryMethodsFittingAllItems.contains(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE) &&
-                    !possibleDeliveryMethodsFittingAllItems.contains(DeliveryMethodEnum.HEMLEVERANS)) {
+            } else if (getPossibleDeliveryMethodsFittingAllItems().contains(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE) &&
+                    !getPossibleDeliveryMethodsFittingAllItems().contains(DeliveryMethodEnum.HEMLEVERANS)) {
                 return DeliveryMethodEnum.UTLÄMNINGSSTÄLLE;
-            } else if (deliveryMethod == null
-                    && possibleDeliveryMethodsFittingAllItems.contains(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)) {
+            } else if (sessionData.getDeliveryMethod() == null
+                    && getPossibleDeliveryMethodsFittingAllItems().contains(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE)) {
                 // If no deliveryMethod is chosen yet and UTLÄMNINGSSTÄLLE is available, make that default choice.
                 return DeliveryMethodEnum.UTLÄMNINGSSTÄLLE;
             } else {
-                return deliveryMethod;
+                return sessionData.getDeliveryMethod();
             }
         }
 
@@ -106,8 +110,12 @@ public class DeliveryController {
             for (Map.Entry<PrescriptionItemType, String> entry : deliveryMethodForEachItem.entrySet()) {
                 entry.setValue(deliveryMethod.name());
             }
+
+            // Instead of relying on side-effects when we do entry.setValue()...
+            sessionData.setDeliveryMethodForEachItem(deliveryMethodForEachItem);
         }
-        this.deliveryMethod = deliveryMethod;
+
+        sessionData.setDeliveryMethod(deliveryMethod);
     }
 
     public DeliveryMethodEnum getUtlamningsstalleEnum() {
@@ -142,6 +150,7 @@ public class DeliveryController {
 
         if (anyDeliveryMethodFitsAll()) {
 
+            DeliveryMethodEnum deliveryMethod = sessionData.getDeliveryMethod();
             if (deliveryMethod == null) {
                 String msg = "Du måste välja leveranssätt.";
                 FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, msg,
@@ -150,6 +159,7 @@ public class DeliveryController {
                 return "delivery";
             }
 
+            // Reset choices since it's not sure the same options are available this time.
             homeDeliveryController.initNotificationGroups();
             collectDeliveryController.resetChoices();
 
@@ -253,21 +263,21 @@ public class DeliveryController {
     }
 
     public boolean isUserNeedsToChooseDeliveryMethodForEachItem() {
-        return userNeedsToChooseDeliveryMethodForEachItem;
+        return sessionData.isUserNeedsToChooseDeliveryMethodForEachItem();
     }
 
     public void setUserNeedsToChooseDeliveryMethodForEachItem(boolean userNeedsToChooseDeliveryMethodForEachItem) {
-        this.userNeedsToChooseDeliveryMethodForEachItem = userNeedsToChooseDeliveryMethodForEachItem;
+        sessionData.setUserNeedsToChooseDeliveryMethodForEachItem(userNeedsToChooseDeliveryMethodForEachItem);
     }
 
     public void setPossibleDeliveryMethodsFittingAllItems(
             Set<DeliveryMethodEnum> possibleDeliveryMethodsFittingAllItems) {
 
-        this.possibleDeliveryMethodsFittingAllItems = possibleDeliveryMethodsFittingAllItems;
+        sessionData.setPossibleDeliveryMethodsFittingAllItems(possibleDeliveryMethodsFittingAllItems);
     }
 
     public Set<DeliveryMethodEnum> getPossibleDeliveryMethodsFittingAllItems() {
-        return possibleDeliveryMethodsFittingAllItems;
+        return sessionData.getPossibleDeliveryMethodsFittingAllItems();
     }
 
     public Map<PrescriptionItemType, String> getDeliveryMethodForEachItem() {
@@ -275,6 +285,8 @@ public class DeliveryController {
         // Remove all which don't exist in cart since there may be remaining items from previous choices.
         List<PrescriptionItemType> prescriptionItemsInCart = prescriptionItemInfo
                 .getPrescriptionItems(cart.getOrderRows());
+
+        Map<PrescriptionItemType, String> deliveryMethodForEachItem = sessionData.getDeliveryMethodForEachItem();
 
         deliveryMethodForEachItem.keySet().retainAll(prescriptionItemsInCart);
 
@@ -325,7 +337,7 @@ public class DeliveryController {
     }
 
     public boolean deliveryMethodUsedForAnyItem(DeliveryMethodEnum deliveryMethod) {
-        return deliveryMethodForEachItem.values().contains(deliveryMethod.name());
+        return sessionData.getDeliveryMethodForEachItem().values().contains(deliveryMethod.name());
     }
 
     public Boolean anyDeliveryAlternativeHasDeliveryMethod(List<DeliveryAlternativeType> deliveryAlternatives,
@@ -340,6 +352,7 @@ public class DeliveryController {
     }
 
     public boolean anyDeliveryMethodFitsAll() {
+        Set<DeliveryMethodEnum> possibleDeliveryMethodsFittingAllItems = getPossibleDeliveryMethodsFittingAllItems();
         return possibleDeliveryMethodsFittingAllItems.contains(DeliveryMethodEnum.HEMLEVERANS)
                 ||
                 possibleDeliveryMethodsFittingAllItems.contains(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);

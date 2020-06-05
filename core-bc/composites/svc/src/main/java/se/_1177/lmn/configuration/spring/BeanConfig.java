@@ -3,11 +3,13 @@ package se._1177.lmn.configuration.spring;
 import org.apache.cxf.configuration.jsse.TLSClientParameters;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
-import org.apache.cxf.interceptor.LoggingInInterceptor;
-import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.transport.http.HTTPConduit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -41,6 +43,12 @@ public class BeanConfig {
     @Autowired
     private Environment env;
 
+    @Autowired
+    private ConfigurableListableBeanFactory beanFactory;
+
+    @Autowired
+    private DefaultListableBeanFactory defaultListableBeanFactory;
+
     private String sslTruststore;
     private String sslTruststorePassword;
 
@@ -55,8 +63,12 @@ public class BeanConfig {
         sslKeystorePassword = env.getProperty("ssl_keystore_password");
     }
 
-    @Bean
+    @Bean(name = "lmnService")
     public LmnService getLmnService() {
+        return new LmnServiceRoutingImpl(getStringLmnServiceMap());
+    }
+
+    public Map<String, LmnService> getStringLmnServiceMap() {
         Map<String, LmnService> countyCodeToLmnService = new HashMap<>();
 
         CountiesConfiguration countiesConfiguration = parseCountiesConfiguration();
@@ -71,19 +83,23 @@ public class BeanConfig {
             String receptionHsaId = county.getReceptionHsaId();
             boolean defaultSelectedPrescriptions = county.isDefaultSelectedPrescriptions();
 
-            LmnService vgrLmnService = new LmnServiceImpl(
-                    getMedicalSupplyDeliveryPointsResponderInterface(getMedicalSupplyDeliveryPointsAddress),
-                    getMedicalSupplyPrescriptionsResponderInterface(getMedicalSupplyPrescriptionsAddress),
-                    getRegisterMedicalSupplyOrderResponderInterface(registerMedicalSupplyOrderAddress),
-                    rtjpLogicalAddress,
-                    receptionHsaId,
-                    defaultSelectedPrescriptions
-            );
+            AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(LmnServiceImpl.class)
+                    .addConstructorArgValue(getMedicalSupplyDeliveryPointsResponderInterface(getMedicalSupplyDeliveryPointsAddress))
+                    .addConstructorArgValue(getMedicalSupplyPrescriptionsResponderInterface(getMedicalSupplyPrescriptionsAddress))
+                    .addConstructorArgValue(getRegisterMedicalSupplyOrderResponderInterface(registerMedicalSupplyOrderAddress))
+                    .addConstructorArgValue(rtjpLogicalAddress)
+                    .addConstructorArgValue(receptionHsaId)
+                    .addConstructorArgValue(defaultSelectedPrescriptions)
+                    .getBeanDefinition();
 
-            countyCodeToLmnService.put(countyCodeToCountEntry.getKey(), vgrLmnService);
+            String countyLmnServiceBeanName = "lmnService-" + countyCodeToCountEntry.getKey();
+            defaultListableBeanFactory.registerBeanDefinition(countyLmnServiceBeanName, beanDefinition);
+
+            LmnService bean = (LmnService) beanFactory.getBean(countyLmnServiceBeanName);
+
+            countyCodeToLmnService.put(countyCodeToCountEntry.getKey(), bean);
         }
-
-        return new LmnServiceRoutingImpl(countyCodeToLmnService);
+        return countyCodeToLmnService;
     }
 
     CountiesConfiguration parseCountiesConfiguration() {

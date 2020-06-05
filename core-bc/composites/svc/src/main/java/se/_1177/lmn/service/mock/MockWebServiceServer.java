@@ -19,31 +19,35 @@ public class MockWebServiceServer {
     }
 
     public static void publishEndpoints(int port) {
-        String endpointBase = "http://localhost:" + port;
+        try {
+            String endpointBase = "http://localhost:" + port;
 
-        endpoint1 = Endpoint.publish(
-                endpointBase + "/GetMedicalSupplyDeliveryPoints",
-                new MockGetMedicalSupplyDeliveryPointsResponder());
+            endpoint1 = Endpoint.publish(
+                    endpointBase + "/GetMedicalSupplyDeliveryPoints",
+                    new MockGetMedicalSupplyDeliveryPointsResponder());
 
-        endpoint2 = Endpoint.publish(
-                endpointBase + "/GetMedicalSupplyPrescriptions",
-                new MockGetMedicalSupplyPrescriptionsResponder());
+            endpoint2 = Endpoint.publish(
+                    endpointBase + "/GetMedicalSupplyPrescriptions",
+                    new MockGetMedicalSupplyPrescriptionsResponder());
 
-        endpoint3 = Endpoint.publish(
-                endpointBase + "/RegisterMedicalSupplyOrder",
-                new MockRegisterMedicalSupplyOrderResponder());
+            endpoint3 = Endpoint.publish(
+                    endpointBase + "/RegisterMedicalSupplyOrder",
+                    new MockRegisterMedicalSupplyOrderResponder());
 
-        endpoint4 = Endpoint.publish(
-                endpointBase + "/GetUserProfile",
-                new MockGetUserProfileResponder());
+            endpoint4 = Endpoint.publish(
+                    endpointBase + "/GetUserProfile",
+                    new MockGetUserProfileResponder());
 
-        endpoint5 = Endpoint.publish(
-                endpointBase + "/AddMessage",
-                new MockAddMessageResponder());
+            endpoint5 = Endpoint.publish(
+                    endpointBase + "/AddMessage",
+                    new MockAddMessageResponder());
 
-        endpoint6 = Endpoint.publish(
-                endpointBase + "/GetUserProfileByAgent",
-                new MockGetUserProfileByAgentResponder());
+            endpoint6 = Endpoint.publish(
+                    endpointBase + "/GetUserProfileByAgent",
+                    new MockGetUserProfileByAgentResponder());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

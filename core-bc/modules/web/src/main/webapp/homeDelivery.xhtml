@@ -141,7 +141,7 @@
                     <h:commandButton styleClass="button back-button full-page-submit" value="Bakåt" action="#{navigationController.goBack}" immediate="true"/>
                     <h:commandButton styleClass="button to-be-confirmed-submit-button" value="Nästa"
                                      action="#{homeDeliveryController.toVerifyDelivery}"/>
-                    <h:commandButton style="display: none" styleClass="button confirm-submit-button full-page-submit"
+                    <h:commandButton style="display: none" styleClass="button confirm-submit-button full-page-submit wait-for-ajax"
                                      value="Nästa"
                                      action="#{homeDeliveryController.toVerifyDelivery}"/>
                 </div>

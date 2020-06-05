@@ -111,6 +111,7 @@ ul { list-style: none;
     background-repeat: repeat;
     background-attachment: scroll;
     color: #008391;
+    text-decoration: none;
 }
 .button.back-button:hover:not([disabled="disabled"]) {
     border: 1px solid #6B6B6B;
