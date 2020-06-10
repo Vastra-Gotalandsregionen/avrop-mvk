@@ -2,7 +2,7 @@ version: "3"
 services:
  redis:
    image: redis
-   restart: always
+   restart: on-failure
  avrop:
   container_name: avrop-lakemedelsnara-produkter
   image: vgr/avrop-lakemedelsnara-produkter
