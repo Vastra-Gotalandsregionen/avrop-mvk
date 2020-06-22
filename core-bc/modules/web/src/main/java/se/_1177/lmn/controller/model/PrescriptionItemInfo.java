@@ -3,19 +3,10 @@ package se._1177.lmn.controller.model;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import riv.crm.selfservice.medicalsupply._1.OrderItemType;
-import riv.crm.selfservice.medicalsupply._1.OrderRowType;
-import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._1.SubjectOfCareType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsResponseType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.ObjectFactory;
-import se._1177.lmn.service.util.JaxbUtil;
+import riv.crm.selfservice.medicalsupply._2.OrderItemType;
+import riv.crm.selfservice.medicalsupply._2.OrderRowType;
+import riv.crm.selfservice.medicalsupply._2.PrescriptionItemType;
 
-import javax.xml.bind.JAXBElement;
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,8 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static se._1177.lmn.service.util.JaxbUtil.readObject;
 
 /**
  * @author Patrik Björk

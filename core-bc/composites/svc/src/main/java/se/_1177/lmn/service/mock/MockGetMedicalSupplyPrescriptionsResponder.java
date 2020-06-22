@@ -726,18 +726,18 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         PrescriptionItemType prescriptionItem = createPrescriptionItemType(random, prescriptionItemId);
 
         DeliveryAlternativeType deliveryAlternativeType1 = new DeliveryAlternativeType();
-        deliveryAlternativeType1.setServicePointProvider(ServicePointProviderEnum.INGEN);
+        deliveryAlternativeType1.setServicePointProvider(toCvType(MockServicePointProviderEnum.INGEN));
         deliveryAlternativeType1.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
         deliveryAlternativeType1.setDeliveryMethodId("1234");
 
         DeliveryAlternativeType deliveryAlternativeType2 = new DeliveryAlternativeType();
-        deliveryAlternativeType2.setServicePointProvider(ServicePointProviderEnum.INGEN);
+        deliveryAlternativeType2.setServicePointProvider(toCvType(MockServicePointProviderEnum.INGEN));
         deliveryAlternativeType2.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
         deliveryAlternativeType2.setDeliveryMethodId("12345");
         deliveryAlternativeType2.getDeliveryNotificationMethod().add(DeliveryNotificationMethodEnum.TELEFON);
 
         DeliveryAlternativeType deliveryAlternativeType3 = new DeliveryAlternativeType();
-        deliveryAlternativeType3.setServicePointProvider(ServicePointProviderEnum.INGEN);
+        deliveryAlternativeType3.setServicePointProvider(toCvType(MockServicePointProviderEnum.INGEN));
         deliveryAlternativeType3.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
         deliveryAlternativeType3.setDeliveryMethodId("123456");
 
@@ -760,7 +760,7 @@ public class MockGetMedicalSupplyPrescriptionsResponder
         article2.setIsOrderable(true);
         article2.setPackageSize(1); // Important
         article2.setPackageSizeUnit("st");
-        article2.setProductArea(ProductAreaEnum.DIABETES);
+        article2.setProductArea(toCvType(MockProductAreaEnum.DIABETES));
 
         prescriptionItem.setArticle(article2);
 

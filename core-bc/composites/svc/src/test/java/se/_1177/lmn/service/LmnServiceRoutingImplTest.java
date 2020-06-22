@@ -5,14 +5,15 @@ import org.junit.Test;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
-import riv.crm.selfservice.medicalsupply._1.ResultCodeEnum;
-import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
-import riv.crm.selfservice.medicalsupply._1.SubjectOfCareType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._1.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._1.GetMedicalSupplyDeliveryPointsResponseType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._1.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsResponseType;
-import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._1.rivtabp21.RegisterMedicalSupplyOrderResponderInterface;
+import riv.crm.selfservice.medicalsupply._2.ResultCodeEnum;
+import riv.crm.selfservice.medicalsupply._2.SubjectOfCareType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._2.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._2.GetMedicalSupplyDeliveryPointsResponseType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._2.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._2.GetMedicalSupplyPrescriptionsResponseType;
+import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._2.rivtabp21.RegisterMedicalSupplyOrderResponderInterface;
+import se._1177.lmn.service.mock.MockServicePointProviderEnum;
+import se._1177.lmn.service.mock.MockUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -125,7 +126,7 @@ public class LmnServiceRoutingImplTest {
         ThreadLocalStore.setCountyCode("20");
 
         // When
-        lmnServiceRouting.getMedicalSupplyDeliveryPoints(ServicePointProviderEnum.POSTNORD, "12345");
+        lmnServiceRouting.getMedicalSupplyDeliveryPoints(MockUtil.toCvType(MockServicePointProviderEnum.POSTNORD), "12345");
 
         // Then
         verify(msdp20).getMedicalSupplyDeliveryPoints(anyString(), any());

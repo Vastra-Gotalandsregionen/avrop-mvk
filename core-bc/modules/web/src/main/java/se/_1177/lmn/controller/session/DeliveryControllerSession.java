@@ -3,8 +3,8 @@ package se._1177.lmn.controller.session;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.PrescriptionItemType;
 
 import java.io.Serializable;
 import java.util.HashMap;

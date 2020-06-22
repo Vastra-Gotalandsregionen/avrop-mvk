@@ -3,7 +3,7 @@ package se._1177.lmn.controller.session;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import riv.crm.selfservice.medicalsupply._1.ArticleType;
+import riv.crm.selfservice.medicalsupply._2.ArticleType;
 import se._1177.lmn.controller.model.ArticleWithSubArticlesModel;
 
 import java.io.Serializable;

@@ -1,10 +1,10 @@
 package se._1177.lmn.controller;
 
 import org.junit.Test;
-import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryAlternativeType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.DeliveryNotificationMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.PrescriptionItemType;
 import se._1177.lmn.model.NotificationVariant;
 
 import static org.junit.Assert.*;

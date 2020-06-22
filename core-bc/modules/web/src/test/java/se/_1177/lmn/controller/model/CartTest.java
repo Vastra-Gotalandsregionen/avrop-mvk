@@ -1,11 +1,11 @@
 package se._1177.lmn.controller.model;
 
 import org.junit.Test;
-import riv.crm.selfservice.medicalsupply._1.CountryCodeEnum;
-import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.DeliveryPointType;
-import riv.crm.selfservice.medicalsupply._1.OrderRowType;
+import riv.crm.selfservice.medicalsupply._2.CountryCodeEnum;
+import riv.crm.selfservice.medicalsupply._2.DeliveryChoiceType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.DeliveryPointType;
+import riv.crm.selfservice.medicalsupply._2.OrderRowType;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

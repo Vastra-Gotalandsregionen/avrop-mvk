@@ -1,9 +1,9 @@
 package se._1177.lmn.service.util;
 
-import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._1.SubjectOfCareType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsResponseType;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.ObjectFactory;
+import riv.crm.selfservice.medicalsupply._2.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._2.SubjectOfCareType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._2.GetMedicalSupplyPrescriptionsResponseType;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._2.ObjectFactory;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;

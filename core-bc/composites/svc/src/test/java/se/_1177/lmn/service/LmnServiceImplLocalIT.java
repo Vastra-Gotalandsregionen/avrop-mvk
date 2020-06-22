@@ -5,8 +5,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.test.util.ReflectionTestUtils;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypoints._2.rivtabp21.GetMedicalSupplyDeliveryPointsResponderInterface;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplydeliverypointsresponder._2.GetMedicalSupplyDeliveryPointsResponseType;
 import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._2.rivtabp21.GetMedicalSupplyPrescriptionsResponderInterface;
@@ -52,6 +55,9 @@ public class LmnServiceImplLocalIT {
 
         lmnService = new LmnServiceImpl(medicalSupplyDeliveryPoints, medicalSupplyPrescriptions,
                 registerMedicalSupplyOrder, "asdfasdf", "SE000111-234", true);
+
+        CacheManager cacheManager = new ConcurrentMapCacheManager();
+        ReflectionTestUtils.setField(lmnService, "cacheManager", cacheManager);
     }
 
     @Test
@@ -60,7 +66,6 @@ public class LmnServiceImplLocalIT {
     }
 
     @Test
-    @Ignore // FIXME
     public void smokeTest() throws Exception {
 
         GetMedicalSupplyDeliveryPointsResponseType deliveryPoints =

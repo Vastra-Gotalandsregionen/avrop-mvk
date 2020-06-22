@@ -2,16 +2,18 @@ package se._1177.lmn.controller;
 
 import org.junit.Before;
 import org.junit.Test;
-import riv.crm.selfservice.medicalsupply._1.ArticleType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.OrderRowType;
-import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
+import riv.crm.selfservice.medicalsupply._2.ArticleType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryAlternativeType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryChoiceType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.DeliveryNotificationMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.OrderRowType;
+import riv.crm.selfservice.medicalsupply._2.PrescriptionItemType;
 import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
+import se._1177.lmn.model.ServicePointProvider;
+import se._1177.lmn.service.mock.MockServicePointProviderEnum;
+import se._1177.lmn.service.mock.MockUtil;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -58,8 +60,8 @@ public class CollectDeliveryController4Test {
 
         DeliveryAlternativeType alternative2 = new DeliveryAlternativeType();
 
-        alternative1.setServicePointProvider(ServicePointProviderEnum.INGEN);
-        alternative2.setServicePointProvider(ServicePointProviderEnum.INGEN);
+        alternative1.setServicePointProvider(MockUtil.toCvType(MockServicePointProviderEnum.INGEN));
+        alternative2.setServicePointProvider(MockUtil.toCvType(MockServicePointProviderEnum.INGEN));
 
         alternative1.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
         alternative2.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
@@ -142,10 +144,10 @@ public class CollectDeliveryController4Test {
     @Test
     public void getDeliveryNotificationMethodsPerProvider() throws Exception {
 
-        Map<ServicePointProviderEnum, List<String>> deliveryNotificationMethodsPerProvider = collectDeliveryController
+        Map<ServicePointProvider, List<String>> deliveryNotificationMethodsPerProvider = collectDeliveryController
                 .getDeliveryNotificationMethodsPerProvider();
 
-        List<String> ingen = deliveryNotificationMethodsPerProvider.get(ServicePointProviderEnum.INGEN);
+        List<String> ingen = deliveryNotificationMethodsPerProvider.get(ServicePointProvider.INGEN);
 
         // We want to assert that no delivery notification methods from the HEMLEVERANS alternative pass through.
         assertEquals(null, ingen);

@@ -1,22 +1,16 @@
 package se._1177.lmn.controller.model;
 
 import org.junit.Test;
-import riv.crm.selfservice.medicalsupply._1.ArticleType;
-import riv.crm.selfservice.medicalsupply._1.CountryCodeEnum;
-import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.DeliveryPointType;
-import riv.crm.selfservice.medicalsupply._1.OrderRowType;
-import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._2.ArticleType;
+import riv.crm.selfservice.medicalsupply._2.PrescriptionItemType;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Collections;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class PrescriptionItemInfoTest {
 

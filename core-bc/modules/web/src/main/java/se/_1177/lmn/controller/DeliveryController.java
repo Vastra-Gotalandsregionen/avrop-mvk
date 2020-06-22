@@ -6,15 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryChoiceType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.DeliveryNotificationMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
+import riv.crm.selfservice.medicalsupply._2.DeliveryAlternativeType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryChoiceType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.DeliveryNotificationMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.PrescriptionItemType;
 import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
 import se._1177.lmn.controller.session.DeliveryControllerSession;
+import se._1177.lmn.model.ServicePointProvider;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -216,14 +216,14 @@ public class DeliveryController {
                 prescriptionItem, getDeliveryMethodForEachItem().get(prescriptionItem));
     }
 
-    private Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>>
+    private Map<ServicePointProvider, Set<DeliveryNotificationMethodEnum>>
     getAllCombinationsOfProvidersAndNotificationMethods(
             Set<DeliveryNotificationMethodEnum> allDeliveryNotificationMethods,
-            Set<ServicePointProviderEnum> allServicePointProviders) {
+            Set<ServicePointProvider> allServicePointProviders) {
 
-        Map<ServicePointProviderEnum, Set<DeliveryNotificationMethodEnum>> allCollectCombinations = new HashMap<>();
+        Map<ServicePointProvider, Set<DeliveryNotificationMethodEnum>> allCollectCombinations = new HashMap<>();
 
-        for (ServicePointProviderEnum servicePointProvider : allServicePointProviders) {
+        for (ServicePointProvider servicePointProvider : allServicePointProviders) {
             allCollectCombinations.put(servicePointProvider, new HashSet<>());
 
             for (DeliveryNotificationMethodEnum deliveryNotificationMethod : allDeliveryNotificationMethods) {

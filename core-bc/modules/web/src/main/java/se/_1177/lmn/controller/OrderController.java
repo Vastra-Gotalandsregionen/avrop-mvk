@@ -6,17 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import riv.crm.selfservice.medicalsupply._1.DeliveryAlternativeType;
-import riv.crm.selfservice.medicalsupply._1.DeliveryMethodEnum;
-import riv.crm.selfservice.medicalsupply._1.OrderRowType;
-import riv.crm.selfservice.medicalsupply._1.PrescriptionItemType;
-import riv.crm.selfservice.medicalsupply._1.ResultCodeEnum;
-import riv.crm.selfservice.medicalsupply._1.ServicePointProviderEnum;
-import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._1.GetMedicalSupplyPrescriptionsResponseType;
+import riv.crm.selfservice.medicalsupply._2.CVType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryAlternativeType;
+import riv.crm.selfservice.medicalsupply._2.DeliveryMethodEnum;
+import riv.crm.selfservice.medicalsupply._2.OrderRowType;
+import riv.crm.selfservice.medicalsupply._2.PrescriptionItemType;
+import riv.crm.selfservice.medicalsupply._2.ResultCodeEnum;
+import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptionsresponder._2.GetMedicalSupplyPrescriptionsResponseType;
 import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
 import se._1177.lmn.controller.session.OrderControllerSession;
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
+import se._1177.lmn.model.ServicePointProvider;
 import se._1177.lmn.service.DefaultLmnServiceException;
 import se._1177.lmn.service.LmnService;
 
@@ -83,7 +84,7 @@ public class OrderController {
     /**
      * This is called by UserProfileController. It fetches the {@link PrescriptionItemType}s, preserves them in a map
      * where the id is mapped to the instance, and also triggers loading of
-     * {@link riv.crm.selfservice.medicalsupply._1.DeliveryPointType}s for all {@link ServicePointProviderEnum}s that
+     * {@link riv.crm.selfservice.medicalsupply._2.DeliveryPointType}s for all {@link ServicePointProvider}s that
      * are relevant, i.e. they are available for at least one orderable {@link PrescriptionItemType}.
      */
     public void init() {
@@ -113,7 +114,7 @@ public class OrderController {
                 return;
             }
 
-            Set<ServicePointProviderEnum> allRelevantProviders = new HashSet<>();
+            Set<ServicePointProvider> allRelevantProviders = new HashSet<>();
             for (PrescriptionItemType prescriptionItem : getMedicalSupplyPrescriptionsHolder().orderable) {
                 String prescriptionItemId = prescriptionItem.getPrescriptionItemId();
                 getPrescriptionItemInfosToPresent().put(prescriptionItemId, prescriptionItem);
@@ -124,9 +125,15 @@ public class OrderController {
                     getChosenItemMap().put(prescriptionItemId, lmnService.getDefaultSelectedPrescriptions());
 
                     prescriptionItem.getDeliveryAlternative().forEach(alternative -> {
-                        if (!alternative.getServicePointProvider().equals(ServicePointProviderEnum.INGEN)
+                        CVType servicePointProviderCVType = alternative.getServicePointProvider();
+
+                        ServicePointProvider servicePointProvider = ServicePointProvider.from(
+                                servicePointProviderCVType
+                        );
+
+                        if (!servicePointProvider.equals(ServicePointProvider.INGEN)
                                 && alternative.isAllowChioceOfDeliveryPoints()) {
-                            allRelevantProviders.add(alternative.getServicePointProvider());
+                            allRelevantProviders.add(servicePointProvider);
                         }
                     });
                 }

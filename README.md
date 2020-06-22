@@ -113,7 +113,7 @@ A typical flow is as follows:
 ![](https://raw.githubusercontent.com/Vastra-Gotalandsregionen/avrop-lakemedelsnara-produkter/release/1.0/core-bc/modules/web/doc/flow10.png)
 
 ## Configuration per county
-The application is used across multiple independent counties in Sweden where each county uses its own source system and has separate contracts with suppliers. Each county can therefore be configured according to their needs. Some needs are configured in the application and some are decided by the SOAP messages. Here the settings which are configured, per county in counties-configuration-10.yml, in the application are listed:
+The application is used across multiple independent counties in Sweden where each county uses its own source system and has separate contracts with suppliers. Each county can therefore be configured according to their needs. Some needs are configured in the application and some are decided by the SOAP messages. Here the settings which are configured, per county in counties-configuration-20.yml, in the application are listed:
 
 * ``getMedicalSupplyDeliveryPointsAddress`` - the endpoint address for fetching delivery points (optional - not all counties have delivery points)
 * ``getMedicalSupplyPrescriptionsAddress`` - the endpoint address for fetching prescriptions for a patient
