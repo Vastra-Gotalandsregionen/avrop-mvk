@@ -17,6 +17,7 @@ import se._1177.lmn.controller.model.Cart;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
 import se._1177.lmn.controller.session.OrderControllerSession;
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
+import se._1177.lmn.service.DefaultLmnServiceException;
 import se._1177.lmn.service.LmnService;
 
 import javax.faces.application.FacesMessage;
@@ -139,6 +140,12 @@ public class OrderController {
                         userProfileController.getUserProfile().getCountyCode());
             }
 
+        } catch (DefaultLmnServiceException e) {
+            LOGGER.warn("A user not belonging to a configured region tried to fetch prescriptions.");
+
+            String text = "Denna tjänst är inte tillgänglig i din region.";
+
+            FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, text, text));
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
 

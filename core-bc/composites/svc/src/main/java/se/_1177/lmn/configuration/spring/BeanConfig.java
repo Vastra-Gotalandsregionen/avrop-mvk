@@ -20,6 +20,7 @@ import riv.crm.selfservice.medicalsupply.getmedicalsupplyprescriptions._1.rivtab
 import riv.crm.selfservice.medicalsupply.registermedicalsupplyorder._1.rivtabp21.RegisterMedicalSupplyOrderResponderInterface;
 import se._1177.lmn.configuration.counties.CountiesConfiguration;
 import se._1177.lmn.configuration.counties.County;
+import se._1177.lmn.service.DefaultLmnServiceImpl;
 import se._1177.lmn.service.LmnService;
 import se._1177.lmn.service.LmnServiceImpl;
 import se._1177.lmn.service.LmnServiceRoutingImpl;
@@ -83,14 +84,20 @@ public class BeanConfig {
             String receptionHsaId = county.getReceptionHsaId();
             boolean defaultSelectedPrescriptions = county.isDefaultSelectedPrescriptions();
 
-            AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(LmnServiceImpl.class)
-                    .addConstructorArgValue(getMedicalSupplyDeliveryPointsResponderInterface(getMedicalSupplyDeliveryPointsAddress))
-                    .addConstructorArgValue(getMedicalSupplyPrescriptionsResponderInterface(getMedicalSupplyPrescriptionsAddress))
-                    .addConstructorArgValue(getRegisterMedicalSupplyOrderResponderInterface(registerMedicalSupplyOrderAddress))
-                    .addConstructorArgValue(rtjpLogicalAddress)
-                    .addConstructorArgValue(receptionHsaId)
-                    .addConstructorArgValue(defaultSelectedPrescriptions)
-                    .getBeanDefinition();
+            AbstractBeanDefinition beanDefinition = null;
+            if (countyCodeToCountEntry.getKey().equalsIgnoreCase("default")) {
+                beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(DefaultLmnServiceImpl.class)
+                        .getBeanDefinition();
+            } else {
+                beanDefinition = BeanDefinitionBuilder.genericBeanDefinition(LmnServiceImpl.class)
+                        .addConstructorArgValue(getMedicalSupplyDeliveryPointsResponderInterface(getMedicalSupplyDeliveryPointsAddress))
+                        .addConstructorArgValue(getMedicalSupplyPrescriptionsResponderInterface(getMedicalSupplyPrescriptionsAddress))
+                        .addConstructorArgValue(getRegisterMedicalSupplyOrderResponderInterface(registerMedicalSupplyOrderAddress))
+                        .addConstructorArgValue(rtjpLogicalAddress)
+                        .addConstructorArgValue(receptionHsaId)
+                        .addConstructorArgValue(defaultSelectedPrescriptions)
+                        .getBeanDefinition();
+            }
 
             String countyLmnServiceBeanName = "lmnService-" + countyCodeToCountEntry.getKey();
             defaultListableBeanFactory.registerBeanDefinition(countyLmnServiceBeanName, beanDefinition);
