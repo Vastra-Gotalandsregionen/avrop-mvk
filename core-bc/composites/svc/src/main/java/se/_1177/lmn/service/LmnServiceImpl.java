@@ -257,7 +257,7 @@ public class LmnServiceImpl implements LmnService {
 
     private String getCacheKeyForDeliveryPoint(String deliveryPointId) {
         // Add logicalAddress to separate cache for the different counties.
-        return deliveryPointId + this.logicalAddress;
+        return deliveryPointId + this.logicalAddress + DeliveryPointType.class.getCanonicalName();
     }
 
     /**

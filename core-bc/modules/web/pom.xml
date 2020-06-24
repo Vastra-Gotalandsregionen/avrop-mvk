@@ -15,7 +15,7 @@
     <packaging>war</packaging>
 
     <build>
-        <finalName>bestallning10</finalName>
+        <finalName>bestallning20</finalName>
 
         <plugins>
             <plugin>
