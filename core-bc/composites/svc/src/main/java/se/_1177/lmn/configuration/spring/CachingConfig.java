@@ -48,7 +48,12 @@ public class CachingConfig {
     public static class SupplyDeliveryKeyGenerator implements KeyGenerator {
         @Override
         public Object generate(Object target, Method method, Object... params) {
-            return ((LmnService) target).getLogicalAddress() + params[0] + params[1];
+            // The purpose to include the canonical class name is to separate cache between co-existing versions of the application.
+            // The canonical name changes between versions of the service contract.
+            return ((LmnService) target).getLogicalAddress()
+                    + params[0]
+                    + params[1]
+                    + params[0].getClass().getCanonicalName();
         }
     }
 }

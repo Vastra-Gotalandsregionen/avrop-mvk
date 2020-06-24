@@ -235,7 +235,7 @@ public class LmnServiceImpl implements LmnService {
      * @param postalCode the postal code
      * @return a {@link GetMedicalSupplyDeliveryPointsResponseType} containing {@link DeliveryPointType}s.
      */
-//    @Cacheable(value = SUPPLY_DELIVERY_POINTS_CACHE, keyGenerator = "supplyDeliveryKeyGenerator")
+    @Cacheable(value = SUPPLY_DELIVERY_POINTS_CACHE, keyGenerator = "supplyDeliveryKeyGenerator")
     public GetMedicalSupplyDeliveryPointsResponseType getMedicalSupplyDeliveryPoints(CVType provider,
                                                                                      String postalCode) {
         GetMedicalSupplyDeliveryPointsType parameters = new GetMedicalSupplyDeliveryPointsType();
