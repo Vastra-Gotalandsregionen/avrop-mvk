@@ -3,9 +3,6 @@ package se._1177.lmn.controller;
 import mvk.itintegration.userprofile._2.ResultCodeEnum;
 import mvk.itintegration.userprofile._2.SubjectOfCareType;
 import mvk.itintegration.userprofile._2.UserProfileType;
-import mvk.itintegration.userprofile.getuserprofilebyagentresponder._2.GetUserProfileByAgentResponseType;
-import mvk.itintegration.userprofile.getuserprofileresponder._2.GetUserProfileResponseType;
-import mvk.itintegration.userprofile.getuserprofileresponder._2.ObjectFactory;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +11,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import se._1177.lmn.controller.session.UserProfileSession;
-import se._1177.lmn.model.jaxb.GetUserProfileResponseTypeRootWrapper;
 import se._1177.lmn.service.MvkUserProfileService;
 import se._1177.lmn.service.ThreadLocalStore;
 
@@ -22,17 +18,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.Map;
 
 /**

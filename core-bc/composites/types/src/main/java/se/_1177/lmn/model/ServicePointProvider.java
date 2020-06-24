@@ -2,7 +2,9 @@ package se._1177.lmn.model;
 
 import riv.crm.selfservice.medicalsupply._2.CVType;
 
-public class ServicePointProvider implements Comparable<ServicePointProvider> {
+import java.io.Serializable;
+
+public class ServicePointProvider implements Comparable<ServicePointProvider>, Serializable {
 
     public static final ServicePointProvider INGEN = new ServicePointProvider("INGEN");
     private String name;

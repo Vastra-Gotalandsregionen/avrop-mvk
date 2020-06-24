@@ -3,6 +3,7 @@ package se._1177.lmn.servlet.filter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.serializer.SerializationException;
 import riv.crm.selfservice.medicalsupply._2.PrescriptionItemType;
 import se._1177.lmn.controller.model.PrescriptionItemInfo;
 
@@ -81,9 +82,29 @@ public class SessionFilter implements Filter {
             return;
         }
 
-        filterChain.doFilter(servletRequest, servletResponse);
-
+        try {
+            filterChain.doFilter(servletRequest, servletResponse);
+        } catch (Exception e) {
+            if (isCausedBySerializationException(e)) {
+                request.getSession().invalidate();
+                redirectToOrderPage(request, response);
+            }
+        }
         touchSessionObjects(request);
+    }
+
+    private boolean isCausedBySerializationException(Exception e) {
+        Throwable cause = e;
+
+        while (cause != null) {
+            if (cause instanceof SerializationException) {
+                return true;
+            }
+
+            cause = cause.getCause();
+        }
+
+        return false;
     }
 
     private void touchSessionObjects(HttpServletRequest request) {
