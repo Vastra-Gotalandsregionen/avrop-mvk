@@ -189,7 +189,7 @@
                                         <h:outputText value="#{homeDeliveryController.addressModel.fullName}"/>
                                     </div>
                                     <h:panelGroup rendered="#{not empty homeDeliveryController.addressModel.coAddress}">
-                                        <h:outputText value="#{homeDeliveryController.addressModel.coAddress}"/>
+                                        <h:outputText value="c/o #{homeDeliveryController.addressModel.coAddress}"/>
                                     </h:panelGroup>
                                     <div>
                                         <h:outputText value="#{homeDeliveryController.addressModel.address}"/>
@@ -214,7 +214,7 @@
                                         <h:outputText value="#{invoiceAddressController.addressModel.fullName}"/>
                                     </div>
                                     <h:panelGroup rendered="#{not empty invoiceAddressController.addressModel.coAddress}">
-                                        <h:outputText value="#{invoiceAddressController.addressModel.coAddress}"/>
+                                        <h:outputText value="c/o #{invoiceAddressController.addressModel.coAddress}"/>
                                     </h:panelGroup>
                                     <div>
                                         <h:outputText value="#{invoiceAddressController.addressModel.address}"/>

@@ -45,6 +45,7 @@ public class MvkInboxServiceTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(MvkInboxServiceTest.class);
 
     private String expectedMessage;
+    private String expectedMessageWithCareOf;
     private String expectedMessageWithContactPerson;
     private String expectedMessageCollectDeliveryWithoutDeliveryPoint;
     private String expectedMessageCollectDeliveryOnlyWithoutDeliveryPoint;
@@ -52,6 +53,7 @@ public class MvkInboxServiceTest {
     @Before
     public void init() throws IOException {
         this.expectedMessage = getContent("expectedInboxMessage.xml");
+        this.expectedMessageWithCareOf = getContent("expectedInboxMessageWithCareOf.xml");
         this.expectedMessageWithContactPerson = getContent("expectedInboxMessageWithContactPerson.xml");
         this.expectedMessageCollectDeliveryWithoutDeliveryPoint =
                 getContent("expectedInboxMessageCollectDeliveryWithoutDeliveryPoint.xml");
@@ -206,13 +208,13 @@ public class MvkInboxServiceTest {
         choice1.setDeliveryNotificationReceiver("070-2345678");
         choice1.setDeliveryNotificationMethod(wrapInJAXBElement(DeliveryNotificationMethodEnum.SMS));
 
-        AddressType address = new AddressType();
-        address.setReceiver("receiver 1");
-        address.setCareOfAddress("careof 1");
-        address.setStreet("street 1");
-        address.setPostalCode("12345");
-        address.setCity("city 1");
-        choice1.setInvoiceAddress(address);
+        AddressType invoiceAddress = new AddressType();
+        invoiceAddress.setReceiver("receiver 1");
+        invoiceAddress.setCareOfAddress("invoice careof 1");
+        invoiceAddress.setStreet("street 1");
+        invoiceAddress.setPostalCode("12345");
+        invoiceAddress.setCity("city 1");
+        choice1.setInvoiceAddress(invoiceAddress);
 
         AddressType homeAddress = new AddressType();
         homeAddress.setStreet("Gatan 37");
@@ -299,7 +301,7 @@ public class MvkInboxServiceTest {
 
         AddressType address = new AddressType();
         address.setReceiver("receiver 1");
-        address.setCareOfAddress("careof 1");
+        address.setCareOfAddress("invoice careof 1");
         address.setStreet("street 1");
         address.setPostalCode("12345");
         address.setCity("city 1");
@@ -590,6 +592,95 @@ public class MvkInboxServiceTest {
         assertFalse(result);
     }
 
+    @Test
+    public void composeMsgWithOneCareOf() throws Exception {
+        MvkInboxService mvkInboxService = new MvkInboxService(null);
+
+        List<OrderRowType> orderRows = new ArrayList<>();
+
+        ArticleType article1 = new ArticleType();
+        ArticleType article2 = new ArticleType();
+        ArticleType article3 = new ArticleType();
+
+        OrderRowType item1 = new OrderRowType();
+        OrderRowType item2 = new OrderRowType();
+        OrderRowType item3 = new OrderRowType();
+
+        article1.setArticleNo("1234");
+        article2.setArticleNo("4321");
+        article3.setArticleNo("5678");
+
+        article1.setArticleName("Artikalnamn1");
+        article2.setArticleName("Artikelnamn2");
+        article3.setArticleName("Artikelnamn3");
+
+        article1.setProductArea(ProductAreaEnum.DIABETES);
+        article2.setProductArea(ProductAreaEnum.INKONTINENS);
+        article3.setProductArea(ProductAreaEnum.INKONTINENS);
+
+        item1.setArticle(article1);
+        item2.setArticle(article2);
+        item3.setArticle(article3);
+
+        item1.setNoOfPackages(3);
+        item2.setNoOfPackages(4);
+        item2.setNoOfPackages(4);
+
+        orderRows.add(item1);
+        orderRows.add(item2);
+        orderRows.add(item3);
+
+        DeliveryChoiceType choice1 = new DeliveryChoiceType();
+        DeliveryChoiceType choice2 = new DeliveryChoiceType();
+        DeliveryChoiceType choice3 = new DeliveryChoiceType();
+
+        choice1.setDeliveryMethod(DeliveryMethodEnum.UTLÄMNINGSSTÄLLE);
+        choice2.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+        choice3.setDeliveryMethod(DeliveryMethodEnum.HEMLEVERANS);
+
+        DeliveryPointType deliveryPoint = new DeliveryPointType();
+        deliveryPoint.setDeliveryPointAddress("Gatan 1");
+        deliveryPoint.setDeliveryPointName("Matnära");
+        deliveryPoint.setDeliveryPointPostalCode("12345");
+        deliveryPoint.setDeliveryPointCity("Ankeborg");
+        deliveryPoint.setCountryCode(CountryCodeEnum.SE);
+
+        choice1.setDeliveryPoint(deliveryPoint);
+
+        choice1.setDeliveryNotificationReceiver("070-2345678");
+        choice1.setDeliveryNotificationMethod(wrapInJAXBElement(DeliveryNotificationMethodEnum.SMS));
+
+        AddressType address = new AddressType();
+        address.setReceiver("receiver 1");
+        address.setCareOfAddress("invoice careof 1");
+        address.setStreet("street 1");
+        address.setPostalCode("12345");
+        address.setCity("city 1");
+        choice1.setInvoiceAddress(address);
+
+        AddressType homeAddress = new AddressType();
+        homeAddress.setStreet("Gatan 37");
+        homeAddress.setPostalCode("43213");
+        homeAddress.setReceiver("Kalle Karlsson");
+        homeAddress.setDoorCode("4321");
+        homeAddress.setCity("Bullerbyn");
+        homeAddress.setPhone("031-123456");
+        homeAddress.setCareOfAddress("Min CO-adress");
+
+        choice2.setHomeDeliveryAddress(homeAddress);
+        choice2.setDeliveryComment("Delivery comment 1.");
+
+        choice3.setHomeDeliveryAddress(homeAddress);
+        choice3.setDeliveryComment("Delivery comment 1.");
+
+        item1.setDeliveryChoice(choice1);
+        item2.setDeliveryChoice(choice2);
+        item3.setDeliveryChoice(choice3);
+
+        String result = mvkInboxService.composeMsg(orderRows);
+
+        assertEquals(expectedMessageWithCareOf, result);
+    }
     private RegisterMedicalSupplyOrderType getComplexRegisterMedicalSupplyOrderType() throws JAXBException {
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("registerMedicalSupplyOrderExample.xml");
 

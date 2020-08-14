@@ -72,6 +72,12 @@
                 <term>${choice.homeDeliveryAddress.receiver}</term>
                 <listitem>&nbsp;</listitem>
             </varlistentry>
+<#if choice.homeDeliveryAddress.careOfAddress?has_content>
+            <varlistentry>
+                <term>c/o ${choice.homeDeliveryAddress.careOfAddress}</term>
+                <listitem> </listitem>
+            </varlistentry>
+</#if>
             <varlistentry>
                 <term>${choice.homeDeliveryAddress.street}</term>
                 <listitem>&nbsp;</listitem>
@@ -99,6 +105,12 @@
                 <term>${choice.homeDeliveryAddress.receiver}</term>
                 <listitem>&nbsp;</listitem>
             </varlistentry>
+<#if choice.homeDeliveryAddress.careOfAddress?has_content>
+            <varlistentry>
+                <term>c/o ${choice.homeDeliveryAddress.careOfAddress}</term>
+                <listitem> </listitem>
+            </varlistentry>
+</#if>
             <varlistentry>
                 <term>${choice.homeDeliveryAddress.street}</term>
                 <listitem>&nbsp;</listitem>
@@ -185,6 +197,12 @@
                 <term>${choice.invoiceAddress.receiver}</term>
                 <listitem>&nbsp;</listitem>
             </varlistentry>
+<#if choice.invoiceAddress.careOfAddress?has_content>
+            <varlistentry>
+                <term>c/o ${choice.invoiceAddress.careOfAddress}</term>
+                <listitem> </listitem>
+            </varlistentry>
+</#if>
             <varlistentry>
                 <term>${choice.invoiceAddress.street}</term>
                 <listitem>&nbsp;</listitem>

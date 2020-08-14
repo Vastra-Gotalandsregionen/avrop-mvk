@@ -26,6 +26,6 @@
         <apache.cxf.version>3.3.4</apache.cxf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <revision>4.0.3</revision>
+        <revision>4.0.4-SNAPSHOT</revision>
     </properties>
 </project>
