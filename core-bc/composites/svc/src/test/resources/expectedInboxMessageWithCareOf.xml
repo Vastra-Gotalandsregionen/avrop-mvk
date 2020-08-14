@@ -68,6 +68,10 @@
                 <listitem>&nbsp;</listitem>
             </varlistentry>
             <varlistentry>
+                <term>c/o Min CO-adress</term>
+                <listitem> </listitem>
+            </varlistentry>
+            <varlistentry>
                 <term>Gatan 37</term>
                 <listitem>&nbsp;</listitem>
             </varlistentry>
@@ -138,14 +142,6 @@
             </varlistentry>
             <varlistentry>
                 <term>12345 Ankeborg</term>
-                <listitem>&nbsp;</listitem>
-            </varlistentry>
-            <varlistentry>
-                <term></term>
-                <listitem>Kontaktperson:</listitem>
-            </varlistentry>
-            <varlistentry>
-                <term>Alfons Åberg</term>
                 <listitem>&nbsp;</listitem>
             </varlistentry>
         </variablelist>

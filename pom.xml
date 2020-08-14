@@ -25,6 +25,6 @@
         <jsf.version>2.2.20</jsf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <revision>4.0.3</revision>
+        <revision>4.0.4-SNAPSHOT</revision>
     </properties>
 </project>
