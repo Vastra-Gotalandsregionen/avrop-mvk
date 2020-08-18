@@ -18,6 +18,7 @@ import se._1177.lmn.controller.model.PrescriptionItemInfo;
 import se._1177.lmn.service.LmnService;
 import se._1177.lmn.service.MvkInboxService;
 import se._1177.lmn.service.MvkInboxServiceException;
+import se._1177.lmn.service.ThreadLocalStore;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -94,7 +95,10 @@ public class VerifyDeliveryController {
                         deliveryChoicePerItem
                 );
             } catch (Exception e) {
-                LOGGER.error(e.getMessage(), e);
+                String contextInfo = "subjectOfCareId=" + subjectOfCareId + ", region="
+                        + ThreadLocalStore.getCountyCode();
+
+                LOGGER.error(contextInfo + " - " + e.getMessage(), e);
 
                 String msg = "Tekniskt fel. Försök senare. Systemet fick inte någon bekräftelse från bakomliggande " +
                         "system och kan därför inte veta om beställningen har gått igenom. Om dina produkter inte " +
@@ -126,6 +130,11 @@ public class VerifyDeliveryController {
                                 msg));
                     }
                 } catch (MvkInboxServiceException e) {
+                    String contextInfo = "subjectOfCareId=" + subjectOfCareId + ", region="
+                            + ThreadLocalStore.getCountyCode();
+
+                    LOGGER.error(contextInfo + " - " + e.getMessage(), e);
+
                     String msg = "Din beställning har utförts men tyvärr kunde inget kvitto skickas till din inkorg.";
                     utilController.addErrorMessageWithCustomerServiceInfo(msg);
                 }
@@ -135,6 +144,10 @@ public class VerifyDeliveryController {
             } else if (response.getResultCode().equals(ResultCodeEnum.ERROR)
                     || response.getResultCode().equals(ResultCodeEnum.INFO)) {
                 String msg = response.getComment();
+
+                String contextInfo = "subjectOfCareId=" + subjectOfCareId + ", region=" + ThreadLocalStore.getCountyCode();
+
+                LOGGER.error(contextInfo + " - " + msg);
 
                 utilController.addErrorMessageWithCustomerServiceInfo("Ett tekniskt fel inträffade när din " +
                         "beställning skulle bekräftas. Beställningen kommer inte att kunna genomföras eller sparas. " +

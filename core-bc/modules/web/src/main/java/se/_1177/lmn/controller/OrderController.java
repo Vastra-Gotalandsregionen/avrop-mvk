@@ -19,6 +19,7 @@ import se._1177.lmn.controller.session.OrderControllerSession;
 import se._1177.lmn.model.MedicalSupplyPrescriptionsHolder;
 import se._1177.lmn.service.DefaultLmnServiceException;
 import se._1177.lmn.service.LmnService;
+import se._1177.lmn.service.ThreadLocalStore;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -87,15 +88,18 @@ public class OrderController {
      * are relevant, i.e. they are available for at least one orderable {@link PrescriptionItemType}.
      */
     public void init() {
+        String subjectOfCareId = null;
+
         try {
             if (userProfileController.getUserProfile() == null) {
                 // We don't need to add a message here since a message should already be added to inform the user.
                 return;
             }
 
+            subjectOfCareId = userProfileController.getUserProfile().getSubjectOfCareId();
             setMedicalSupplyPrescriptions(
                     lmnService.getMedicalSupplyPrescriptionsHolder(
-                            userProfileController.getUserProfile().getSubjectOfCareId()
+                            subjectOfCareId
                     )
             );
 
@@ -147,7 +151,9 @@ public class OrderController {
 
             FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, text, text));
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            String contextInfo = "subjectOfCareId=" + subjectOfCareId + ", region=" + ThreadLocalStore.getCountyCode();
+
+            LOGGER.error(contextInfo + " - " + e.getMessage(), e);
 
             String msg = messageController.getMessage(PRODUCTS_FETCH_DEFAULT_ERROR);
 

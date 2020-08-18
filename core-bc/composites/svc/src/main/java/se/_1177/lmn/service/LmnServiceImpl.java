@@ -316,7 +316,10 @@ public class LmnServiceImpl implements LmnService {
 
         stopWatch.stop();
 
-        LOGGER.info("Time to registerMedicalSupplyOrder: " + stopWatch.getTotalTimeMillis() + " millis.");
+        String contextInfo = "subjectOfCareId=" + subjectOfCareId + ", region=" + ThreadLocalStore.getCountyCode();
+
+        LOGGER.info(contextInfo + " - " + "Time to registerMedicalSupplyOrder: " + stopWatch.getTotalTimeMillis()
+                + " millis.");
 
         return response;
     }
