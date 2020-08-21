@@ -614,9 +614,9 @@ public class MvkInboxServiceTest {
         article2.setArticleName("Artikelnamn2");
         article3.setArticleName("Artikelnamn3");
 
-        article1.setProductArea(ProductAreaEnum.DIABETES);
-        article2.setProductArea(ProductAreaEnum.INKONTINENS);
-        article3.setProductArea(ProductAreaEnum.INKONTINENS);
+        article1.setProductArea(MockUtil.toCvType(MockProductAreaEnum.DIABETES));
+        article2.setProductArea(MockUtil.toCvType(MockProductAreaEnum.INKONTINENS));
+        article3.setProductArea(MockUtil.toCvType(MockProductAreaEnum.INKONTINENS));
 
         item1.setArticle(article1);
         item2.setArticle(article2);
