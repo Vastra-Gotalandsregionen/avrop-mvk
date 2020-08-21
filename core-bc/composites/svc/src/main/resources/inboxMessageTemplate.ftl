@@ -48,8 +48,8 @@
             </varlistentry>
 <#if choice.deliveryMethod.name() == 'UTLÄMNINGSSTÄLLE' && choice.getDeliveryPoint()??>
             <varlistentry>
-                <term></term>
-                <listitem>Utlämningsställe:</listitem>
+                <term>Utlämningsställe:</term>
+                <listitem>&nbsp;</listitem>
             </varlistentry>
             <varlistentry>
                 <term>${choice.deliveryPoint.deliveryPointName}</term>
@@ -75,7 +75,7 @@
 <#if choice.homeDeliveryAddress.careOfAddress?has_content>
             <varlistentry>
                 <term>c/o ${choice.homeDeliveryAddress.careOfAddress}</term>
-                <listitem> </listitem>
+                <listitem>&nbsp;</listitem>
             </varlistentry>
 </#if>
             <varlistentry>
@@ -98,8 +98,8 @@
 </#if>
 <#else >
             <varlistentry>
-                <term></term>
-                <listitem>Leveransadress:</listitem>
+                <term>Leveransadress:</term>
+                <listitem>&nbsp;</listitem>
             </varlistentry>
             <varlistentry>
                 <term>${choice.homeDeliveryAddress.receiver}</term>
@@ -108,7 +108,7 @@
 <#if choice.homeDeliveryAddress.careOfAddress?has_content>
             <varlistentry>
                 <term>c/o ${choice.homeDeliveryAddress.careOfAddress}</term>
-                <listitem> </listitem>
+                <listitem>&nbsp;</listitem>
             </varlistentry>
 </#if>
             <varlistentry>
@@ -200,7 +200,7 @@
 <#if choice.invoiceAddress.careOfAddress?has_content>
             <varlistentry>
                 <term>c/o ${choice.invoiceAddress.careOfAddress}</term>
-                <listitem> </listitem>
+                <listitem>&nbsp;</listitem>
             </varlistentry>
 </#if>
             <varlistentry>
