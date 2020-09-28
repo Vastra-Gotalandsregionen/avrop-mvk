@@ -12,7 +12,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 3600) // One hour, which is more than session timeout for fronting web servers.
+// One hour, which is more than session timeout for fronting web servers.
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 3600, redisNamespace = "lmn:5:session")
 public class RedisSessionConfig {
 
 	@Bean
